@@ -12,7 +12,7 @@ import {Configuration} from './types';
 
 const urn_exc = urn_exception.init('WEB-CONFIG', 'Web Configuration module');
 
-export function get_core_config()
+function get_core_config()
 		:urn_core.Configuration {
 	
 	const process_core_vars = [
@@ -20,8 +20,7 @@ export function get_core_config()
 		'urn_db_port',
 		'urn_db_name',
 		'urn_db_trash_name',
-		'urn_db_log_name',
-		'urn_log_level'
+		'urn_db_log_name'
 	];
 
 	_check_variables(process_core_vars);
@@ -38,9 +37,7 @@ export function get_core_config()
 		
 		db_log_name: process.env.urn_db_log_name!,
 		
-		db_type: process.env.urn_db_type! as any,
-		
-		log_level: urn_log.defaults.log_level
+		db_type: process.env.urn_db_type! as any
 		
 	};
 	
@@ -48,7 +45,7 @@ export function get_core_config()
 	
 }
 
-export function get_web_config()
+function get_web_config()
 		:Configuration{
 	
 	const process_web_vars = [
@@ -72,7 +69,34 @@ function _check_variables(variables:string[])
 	
 	for(const v of variables){
 		if(!process.env[v])
-			throw urn_exc.create('GCN', `Environment variable [${v}] is nullish.`);
+			throw urn_exc.create('ENV_VAR_NOT_SET', `Environment variable [${v}] is nullish.`);
 	}
 	
 }
+
+if(process.env.urn_log_level)
+	urn_log.defaults.log_level = parseInt(process.env.urn_log_level);
+
+export const core_config = get_core_config();
+
+export const web_config = get_web_config();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
