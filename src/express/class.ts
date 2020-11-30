@@ -12,6 +12,8 @@ import {Service} from '../types';
 
 import {users_route} from './users';
 
+import {auth_route} from './auth';
+
 const express_app = express();
 
 express_app.use(cors());
@@ -24,6 +26,7 @@ export class ExpressWebService implements Service {
 	
 	constructor(){
 		express_app.use('/users', users_route);
+		express_app.use('/auth', auth_route);
 	}
 	
 	public listen(ws_port:number, callback:() => void):void{
