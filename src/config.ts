@@ -13,7 +13,7 @@ import {Configuration} from './types';
 const urn_exc = urn_exception.init('WEB_CONFIG', 'Web Configuration module');
 
 function get_core_config()
-		:urn_core.Configuration {
+		:urn_core.types.Configuration {
 	
 	const process_core_vars = [
 		'urn_db_host',
@@ -26,7 +26,7 @@ function get_core_config()
 
 	_check_variables(process_core_vars);
 	
-	const config:urn_core.Configuration = {
+	const config:urn_core.types.Configuration = {
 		
 		db_host: process.env.urn_db_host!,
 		
@@ -38,7 +38,7 @@ function get_core_config()
 		
 		db_log_name: process.env.urn_db_log_name!,
 		
-		db_type: process.env.urn_db_type! as urn_core.DBType,
+		db_type: process.env.urn_db_type! as urn_core.types.DBType,
 		
 		jwt_private_key: process.env.urn_jwt_private_key!
 		
