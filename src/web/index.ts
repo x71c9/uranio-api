@@ -4,17 +4,17 @@
  * @packageDocumentation
  */
 
-import urn_core from 'urn-core';
+// import urn_core from '@core';
 
-import {core_config, web_config} from './config';
+// import {core_config, web_config} from './config';
 
-urn_core.init(core_config);
+// urn_core.init(core_config);
 
-import {service} from './express/';
+// import {service} from './express/';
 
-service.listen(web_config.ws_port, () => {
+// service.listen(web_config.ws_port, () => {
 	
-	console.log(`Listening on port ${web_config.ws_port}...`)
+//   console.log(`Listening on port ${web_config.ws_port}...`)
 	
-});
+// });
 

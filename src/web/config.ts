@@ -6,7 +6,7 @@
 
 import {urn_log, urn_exception} from 'urn-lib';
 
-import urn_core from 'urn-core';
+import urn_core from '@core';
 
 import {Configuration} from './types';
 
@@ -38,7 +38,7 @@ function get_core_config()
 		
 		db_log_name: process.env.urn_db_log_name!,
 		
-		db_type: process.env.urn_db_type! as urn_core.types.DBType,
+		db_type: process.env.urn_db_type! as urn_core.types.DatabaseType,
 		
 		jwt_private_key: process.env.urn_jwt_private_key!
 		
