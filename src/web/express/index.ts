@@ -4,6 +4,6 @@
  * @packageDocumentation
  */
 
-import {ExpressWebService} from './class';
+// import {ExpressWebService} from './class';
 
-export const service = new ExpressWebService();
+// export const service = new ExpressWebService();

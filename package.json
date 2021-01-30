@@ -1,32 +1,36 @@
 {
-  "name": "urn-web",
-  "version": "0.0.1",
-  "description": "Uranio Web API",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "tsc -b",
-    "start": "node -r source-map-support/register -r dotenv/config dist/index.js dotenv_config_path=config/dev.env",
-    "dev": "tsc-watch --onSuccess \"node -r source-map-support/register -r dotenv/config ./dist/index.js dotenv_config_path=config/dev.env\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@bitbucket.org/nbl7/urn-web.git"
-  },
-  "keywords": [
-    "uranio",
-    "urn"
-  ],
-  "author": "Andrea Reni <mail@nbl7.net>",
-  "license": "ISC",
-  "homepage": "https://bitbucket.org/nbl7/urn-web#readme",
-  "devDependencies": {},
-  "dependencies": {
-    "@types/cors": "^2.8.9",
-    "@types/express": "^4.17.11",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "urn-core": "git+ssh://git@bitbucket.org/nbl7/urn-core.git"
-  }
+	"name": "urn-web",
+	"version": "0.0.1",
+	"description": "Uranio web",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"build": "tsc -b",
+		"start": "node -r source-map-support/register -r module-alias/register dist/index.js",
+		"dev": "./node_modules/.bin/tsc-watch --onSuccess \"node -r source-map-support/register -r module-alias/register ./dist/index.js\""
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@bitbucket.org/nbl7/urn-web.git"
+	},
+	"keywords": [
+		"uranio",
+		"urn"
+	],
+	"author": "Andrea Reni <mail@nbl7.net>",
+	"license": "ISC",
+	"homepage": "https://bitbucket.org/nbl7/urn-web#readme",
+	"devDependencies": {},
+	"dependencies": {
+		"@types/cors": "^2.8.9",
+		"@types/express": "^4.17.11",
+		"cors": "^2.8.5",
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"urn-core": "git+ssh://git@bitbucket.org/nbl7/urn-core.git"
+	},
+	"_moduleAliases": {
+		"@book": "dist/book.js",
+		"@core": "dist/core"
+	}
 }
