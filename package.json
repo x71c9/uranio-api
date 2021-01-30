@@ -20,16 +20,13 @@
   "author": "Andrea Reni <mail@nbl7.net>",
   "license": "ISC",
   "homepage": "https://bitbucket.org/nbl7/urn-web#readme",
-  "devDependencies": {
-    "@types/cors": "^2.8.8",
-    "@types/express": "^4.17.9",
-    "urn-dev": "git+ssh://git@bitbucket.org/nbl7/urn-dev.git"
-  },
+  "devDependencies": {},
   "dependencies": {
+    "@types/cors": "^2.8.9",
+    "@types/express": "^4.17.11",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "urn-core": "file:../urn-core/",
-    "urn-lib": "file:../urn-lib/"
+    "urn-core": "git+ssh://git@bitbucket.org/nbl7/urn-core.git"
   }
 }
