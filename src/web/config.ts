@@ -6,7 +6,7 @@
 
 import {urn_log, urn_exception} from 'urn-lib';
 
-import urn_core from '@core';
+import urn_core from '../_core/';
 
 import {Configuration} from './types';
 

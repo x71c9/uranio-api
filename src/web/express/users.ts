@@ -6,7 +6,7 @@
 
 import express from 'express';
 
-import urn_core from '@core';
+import urn_core from '../../_core/';
 
 const users_route = express.Router();
 
