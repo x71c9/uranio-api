@@ -6,7 +6,7 @@
 
 import urn_core from 'urn_core';
 
-export * from '../core/types';
+export * from '../urn-core/types';
 
 export type Book = urn_core.types.Book;
 
