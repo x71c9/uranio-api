@@ -1,16 +1,8 @@
 /**
- * Types module
+ * Service types module
  *
  * @packageDocumentation
  */
-
-// export * from './typ/config';
-
-export type Configuration = {
-	
-	ws_port: number;
-	
-}
 
 export interface Service {
 	
