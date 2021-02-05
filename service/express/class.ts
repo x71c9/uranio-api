@@ -6,13 +6,13 @@
 
 import {atom_book} from 'urn_book';
 
+import urn_core from 'urn_core';
+
 import express from 'express';
 
 import cors from 'cors';
 
 import {urn_log} from 'urn-lib';
-
-import urn_core from 'urn_core';
 
 import {
 	AtomName,
@@ -56,6 +56,26 @@ function _create_atom_route(atom_name:AtomName):express.Router{
 	
 	router.get('/', async (_, res) => {
 		const res_find = await urn_bll.find({});
+		res.status(200).send(res_find);
+	});
+	
+	router.get('/:id', async (req, res) => {
+		const res_find = await urn_bll.find_by_id(req.params.id);
+		res.status(200).send(res_find);
+	});
+	
+	router.post('/', async (req, res) => {
+		const res_find = await urn_bll.insert_new(req.body);
+		res.status(200).send(res_find);
+	});
+	
+	router.post('/:id', async (req, res) => {
+		const res_find = await urn_bll.update_by_id(req.params.id, req.body);
+		res.status(200).send(res_find);
+	});
+	
+	router.delete('/:id', async (req, res) => {
+		const res_find = await urn_bll.remove_by_id(req.params.id);
 		res.status(200).send(res_find);
 	});
 	
