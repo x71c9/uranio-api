@@ -44,7 +44,7 @@ export function create(atom_name:AtomName):express.Router{
 		
 	}));
 	
-	router.get('/:id', async (req, res) => {
+	router.get('/:id', async_catch_mdlw(async (req, res) => {
 		
 		_only_valid_param_keys(req.param, ['id']);
 		_only_valid_query_keys(req.query, ['filter','options']);
@@ -56,11 +56,11 @@ export function create(atom_name:AtomName):express.Router{
 		
 		const res_find = await urn_bll.find_by_id(req.params.id, options);
 		
-		res.status(200).send(res_find);
+		res.status(200).json(res_find);
 		
-	});
+	}));
 	
-	router.post('/', async (req, res) => {
+	router.post('/', async_catch_mdlw(async (req, res) => {
 		
 		_empty(req.params, 'params');
 		_empty(req.query, 'query');
@@ -69,11 +69,11 @@ export function create(atom_name:AtomName):express.Router{
 		
 		const res_find = await urn_bll.insert_new(req.body);
 		
-		res.status(200).send(res_find);
+		res.status(200).json(res_find);
 		
-	});
+	}));
 	
-	router.post('/:id', async (req, res) => {
+	router.post('/:id', async_catch_mdlw(async (req, res) => {
 		
 		_only_valid_param_keys(req.param, ['id']);
 		_empty(req.query, 'query');
@@ -82,11 +82,11 @@ export function create(atom_name:AtomName):express.Router{
 		
 		const res_find = await urn_bll.update_by_id(req.params.id, req.body);
 		
-		res.status(200).send(res_find);
+		res.status(200).json(res_find);
 		
-	});
+	}));
 	
-	router.delete('/:id', async (req, res) => {
+	router.delete('/:id', async_catch_mdlw(async (req, res) => {
 		
 		_only_valid_param_keys(req.param, ['id']);
 		_empty(req.query, 'query');
@@ -96,9 +96,9 @@ export function create(atom_name:AtomName):express.Router{
 		
 		const res_find = await urn_bll.remove_by_id(req.params.id);
 		
-		res.status(200).send(res_find);
+		res.status(200).json(res_find);
 		
-	});
+	}));
 	
 	return router;
 	
