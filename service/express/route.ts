@@ -6,7 +6,9 @@
 
 import express from 'express';
 
-import {urn_log, urn_exception} from 'urn-lib';
+import {urn_log, urn_exception, urn_return} from 'urn-lib';
+
+const urn_ret = urn_return.create();
 
 const urn_exc = urn_exception.init(`EXPRESS_ROUTE`, `Express default route`);
 
@@ -16,16 +18,18 @@ import {AtomName, Query} from '../../types';
 
 import {ExpressQueryParam} from './types';
 
+import {async_catch_mdlw} from './mdlw';
 
 export function create(atom_name:AtomName):express.Router{
 	
-	urn_log.fn_debug(`Create Express Router`);
+	urn_log.fn_debug(`Create Express Default Atom Router`);
 	
 	const router = express.Router();
 	
-	router.get('/', async (req, res) => {
+	router.get('/', async_catch_mdlw(async (req, res) => {
 		
 		_only_valid_query_keys(req.query, ['filter','options']);
+		_empty(req.params, 'params');
 		_empty(req.body, 'body');
 		
 		const urn_bll = urn_core.bll.create_basic(atom_name);
@@ -34,9 +38,11 @@ export function create(atom_name:AtomName):express.Router{
 		const options = _process_request_options(req.query.options);
 		
 		const res_find = await urn_bll.find(filter, options);
-		res.status(200).send(res_find);
+		const ret = urn_ret.return_success('Success', res_find);
 		
-	});
+		return res.status(200).json(ret);
+		
+	}));
 	
 	router.get('/:id', async (req, res) => {
 		
