@@ -1,0 +1,26 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Api	types.ts	/^		export type Api = {$/;"	t
+Book	types.ts	/^export type Book = urn_core.types.Book;$/;"	t
+Definition	types.ts	/^	export type Definition = urn_core.types.Book.Definition & {$/;"	t
+ExpressQueryParam	service/express/types.ts	/^export type ExpressQueryParam =$/;"	t
+ExpressWebService	service/express/class.ts	/^class ExpressWebService implements Service {$/;"	c
+QueryString	service/express/types.ts	/^import QueryString from 'qs';$/;"	I
+Service	service/types.ts	/^export interface Service {$/;"	i
+_empty	service/express/route.ts	/^function _empty(p:any, param_name:string)$/;"	f
+_only_valid_param_keys	service/express/route.ts	/^function _only_valid_param_keys(params:any, valid_params_keys:string[])$/;"	f
+_only_valid_query_keys	service/express/route.ts	/^function _only_valid_query_keys(query:any, valid_query_keys:string[])$/;"	f
+_process_request_filter	service/express/route.ts	/^function _process_request_filter<A extends AtomName>(filter:ExpressQueryParam)$/;"	f
+_process_request_options	service/express/route.ts	/^function _process_request_options<A extends AtomName>(options:ExpressQueryParam)$/;"	f
+cors	service/express/class.ts	/^import cors from 'cors';$/;"	I
+create	service/express/class.ts	/^export function create():ExpressWebService{$/;"	f
+create	service/express/route.ts	/^export function create(atom_name:AtomName):express.Router{$/;"	f
+express	service/express/class.ts	/^import express from 'express';$/;"	I
+express	service/express/route.ts	/^import express from 'express';$/;"	I
+urn_core	service/express/route.ts	/^import urn_core from 'urn_core';$/;"	I
+urn_core	types.ts	/^import urn_core from 'urn_core';$/;"	I
+urn_web	run.ts	/^import urn_web from 'urn_web';$/;"	I

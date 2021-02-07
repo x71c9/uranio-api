@@ -8,7 +8,9 @@ import express from 'express';
 
 import cors from 'cors';
 
-import {urn_log} from 'urn-lib';
+import {urn_log, urn_return} from 'urn-lib';
+
+const urn_ret = urn_return.create();
 
 import {atom_book} from 'urn_book';
 
@@ -25,6 +27,17 @@ express_app.use(cors());
 express_app.use(express.json());
 
 express_app.use(express.urlencoded({extended: true}));
+
+express_app.use(function(err:any, req:express.Request, res:express.Response, next:express.NextFunction){
+	
+	if(err.status === 400 && "body" in err) {
+		const respo = urn_ret.return_error(400, 'JSON parse error - '+err.message, {request: req});
+		res.status(respo.status).send(respo);
+	}else{
+		next();
+	}
+	
+});
 
 @urn_log.decorators.debug_constructor
 @urn_log.decorators.debug_methods
