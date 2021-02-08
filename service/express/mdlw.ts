@@ -10,6 +10,10 @@ import {urn_return, urn_exception, urn_log} from 'urn-lib';
 
 const urn_ret = urn_return.create(urn_log.return_injector);
 
+import urn_core from 'urn_core';
+
+const bll_log = urn_core.bll.create_log();
+
 type Handler = (req:express.Request, res:express.Response, next?:express.NextFunction) => Promise<any>
 
 export function async_catch_mdlw(handler:Handler)
@@ -19,9 +23,35 @@ export function async_catch_mdlw(handler:Handler)
 		
 		try{
 			
+			const log = {
+				active: true,
+				msg: 'WebService Debug',
+				type: 'debug',
+				body: JSON.stringify(req.body),
+				params: JSON.stringify(req.params),
+				query: JSON.stringify(req.query),
+				path: `${req.method}: ${req.baseUrl}${req.path}`,
+				ip: req.ip
+			};
+			
+			await bll_log.insert_new(log);
+			
 			await handler(req, res, next);
 			
 		}catch(ex){
+			
+			const log = {
+				active: true,
+				msg: `WebService Error [${ex.type}]`,
+				type: 'error',
+				body: JSON.stringify(req.body),
+				params: JSON.stringify(req.params),
+				query: JSON.stringify(req.query),
+				path: `${req.method}: ${req.baseUrl}${req.path}`,
+				ip: req.ip
+			};
+			
+			await bll_log.insert_new(log);
 			
 			switch(ex.type){
 				case urn_exception.ExceptionType.UNAUTHORIZED:{
@@ -34,7 +64,7 @@ export function async_catch_mdlw(handler:Handler)
 					return res.status(400).json(urn_ret.return_error(400, `Invalid Request`, ex.error_code, ex.msg));
 				}
 			}
-			return res.status(500).json(urn_ret.return_error(500, `Internal Server Error`, ex.error_code, ex.msg));
+			return res.status(500).json(urn_ret.return_error(500, `Internal Server Error`, '500', ex.message));
 			
 		}
 	};
