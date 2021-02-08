@@ -12,7 +12,8 @@ const urn_ret = urn_return.create(urn_log.return_injector);
 
 import urn_core from 'urn_core';
 
-const bll_log = urn_core.bll.create_log();
+const db_log_debug = urn_core.bll.create_log('debug');
+const db_log_error = urn_core.bll.create_log('error');
 
 type Handler = (req:express.Request, res:express.Response, next?:express.NextFunction) => Promise<any>
 
@@ -34,7 +35,7 @@ export function async_catch_mdlw(handler:Handler)
 				ip: req.ip
 			};
 			
-			await bll_log.insert_new(log);
+			await db_log_debug.insert_new(log);
 			
 			await handler(req, res, next);
 			
@@ -51,7 +52,7 @@ export function async_catch_mdlw(handler:Handler)
 				ip: req.ip
 			};
 			
-			await bll_log.insert_new(log);
+			await db_log_error.insert_new(log);
 			
 			switch(ex.type){
 				case urn_exception.ExceptionType.UNAUTHORIZED:{
