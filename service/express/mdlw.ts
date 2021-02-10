@@ -27,7 +27,7 @@ export function async_catch_mdlw(handler:Handler)
 			
 		}catch(ex){
 			
-			await logger.error('async_catch_mdlw', req.path, req.ip, JSON.stringify(req.params), JSON.stringify(req.query), JSON.stringify(req.body));
+			await logger.error(ex.message, req.path, req.ip, JSON.stringify(req.params), JSON.stringify(req.query), JSON.stringify(req.body));
 			
 			switch(ex.type){
 				case urn_exception.ExceptionType.UNAUTHORIZED:{
