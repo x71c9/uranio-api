@@ -10,10 +10,7 @@ import {urn_return, urn_exception, urn_log} from 'urn-lib';
 
 const urn_ret = urn_return.create(urn_log.return_injector);
 
-import urn_core from 'urn_core';
-
-const db_log_debug = urn_core.bll.create_log('debug');
-const db_log_error = urn_core.bll.create_log('error');
+import * as logger from '../../log/';
 
 type Handler = (req:express.Request, res:express.Response, next?:express.NextFunction) => Promise<any>
 
@@ -24,35 +21,13 @@ export function async_catch_mdlw(handler:Handler)
 		
 		try{
 			
-			const log = {
-				active: true,
-				msg: 'WebService Debug',
-				type: 'debug',
-				body: JSON.stringify(req.body),
-				params: JSON.stringify(req.params),
-				query: JSON.stringify(req.query),
-				path: `${req.method}: ${req.baseUrl}${req.path}`,
-				ip: req.ip
-			};
-			
-			await db_log_debug.insert_new(log);
+			await logger.debug('async_catch_mdlw', req.path, req.ip, JSON.stringify(req.params), JSON.stringify(req.query), JSON.stringify(req.body));
 			
 			await handler(req, res, next);
 			
 		}catch(ex){
 			
-			const log = {
-				active: true,
-				msg: `WebService Error [${ex.type}]`,
-				type: 'error',
-				body: JSON.stringify(req.body),
-				params: JSON.stringify(req.params),
-				query: JSON.stringify(req.query),
-				path: `${req.method}: ${req.baseUrl}${req.path}`,
-				ip: req.ip
-			};
-			
-			await db_log_error.insert_new(log);
+			await logger.error('async_catch_mdlw', req.path, req.ip, JSON.stringify(req.params), JSON.stringify(req.query), JSON.stringify(req.body));
 			
 			switch(ex.type){
 				case urn_exception.ExceptionType.UNAUTHORIZED:{

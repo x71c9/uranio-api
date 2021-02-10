@@ -32,10 +32,10 @@ export function create(atom_name:AtomName):express.Router{
 		_empty(req.params, 'params');
 		_empty(req.body, 'body');
 		
-		const urn_bll = urn_core.bll.create_basic(atom_name);
-		
 		const filter = _process_request_filter(req.query.filter);
 		const options = _process_request_options(req.query.options);
+		
+		const urn_bll = urn_core.bll.create_basic(atom_name);
 		
 		const res_find = await urn_bll.find(filter, options);
 		const urn_response = urn_ret.return_success('Success', res_find);
@@ -50,9 +50,9 @@ export function create(atom_name:AtomName):express.Router{
 		_only_valid_query_keys(req.query, ['filter','options']);
 		_empty(req.body, 'body');
 		
-		const urn_bll = urn_core.bll.create_basic(atom_name);
-		
 		const options = _process_request_options(req.query.options);
+		
+		const urn_bll = urn_core.bll.create_basic(atom_name);
 		
 		const res_find = await urn_bll.find_by_id(req.params.id, options);
 		const urn_response = urn_ret.return_success('Success', res_find);
