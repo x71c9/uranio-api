@@ -4,26 +4,57 @@ import * as book_types from './types';
 import {core_atom_book} from 'urn_core/book';
 
 export const web_atom_book = {
-	log: {
+	error: {
 		connection: 'log',
 		security: {
 			type: book_types.BookSecurityType.UNIFORM,
 			_r: null
 		},
 		api:{
-			url: '/log'
+			url: '/errors'
 		},
 		properties: {
-			...core_atom_book.log.properties,
-			path: {
+			status: {
+				type: book_types.BookPropertyType.INTEGER,
+				label: 'Status'
+			},
+			msg: {
 				type: book_types.BookPropertyType.TEXT,
-				label: 'Path',
+				label: 'Message'
+			},
+			error_code: {
+				type: book_types.BookPropertyType.TEXT,
+				label: 'Error Code'
+			},
+			error_msg: {
+				type: book_types.BookPropertyType.TEXT,
+				label: 'Error Message'
+			},
+			request: {
+				type: book_types.BookPropertyType.ATOM,
+				label: 'Request',
+				atom: 'request',
 				optional: true
+			}
+		}
+	},
+	request: {
+		connection: 'log',
+		security: {
+			type: book_types.BookSecurityType.UNIFORM,
+			_r: null
+		},
+		api:{
+			url: '/requests'
+		},
+		properties: {
+			url: {
+				type: book_types.BookPropertyType.TEXT,
+				label: 'URL'
 			},
 			ip: {
 				type: book_types.BookPropertyType.TEXT,
-				label: 'IP',
-				optional: true
+				label: 'IP'
 			},
 			params: {
 				type: book_types.BookPropertyType.TEXT,

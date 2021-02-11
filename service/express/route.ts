@@ -20,6 +20,7 @@ import {ExpressQueryParam} from './types';
 
 import {async_catch_mdlw} from './mdlw';
 
+
 export function create(atom_name:AtomName):express.Router{
 	
 	urn_log.fn_debug(`Create Express Default Atom Router`);
