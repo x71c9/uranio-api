@@ -105,8 +105,12 @@ async function _handle_exception(
 			error_code,
 			error_msg
 		};
-		if(request_id)
+		if(request_id){
 			error_log.request = request_id;
+		}
+		if(!ex.type){
+			error_log.stack = ex.stack;
+		}
 		
 		await bll_errors.insert_new(error_log);
 		

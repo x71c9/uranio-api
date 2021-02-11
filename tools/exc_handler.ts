@@ -4,15 +4,28 @@
  * @packageDocumentation
  */
 
+import urn_core from 'urn_core';
+const bll_errors = urn_core.bll.create_log('error');
 /*
  * Function for handling exception.
  * It should log the exception and stop the application.
  *
  * @params ex - The exception
  */
-function handleException(ex:Error):void{
-	// urn_console.error('URANIO UncaughtException', ex);
+async function handleException(ex:Error)
+		:Promise<void>{
 	console.error(ex);
+	try {
+		await bll_errors.insert_new({
+			status: 500,
+			msg: 'UnhandledException',
+			error_code: '500',
+			error_msg: ex.message,
+			stack: ex.stack
+		});
+	}catch(ex){
+		// TODO
+	}
 	process.exit(1);
 }
 
@@ -23,9 +36,20 @@ function handleException(ex:Error):void{
  * @param reason - the reason
  * @param promise - the promise
  */
-function handleRejectedPromise(reason:any, promise:Promise<any>):void{
-	// urn_console.error('URANIO UnhandledRejection', reason, promise);
+async function handleRejectedPromise(reason:any, promise:Promise<any>)
+		:Promise<void>{
 	console.error(reason, promise);
+	try {
+		await bll_errors.insert_new({
+			status: 510,
+			msg: 'UnhandledRejectedPromise',
+			error_code: '510',
+			error_msg: JSON.stringify(reason),
+			stack: JSON.stringify(promise)
+		});
+	}catch(ex){
+		// TODO
+	}
 	process.exit(1);
 }
 
