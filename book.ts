@@ -35,6 +35,11 @@ export const web_atom_book = {
 				label: 'Request',
 				atom: 'request',
 				optional: true
+			},
+			stack: {
+				type: book_types.BookPropertyType.LONG_TEXT,
+				label: 'Stack',
+				optional: true
 			}
 		}
 	},
