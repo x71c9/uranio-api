@@ -74,26 +74,25 @@ async function _handle_exception(
 	let error_code = '500';
 	let error_msg = ex.message;
 	
+	if(ex.type){
+		error_code = ex.module_code + '_' + ex.error_code;
+		error_msg = ex.module_name + '. ' + ex.msg;
+	}
+	
 	switch(ex.type){
 		case urn_exception.ExceptionType.UNAUTHORIZED:{
 			status = 401;
 			msg = 'Unauthorized';
-			error_code = ex.error_code;
-			error_msg = ex.msg;
 			break;
 		}
 		case urn_exception.ExceptionType.NOT_FOUND:{
 			status = 404;
 			msg = 'Not Found';
-			error_code = ex.error_code;
-			error_msg = ex.msg;
 			break;
 		}
 		case urn_exception.ExceptionType.INVALID_REQUEST:{
 			status = 400;
 			msg = 'Invalid Request';
-			error_code = ex.error_code;
-			error_msg = ex.msg;
 			break;
 		}
 	}
