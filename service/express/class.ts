@@ -18,7 +18,9 @@ import {AtomName, Book} from '../../types';
 
 import {Service} from '../types';
 
-import {create as create_route} from './route';
+import {
+	create as create_route,
+} from './route';
 
 const express_app = express();
 
@@ -48,7 +50,11 @@ class ExpressWebService implements Service {
 		for(atom_name in atom_book){
 			const atom_def = atom_book[atom_name] as Book.Definition;
 			const router = create_route(atom_name);
-			express_app.use(atom_def.api.url, router);
+			if(atom_def.connection && atom_def.connection === 'log'){
+				express_app.use('/logs'+atom_def.api.url, router);
+			}else{
+				express_app.use(atom_def.api.url, router);
+			}
 		}
 	}
 	

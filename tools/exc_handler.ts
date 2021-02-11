@@ -12,7 +12,7 @@
  */
 function handleException(ex:Error):void{
 	// urn_console.error('URANIO UncaughtException', ex);
-	console.log(ex);
+	console.error(ex);
 	process.exit(1);
 }
 
@@ -25,7 +25,7 @@ function handleException(ex:Error):void{
  */
 function handleRejectedPromise(reason:any, promise:Promise<any>):void{
 	// urn_console.error('URANIO UnhandledRejection', reason, promise);
-	console.log(reason, promise);
+	console.error(reason, promise);
 	process.exit(1);
 }
 
