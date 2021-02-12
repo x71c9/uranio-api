@@ -34,6 +34,7 @@ export const web_atom_book = {
 				type: book_types.BookPropertyType.ATOM,
 				label: 'Request',
 				atom: 'request',
+				delete_cascade: true,
 				optional: true
 			},
 			stack: {

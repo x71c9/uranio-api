@@ -117,7 +117,7 @@ function _process_request_filter<A extends AtomName>(filter:ExpressQueryParam)
 	if(!Array.isArray(filter) && typeof filter === 'object'){
 		return filter;
 	}
-	throw urn_exc.create(`INVALID_FILTER`, `Invalid filter`);
+	throw urn_exc.create_invalid_request(`INVALID_FILTER`, `Invalid filter`);
 }
 
 function _process_request_options<A extends AtomName>(options:ExpressQueryParam)
@@ -128,7 +128,7 @@ function _process_request_options<A extends AtomName>(options:ExpressQueryParam)
 	if(!Array.isArray(options) && typeof options === 'object'){
 		return options;
 	}
-	throw urn_exc.create(`INVALID_OPTIONS`, `Invalid options`);
+	throw urn_exc.create_invalid_request(`INVALID_OPTIONS`, `Invalid options`);
 }
 
 function _only_valid_query_keys(query:any, valid_query_keys:string[])
@@ -137,7 +137,7 @@ function _only_valid_query_keys(query:any, valid_query_keys:string[])
 		for(const [k] of Object.entries(query)){
 			if(!valid_query_keys.includes(k)){
 				const err_msg = `Invalid request query parameters [${k}]`;
-				throw urn_exc.create(`INVALID_QUERY`, err_msg);
+				throw urn_exc.create_invalid_request(`INVALID_QUERY`, err_msg);
 			}
 		}
 	}
@@ -149,7 +149,7 @@ function _only_valid_param_keys(params:any, valid_params_keys:string[])
 		for(const [k] of Object.entries(params)){
 			if(!valid_params_keys.includes(k)){
 				const err_msg = `Invalid parameters [${k}]`;
-				throw urn_exc.create(`INVALID_PARAMETERS`, err_msg);
+				throw urn_exc.create_invalid_request(`INVALID_PARAMETERS`, err_msg);
 			}
 		}
 	}
@@ -164,7 +164,7 @@ function _empty(p:any, param_name:string)
 		return true;
 	}
 	const err_msg = `Invalid request ${param_name}. ${param_name[0].toUpperCase() + param_name.slice(1)} should be empty.`;
-	throw urn_exc.create(`INVALID_BODY`, err_msg);
+	throw urn_exc.create_invalid_request(`INVALID_PARAM`, err_msg);
 }
 
 
