@@ -6,17 +6,13 @@
 
 import express from 'express';
 
-import {urn_log, urn_return, urn_exception, urn_response} from 'urn-lib';
+import {urn_log, urn_return, urn_exception} from 'urn-lib';
 
 const urn_ret = urn_return.create(urn_log.return_injector);
 
 import urn_core from 'urn_core';
 
-import {Atom, AtomShape} from '../../../types';
-
-import {log_and_catch_middleware} from '../mdlw';
-
-const bll_errors = urn_core.bll.create_log('error');
+import {route_middlewares, store_error} from '../mdlw';
 
 import * as req_validator from './validate';
 
@@ -24,7 +20,7 @@ const auth_bll = urn_core.bll.create_auth();
 
 const router = express.Router();
 
-router.post('/', log_and_catch_middleware(async (req:express.Request, res:express.Response) => {
+router.post('/', route_middlewares(async (req:express.Request, res:express.Response) => {
 	
 	req_validator.empty(req.params, 'params');
 	req_validator.empty(req.query, 'query');
@@ -44,7 +40,7 @@ router.post('/', log_and_catch_middleware(async (req:express.Request, res:expres
 					'USER_NOT_FOUND',
 					'User not found.'
 				);
-				await _store_error(urn_res, res);
+				await store_error(urn_res, res);
 				return res.status(404).send(urn_res);
 			}
 			case urn_exception.ExceptionType.INVALID_REQUEST:{
@@ -55,7 +51,7 @@ router.post('/', log_and_catch_middleware(async (req:express.Request, res:expres
 						'AUTH_INVALID_PASSWORD',
 						`User and password don't match.`
 					);
-					await _store_error(urn_res, res);
+					await store_error(urn_res, res);
 					return res.status(400).send(urn_res);
 				}else{
 					throw ex;
@@ -67,26 +63,6 @@ router.post('/', log_and_catch_middleware(async (req:express.Request, res:expres
 	}
 	
 }));
-
-async function _store_error(urn_res:urn_response.Fail, res:express.Response)
-		:Promise<Atom<'error'> | undefined>{
-	try{
-		const error_log:AtomShape<'error'> = {
-			status: urn_res.status,
-			msg: '' + urn_res.message,
-			error_code: urn_res.err_code,
-			error_msg: urn_res.err_msg,
-		};
-		if(res.locals.urn_request){
-			error_log.request = res.locals.urn_request._id;
-		}
-		return await bll_errors.insert_new(error_log);
-	}catch(ex){
-		// TODO
-		// Save to file CANNOT LOG
-		return undefined;
-	}
-}
 
 
 export {

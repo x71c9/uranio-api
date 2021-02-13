@@ -34,3 +34,23 @@ export namespace Book {
 	}
 	
 }
+
+import {FullConfiguration as CoreFullConfiguration} from 'urn_core/types';
+
+type RequiredConfigParams = {
+	web_required_param: string
+}
+
+type OptionalConfigParam = {
+	web_optional_param: string
+}
+
+export type Configuration =
+	CoreFullConfiguration &
+	RequiredConfigParams &
+	Partial<OptionalConfigParam>;
+
+export type FullConfiguration =
+	CoreFullConfiguration &
+	RequiredConfigParams &
+	OptionalConfigParam;
