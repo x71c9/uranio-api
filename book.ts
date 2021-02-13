@@ -8,7 +8,7 @@ export const web_atom_book = {
 		connection: 'log',
 		security: {
 			type: book_types.BookSecurityType.UNIFORM,
-			_r: null
+			_r: book_types.BookPermissionType.NOBODY
 		},
 		api:{
 			url: '/errors'
@@ -48,7 +48,7 @@ export const web_atom_book = {
 		connection: 'log',
 		security: {
 			type: book_types.BookSecurityType.UNIFORM,
-			_r: null
+			_r: book_types.BookPermissionType.NOBODY
 		},
 		api:{
 			url: '/requests'

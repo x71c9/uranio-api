@@ -5,6 +5,7 @@
  */
 
 import urn_core from 'urn_core';
+
 const bll_errors = urn_core.bll.create_log('error');
 /*
  * Function for handling exception.
