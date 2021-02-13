@@ -6,13 +6,13 @@
 
 import express from 'express';
 
-import {urn_log, urn_return, urn_exception} from 'urn-lib';
+import {urn_log, urn_return, urn_exception, urn_response} from 'urn-lib';
 
 const urn_ret = urn_return.create(urn_log.return_injector);
 
 import urn_core from 'urn_core';
 
-import {AtomShape} from '../../../types';
+import {Atom, AtomShape} from '../../../types';
 
 import {log_and_catch_middleware} from '../mdlw';
 
@@ -44,21 +44,7 @@ router.post('/', log_and_catch_middleware(async (req:express.Request, res:expres
 					'USER_NOT_FOUND',
 					'User not found.'
 				);
-				try{
-					const error_log:AtomShape<'error'> = {
-						status: urn_res.status,
-						msg: '' + urn_res.message,
-						error_code: urn_res.err_code,
-						error_msg: urn_res.err_msg,
-					};
-					if(res.locals.urn_request){
-						error_log.request = res.locals.urn_request._id;
-					}
-					await bll_errors.insert_new(error_log);
-				}catch(ex){
-					// TODO
-					// Save to file CANNOT LOG
-				}
+				await _store_error(urn_res, res);
 				return res.status(404).send(urn_res);
 			}
 			case urn_exception.ExceptionType.INVALID_REQUEST:{
@@ -69,17 +55,39 @@ router.post('/', log_and_catch_middleware(async (req:express.Request, res:expres
 						'AUTH_INVALID_PASSWORD',
 						`User and password don't match.`
 					);
+					await _store_error(urn_res, res);
 					return res.status(400).send(urn_res);
 				}else{
 					throw ex;
 				}
 			}
 		}
-		
 		throw ex;
+		
 	}
 	
 }));
+
+async function _store_error(urn_res:urn_response.Fail, res:express.Response)
+		:Promise<Atom<'error'> | undefined>{
+	try{
+		const error_log:AtomShape<'error'> = {
+			status: urn_res.status,
+			msg: '' + urn_res.message,
+			error_code: urn_res.err_code,
+			error_msg: urn_res.err_msg,
+		};
+		if(res.locals.urn_request){
+			error_log.request = res.locals.urn_request._id;
+		}
+		return await bll_errors.insert_new(error_log);
+	}catch(ex){
+		// TODO
+		// Save to file CANNOT LOG
+		return undefined;
+	}
+}
+
 
 export {
 	router as auth_route
