@@ -19,12 +19,16 @@ const bll_errors = urn_core.bll.create_log('error');
 
 type Handler = (req:express.Request, res:express.Response, next?:express.NextFunction) => Promise<any>
 
-export function async_catch_mdlw(handler:Handler)
-		:express.RequestHandler{
+export function log_and_catch_middleware(handler:Handler)
+		:express.RequestHandler[]{
+	
+	return [_log_middleware, _catch_middleware(handler)];
+	
+}
+
+export function _catch_middleware(handler:Handler):express.RequestHandler{
 	
 	return async (req: express.Request, res:express.Response, next:express.NextFunction) => {
-		
-		const request = await _log_request(req);
 		
 		try{
 			
@@ -32,11 +36,22 @@ export function async_catch_mdlw(handler:Handler)
 			
 		}catch(ex){
 			
-			_handle_exception(ex, res, request._id);
+			const request_id = (res.locals.urn_request) ? res.locals.urn_request._id : undefined;
+			_handle_exception(ex, res, request_id);
 			
 		}
 			
 	};
+}
+
+async function _log_middleware(req: express.Request, res:express.Response, next:express.NextFunction) {
+	try {
+		const urn_request = await _log_request(req);
+		res.locals.urn_request = urn_request;
+	}catch(ex){
+		// TODO save on file CANNOT LOG
+	}
+	next();
 }
 
 async function _log_request(req:express.Request)
@@ -57,8 +72,7 @@ async function _log_request(req:express.Request)
 		return await bll_requests.insert_new(request_shape);
 		
 	}catch(ex){
-		// TODO
-		// Save on file CANNOT LOG
+		// TODO save on file CANNOT LOG
 		return request_shape as Atom<'request'>;
 	}
 }
@@ -88,6 +102,8 @@ async function _handle_exception(
 		case urn_exception.ExceptionType.NOT_FOUND:{
 			status = 404;
 			msg = 'Not Found';
+			error_code = 'RECORD_NOT_FOUND';
+			error_msg = 'Record not found.';
 			break;
 		}
 		case urn_exception.ExceptionType.INVALID_REQUEST:{
@@ -115,8 +131,7 @@ async function _handle_exception(
 		await bll_errors.insert_new(error_log);
 		
 	}catch(ex){
-		// TODO
-		// Save to file CANNOT LOG
+		// TODO save on file CANNOT LOG
 	}
 	const urn_res = urn_ret.return_error(status, msg, error_code, error_msg);
 	return res.status(status).json(urn_res);

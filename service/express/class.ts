@@ -20,7 +20,8 @@ import {Service} from '../types';
 
 import {
 	create as create_route,
-} from './route';
+	auth_route
+} from './routes/';
 
 const express_app = express();
 
@@ -56,6 +57,8 @@ class ExpressWebService implements Service {
 				express_app.use(atom_def.api.url, router);
 			}
 		}
+		
+		express_app.use('/auth', auth_route);
 	}
 	
 	listen(ws_port: number, callback:() => void): void {
