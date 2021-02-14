@@ -25,17 +25,20 @@ type Handler = (req:express.Request, res:express.Response, next?:express.NextFun
 
 export function route_middlewares(handler:Handler)
 		:express.RequestHandler[]{
-	
-	return [_local, _log_middleware, _authorization_middleware,  _catch_middleware(handler)];
-	
+	return [_locals, _log, _authorization,  _catch(handler)];
 }
 
-function _local(_:express.Request, res:express.Response, next:express.NextFunction) {
+export function auth_route_middlewares(handler:Handler)
+		:express.RequestHandler[]{
+	return [_locals, _log, _catch(handler)];
+}
+
+function _locals(_:express.Request, res:express.Response, next:express.NextFunction) {
 	res.locals.urn = {};
 	next();
 }
 
-async function _log_middleware(req: express.Request, res:express.Response, next:express.NextFunction) {
+async function _log(req: express.Request, res:express.Response, next:express.NextFunction) {
 	try {
 		const urn_request = await _log_request(req);
 		res.locals.urn.request = urn_request;
@@ -45,7 +48,7 @@ async function _log_middleware(req: express.Request, res:express.Response, next:
 	next();
 }
 
-async function _authorization_middleware(req:express.Request, res:express.Response, next:express.NextFunction) {
+async function _authorization(req:express.Request, res:express.Response, next:express.NextFunction) {
 	try{
 		const token = req.header('x-auth-token');
 		res.locals.urn.groups = [];
@@ -54,7 +57,8 @@ async function _authorization_middleware(req:express.Request, res:express.Respon
 		}
 		const decoded = jwt.verify(token, web_config.jwt_private_key) as any;
 		if(Array.isArray(decoded.user.groups)){
-			res.locals.urn.groups = decoded.user.groups;
+			res.locals.urn.groups = decoded.groups;
+			res.locals.urn.atom_user = decoded.atom;
 		}
 		// res.locals.urn.decoded_token = decoded;
 	}catch(ex){
@@ -70,7 +74,7 @@ async function _authorization_middleware(req:express.Request, res:express.Respon
 	return next();
 }
 
-function _catch_middleware(handler:Handler):express.RequestHandler{
+function _catch(handler:Handler):express.RequestHandler{
 	
 	return async (req: express.Request, res:express.Response, next:express.NextFunction) => {
 		
@@ -117,7 +121,7 @@ async function _handle_exception(
 	let error_msg = ex.message;
 	if(ex.type){
 		error_code = ex.module_code + '_' + ex.error_code;
-		error_msg = ex.module_name + '. ' + ex.msg;
+		error_msg = ex.msg;
 	}
 	switch(ex.type){
 		case urn_exception.ExceptionType.UNAUTHORIZED:{

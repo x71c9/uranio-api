@@ -19,7 +19,8 @@ export namespace Book {
 	export namespace Definition {
 		
 		export type Api = {
-			url: string
+			url: string,
+			auth: string
 		}
 		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
