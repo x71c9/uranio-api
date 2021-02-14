@@ -14,13 +14,13 @@ const urn_ret = urn_return.create(urn_log.return_injector);
 
 import {atom_book} from 'urn_book';
 
-import {AtomName, Book} from '../../types';
+import {AtomName, Book, AuthName} from '../../types';
 
 import {Service} from '../types';
 
 import {
 	create as create_route,
-	auth_route
+	create_auth_route
 } from './routes/';
 
 const express_app = express();
@@ -56,9 +56,10 @@ class ExpressWebService implements Service {
 			}else{
 				express_app.use(atom_def.api.url, router);
 			}
+			if(atom_def.api && atom_def.api.auth && typeof atom_def.api.auth === 'string'){
+				express_app.use(atom_def.api.auth, create_auth_route(atom_name as AuthName));
+			}
 		}
-		
-		express_app.use('/auth', auth_route);
 	}
 	
 	listen(ws_port: number, callback:() => void): void {

@@ -67,8 +67,8 @@ export function empty(p:unknown, param_name:string)
 	if(p && typeof p === 'object' && Object.keys(p).length === 0){
 		return true;
 	}
-	let err_msg = `Invalid request ${param_name}`;
-	err_msg += ` ${param_name[0].toUpperCase() + param_name.slice(1)}`;
+	let err_msg = `Invalid request.`;
+	err_msg += ` [${param_name}]`;
 	err_msg += ` should be empty.`;
 	throw urn_exc.create_invalid_request(`INVALID_PARAM`, err_msg);
 }
