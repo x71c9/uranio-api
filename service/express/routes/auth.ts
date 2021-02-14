@@ -24,7 +24,7 @@ export function create_auth_route<A extends AuthName>(atom_name:A)
 
 	const router = express.Router();
 
-	const auth_bll = urn_core.bll.create_auth(atom_name);
+	const auth_bll = urn_core.bll.create_authentication(atom_name);
 
 	router.post('/', auth_route_middlewares(async (req:express.Request, res:express.Response) => {
 		

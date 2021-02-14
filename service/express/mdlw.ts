@@ -12,11 +12,13 @@ import {urn_response, urn_return, urn_exception, urn_log} from 'urn-lib';
 
 const urn_ret = urn_return.create(urn_log.return_injector);
 
+const urn_exc = urn_exception.init('EXPRESS_MDLW', 'Express middlewares');
+
 import urn_core from 'urn_core';
 
 import {web_config} from '../../conf/defaults';
 
-import {Atom, AtomShape} from '../../types';
+import {Atom, AtomShape, TokenObject} from '../../types';
 
 const bll_requests = urn_core.bll.create_log('request');
 const bll_errors = urn_core.bll.create_log('error');
@@ -55,21 +57,28 @@ async function _authorization(req:express.Request, res:express.Response, next:ex
 		if(!token){
 			return next();
 		}
-		const decoded = jwt.verify(token, web_config.jwt_private_key) as any;
-		if(Array.isArray(decoded.user.groups)){
-			res.locals.urn.groups = decoded.groups;
-			res.locals.urn.atom_user = decoded.atom;
+		const decoded = jwt.verify(token, web_config.jwt_private_key) as TokenObject;
+		
+		await urn_core.bll.auth.is_valid_token_object(decoded);
+		
+		if(!res.locals.urn){
+			const err_msg = 'Express response locals .urn not set';
+			throw urn_exc.create_invalid_request('LOCALS_NOT_SET', err_msg);
 		}
-		// res.locals.urn.decoded_token = decoded;
+		
+		res.locals.urn.token_object = decoded;
+		
 	}catch(ex){
+		
 		const urn_res = urn_ret.return_error(
 			400,
 			'Invalid request',
 			'INVALID_TOKEN',
-			'Invalid authorization token.'
+			ex.message,
 		);
 		await store_error(urn_res, res, ex);
 		return res.status(400).send(urn_res);
+		
 	}
 	return next();
 }
