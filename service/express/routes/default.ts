@@ -34,7 +34,9 @@ export function create(atom_name:AtomName):express.Router{
 		const filter = req_validator.process_request_filter(req.query.filter);
 		const options = req_validator.process_request_options(req.query.options);
 		
-		const urn_bll = urn_core.bll.create(atom_name, res.locals.urn.groups);
+		const token_object = await req_validator.process_request_token(res.locals);
+		
+		const urn_bll = urn_core.bll.create(atom_name, token_object);
 		
 		let bll_res = await urn_bll.find(filter, options);
 		

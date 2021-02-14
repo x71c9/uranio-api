@@ -8,10 +8,26 @@ import {urn_exception} from 'urn-lib';
 
 const urn_exc = urn_exception.init(`VALIDATE_REQUEST`, `Validate request module`);
 
-import {AtomName, Query} from '../../../types';
+import urn_core from 'urn_core';
+
+import {AtomName, Query, TokenObject} from '../../../types';
 
 import {ExpressQueryParam} from '../types';
 
+
+export async function process_request_token(locals:unknown)
+		:Promise<TokenObject>{
+	if(!locals || !(locals as any).urn){
+		throw urn_exc.create('INVALID_REQUEST_LOCALS', 'Invalid request locals not set.');
+	}
+	const urn_locals = (locals as any).urn;
+	
+	await urn_core.bll.auth.is_valid_token_object(urn_locals.token_object);
+	
+	const token_object:TokenObject = urn_locals.token_object;
+	
+	return token_object;
+}
 
 export function process_request_filter<A extends AtomName>(filter:ExpressQueryParam)
 		:Query<A>{
