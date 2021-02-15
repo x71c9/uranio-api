@@ -6,7 +6,8 @@
 
 import urn_core from 'urn_core';
 
-const bll_errors = urn_core.bll.create_log('error');
+const bll_errors = urn_core.bll.log.create('error');
+
 /*
  * Function for handling exception.
  * It should log the exception and stop the application.

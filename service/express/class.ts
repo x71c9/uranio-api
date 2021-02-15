@@ -19,7 +19,7 @@ import {AtomName, Book, AuthName} from '../../types';
 import {Service} from '../types';
 
 import {
-	create as create_route,
+	create_route,
 	create_auth_route
 } from './routes/';
 
