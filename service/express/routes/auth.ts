@@ -18,14 +18,13 @@ import {auth_route_middlewares, store_error} from '../mdlw';
 
 import * as req_validator from './validate';
 
-
 export function create_auth_route<A extends AuthName>(atom_name:A)
 		:express.Router{
-
+	
 	const router = express.Router();
-
-	const auth_bll = urn_core.bll.create_authentication(atom_name);
-
+	
+	const auth_bll = urn_core.bll.auth.create(atom_name);
+	
 	router.post('/', auth_route_middlewares(async (req:express.Request, res:express.Response) => {
 		
 		req_validator.empty(req.params, 'params');

@@ -20,8 +20,8 @@ import {web_config} from '../../conf/defaults';
 
 import {Atom, AtomShape, TokenObject} from '../../types';
 
-const bll_requests = urn_core.bll.create_log('request');
-const bll_errors = urn_core.bll.create_log('error');
+const bll_requests = urn_core.bll.log.create('request');
+const bll_errors = urn_core.bll.log.create('error');
 
 type Handler = (req:express.Request, res:express.Response, next?:express.NextFunction) => Promise<any>
 
@@ -52,17 +52,21 @@ async function _log(req: express.Request, res:express.Response, next:express.Nex
 
 async function _authorization(req:express.Request, res:express.Response, next:express.NextFunction) {
 	try{
+		
 		const token = req.header('x-auth-token');
-		res.locals.urn.groups = [];
+		
+		res.locals.urn.token_object = {groups:[]};
+		
 		if(!token){
 			return next();
 		}
+		
 		const decoded = jwt.verify(token, web_config.jwt_private_key) as TokenObject;
 		
 		await urn_core.bll.auth.is_valid_token_object(decoded);
 		
 		if(!res.locals.urn){
-			const err_msg = 'Express response locals .urn not set';
+			const err_msg = 'Express response locals.urn has not been set.';
 			throw urn_exc.create_invalid_request('LOCALS_NOT_SET', err_msg);
 		}
 		
@@ -101,7 +105,7 @@ function _catch(handler:Handler):express.RequestHandler{
 }
 
 async function _log_request(req:express.Request)
-		:Promise<Atom<'request'>>{
+		:Promise<AtomShape<'request'>>{
 	const request_shape:AtomShape<'request'> = {
 		url: `${req.method.toUpperCase()}: ${req.baseUrl}${req.url}`,
 		ip: req.ip
@@ -116,7 +120,7 @@ async function _log_request(req:express.Request)
 		return await bll_requests.insert_new(request_shape);
 	}catch(ex){
 		// TODO save on file CANNOT LOG
-		return request_shape as Atom<'request'>;
+		return request_shape;
 	}
 }
 

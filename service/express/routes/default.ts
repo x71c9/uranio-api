@@ -19,7 +19,8 @@ import {route_middlewares} from '../mdlw';
 import * as req_validator from './validate';
 
 
-export function create(atom_name:AtomName):express.Router{
+export function create_route(atom_name:AtomName)
+		:express.Router{
 	
 	urn_log.fn_debug(`Create Express Default Atom Router`);
 	
@@ -40,7 +41,7 @@ export function create(atom_name:AtomName):express.Router{
 		
 		let bll_res = await urn_bll.find(filter, options);
 		
-		bll_res = urn_core.atm.hide_hidden_properties(atom_name, bll_res);
+		bll_res = urn_core.atm.util.hide_hidden_properties(atom_name, bll_res);
 		
 		const urn_response = urn_ret.return_success('Success', bll_res);
 		
@@ -60,7 +61,7 @@ export function create(atom_name:AtomName):express.Router{
 		
 		let bll_res = await urn_bll.find_by_id(req.params.id, options);
 		
-		bll_res = urn_core.atm.hide_hidden_properties(atom_name, bll_res);
+		bll_res = urn_core.atm.util.hide_hidden_properties(atom_name, bll_res);
 		
 		const urn_response = urn_ret.return_success('Success', bll_res);
 		
@@ -77,7 +78,7 @@ export function create(atom_name:AtomName):express.Router{
 		
 		let bll_res = await urn_bll.insert_new(req.body);
 		
-		bll_res = urn_core.atm.hide_hidden_properties(atom_name, bll_res);
+		bll_res = urn_core.atm.util.hide_hidden_properties(atom_name, bll_res);
 		
 		const urn_response = urn_ret.return_success('Success', bll_res);
 		
@@ -94,7 +95,7 @@ export function create(atom_name:AtomName):express.Router{
 		
 		let bll_res = await urn_bll.update_by_id(req.params.id, req.body);
 		
-		bll_res = urn_core.atm.hide_hidden_properties(atom_name, bll_res);
+		bll_res = urn_core.atm.util.hide_hidden_properties(atom_name, bll_res);
 		
 		const urn_response = urn_ret.return_success('Success', bll_res);
 		
@@ -112,7 +113,7 @@ export function create(atom_name:AtomName):express.Router{
 		
 		let bll_res = await urn_bll.remove_by_id(req.params.id);
 		
-		bll_res = urn_core.atm.hide_hidden_properties(atom_name, bll_res);
+		bll_res = urn_core.atm.util.hide_hidden_properties(atom_name, bll_res);
 		
 		const urn_response = urn_ret.return_success('Success', bll_res);
 		
