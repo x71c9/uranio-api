@@ -12,7 +12,7 @@ const urn_ret = urn_return.create(urn_log.return_injector);
 
 import urn_core from 'urn_core';
 
-import {AuthName} from '../../../types';
+import {AuthName, AuthAction} from '../../../types';
 
 import {auth_route_middlewares, store_error} from '../mdlw';
 
@@ -25,7 +25,7 @@ export function create_auth_route<A extends AuthName>(atom_name:A)
 	
 	const auth_bll = urn_core.bll.auth.create(atom_name);
 	
-	router.post('/', auth_route_middlewares(async (req:express.Request, res:express.Response) => {
+	router.post('/', auth_route_middlewares(atom_name, AuthAction.AUTH, async (req:express.Request, res:express.Response) => {
 		
 		req_validator.empty(req.params, 'params');
 		req_validator.empty(req.query, 'query');
