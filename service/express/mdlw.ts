@@ -88,7 +88,7 @@ async function _authorization(req:express.Request, res:express.Response, next:ex
 		
 		const decoded = jwt.verify(token, web_config.jwt_private_key) as TokenObject;
 		
-		urn_core.bll.auth.is_valid_token_object(decoded);
+		// urn_core.bll.auth.is_valid_token_object(decoded);
 		
 		res.locals.urn.token_object = decoded;
 		
