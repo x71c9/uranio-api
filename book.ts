@@ -79,12 +79,14 @@ export const web_atom_book = {
 			},
 			atom_name: {
 				type: book_types.BookPropertyType.TEXT,
-				label: 'Atom name'
+				label: 'Atom name',
+				on_error: () => {return 'generic_atom';}
 			},
 			auth_action: {
 				type: book_types.BookPropertyType.ENUM_STRING,
 				label: 'Auth action',
-				values: ['READ', 'WRITE']
+				values: ['READ', 'WRITE'],
+				on_error: () => {return 'READ';}
 			}
 		}
 	},
