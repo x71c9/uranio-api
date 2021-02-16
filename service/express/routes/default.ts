@@ -53,6 +53,8 @@ export function create_route(atom_name:AtomName)
 		req_validator.empty(req.body, 'body');
 		
 		const options = req_validator.process_request_options(req.query.options);
+
+		console.log(res.locals.urn.token_object);
 		
 		const urn_bll = urn_core.bll.create(atom_name, res.locals.urn.token_object);
 		
@@ -109,6 +111,8 @@ export function create_route(atom_name:AtomName)
 		const urn_bll = urn_core.bll.create(atom_name, res.locals.urn.token_object);
 		
 		let bll_res = await urn_bll.remove_by_id(req.params.id);
+		
+		console.log(bll_res);
 		
 		bll_res = urn_core.atm.util.hide_hidden_properties(atom_name, bll_res);
 		
