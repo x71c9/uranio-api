@@ -76,6 +76,15 @@ export const web_atom_book = {
 				type: book_types.BookPropertyType.LONG_TEXT,
 				label: 'Body',
 				optional: true
+			},
+			atom_name: {
+				type: book_types.BookPropertyType.TEXT,
+				label: 'Atom name'
+			},
+			auth_action: {
+				type: book_types.BookPropertyType.ENUM_STRING,
+				label: 'Auth action',
+				values: ['READ', 'WRITE']
 			}
 		}
 	},

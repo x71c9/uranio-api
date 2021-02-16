@@ -12,12 +12,11 @@ const urn_ret = urn_return.create();
 
 import urn_core from 'urn_core';
 
-import {AtomName} from '../../../types';
+import {AtomName, AuthAction} from '../../../types';
 
 import {route_middlewares} from '../mdlw';
 
 import * as req_validator from './validate';
-
 
 export function create_route(atom_name:AtomName)
 		:express.Router{
@@ -26,7 +25,7 @@ export function create_route(atom_name:AtomName)
 	
 	const router = express.Router();
 	
-	router.get('/', route_middlewares(async (req, res) => {
+	router.get('/', route_middlewares(atom_name, AuthAction.READ, async (req, res) => {
 		
 		req_validator.only_valid_query_keys(req.query, ['filter','options']);
 		req_validator.empty(req.params, 'params');
@@ -35,9 +34,7 @@ export function create_route(atom_name:AtomName)
 		const filter = req_validator.process_request_filter(req.query.filter);
 		const options = req_validator.process_request_options(req.query.options);
 		
-		const token_object = await req_validator.process_request_token(res.locals);
-		
-		const urn_bll = urn_core.bll.create(atom_name, token_object);
+		const urn_bll = urn_core.bll.create(atom_name, res.locals.urn.token_object);
 		
 		let bll_res = await urn_bll.find(filter, options);
 		
@@ -49,7 +46,7 @@ export function create_route(atom_name:AtomName)
 		
 	}));
 	
-	router.get('/:id', route_middlewares(async (req, res) => {
+	router.get('/:id', route_middlewares(atom_name, AuthAction.READ, async (req, res) => {
 		
 		req_validator.only_valid_param_keys(req.param, ['id']);
 		req_validator.only_valid_query_keys(req.query, ['filter','options']);
@@ -57,7 +54,7 @@ export function create_route(atom_name:AtomName)
 		
 		const options = req_validator.process_request_options(req.query.options);
 		
-		const urn_bll = urn_core.bll.create(atom_name, res.locals.urn.groups);
+		const urn_bll = urn_core.bll.create(atom_name, res.locals.urn.token_object);
 		
 		let bll_res = await urn_bll.find_by_id(req.params.id, options);
 		
@@ -69,12 +66,12 @@ export function create_route(atom_name:AtomName)
 		
 	}));
 	
-	router.post('/', route_middlewares(async (req, res) => {
+	router.post('/', route_middlewares(atom_name, AuthAction.WRITE, async (req, res) => {
 		
 		req_validator.empty(req.params, 'params');
 		req_validator.empty(req.query, 'query');
 		
-		const urn_bll = urn_core.bll.create(atom_name, res.locals.urn.groups);
+		const urn_bll = urn_core.bll.create(atom_name, res.locals.urn.token_object);
 		
 		let bll_res = await urn_bll.insert_new(req.body);
 		
@@ -86,12 +83,12 @@ export function create_route(atom_name:AtomName)
 		
 	}));
 	
-	router.post('/:id', route_middlewares(async (req, res) => {
+	router.post('/:id', route_middlewares(atom_name, AuthAction.WRITE, async (req, res) => {
 		
 		req_validator.only_valid_param_keys(req.param, ['id']);
 		req_validator.empty(req.query, 'query');
 		
-		const urn_bll = urn_core.bll.create(atom_name, res.locals.urn.groups);
+		const urn_bll = urn_core.bll.create(atom_name, res.locals.urn.token_object);
 		
 		let bll_res = await urn_bll.update_by_id(req.params.id, req.body);
 		
@@ -103,13 +100,13 @@ export function create_route(atom_name:AtomName)
 		
 	}));
 	
-	router.delete('/:id', route_middlewares(async (req, res) => {
+	router.delete('/:id', route_middlewares(atom_name, AuthAction.WRITE, async (req, res) => {
 		
 		req_validator.only_valid_param_keys(req.param, ['id']);
 		req_validator.empty(req.query, 'query');
 		req_validator.empty(req.body, 'body');
 		
-		const urn_bll = urn_core.bll.create(atom_name, res.locals.urn.groups);
+		const urn_bll = urn_core.bll.create(atom_name, res.locals.urn.token_object);
 		
 		let bll_res = await urn_bll.remove_by_id(req.params.id);
 		
