@@ -21,11 +21,13 @@ import * as req_validator from './validate';
 export function create_route(atom_name:AtomName)
 		:express.Router{
 	
-	urn_log.fn_debug(`Create Express Default Atom Router`);
+	urn_log.fn_debug(`Create Express Default Atom Router [${atom_name}]`);
 	
 	const router = express.Router();
 	
 	router.get('/', route_middlewares(atom_name, AuthAction.READ, async (req, res) => {
+		
+		urn_log.fn_debug(`Router GET / [${atom_name}]`);
 		
 		req_validator.only_valid_query_keys(req.query, ['filter','options']);
 		req_validator.empty(req.params, 'params');
@@ -48,14 +50,14 @@ export function create_route(atom_name:AtomName)
 	
 	router.get('/:id', route_middlewares(atom_name, AuthAction.READ, async (req, res) => {
 		
+		urn_log.fn_debug(`Router GET /:id [${atom_name}]`);
+		
 		req_validator.only_valid_param_keys(req.param, ['id']);
 		req_validator.only_valid_query_keys(req.query, ['filter','options']);
 		req_validator.empty(req.body, 'body');
 		
 		const options = req_validator.process_request_options(req.query.options);
 
-		console.log(res.locals.urn.token_object);
-		
 		const urn_bll = urn_core.bll.create(atom_name, res.locals.urn.token_object);
 		
 		let bll_res = await urn_bll.find_by_id(req.params.id, options);
@@ -69,6 +71,8 @@ export function create_route(atom_name:AtomName)
 	}));
 	
 	router.post('/', route_middlewares(atom_name, AuthAction.WRITE, async (req, res) => {
+		
+		urn_log.fn_debug(`Router POST / [${atom_name}]`);
 		
 		req_validator.empty(req.params, 'params');
 		req_validator.empty(req.query, 'query');
@@ -87,6 +91,8 @@ export function create_route(atom_name:AtomName)
 	
 	router.post('/:id', route_middlewares(atom_name, AuthAction.WRITE, async (req, res) => {
 		
+		urn_log.fn_debug(`Router POST /:id [${atom_name}]`);
+		
 		req_validator.only_valid_param_keys(req.param, ['id']);
 		req_validator.empty(req.query, 'query');
 		
@@ -104,6 +110,8 @@ export function create_route(atom_name:AtomName)
 	
 	router.delete('/:id', route_middlewares(atom_name, AuthAction.WRITE, async (req, res) => {
 		
+		urn_log.fn_debug(`Router DELETE /:id [${atom_name}]`);
+		
 		req_validator.only_valid_param_keys(req.param, ['id']);
 		req_validator.empty(req.query, 'query');
 		req_validator.empty(req.body, 'body');
@@ -111,8 +119,6 @@ export function create_route(atom_name:AtomName)
 		const urn_bll = urn_core.bll.create(atom_name, res.locals.urn.token_object);
 		
 		let bll_res = await urn_bll.remove_by_id(req.params.id);
-		
-		console.log(bll_res);
 		
 		bll_res = urn_core.atm.util.hide_hidden_properties(atom_name, bll_res);
 		
