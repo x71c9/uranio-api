@@ -31,10 +31,10 @@ const bll_errors = urn_core.bll.log.create('error');
 
 type Handler = (req:express.Request, res:express.Response, next?:express.NextFunction) => Promise<any>
 
-export function route_middlewares_old(atom_name:AtomName, action: AuthAction, handler:Handler)
-		:express.RequestHandler[]{
-	return [_locals(atom_name, action), _log, _authorization,  _catch(handler)];
-}
+// export function route_middlewares_old(atom_name:AtomName, action: AuthAction, handler:Handler)
+//     :express.RequestHandler[]{
+//   return [_locals(atom_name, action), _log, _authorization,  _catch(handler)];
+// }
 
 export function route_middlewares(atom_name:AtomName, action: AuthAction, handler:Handler)
 		:express.RequestHandler[]{

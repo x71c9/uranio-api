@@ -11,7 +11,7 @@ export const web_atom_book = {
 			_r: book_types.BookPermissionType.NOBODY
 		},
 		api:{
-			url: '/errors'
+			url: 'errors'
 		},
 		properties: {
 			status: {
@@ -51,7 +51,7 @@ export const web_atom_book = {
 			_r: book_types.BookPermissionType.NOBODY
 		},
 		api:{
-			url: '/requests'
+			url: 'requests'
 		},
 		properties: {
 			url: {
