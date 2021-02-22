@@ -30,27 +30,38 @@ import {ExpressQueryParam} from '../types';
 //   return token_object;
 // }
 
-export function process_request_filter<A extends AtomName>(filter:ExpressQueryParam)
+export function process_request_query<A extends AtomName>(query:ExpressQueryParam)
 		:Query<A>{
-	if(typeof filter === 'undefined'){
+	if(typeof query === 'undefined'){
 		return {};
 	}
-	if(!Array.isArray(filter) && typeof filter === 'object'){
-		return filter;
+	if(!Array.isArray(query) && typeof query === 'object'){
+		return query;
 	}
-	throw urn_exc.create_invalid_request(`INVALID_FILTER`, `Invalid filter`);
+	throw urn_exc.create_invalid_request(`INVALID_QUERY_PARAM`, `Invalid query`);
 }
 
-export function process_request_options<A extends AtomName>(options:ExpressQueryParam)
-		:Query.Options<A>{
-	if(typeof options === 'undefined'){
-		return {};
-	}
-	if(!Array.isArray(options) && typeof options === 'object'){
-		return options;
-	}
-	throw urn_exc.create_invalid_request(`INVALID_OPTIONS`, `Invalid options`);
-}
+// export function process_request_filter<A extends AtomName>(filter:ExpressQueryParam)
+//     :Query<A>{
+//   if(typeof filter === 'undefined'){
+//     return {};
+//   }
+//   if(!Array.isArray(filter) && typeof filter === 'object'){
+//     return filter;
+//   }
+//   throw urn_exc.create_invalid_request(`INVALID_FILTER`, `Invalid filter`);
+// }
+
+// export function process_request_options<A extends AtomName>(options:ExpressQueryParam)
+//     :Query.Options<A>{
+//   if(typeof options === 'undefined'){
+//     return {};
+//   }
+//   if(!Array.isArray(options) && typeof options === 'object'){
+//     return options;
+//   }
+//   throw urn_exc.create_invalid_request(`INVALID_OPTIONS`, `Invalid options`);
+// }
 
 export function only_valid_query_keys(query:unknown, valid_query_keys:string[])
 		:void{

@@ -14,136 +14,247 @@ const urn_ret = urn_return.create(urn_log.return_injector);
 
 const urn_exc = urn_exception.init('EXPRESS_MDLW', 'Express middlewares');
 
+import {atom_book} from 'urn_book';
+
 import urn_core from 'urn_core';
 
 import {web_config} from '../../conf/defaults';
+
+import * as req_validator from './routes/validate';
 
 import {
 	Atom,
 	AtomName,
 	AtomShape,
 	TokenObject,
-	AuthAction
+	RouteRequest,
+	RouteMethod,
+	Book,
 } from '../../types';
 
 const bll_requests = urn_core.bll.log.create('request');
 const bll_errors = urn_core.bll.log.create('error');
 
-type Handler = (req:express.Request, res:express.Response, next?:express.NextFunction) => Promise<any>
+export function route_middlewares<A extends AtomName>(
+	atom_name: A,
+	route_name: string
+):express.RequestHandler[]{
+	return [_locals(atom_name, route_name), _log(), _authorization(),  _validate_and_catch()];
+}
 
-// export function route_middlewares_old(atom_name:AtomName, action: AuthAction, handler:Handler)
-//     :express.RequestHandler[]{
-//   return [_locals(atom_name, action), _log, _authorization,  _catch(handler)];
+// export function auth_route_middlewares<A extends AtomName>(
+//   atom_name:A,
+//   route_name:RouteName<A>,
+//   handler:Handler
+// ):express.RequestHandler[]{
+//   return [_locals(atom_name, route_name), _log, _catch(handler)];
 // }
 
-export function route_middlewares(atom_name:AtomName, action: AuthAction, handler:Handler)
-		:express.RequestHandler[]{
-	return [_locals(atom_name, action), _log, _authorization,  _catch(handler)];
-}
-
-export function auth_route_middlewares(atom_name:AtomName, action: AuthAction, handler:Handler)
-		:express.RequestHandler[]{
-	return [_locals(atom_name, action), _log, _catch(handler)];
-}
-
-function _locals(atom_name:AtomName, action:AuthAction) {
-	return (_:express.Request, res:express.Response, next:express.NextFunction) => {
-		res.locals.urn = {};
-		res.locals.urn.atom_name = atom_name;
-		res.locals.urn.auth_action = action;
+function _locals<A extends AtomName>(atom_name:A, route_name:string) {
+	return (req:express.Request, res:express.Response, next:express.NextFunction) => {
+		
+		const route_request:RouteRequest = {
+			params: req.params,
+			query: req.query,
+			body: req.body,
+			atom_name: atom_name,
+			route_name: route_name,
+			ip: req.ip
+		};
+		
+		res.locals.urn = route_request;
+		
 		return next();
 	};
 }
 
-async function _log(req: express.Request, res:express.Response, next:express.NextFunction) {
-	try {
-		const urn_request = await _log_request(req, res);
-		res.locals.urn.request = urn_request;
-	}catch(ex){
-		// TODO save on file CANNOT LOG
-	}
-	return next();
+function _log() {
+	return async (_req: express.Request, res:express.Response, next:express.NextFunction) => {
+		const route_request = _get_route_request(res);
+		try {
+			await _log_request(route_request);
+		}catch(ex){
+			// TODO save on file CANNOT LOG
+		}
+		return next();
+	};
 }
 
-async function _authorization(req:express.Request, res:express.Response, next:express.NextFunction) {
+function _authorization() {
+	return async (req:express.Request, res:express.Response, next:express.NextFunction) => {
+		
+		const route_request = _get_route_request(res);
+		const route_def = _get_route_def(route_request);
+		
+		if(urn_core.bll.auth.is_public_request(route_request.atom_name, route_def.action)){
+			return next();
+		}
+		
+		const token = req.header('x-auth-token');
+		
+		if(!token){
+			return next();
+		}
+			
+		try{
+			
+			const decoded = jwt.verify(token, web_config.jwt_private_key) as TokenObject;
+			res.locals.urn.token_object = decoded;
+			
+		}catch(ex){
+			ex.stack = '';
+			const urn_res = urn_ret.return_error(
+				400,
+				'Invalid request',
+				'INVALID_TOKEN',
+				'Invalid token.',
+			);
+			await store_error(urn_res, res, ex);
+			return res.status(400).send(urn_res);
+		}
+		return next();
+	};
+}
+
+function _validate_and_catch()
+		:express.RequestHandler{
 	
-	if(!res.locals.urn){
+	return async (_req: express.Request, res:express.Response) => {
+		
+		try{
+			
+			const route_request = _get_route_request(res);
+			const route_def = _get_route_def(route_request);
+			
+			urn_log.fn_debug(`Router GET / [${route_request.atom_name}]`);
+			
+			_validate(route_request);
+			
+			const call_response = await route_def.call(route_request);
+			
+			const urn_response = urn_ret.return_success('Success', call_response);
+			
+			return res.status(200).json(urn_response);
+			
+		}catch(ex){
+			
+			return _handle_exception(ex, res);
+			
+		}
+		
+	};
+}
+
+function _validate(route_request:RouteRequest)
+		:void{
+	
+	const route_def = _get_route_def(route_request);
+		
+	urn_log.fn_debug(`Validate Route ${route_def.url} [${route_request.atom_name}]`);
+	
+	if(route_def.method === RouteMethod.GET){
+		req_validator.empty(route_request.body, 'body');
+	}
+	
+	if(route_def.url.indexOf(':') !== -1){
+		const param_names:string[] = [];
+		const folds = route_def.url.split('/');
+		for(let i = 0; i < folds.length; i++){
+			const splitted = folds[i].split(':');
+			if(splitted.length === 2){
+				param_names.push(splitted[1]);
+			}
+		}
+		req_validator.only_valid_param_keys(route_request.params, param_names);
+	}else{
+		req_validator.empty(route_request.params, 'params');
+	}
+	
+	if(route_def.query){
+		req_validator.only_valid_query_keys(route_request.query, route_def.query);
+		if(Array.isArray(route_def.query)){
+			for(let i = 0; i < route_def.query.length; i++){
+				route_request.query[route_def.query[i]] = req_validator.process_request_query(route_request.query[route_def.query[i]]);
+			}
+		}
+	}else{
+		req_validator.empty(route_request.query, 'query');
+	}
+	
+}
+
+function _get_route_def(route_request:RouteRequest)
+		:Book.Definition.Api.Routes.Route{
+	
+	const atom_api = atom_book[route_request.atom_name].api as Book.Definition.Api;
+	
+	if(!atom_api.routes){
+		// TODO implement generic routes.
+		atom_api.routes = {};
+	}
+	
+	if(!atom_api.routes[route_request.route_name]){
+		throw urn_exc.create_invalid_request(`INVALID_ROUTE_NAME`, `Invalid route name.`);
+	}
+	
+	// TODO _check_if_def_is_valid();
+	
+	return atom_api.routes[route_request.route_name];
+}
+
+function _get_route_request(res:express.Response)
+		:RouteRequest{
+		
+	const route_request = res.locals.urn as RouteRequest;
+	
+	if(!route_request){
 		const err_msg = 'Express response locals.urn has not been set.';
 		throw urn_exc.create_invalid_request('LOCALS_NOT_SET', err_msg);
 	}
 	
-	const atom_name = res?.locals?.urn?.atom_name;
-	const auth_action = res?.locals?.urn?.auth_action;
-	if(urn_core.bll.auth.is_public_request(atom_name, auth_action)){
-		return next();
-	}
+	// TODO _check_if_request_is_valid()
 	
-	const token = req.header('x-auth-token');
-	
-	if(!token){
-		return next();
-	}
-		
-	try{
-		
-		const decoded = jwt.verify(token, web_config.jwt_private_key) as TokenObject;
-		
-		// urn_core.bll.auth.is_valid_token_object(decoded);
-		
-		res.locals.urn.token_object = decoded;
-		
-	}catch(ex){
-		
-		ex.stack = '';
-		
-		const urn_res = urn_ret.return_error(
-			400,
-			'Invalid request',
-			'INVALID_TOKEN',
-			'Invalid token.',
-		);
-		await store_error(urn_res, res, ex);
-		return res.status(400).send(urn_res);
-		
-	}
-	return next();
+	return route_request;
 }
 
-function _catch(handler:Handler):express.RequestHandler{
-	
-	return async (req: express.Request, res:express.Response, next:express.NextFunction) => {
-		
-		try{
-			
-			await handler(req, res, next);
-			
-		}catch(ex){
-			
-			_handle_exception(ex, res);
-			
-		}
-			
-	};
-}
+// function _catch(handler:Handler):express.RequestHandler{
+//   return async (req: express.Request, res:express.Response, next:express.NextFunction) => {
+//     try{
+//       await handler(req, res, next);
+//     }catch(ex){
+//       _handle_exception(ex, res);
+//     }
+//   };
+// }
 
-async function _log_request(req:express.Request, res:express.Response)
+async function _log_request(route_request:RouteRequest)
 		:Promise<AtomShape<'request'>>{
-	const atom_name = res.locals?.urn?.atom_name;
-	const auth_action = res.locals?.urn?.auth_action;
+	
+	const atom_api = atom_book[route_request.atom_name].api as Book.Definition.Api;
+	if(!atom_api.routes){
+		// TODO implement generic routes.
+		atom_api.routes = {};
+	}
+	if(!atom_api.routes[route_request.route_name]){
+		throw urn_exc.create_invalid_request(`INVALID_ROUTE_NAME`, `Invalid route name.`);
+	}
+	
+	const route_def = _get_route_def(route_request);
+	
 	const request_shape:AtomShape<'request'> = {
-		url: `${req.method.toUpperCase()}: ${req.baseUrl}${req.url}`,
-		ip: req.ip,
-		atom_name: atom_name,
-		auth_action: auth_action
+		url: `${route_def.method.toUpperCase()}: ${atom_api.url}/${route_def.url}`,
+		ip: route_request.ip,
+		atom_name: route_request.atom_name,
+		auth_action: route_def.action
 	};
-	if(Object.keys(req.params).length > 0){
-		request_shape.params = JSON.stringify(req.params);
+	if(Object.keys(route_request.params).length > 0){
+		request_shape.params = JSON.stringify(route_request.params);
 	}
-	if(Object.keys(req.query).length > 0){
-		request_shape.query = JSON.stringify(req.query);
+	if(Object.keys(route_request.query).length > 0){
+		request_shape.query = JSON.stringify(route_request.query);
 	}
-	if(Object.keys(req.body).length > 0){
-		request_shape.body = JSON.stringify(req.body);
+	if(Object.keys(route_request.body).length > 0){
+		request_shape.body = JSON.stringify(route_request.body);
 	}
 	try{
 		return await bll_requests.insert_new(request_shape);
