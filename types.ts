@@ -55,3 +55,9 @@ export type FullConfiguration =
 	CoreFullConfiguration &
 	RequiredConfigParams &
 	OptionalConfigParam;
+
+export const enum RouteMethod {
+	GET = 'GET',
+	POST = 'POST',
+	DELETE = 'DELETE'
+}
