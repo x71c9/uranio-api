@@ -6,21 +6,52 @@
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 Api	types.ts	/^		export type Api = {$/;"	t
 Book	types.ts	/^export type Book = urn_core.types.Book;$/;"	t
-Definition	types.ts	/^	export type Definition = urn_core.types.Book.Definition & {$/;"	t
+Call	types.ts	/^					export type Call = (route_request: RouteRequest) => any$/;"	t
+Configuration	types.ts	/^export type Configuration =$/;"	t
+Definition	types.ts	/^	export type Definition =$/;"	t
 ExpressQueryParam	service/express/types.ts	/^export type ExpressQueryParam =$/;"	t
 ExpressWebService	service/express/class.ts	/^class ExpressWebService implements Service {$/;"	c
+FullConfiguration	types.ts	/^export type FullConfiguration =$/;"	t
+OptionalConfigParam	types.ts	/^type OptionalConfigParam = {$/;"	t
 QueryString	service/express/types.ts	/^import QueryString from 'qs';$/;"	I
+RequiredConfigParams	types.ts	/^type RequiredConfigParams = {$/;"	t
+Route	types.ts	/^				export type Route = {$/;"	t
+RouteRequest	types.ts	/^export type RouteRequest = {$/;"	t
+RouteRequestParams	types.ts	/^type RouteRequestParams = {$/;"	t
+RouteRequestQuery	types.ts	/^type RouteRequestQuery = {$/;"	t
+Routes	types.ts	/^			export type Routes = {$/;"	t
 Service	service/types.ts	/^export interface Service {$/;"	i
-_empty	service/express/route.ts	/^function _empty(p:any, param_name:string)$/;"	f
-_only_valid_param_keys	service/express/route.ts	/^function _only_valid_param_keys(params:any, valid_params_keys:string[])$/;"	f
-_only_valid_query_keys	service/express/route.ts	/^function _only_valid_query_keys(query:any, valid_query_keys:string[])$/;"	f
-_process_request_filter	service/express/route.ts	/^function _process_request_filter<A extends AtomName>(filter:ExpressQueryParam)$/;"	f
-_process_request_options	service/express/route.ts	/^function _process_request_options<A extends AtomName>(options:ExpressQueryParam)$/;"	f
+_authorization	service/express/mdlw.ts	/^function _authorization() {$/;"	f
+_get_route_api	service/express/mdlw.ts	/^function _get_route_api(atom_name:AtomName):Book.Definition.Api{$/;"	f
+_get_route_def	service/express/mdlw.ts	/^function _get_route_def(route_request:RouteRequest)$/;"	f
+_get_route_request	service/express/mdlw.ts	/^function _get_route_request(res:express.Response)$/;"	f
+_handle_exception	service/express/mdlw.ts	/^async function _handle_exception($/;"	f
+_locals	service/express/mdlw.ts	/^function _locals<A extends AtomName>(atom_name:A, route_name:string) {$/;"	f
+_log	service/express/mdlw.ts	/^function _log() {$/;"	f
+_log_request	service/express/mdlw.ts	/^async function _log_request(route_request:RouteRequest)$/;"	f
+_validate	service/express/mdlw.ts	/^function _validate(route_request:RouteRequest)$/;"	f
+_validate_and_catch	service/express/mdlw.ts	/^function _validate_and_catch()$/;"	f
+atom_book	book.ts	/^export const atom_book = {$/;"	v
 cors	service/express/class.ts	/^import cors from 'cors';$/;"	I
 create	service/express/class.ts	/^export function create():ExpressWebService{$/;"	f
-create	service/express/route.ts	/^export function create(atom_name:AtomName):express.Router{$/;"	f
+create_route	service/express/routes/default.ts	/^export function create_route<A extends AtomName>(atom_name:A)$/;"	f
+empty	service/express/routes/validate.ts	/^export function empty(p:unknown, param_name:string)$/;"	f
+enum	types.ts	/^export const enum RouteMethod {$/;"	v
 express	service/express/class.ts	/^import express from 'express';$/;"	I
-express	service/express/route.ts	/^import express from 'express';$/;"	I
-urn_core	service/express/route.ts	/^import urn_core from 'urn_core';$/;"	I
+express	service/express/mdlw.ts	/^import express from 'express';$/;"	I
+express	service/express/routes/default.ts	/^import express from 'express';$/;"	I
+handleException	tools/exc_handler.ts	/^async function handleException(ex:Error)$/;"	f
+handleRejectedPromise	tools/exc_handler.ts	/^async function handleRejectedPromise(reason:any, promise:Promise<any>)$/;"	f
+jwt	service/express/mdlw.ts	/^import jwt from 'jsonwebtoken';$/;"	I
+only_valid_param_keys	service/express/routes/validate.ts	/^export function only_valid_param_keys(params:unknown, valid_params_keys:string[])$/;"	f
+only_valid_query_keys	service/express/routes/validate.ts	/^export function only_valid_query_keys(query:unknown, valid_query_keys:string[])$/;"	f
+process_request_query	service/express/routes/validate.ts	/^export function process_request_query<A extends AtomName>(query:ExpressQueryParam)$/;"	f
+registerExceptionHandler	tools/exc_handler.ts	/^function registerExceptionHandler():void {$/;"	f
+route_middlewares	service/express/mdlw.ts	/^export function route_middlewares<A extends AtomName>($/;"	f
+store_error	service/express/mdlw.ts	/^export async function store_error(urn_res:urn_response.Fail, res:express.Response, ex?:urn_exception.ExceptionInstance)$/;"	f
+urn_core	service/express/mdlw.ts	/^import urn_core from 'urn_core';$/;"	I
+urn_core	tools/exc_handler.ts	/^import urn_core from 'urn_core';$/;"	I
 urn_core	types.ts	/^import urn_core from 'urn_core';$/;"	I
 urn_web	run.ts	/^import urn_web from 'urn_web';$/;"	I
+web_atom_book	book.ts	/^export const web_atom_book = {$/;"	v
+web_config	conf/defaults.ts	/^export const web_config:FullConfiguration = {$/;"	v

@@ -130,7 +130,9 @@ function _validate_and_catch()
 			
 			_validate(route_request);
 			
-			const call_response = await route_def.call(route_request);
+			let call_response = await route_def.call(route_request);
+			
+			call_response = urn_core.atm.util.hide_hidden_properties(route_request.atom_name, call_response);
 			
 			const urn_response = urn_ret.return_success('Success', call_response);
 			
