@@ -16,9 +16,9 @@ export type Book = urn_core.types.Book;
 
 export namespace Book {
 	
-	export type Definition = urn_core.types.Book.Definition & {
-		api: Definition.Api
-	}
+	export type Definition =
+		urn_core.types.Book.Definition &
+		{ api?: Definition.Api }
 	
 	export namespace Definition {
 		

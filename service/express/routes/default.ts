@@ -27,9 +27,9 @@ export function create_route<A extends AtomName>(atom_name:A)
 	
 	const atom_api = atom_book[atom_name].api as Book.Definition.Api;
 	
-	// TODO load default routes
-	
-	if(atom_api.routes){
+	if(atom_api && atom_api.routes){
+		
+		// TODO load default routes
 		
 		for(const [route_name, route_def] of Object.entries(atom_api.routes)){
 			
