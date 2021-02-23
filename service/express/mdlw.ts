@@ -279,7 +279,7 @@ async function _log_request(route_request:RouteRequest)
 	const route_def = _get_route_def(route_request);
 	
 	const request_shape:AtomShape<'request'> = {
-		url: `${route_def.method.toUpperCase()}: ${atom_api.url}/${route_def.url}`,
+		url: `${route_def.method.toUpperCase()}: /${atom_api.url}${route_def.url}`,
 		ip: route_request.ip,
 		atom_name: route_request.atom_name,
 		auth_action: route_def.action
