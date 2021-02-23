@@ -186,7 +186,7 @@ function _validate(route_request:RouteRequest)
 function _get_route_def(route_request:RouteRequest)
 		:Book.Definition.Api.Routes.Route{
 	
-	const atom_api = atom_book[route_request.atom_name].api as Book.Definition.Api;
+	const atom_api = _get_route_api(route_request.atom_name);
 	
 	if(!atom_api.routes){
 		// TODO implement generic routes.
@@ -194,7 +194,7 @@ function _get_route_def(route_request:RouteRequest)
 	}
 	
 	if(!atom_api.routes[route_request.route_name]){
-		throw urn_exc.create_invalid_request(`INVALID_ROUTE_NAME`, `Invalid route name.`);
+		throw urn_exc.create(`INVALID_ROUTE_NAME`, `Invalid route name.`);
 	}
 	
 	// TODO _check_if_def_is_valid();
@@ -217,6 +217,36 @@ function _get_route_request(res:express.Response)
 	return route_request;
 }
 
+function _get_route_api(atom_name:AtomName):Book.Definition.Api{
+	
+	const atom_api = atom_book[atom_name].api as Book.Definition.Api;
+	
+	if(!atom_api){
+		throw urn_exc.create(`INVLID_API_DEF`,'Invalid api definition in atom_book.');
+	}
+	
+	return atom_api;
+	
+}
+
+// function _get_api_route(atom_name:AtomName, route_name:string)
+//     :Book.Definition.Api.Routes.Route{
+//   const atom_api = _get_route_api(atom_name);
+	
+//   if(!atom_api.routes){
+//     //TODO implements generic routes
+//     atom_api.routes = {};
+//   }
+	
+//   if(!atom_api.routes[route_name]){
+//     const err_msg = `Invalid route name [${atom_name}] [${route_name}].`;
+//     throw urn_exc.create_invalid_request(`INVALID_ROUTE_NAME`, err_msg);
+//   }
+	
+//   return atom_api.routes[route_name];
+	
+// }
+
 // function _catch(handler:Handler):express.RequestHandler{
 //   return async (req: express.Request, res:express.Response, next:express.NextFunction) => {
 //     try{
@@ -230,14 +260,19 @@ function _get_route_request(res:express.Response)
 async function _log_request(route_request:RouteRequest)
 		:Promise<AtomShape<'request'>>{
 	
-	const atom_api = atom_book[route_request.atom_name].api as Book.Definition.Api;
-	if(!atom_api.routes){
-		// TODO implement generic routes.
-		atom_api.routes = {};
-	}
-	if(!atom_api.routes[route_request.route_name]){
-		throw urn_exc.create_invalid_request(`INVALID_ROUTE_NAME`, `Invalid route name.`);
-	}
+	// const atom_api = atom_book[route_request.atom_name].api as Book.Definition.Api;
+	
+	const atom_api = _get_route_api(route_request.atom_name);
+	
+	// const route_def = _get_route_def
+	
+	// if(!atom_api.routes){
+	//   // TODO implement generic routes.
+	//   atom_api.routes = {};
+	// }
+	// if(!atom_api.routes[route_request.route_name]){
+	//   throw urn_exc.create_invalid_request(`INVALID_ROUTE_NAME`, `Invalid route name.`);
+	// }
 	
 	const route_def = _get_route_def(route_request);
 	
