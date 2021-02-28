@@ -12,7 +12,9 @@ import urn_core from 'urn_core';
 
 export * from 'urn_core/types';
 
-export type Book = urn_core.types.Book;
+export type Book = {
+	[k in string]: Book.Definition;
+};
 
 export namespace Book {
 	
