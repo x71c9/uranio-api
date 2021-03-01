@@ -12,15 +12,24 @@ import urn_core from 'urn_core';
 
 export * from 'urn_core/types';
 
+// export type RawBook = {
+//   // [k in string]: k extends urn_core.types.AtomName ? urn_core.types.Book.Definition<k> : never;
+//   [k in string]: urn_core.types.Book.Definition;
+// };
+
 export type Book = {
-	[k in string]: Book.Definition;
-};
+	[k in urn_core.types.AtomName]?: Book.AtomDefinition<k>;
+}
 
 export namespace Book {
 	
 	export type Definition =
 		urn_core.types.Book.Definition &
 		{ api?: Definition.Api }
+	
+	export type AtomDefinition<A extends urn_core.types.AtomName> =
+		Book.Definition &
+		{ bll?: new(...args:any[]) => urn_core.bll.BLL<A>}
 	
 	export namespace Definition {
 		
