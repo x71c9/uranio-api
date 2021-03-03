@@ -1,16 +1,13 @@
 
 import urn_core from 'urn_core';
 
-export const web_atom_book = {
-	...urn_core.types.required_book,
+export const atom = {
+	...urn_core.types.required_books.atom,
 	error: {
 		connection: 'log',
 		security: {
 			type: urn_core.types.BookSecurityType.UNIFORM,
 			_r: urn_core.types.BookPermissionType.NOBODY
-		},
-		api:{
-			url: 'errors'
 		},
 		properties: {
 			status: {
@@ -48,9 +45,6 @@ export const web_atom_book = {
 		security: {
 			type: urn_core.types.BookSecurityType.UNIFORM,
 			_r: urn_core.types.BookPermissionType.NOBODY
-		},
-		api:{
-			url: 'requests'
 		},
 		properties: {
 			url: {
@@ -90,3 +84,24 @@ export const web_atom_book = {
 		}
 	},
 } as const;
+
+export const bll = {
+	...urn_core.types.required_books.bll,
+	error: {},
+	request: {}
+} as const;
+
+export const api = {
+	...urn_core.types.required_books.api,
+	error: {
+		api:{
+			url: 'errors'
+		}
+	},
+	request: {
+		api:{
+			url: 'requests'
+		}
+	}
+} as const;
+
