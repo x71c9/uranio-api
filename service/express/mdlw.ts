@@ -14,7 +14,7 @@ const urn_ret = urn_return.create(urn_log.return_injector);
 
 const urn_exc = urn_exception.init('EXPRESS_MDLW', 'Express middlewares');
 
-import {atom_book} from 'urn_book';
+import {api_book} from 'urn_book';
 
 import urn_core from 'urn_core';
 
@@ -221,7 +221,7 @@ function _get_route_request(res:express.Response)
 
 function _get_route_api(atom_name:AtomName):Book.Definition.Api{
 	
-	const atom_api = atom_book[atom_name].api as Book.Definition.Api;
+	const atom_api = api_book[atom_name as keyof typeof api_book].api as Book.Definition.Api;
 	
 	if(!atom_api){
 		throw urn_exc.create(`INVLID_API_DEF`,'Invalid api definition in atom_book.');

@@ -8,7 +8,7 @@ import express from 'express';
 
 import {urn_log} from 'urn-lib';
 
-import {atom_book} from 'urn_book';
+import {api_book} from 'urn_book';
 
 import {
 	AtomName,
@@ -27,7 +27,7 @@ export function create_route<A extends AtomName>(atom_name:A)
 	
 	const router = express.Router();
 	
-	const atom_api = atom_book[atom_name].api as Book.Definition.Api;
+	const atom_api = api_book[atom_name as keyof typeof api_book].api as Book.Definition.Api;
 	
 	if(!atom_api){
 		return router;
