@@ -12,9 +12,9 @@ import {urn_log, urn_return} from 'urn-lib';
 
 const urn_ret = urn_return.create(urn_log.return_injector);
 
-import {atom_book} from 'urn_book';
+import {api_book} from 'urn_book';
 
-import {AtomName, Book} from '../../types';
+import {Book} from '../../types';
 
 import {Service} from '../types';
 
@@ -47,9 +47,9 @@ express_app.use(function(err:any, _:express.Request, res:express.Response, next:
 class ExpressWebService implements Service {
 	
 	constructor(){
-		let atom_name:AtomName;
-		for(atom_name in atom_book){
-			const atom_def = atom_book[atom_name] as Book.Definition;
+		let atom_name:keyof typeof api_book;
+		for(atom_name in api_book){
+			const atom_def = api_book[atom_name] as Book.Definition;
 			const router = create_route(atom_name);
 			if(atom_def.api){
 				if(atom_def.connection && atom_def.connection === 'log'){
