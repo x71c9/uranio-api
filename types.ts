@@ -8,7 +8,9 @@ import urn_core from 'urn_core';
 
 export * from 'urn_core/types';
 
-export {web_atom_book as required_book} from './book';
+import * as required_books from './books';
+
+export {required_books};
 
 export type Book = {
 	[k in urn_core.types.AtomName]?: Book.AtomDefinition<k>;
