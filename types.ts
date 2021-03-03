@@ -4,18 +4,11 @@
  * @packageDocumentation
  */
 
-// import {urn_response} from 'urn-lib';
-
-// import {route_book} from 'urn_book';
-
 import urn_core from 'urn_core';
 
 export * from 'urn_core/types';
 
-// export type RawBook = {
-//   // [k in string]: k extends urn_core.types.AtomName ? urn_core.types.Book.Definition<k> : never;
-//   [k in string]: urn_core.types.Book.Definition;
-// };
+export {web_atom_book as required_book} from './book';
 
 export type Book = {
 	[k in urn_core.types.AtomName]?: Book.AtomDefinition<k>;
@@ -122,38 +115,5 @@ type RouteRequestParams = {
 type RouteRequestQuery = {
 	[k:string]: any
 }
-
-// export type RouteBook = {
-//   [A in urn_core.Book.Definition.Api.Routes.Route.RouteRequesme]?: RouteBook.Routes
-// }
-
-// export namespace RouteBook {
-	
-//   export type Routes = {
-//     [k:string]: Routes.Route
-//   }
-	
-//   export namespace Routes {
-		
-//     export type Route = {
-			
-//       method: RouteMethod,
-//       action: urn_core.types.AuthAction,
-//       query: string[],
-//       url: string,
-//       call: (urn_request:RouteRequest) => Promise<urn_response.General>
-			
-//     }
-		
-//   }
-// }
-
-
-// export type RouteName<A extends urn_core.types.AtomName> =
-//   A extends keyof typeof route_book ?
-//   typeof route_book[A] extends RouteBook.Routes<A> ?
-//   keyof typeof route_book[A] :
-//   never :
-//   never;
 
 
