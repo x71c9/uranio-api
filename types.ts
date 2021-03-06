@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import urn_core from '../urn-core/';
+import urn_core from 'urn_core';
 
 export * from 'urn_core/types';
 

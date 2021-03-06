@@ -8,7 +8,7 @@ import express from 'express';
 
 import {urn_log} from 'urn-lib';
 
-import {api_book} from '../../../../books';
+import {api_book} from 'urn_books';
 
 import {
 	AtomName,

@@ -1,5 +1,5 @@
 
-import urn_core from '../urn-core/';
+import urn_core from 'urn_core';
 
 export const atom = {
 	...urn_core.types.required_books.atom,
