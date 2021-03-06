@@ -12,7 +12,7 @@ import {urn_log, urn_return} from 'urn-lib';
 
 const urn_ret = urn_return.create(urn_log.return_injector);
 
-import {api_book} from 'urn_books';
+import {api_book} from '../../../books';
 
 import {Book} from '../../types';
 

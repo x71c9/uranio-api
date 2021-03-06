@@ -4,9 +4,9 @@
  * @packageDocumentation
  */
 
-import core from 'urn_core';
+import core from '../../urn-core/';
 
-import web from 'urn_web';
+import web from '../index';
 
 import * as types from '../types';
 
