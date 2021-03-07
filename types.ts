@@ -4,13 +4,11 @@
  * @packageDocumentation
  */
 
-import urn_core from 'urn_core';
+import urn_core from './core/';
 
-export * from 'urn_core/types';
+export * from './core/types';
 
-// import * as required_books from './books';
-
-// export {required_books};
+import {FullConfiguration as CoreFullConfiguration} from './core/types';
 
 export type Book = {
 	[k in urn_core.types.AtomName]?: Book.AtomDefinition<k>;
@@ -72,8 +70,6 @@ export namespace Book {
 	}
 	
 }
-
-import {FullConfiguration as CoreFullConfiguration} from 'urn_core/types';
 
 type RequiredConfigParams = {
 	web_required_param: string
