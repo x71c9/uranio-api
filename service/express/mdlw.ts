@@ -16,7 +16,7 @@ const urn_exc = urn_exception.init('EXPRESS_MDLW', 'Express middlewares');
 
 import {api_book} from 'urn_books';
 
-import urn_core from 'urn_core';
+import urn_core from '../../core/';
 
 import {web_config} from '../../conf/defaults';
 
