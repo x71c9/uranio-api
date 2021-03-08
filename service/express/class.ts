@@ -42,8 +42,8 @@ express_app.use(function(err:any, _:express.Request, res:express.Response, next:
 	
 });
 
-@urn_log.decorators.debug_constructor
-@urn_log.decorators.debug_methods
+@urn_log.util.decorators.debug_constructor
+@urn_log.util.decorators.debug_methods
 class ExpressWebService implements Service {
 	
 	constructor(){
