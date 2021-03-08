@@ -10,7 +10,7 @@ import jwt from 'jsonwebtoken';
 
 import {urn_response, urn_return, urn_exception, urn_log} from 'urn-lib';
 
-const urn_ret = urn_return.create(urn_log.return_injector);
+const urn_ret = urn_return.create(urn_log.util.return_injector);
 
 const urn_exc = urn_exception.init('EXPRESS_MDLW', 'Express middlewares');
 
