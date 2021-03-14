@@ -4,19 +4,38 @@
  * @packageDocumentation
  */
 
-// import express from 'express';
+import express from 'express';
 
-// import {urn_log, urn_return, urn_exception} from 'urn-lib';
+import {urn_log} from 'urn-lib';
 
-// const urn_ret = urn_return.create(urn_log.return_injector);
+import urn_core from '../../../core';
 
-// import urn_core from 'urn_core';
+import {AuthName, RouteRequest} from '../../../types';
 
-// import {AuthName, AuthAction} from '../../../types';
+import {auth_route_middlewares} from '../mdlw';
 
-// import {auth_route_middlewares, store_error} from '../mdlw';
-
-// import * as req_validator from './validate';
+export function create_auth_route<A extends AuthName>(atom_name:A)
+		:express.Router{
+	
+	urn_log.fn_debug(`Create Express Auth Atom Router [${atom_name}]`);
+	
+	const router = express.Router();
+	
+	const auth_bll = urn_core.bll.auth.create(atom_name);
+	
+	router.post('/', auth_route_middlewares(atom_name, 'auth',
+		async (route_request:RouteRequest) => {
+			const token = await auth_bll.authenticate(
+				route_request.body.email,
+				route_request.body.password
+			);
+			return token;
+		}
+	));
+	
+	return router;
+	
+}
 
 // export function create_auth_route<A extends AuthName>(atom_name:A)
 //     :express.Router{
@@ -71,6 +90,7 @@
 
 //   return router;
 // }
+
 
 // export {
 //   router as auth_route,
