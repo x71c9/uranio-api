@@ -25,6 +25,7 @@ import * as req_validator from './routes/validate';
 import {
 	Atom,
 	AtomName,
+	AuthName,
 	AtomShape,
 	TokenObject,
 	RouteRequest,
@@ -39,7 +40,12 @@ export function route_middlewares<A extends AtomName>(
 	atom_name: A,
 	route_name: string
 ):express.RequestHandler[]{
-	return [_locals(atom_name, route_name), _log(), _authorization(),  _validate_and_catch()];
+	return [
+		_locals(atom_name, route_name),
+		_log(),
+		_authorization(),
+		_validate_and_catch()
+	];
 }
 
 // export function auth_route_middlewares<A extends AtomName>(
@@ -50,8 +56,26 @@ export function route_middlewares<A extends AtomName>(
 //   return [_locals(atom_name, route_name), _log, _catch(handler)];
 // }
 
+type AuthHandler = (route_request:RouteRequest) => Promise<string>;
+
+export function auth_route_middlewares<A extends AuthName>(
+	atom_name: A,
+	route_name: string,
+	handler: AuthHandler
+):express.RequestHandler[]{
+	return [
+		_locals(atom_name, route_name),
+		_log(),
+		_auth_validate_and_catch(handler)
+	];
+}
+
 function _locals<A extends AtomName>(atom_name:A, route_name:string) {
-	return (req:express.Request, res:express.Response, next:express.NextFunction) => {
+	return (
+		req: express.Request,
+		res: express.Response,
+		next: express.NextFunction
+	) => {
 		
 		const route_request:RouteRequest = {
 			params: req.params,
@@ -69,19 +93,30 @@ function _locals<A extends AtomName>(atom_name:A, route_name:string) {
 }
 
 function _log() {
-	return async (_req: express.Request, res:express.Response, next:express.NextFunction) => {
+	return async (
+		_req: express.Request,
+		res:express.Response,
+		next:express.NextFunction
+	) => {
+		
 		const route_request = _get_route_request(res);
+		
 		try {
 			await _log_request(route_request);
 		}catch(ex){
 			// TODO save on file CANNOT LOG
 		}
 		return next();
+		
 	};
 }
 
 function _authorization() {
-	return async (req:express.Request, res:express.Response, next:express.NextFunction) => {
+	return async (
+		req:express.Request,
+		res:express.Response,
+		next:express.NextFunction
+	) => {
 		
 		const route_request = _get_route_request(res);
 		const route_def = _get_route_def(route_request);
@@ -113,6 +148,7 @@ function _authorization() {
 			return res.status(400).send(urn_res);
 		}
 		return next();
+		
 	};
 }
 
@@ -126,13 +162,14 @@ function _validate_and_catch()
 			const route_request = _get_route_request(res);
 			const route_def = _get_route_def(route_request);
 			
-			urn_log.fn_debug(`Router GET / [${route_request.atom_name}]`);
+			urn_log.fn_debug(`Router ${route_def.method} ${route_def.url} [${route_request.atom_name}]`);
 			
 			_validate(route_request);
 			
 			let call_response = await route_def.call(route_request);
 			
-			call_response = urn_core.atm.util.hide_hidden_properties(route_request.atom_name, call_response);
+			call_response = urn_core.atm.util
+				.hide_hidden_properties(route_request.atom_name, call_response);
 			
 			const urn_response = urn_ret.return_success('Success', call_response);
 			
@@ -145,6 +182,69 @@ function _validate_and_catch()
 		}
 		
 	};
+}
+
+function _auth_validate_and_catch(handler:AuthHandler)
+		:express.RequestHandler{
+	
+	return async (_req: express.Request, res:express.Response) => {
+		
+		try{
+			
+			const route_request = _get_route_request(res);
+			
+			const api_def = api_book[route_request.atom_name as AuthName] as Book.Definition;
+			
+			if(!api_def.api){
+				throw urn_exc.create('NOAPIDEF', `Invalid api definition`);
+			}
+			
+			urn_log.fn_debug(`Router Auth ${api_def.api.url} [${route_request.atom_name}]`);
+			
+			_auth_validate(route_request);
+			
+			const token = await handler(route_request);
+			
+			const urn_response = urn_ret.return_success('Success', {token: token});
+			
+			return res.header('x-auth-token', token).status(200).send(urn_response);
+			
+		}catch(ex){
+			
+			switch(ex.type){
+				case urn_exception.ExceptionType.INVALID_REQUEST:
+				case urn_exception.ExceptionType.NOT_FOUND:{
+					const status = 400;
+					const msg = 'Invalid auth request';
+					const error_code = 'INVALID_AUTH_REQUEST';
+					const error_msg = 'User or password are not valid.';
+					const urn_res = urn_ret.return_error(
+						status,
+						msg,
+						error_code,
+						error_msg
+					);
+					await store_error(urn_res, res, ex);
+					return res.status(status).json(urn_res);
+				}
+				default:{
+					return _handle_exception(ex, res);
+				}
+			}
+			
+		}
+		
+	};
+}
+
+function _auth_validate(route_request:RouteRequest)
+		:void{
+	
+	urn_log.fn_debug(`Validate Auth Route [${route_request.atom_name}]`);
+	
+	req_validator.empty(route_request.params, 'params');
+	req_validator.empty(route_request.query, 'query');
+	
 }
 
 function _validate(route_request:RouteRequest)
@@ -224,7 +324,7 @@ function _get_route_api(atom_name:AtomName):Book.Definition.Api{
 	const atom_api = api_book[atom_name as keyof typeof api_book].api as Book.Definition.Api;
 	
 	if(!atom_api){
-		throw urn_exc.create(`INVLID_API_DEF`,'Invalid api definition in atom_book.');
+		throw urn_exc.create(`INVLID_API_DEF`,'Invalid api definition in api_book.');
 	}
 	
 	return atom_api;

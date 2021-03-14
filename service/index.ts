@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import '../tools/exc_handler';
+// import '../tools/exc_handler';
 
 import * as express from './express/';
 
