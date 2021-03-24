@@ -11,7 +11,7 @@ export * from './core/types';
 import {FullConfiguration as CoreFullConfiguration} from './core/types';
 
 export type Book = {
-	[k in string]: k extends urn_core.types.AtomName ? Book.Definition<k> : never;
+	[k in urn_core.types.AtomName]?: Book.Definition<k>;
 }
 
 export namespace Book {
