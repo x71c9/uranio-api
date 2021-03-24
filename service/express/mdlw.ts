@@ -193,7 +193,7 @@ function _auth_validate_and_catch(handler:AuthHandler)
 			
 			const route_request = _get_route_request(res);
 			
-			const api_def = api_book[route_request.atom_name as AuthName] as Book.Definition;
+			const api_def = api_book[route_request.atom_name as AuthName] as Book.BasicDefinition;
 			
 			if(!api_def.api){
 				throw urn_exc.create('NOAPIDEF', `Invalid api definition`);
