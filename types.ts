@@ -21,8 +21,8 @@ export namespace Book {
 		{ api?: Definition.Api }
 	
 	export type Definition<A extends urn_core.types.AtomName> =
-		Book.BasicDefinition &
-		{ bll?: new(...args:any[]) => urn_core.bll.BLL<A>}
+		Book.BasicDefinition & 
+		{ bll?: (token_object?:urn_core.types.TokenObject) => urn_core.bll.BLL<A> }
 	
 	export namespace Definition {
 		
