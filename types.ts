@@ -21,8 +21,8 @@ export namespace Book {
 		{ api?: Definition.Api }
 	
 	export type Definition<A extends urn_core.types.AtomName> =
-		Book.BasicDefinition & 
-		{ bll?: (token_object?:urn_core.types.TokenObject) => urn_core.bll.BLL<A> }
+		Book.BasicDefinition &
+		{ bll?: (passport?:urn_core.types.Passport) => urn_core.bll.BLL<A> }
 	
 	export namespace Definition {
 		
@@ -102,7 +102,7 @@ export type RouteRequest = {
 	query: RouteRequestQuery,
 	body: any,
 	ip: string,
-	token_object?: urn_core.types.TokenObject,
+	passport?: urn_core.types.Passport,
 	log?: urn_core.types.Atom<'request'>
 }
 

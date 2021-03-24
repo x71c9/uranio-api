@@ -28,7 +28,7 @@ export function return_default_routes(atom_name:AtomName)
 				urn_log.fn_debug(`Router Call GET [find] / [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
-					route_request.token_object
+					route_request.passport
 				) as urn_core.bll.BLL<typeof atom_name>;
 				const bll_res = await urn_bll.find(
 					route_request.query.filter,
@@ -46,7 +46,7 @@ export function return_default_routes(atom_name:AtomName)
 				urn_log.fn_debug(`Router Call GET [find_id] /:id [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
-					route_request.token_object
+					route_request.passport
 				) as urn_core.bll.BLL<typeof atom_name>;
 				const bll_res = await urn_bll.find_by_id(
 					route_request.params.id,
@@ -64,7 +64,7 @@ export function return_default_routes(atom_name:AtomName)
 				urn_log.fn_debug(`Router Call GET [find_one] / [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
-					route_request.token_object
+					route_request.passport
 				) as urn_core.bll.BLL<typeof atom_name>;
 				const bll_res = await urn_bll.find_one(
 					route_request.query.filter,
@@ -81,7 +81,7 @@ export function return_default_routes(atom_name:AtomName)
 				urn_log.fn_debug(`Router Call POST [insert] / [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
-					route_request.token_object
+					route_request.passport
 				) as urn_core.bll.BLL<typeof atom_name>;
 				const bll_res = await urn_bll.insert_new(route_request.body);
 				return bll_res;
@@ -95,7 +95,7 @@ export function return_default_routes(atom_name:AtomName)
 				urn_log.fn_debug(`Router Call POST [update] / [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
-					route_request.token_object
+					route_request.passport
 				) as urn_core.bll.BLL<typeof atom_name>;
 				const bll_res = await urn_bll.update_by_id(
 					route_request.params.id,
@@ -112,7 +112,7 @@ export function return_default_routes(atom_name:AtomName)
 				urn_log.fn_debug(`Router Call DELETE [delete] / [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
-					route_request.token_object
+					route_request.passport
 				) as urn_core.bll.BLL<typeof atom_name>;
 				const bll_res = await urn_bll.remove_by_id(route_request.params.id);
 				return bll_res;

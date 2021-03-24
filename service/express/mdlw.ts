@@ -27,7 +27,7 @@ import {
 	AtomName,
 	AuthName,
 	AtomShape,
-	TokenObject,
+	Passport,
 	RouteRequest,
 	RouteMethod,
 	Book,
@@ -133,8 +133,8 @@ function _authorization() {
 			
 		try{
 			
-			const decoded = jwt.verify(token, web_config.jwt_private_key) as TokenObject;
-			res.locals.urn.token_object = decoded;
+			const decoded = jwt.verify(token, web_config.jwt_private_key) as Passport;
+			res.locals.urn.passport = decoded;
 			
 		}catch(ex){
 			ex.stack = '';
