@@ -11,17 +11,17 @@ export * from './core/types';
 import {FullConfiguration as CoreFullConfiguration} from './core/types';
 
 export type Book = {
-	[k in urn_core.types.AtomName]?: Book.AtomDefinition<k>;
+	[k in string]: k extends urn_core.types.AtomName ? Book.Definition<k> : never;
 }
 
 export namespace Book {
 	
-	export type Definition =
-		urn_core.types.Book.Definition &
+	export type BasicDefinition =
+		urn_core.types.Book.BasicDefinition &
 		{ api?: Definition.Api }
 	
-	export type AtomDefinition<A extends urn_core.types.AtomName> =
-		Book.Definition &
+	export type Definition<A extends urn_core.types.AtomName> =
+		Book.BasicDefinition &
 		{ bll?: new(...args:any[]) => urn_core.bll.BLL<A>}
 	
 	export namespace Definition {
