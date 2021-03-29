@@ -48,14 +48,6 @@ export function route_middlewares<A extends AtomName>(
 	];
 }
 
-// export function auth_route_middlewares<A extends AtomName>(
-//   atom_name:A,
-//   route_name:RouteName<A>,
-//   handler:Handler
-// ):express.RequestHandler[]{
-//   return [_locals(atom_name, route_name), _log, _catch(handler)];
-// }
-
 type AuthHandler = (route_request:RouteRequest) => Promise<string>;
 
 export function auth_route_middlewares<A extends AuthName>(
@@ -212,8 +204,8 @@ function _auth_validate_and_catch(handler:AuthHandler)
 		}catch(ex){
 			
 			switch(ex.type){
-				case urn_exception.ExceptionType.INVALID_REQUEST:
-				case urn_exception.ExceptionType.NOT_FOUND:{
+				case urn_exception.ExceptionType.AUTH_NOT_FOUND:
+				case urn_exception.ExceptionType.AUTH_INVALID_PASSWORD:{
 					const status = 400;
 					const msg = 'Invalid auth request';
 					const error_code = 'INVALID_AUTH_REQUEST';
