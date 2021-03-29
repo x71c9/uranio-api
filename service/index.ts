@@ -4,12 +4,17 @@
  * @packageDocumentation
  */
 
-// import '../tools/exc_handler';
-
 import * as express from './express/';
+
+import {Service, ServiceType} from './types';
 
 export * from './types';
 
-export {
-	express
-};
+export function create(service_type:ServiceType)
+		:Service{
+	switch(service_type){
+		case 'express':{
+			return express.create();
+		}
+	}
+}
