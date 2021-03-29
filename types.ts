@@ -76,7 +76,8 @@ type RequiredConfigParams = {
 }
 
 type OptionalConfigParam = {
-	web_optional_param: string
+	web_optional_param: string,
+	request_auto_limit: number,
 }
 
 export type Configuration =

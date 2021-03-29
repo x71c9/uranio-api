@@ -82,7 +82,7 @@ export const atom = {
 			auth_action: {
 				type: uranio.types.BookPropertyType.ENUM_STRING,
 				label: 'Auth action',
-				values: ['READ', 'WRITE'],
+				values: ['READ', 'WRITE', 'AUTH'],
 				on_error: () => {return 'READ';}
 			}
 		}

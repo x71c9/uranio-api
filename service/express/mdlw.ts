@@ -44,7 +44,8 @@ export function route_middlewares<A extends AtomName>(
 		_locals(atom_name, route_name),
 		_log(),
 		_authorization(),
-		_validate_and_catch()
+		_limit(),
+		_validate_and_catch(),
 	];
 }
 
@@ -57,7 +58,7 @@ export function auth_route_middlewares<A extends AuthName>(
 ):express.RequestHandler[]{
 	return [
 		_locals(atom_name, route_name),
-		_log(),
+		_auth_log(),
 		_auth_validate_and_catch(handler)
 	];
 }
@@ -96,6 +97,27 @@ function _log() {
 		try {
 			await _log_request(route_request);
 		}catch(ex){
+			console.error('CANNOT LOG', ex);
+			// TODO save on file CANNOT LOG
+		}
+		return next();
+		
+	};
+}
+
+function _auth_log() {
+	return async (
+		_req: express.Request,
+		res:express.Response,
+		next:express.NextFunction
+	) => {
+		
+		const route_request = _get_route_request(res);
+		
+		try {
+			await _log_auth_request(route_request);
+		}catch(ex){
+			console.error('CANNOT AUTH LOG', ex);
 			// TODO save on file CANNOT LOG
 		}
 		return next();
@@ -141,6 +163,22 @@ function _authorization() {
 		}
 		return next();
 		
+	};
+}
+
+function _limit()
+		:express.RequestHandler{
+	return (_req:express.Request, res:express.Response, next:express.NextFunction) => {
+		
+		const route_request = _get_route_request(res);
+		let options = route_request.query.options;
+		if(!options){
+			options = {};
+		}
+		if(!options.limit || options.limit > web_config.request_auto_limit){
+			options.limit = web_config.request_auto_limit;
+		}
+		return next();
 	};
 }
 
@@ -388,6 +426,41 @@ async function _log_request(route_request:RouteRequest)
 	try{
 		return await bll_requests.insert_new(request_shape);
 	}catch(ex){
+		console.error('CANNOT LOG REQUEST', ex);
+		// TODO save on file CANNOT LOG
+		return request_shape;
+	}
+}
+
+async function _log_auth_request(auth_request:RouteRequest)
+		:Promise<AtomShape<'request'>>{
+	const atom_api = _get_route_api(auth_request.atom_name);
+	
+	const request_shape:AtomShape<'request'> = {
+		url: `POST: /${atom_api.auth}`,
+		ip: auth_request.ip,
+		atom_name: auth_request.atom_name,
+		auth_action: urn_core.types.AuthAction.AUTH
+	};
+	if(Object.keys(auth_request.params).length > 0){
+		request_shape.params = JSON.stringify(auth_request.params);
+	}
+	if(Object.keys(auth_request.query).length > 0){
+		request_shape.query = JSON.stringify(auth_request.query);
+	}
+	if(Object.keys(auth_request.body).length > 0){
+		request_shape.body = JSON.stringify(auth_request.body);
+	}
+	const auth_request_clone = {...request_shape};
+	if(auth_request_clone.body){
+		const body = JSON.parse(auth_request_clone.body);
+		body.password = '[DELETED]';
+		auth_request_clone.body = JSON.stringify(body);
+	}
+	try{
+		return await bll_requests.insert_new(auth_request_clone);
+	}catch(ex){
+		console.error('CANNOT LOG AUTH REQUEST', ex);
 		// TODO save on file CANNOT LOG
 		return request_shape;
 	}
@@ -452,8 +525,8 @@ export async function store_error(urn_res:urn_response.Fail, res:express.Respons
 		}
 		return await bll_errors.insert_new(error_log);
 	}catch(ex){
-		// TODO
-		// Save to file CANNOT LOG
+		// TODO Save to file CANNOT LOG
+		console.error('CANNOT STORE ERROR', ex);
 		return undefined;
 	}
 }
