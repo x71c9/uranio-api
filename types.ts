@@ -10,6 +10,8 @@ export * from './core/types';
 
 import {FullConfiguration as CoreFullConfiguration} from './core/types';
 
+import {ServiceName} from './service/';
+
 export type Book = {
 	[k in urn_core.types.AtomName]?: Book.Definition<k>;
 }
@@ -72,11 +74,10 @@ export namespace Book {
 }
 
 type RequiredConfigParams = {
-	web_required_param: string
+	service: ServiceName
 }
 
 type OptionalConfigParam = {
-	web_optional_param: string,
 	request_auto_limit: number,
 }
 

@@ -10,4 +10,4 @@ export interface Service {
 	
 }
 
-export type ServiceType = 'express'; // | 'hapi' | 'nest_js'
+export type ServiceName = 'express'; // | 'hapi' | 'nest_js'
