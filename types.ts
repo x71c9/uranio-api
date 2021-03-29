@@ -78,6 +78,7 @@ type RequiredConfigParams = {
 }
 
 type OptionalConfigParam = {
+	service_port: number
 	request_auto_limit: number,
 }
 

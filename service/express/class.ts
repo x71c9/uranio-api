@@ -8,13 +8,17 @@ import express from 'express';
 
 import cors from 'cors';
 
-import {urn_log, urn_return} from 'urn-lib';
+import {urn_log, urn_return, urn_exception} from 'urn-lib';
+
+const urn_exc = urn_exception.init(`EXPRESSCLASS`, `Express class module.`);
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 
 import {atom_book, api_book} from 'urn_books';
 
 import {register_exception_handler} from '../../tools/exc_handler';
+
+import {web_config} from '../../conf/defaults';
 
 import {Book, AuthName} from '../../types';
 
@@ -44,6 +48,8 @@ express_app.use(function(err:any, _:express.Request, res:express.Response, next:
 	
 });
 
+type Callback = () => void;
+
 @urn_log.util.decorators.debug_constructor
 @urn_log.util.decorators.debug_methods
 class ExpressWebService implements Service {
@@ -70,13 +76,27 @@ class ExpressWebService implements Service {
 		}
 	}
 	
-	listen(ws_port: number, callback:() => void): void {
-		express_app.listen(ws_port, callback);
+	listen(portcall:Callback): void;
+	listen(portcall: number, callback:Callback): void;
+	listen(portcall: number | Callback, callback?:() => void): void {
+		switch(typeof portcall){
+			case 'function':{
+				express_app.listen(web_config.service_port, callback);
+				break;
+			}
+			case 'number':{
+				express_app.listen(portcall, callback);
+				break;
+			}
+			default:{
+				throw urn_exc.create(`INVALID_LISTEN_ARGS`, 'Invalid arguments.');
+			}
+		}
 	}
-	
 }
 
 export function create():ExpressWebService{
 	urn_log.fn_debug(`Create ExpressWebService`);
 	return new ExpressWebService();
 }
+
