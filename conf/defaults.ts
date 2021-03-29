@@ -16,4 +16,6 @@ export const web_config:FullConfiguration = {
 	
 	service: 'express',
 	
+	service_port: 3000
+	
 };
