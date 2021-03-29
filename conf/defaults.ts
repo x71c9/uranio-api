@@ -14,8 +14,6 @@ export const web_config:FullConfiguration = {
 	
 	request_auto_limit: 2,
 	
-	web_optional_param: '',
-	
-	web_required_param: ''
+	service: 'express',
 	
 };

@@ -4,15 +4,17 @@
  * @packageDocumentation
  */
 
+import {web_config} from '../conf/defaults';
+
 import * as express from './express/';
 
-import {Service, ServiceType} from './types';
+import {Service} from './types';
 
 export * from './types';
 
-export function create(service_type:ServiceType)
+export function create()
 		:Service{
-	switch(service_type){
+	switch(web_config.service){
 		case 'express':{
 			return express.create();
 		}
