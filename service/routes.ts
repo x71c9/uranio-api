@@ -49,7 +49,7 @@ export function return_default_routes(atom_name:AtomName)
 					route_request.passport
 				) as urn_core.bll.BLL<typeof atom_name>;
 				const bll_res = await urn_bll.find_by_id(
-					route_request.params.id,
+					route_request.params.id!,
 					route_request.query.options
 				);
 				return bll_res;
@@ -98,7 +98,7 @@ export function return_default_routes(atom_name:AtomName)
 					route_request.passport
 				) as urn_core.bll.BLL<typeof atom_name>;
 				const bll_res = await urn_bll.update_by_id(
-					route_request.params.id,
+					route_request.params.id!,
 					route_request.body
 				);
 				return bll_res;
@@ -114,7 +114,7 @@ export function return_default_routes(atom_name:AtomName)
 					atom_name,
 					route_request.passport
 				) as urn_core.bll.BLL<typeof atom_name>;
-				const bll_res = await urn_bll.remove_by_id(route_request.params.id);
+				const bll_res = await urn_bll.remove_by_id(route_request.params.id!);
 				return bll_res;
 			}
 		}

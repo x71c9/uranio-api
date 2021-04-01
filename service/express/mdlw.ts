@@ -292,9 +292,9 @@ function _validate(route_request:RouteRequest)
 		const param_names:string[] = [];
 		const folds = route_def.url.split('/');
 		for(let i = 0; i < folds.length; i++){
-			const splitted = folds[i].split(':');
+			const splitted = folds[i]!.split(':');
 			if(splitted.length === 2){
-				param_names.push(splitted[1]);
+				param_names.push(splitted[1]!);
 			}
 		}
 		req_validator.only_valid_param_keys(route_request.params, param_names);
@@ -306,7 +306,7 @@ function _validate(route_request:RouteRequest)
 		req_validator.only_valid_query_keys(route_request.query, route_def.query);
 		if(Array.isArray(route_def.query)){
 			for(let i = 0; i < route_def.query.length; i++){
-				route_request.query[route_def.query[i]] = req_validator.process_request_query(route_request.query[route_def.query[i]]);
+				route_request.query[route_def.query[i]!] = req_validator.process_request_query(route_request.query[route_def.query[i]!]);
 			}
 		}
 	}else{
@@ -331,7 +331,7 @@ function _get_route_def(route_request:RouteRequest)
 	
 	// TODO _check_if_def_is_valid();
 	
-	return atom_api.routes[route_request.route_name];
+	return atom_api.routes[route_request.route_name]!;
 }
 
 function _get_route_request(res:express.Response)
