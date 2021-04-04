@@ -6,7 +6,7 @@
 
 import {urn_log} from 'urn-lib';
 
-import urn_core from '../core/';
+import urn_core from 'urn_core';
 
 import * as book_types from '../types';
 

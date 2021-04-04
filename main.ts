@@ -6,7 +6,7 @@
 
 import urn_lib from 'urn-lib';
 
-import core from './core/';
+import core from 'urn_core';
 
 import * as types from './types';
 
