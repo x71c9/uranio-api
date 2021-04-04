@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import urn_core from '../core/';
+import urn_core from 'urn_core';
 
 const bll_errors = urn_core.bll.log.create('error');
 

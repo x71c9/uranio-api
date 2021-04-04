@@ -4,11 +4,11 @@
  * @packageDocumentation
  */
 
-import urn_core from './core/';
+import urn_core from 'urn_core';
 
-export * from './core/types';
+export * from 'urn_core/types';
 
-import {FullConfiguration as CoreFullConfiguration} from './core/types';
+import {FullConfiguration as CoreFullConfiguration} from 'urn_core/types';
 
 import {ServiceName} from './service/';
 
