@@ -1,0 +1,5 @@
+[submodule ".uranio/repo/core"]
+	path = .uranio/repo/core
+	url = ssh://git@bitbucket.org/nbl7/urn-core.git
+	branch = master
+	update = rebase
