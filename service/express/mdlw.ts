@@ -14,7 +14,7 @@ const urn_ret = urn_return.create(urn_log.util.return_injector);
 
 const urn_exc = urn_exception.init('EXPRESS_MDLW', 'Express middlewares');
 
-import {api_book} from 'urn_books';
+import {api_book} from 'uranio-books';
 
 import urn_core from 'uranio-core';
 
