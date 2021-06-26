@@ -8,7 +8,7 @@ import {urn_exception} from 'urn-lib';
 
 const urn_exc = urn_exception.init(`VALIDATE_REQUEST`, `Validate request module`);
 
-// import urn_core from 'urn_core';
+// import urn_core from 'uranio-core';
 
 // import {AtomName, Query, TokenObject} from '../../../types';
 import {AtomName, Query} from '../../../types';

@@ -6,7 +6,7 @@
 
 import {FullConfiguration} from '../types';
 
-import {core_config} from 'urn_core/conf/defaults';
+import {core_config} from 'uranio-core/conf/defaults';
 
 export const web_config:FullConfiguration = {
 	

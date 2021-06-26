@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import urn_core from 'urn_core';
+import urn_core from 'uranio-core';
 
 const bll_errors = urn_core.bll.log.create('error');
 
