@@ -14,7 +14,7 @@ const urn_exc = urn_exception.init(`EXPRESSCLASS`, `Express class module.`);
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 
-import {atom_book, api_book} from 'urn_books';
+import {atom_book, api_book} from 'uranio-books';
 
 import {register_exception_handler} from '../../tools/exc_handler';
 
