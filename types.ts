@@ -4,11 +4,11 @@
  * @packageDocumentation
  */
 
-import urn_core from 'urn_core';
+import urn_core from 'uranio-core';
 
-export * from 'urn_core/types';
+export * from 'uranio-core/types';
 
-import {FullConfiguration as CoreFullConfiguration} from 'urn_core/types';
+import {FullConfiguration as CoreFullConfiguration} from 'uranio-core/types';
 
 import {ServiceName} from './service/';
 

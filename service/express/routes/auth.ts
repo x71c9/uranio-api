@@ -8,7 +8,7 @@ import express from 'express';
 
 import {urn_log} from 'urn-lib';
 
-import urn_core from 'urn_core';
+import urn_core from 'uranio-core';
 
 import {AuthName, RouteRequest} from '../../../types';
 
