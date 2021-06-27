@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import core from './core/client';
+import core from 'uranio-core/client';
 
 import * as types from './export';
 
