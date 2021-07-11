@@ -8,7 +8,7 @@ import express from 'express';
 
 import {urn_log} from 'urn-lib';
 
-import {api_book} from 'uranio-books';
+import {api_book} from 'uranio-books/api';
 
 import {
 	AtomName,
