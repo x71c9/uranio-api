@@ -31,32 +31,28 @@ import {
 	create_auth_route
 } from './routes/';
 
-const express_app = express();
-
-express_app.use(cors());
-
-express_app.use(express.json());
-
-express_app.use(express.urlencoded({extended: true}));
-
-express_app.use(function(err:any, _:express.Request, res:express.Response, next:express.NextFunction){
-	
-	if(err.status === 400 && "body" in err) {
-		const respo = urn_ret.return_error(400, 'JSON parse error', 'INVALID_JSON_REQUEST', err.message);
-		res.status(respo.status).json(respo);
-	}else{
-		next();
-	}
-	
-});
-
 type Callback = () => void;
 
 @urn_log.util.decorators.debug_constructor
 @urn_log.util.decorators.debug_methods
 class ExpressWebService implements Service {
 	
+	public express_app:express.Application;
+	
 	constructor(public service_name='main'){
+		
+		this.express_app = express();
+		this.express_app.use(cors());
+		this.express_app.use(express.json());
+		this.express_app.use(express.urlencoded({extended: true}));
+		this.express_app.use(function(err:any, _:express.Request, res:express.Response, next:express.NextFunction){
+			if(err.status === 400 && "body" in err) {
+				const respo = urn_ret.return_error(400, 'JSON parse error', 'INVALID_JSON_REQUEST', err.message);
+				res.status(respo.status).json(respo);
+			}else{
+				next();
+			}
+		});
 		
 		register_exception_handler(service_name);
 		
@@ -67,13 +63,13 @@ class ExpressWebService implements Service {
 			const router = create_route(atom_name);
 			if(api_def.api){
 				if(atom_def.connection && atom_def.connection === 'log'){
-					express_app.use(`/logs/${api_def.api.url}`, router);
+					this.express_app.use(`/logs/${api_def.api.url}`, router);
 				}else{
-					express_app.use(`/${api_def.api.url}`, router);
+					this.express_app.use(`/${api_def.api.url}`, router);
 				}
 			}
 			if(api_def.api && api_def.api.auth && typeof api_def.api.auth === 'string'){
-				express_app.use(`/${api_def.api.auth}`, create_auth_route(atom_name as AuthName));
+				this.express_app.use(`/${api_def.api.auth}`, create_auth_route(atom_name as AuthName));
 			}
 		}
 	}
@@ -83,11 +79,11 @@ class ExpressWebService implements Service {
 	listen(portcall: number | Callback, callback?:() => void): void {
 		switch(typeof portcall){
 			case 'function':{
-				express_app.listen(web_config.service_port, callback);
+				this.express_app.listen(web_config.service_port, callback);
 				break;
 			}
 			case 'number':{
-				express_app.listen(portcall, callback);
+				this.express_app.listen(portcall, callback);
 				break;
 			}
 			default:{
