@@ -27,8 +27,8 @@ import {Book, AuthName} from '../../types';
 import {Service} from '../types';
 
 import {
-	create_route,
-	create_auth_route
+	create_express_route,
+	create_express_auth_route
 } from './routes/';
 
 type Callback = () => void;
@@ -60,7 +60,7 @@ class ExpressWebService implements Service {
 		for(atom_name in api_book){
 			const api_def = api_book[atom_name] as Book.BasicDefinition;
 			const atom_def = atom_book[atom_name] as Book.BasicDefinition;
-			const router = create_route(atom_name);
+			const router = create_express_route(atom_name);
 			if(api_def.api){
 				if(atom_def.connection && atom_def.connection === 'log'){
 					this.express_app.use(`/logs/${api_def.api.url}`, router);
@@ -69,7 +69,7 @@ class ExpressWebService implements Service {
 				}
 			}
 			if(api_def.api && api_def.api.auth && typeof api_def.api.auth === 'string'){
-				this.express_app.use(`/${api_def.api.auth}`, create_auth_route(atom_name as AuthName));
+				this.express_app.use(`/${api_def.api.auth}`, create_express_auth_route(atom_name as AuthName));
 			}
 		}
 	}

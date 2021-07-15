@@ -20,7 +20,7 @@ import {return_default_routes} from '../../routes';
 
 import {route_middlewares} from '../mdlw';
 
-export function create_route<A extends AtomName>(atom_name:A)
+export function create_express_route<A extends AtomName>(atom_name:A)
 		:express.Router{
 	
 	urn_log.fn_debug(`Create Express Default Atom Router [${atom_name}]`);

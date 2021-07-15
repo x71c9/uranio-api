@@ -14,7 +14,7 @@ import {AuthName, RouteRequest} from '../../../types';
 
 import {auth_route_middlewares} from '../mdlw';
 
-export function create_auth_route<A extends AuthName>(atom_name:A)
+export function create_express_auth_route<A extends AuthName>(atom_name:A)
 		:express.Router{
 	
 	urn_log.fn_debug(`Create Express Auth Atom Router [${atom_name}]`);
@@ -37,7 +37,7 @@ export function create_auth_route<A extends AuthName>(atom_name:A)
 	
 }
 
-// export function create_auth_route<A extends AuthName>(atom_name:A)
+// export function create_express_auth_route<A extends AuthName>(atom_name:A)
 //     :express.Router{
 	
 //   const router = express.Router();
