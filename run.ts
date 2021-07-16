@@ -16,11 +16,13 @@ import urn_web from './index';
 //   urn_log.debug(`Listening on port 3000...`);
 // });
 
+import * as types from './types';
+
 const event = {
 	rawURL: '',
 	rawQuery: '',
-	path: '/uranio/api/superusers',
-	httpMethod: 'GET',
+	path: '/uranio/api/superusers/6666/dd',
+	httpMethod: types.RouteMethod.GET,
 	headers: {},
 	multiValueHeaders: {},
 	queryStringParameters: null,

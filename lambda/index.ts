@@ -16,18 +16,22 @@ const urn_exc = urn_exception.init(`LAMBDAMODULE`, `Lambda handle module.`);
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 
-import {Book} from '../types';
+import * as types from '../types';
+
+import {Book, AtomName} from '../types';
+
+import {return_default_routes} from '../routes/';
 
 import {Event, Context, HandlerResponse, Headers, MultiValueHeaders} from './types';
 
+
 // export * from './types';
 
-export async function handle(event:Event, _context:Context)
+export async function handle(event:Event, context:Context)
 		:Promise<HandlerResponse>{
 	const path = event.path;
 	try{
-		const {api_url, route_url} = _process_path(path);
-		console.log(api_url, route_url);
+		_validate_path(path);
 	}catch(err){
 		const res_err = urn_ret.return_error(
 			500,
@@ -39,10 +43,29 @@ export async function handle(event:Event, _context:Context)
 		);
 		return _return_handler_response(res_err);
 	}
-	return _return_handler_response(urn_ret.return_success(''));
+	const {atom_name, route_name} = _process_event(event);
+	const urn_response = await _lambda_route(event, context, atom_name, route_name);
+	return _return_handler_response(urn_response);
 }
 
-function _process_path(path:string){
+async function _lambda_route(event: Event, context:Context, atom_name:AtomName, route_name:keyof Book.Definition.Api.Routes){
+	// return await _process_mdlw(event, context, route_middlewares(atom_name, route_name));
+}
+
+
+// function _get_route_def(atom_name:AtomName, route_name:keyof Book.Definition.Api.Routes){
+//   const atom_api = _get_atom_api(atom_name);
+//   if(!atom_api.routes){
+//     throw urn_exc.create(`INVALID_API_DEF`, `Invalid api_def. Missing "routes" property.`);
+//   }
+//   const route_def = atom_api.routes[route_name];
+//   if(!route_def){
+//     throw urn_exc.create(`INVALID_ROUTE_NAME`, `Invalid route name for Atom [${atom_name}] Route name [${route_name}]`);
+//   }
+//   return route_def;
+// }
+
+function _validate_path(path:string){
 	if(!path.includes('/uranio/api/')){
 		throw urn_exc.create_invalid_request(
 			`INVALID_PATH_WRONG_PREFIX`,
@@ -59,11 +82,94 @@ function _process_path(path:string){
 			`Invalid path. Invalid api url. Api url not present in api_book.`
 		);
 	}
+	return true;
+}
+
+function _process_event(event:Event){
+	const path = event.path;
+	const splitted_path = path.split('/uranio/api/');
+	const url = splitted_path[1];
+	const splitted_url = url.split('/');
+	const api_url = splitted_url[0];
 	let route_url = '/';
 	if(splitted_path.length > 1){
 		route_url += splitted_url.slice(1).join('/');
 	}
-	return {api_url, route_url};
+	const atom_name = _get_atom_name_from_api_url(api_url);
+	const route_name = _get_route_name(atom_name, route_url, event.httpMethod);
+	return {atom_name, route_name};
+}
+
+function _get_route_name(atom_name:AtomName, route_url:string, http_method:types.RouteMethod){
+	
+	const atom_api = _get_atom_api(atom_name);
+	if(!atom_api.routes){
+		throw urn_exc.create(`INVALID_API_DEF`, `Invalid api_def. Missing "routes" property.`);
+	}
+	for(const route_name in atom_api.routes){
+		const route_def = atom_api.routes[route_name];
+		if(route_def.method === http_method){
+			if(route_def.url === route_url){
+				return route_name;
+			}else if(route_def.url.includes(':')){
+				const splitted_route_def_url = route_def.url.split('/');
+				const splitted_route_url = route_url.split('/');
+				if(splitted_route_def_url.length !== splitted_route_url.length){
+					continue;
+				}
+				for(let i = 0; i < splitted_route_def_url.length; i++){
+					const url_part = splitted_route_def_url[i];
+					if(url_part.includes(':') || url_part === splitted_route_url[i]){
+						continue;
+					}
+					throw urn_exc.create_invalid_request(
+						`IVALID_ROUTE_PATH`,
+						`Invalid route path.`
+					);
+				}
+				return route_name;
+			}
+		}
+	}
+	throw urn_exc.create_invalid_request(
+		`INVALID_PATH_ROUTE_NOT_FOUND`,
+		`Invalid path. Route not found or invalid.`
+	);
+}
+
+function _get_atom_api(atom_name:AtomName){
+
+	const atom_api = api_book[atom_name as keyof typeof api_book].api as
+		Book.Definition.Api;
+	
+	const default_routes = return_default_routes(atom_name);
+	
+	if(!atom_api.routes){
+		
+		atom_api.routes = default_routes;
+		
+	}else{
+		
+		atom_api.routes = {
+			...default_routes,
+			...atom_api.routes
+		};
+		
+	}
+	
+	return atom_api;
+}
+
+function _get_atom_name_from_api_url(api_url:string)
+		:AtomName{
+	let atom_name:keyof typeof api_book;
+	for(atom_name in api_book){
+		const api_def = api_book[atom_name] as Book.Definition<typeof atom_name>;
+		if(api_def.api && api_def.api.url && api_def.api.url === api_url){
+			return atom_name;
+		}
+	}
+	throw urn_exc.create(`INVALID_API_URL`, `Invalid api url.`);
 }
 
 function _is_valid_api_url(api_url:string){
