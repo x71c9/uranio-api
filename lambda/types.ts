@@ -4,13 +4,15 @@
  * @packageDocumentation
  */
 
-// From https://github.com/netlify/functions/tree/main/src/function 
+import * as types from '../types';
+
+// From https://github.com/netlify/functions/tree/main/src/function
 
 export interface Event {
 	rawURL: string,
 	rawQuery: string,
 	path: string,
-	httpMethod: string,
+	httpMethod: types.RouteMethod
 	headers: EventHeaders,
 	multiValueHeaders: EventMultiValueHeaders,
 	queryStringParameters: EventQueryStringParameters | null,

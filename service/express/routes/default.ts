@@ -16,7 +16,7 @@ import {
 	Book
 } from '../../../types';
 
-import {return_default_routes} from '../../routes';
+import {return_default_routes} from '../../../routes/';
 
 import {route_middlewares} from '../mdlw';
 
