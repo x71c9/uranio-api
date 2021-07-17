@@ -158,7 +158,7 @@ function _authorization() {
 				'INVALID_TOKEN',
 				'Invalid token.',
 			);
-			await store_error(urn_res, res, ex);
+			await _store_error(urn_res, res, ex);
 			return res.status(400).send(urn_res);
 		}
 		return next();
@@ -254,7 +254,7 @@ function _auth_validate_and_catch(handler:AuthHandler)
 						error_code,
 						error_msg
 					);
-					await store_error(urn_res, res, ex);
+					await _store_error(urn_res, res, ex);
 					return res.status(status).json(urn_res);
 				}
 				default:{
@@ -503,12 +503,12 @@ async function _handle_exception(
 		error_code,
 		error_msg
 	);
-	await store_error(urn_res, res, ex);
+	await _store_error(urn_res, res, ex);
 	return res.status(status).json(urn_res);
 	
 }
 
-export async function store_error(urn_res:urn_response.Fail, res:express.Response, ex?:urn_exception.ExceptionInstance)
+async function _store_error(urn_res:urn_response.Fail, res:express.Response, ex?:urn_exception.ExceptionInstance)
 		:Promise<Atom<'error'> | undefined>{
 	try{
 		const error_log:AtomShape<'error'> = {
