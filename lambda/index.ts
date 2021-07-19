@@ -48,7 +48,12 @@ export async function handle(event:Event, context:Context)
 	return _return_handler_response(urn_response);
 }
 
-async function _lambda_route(event: Event, context:Context, atom_name:AtomName, route_name:keyof Book.Definition.Api.Routes){
+async function _lambda_route(
+	event: Event,
+	context:Context,
+	atom_name:AtomName,
+	route_name:keyof Book.Definition.Api.Routes
+){
 	// return await _process_mdlw(event, context, route_middlewares(atom_name, route_name));
 }
 
