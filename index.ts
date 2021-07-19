@@ -1,10 +1,10 @@
 /**
- * Index module for URANIO Web
+ * Index module for URANIO Api
  *
  * @packageDocumentation
  */
 
-import * as urn_web from './main';
+import * as urn_api from './main';
 
-export default urn_web;
+export default urn_api;
 

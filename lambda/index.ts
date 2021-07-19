@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-// import {web_config} from '../conf/defaults';
+// import {api_config} from '../conf/defaults';
 
 import {urn_log, urn_return, urn_exception, urn_response} from 'urn-lib';
 
