@@ -18,7 +18,7 @@ import {api_book} from 'uranio-books/api';
 
 import urn_core from 'uranio-core';
 
-import {web_config} from '../../conf/defaults';
+import {api_config} from '../../conf/defaults';
 
 import * as req_validator from './routes/validate';
 
@@ -147,7 +147,7 @@ function _authorization() {
 			
 		try{
 			
-			const decoded = jwt.verify(token, web_config.jwt_private_key) as Passport;
+			const decoded = jwt.verify(token, api_config.jwt_private_key) as Passport;
 			res.locals.urn.passport = decoded;
 			
 		}catch(ex){
@@ -175,8 +175,8 @@ function _limit()
 		if(!options){
 			options = {};
 		}
-		if(!options.limit || options.limit > web_config.request_auto_limit){
-			options.limit = web_config.request_auto_limit;
+		if(!options.limit || options.limit > api_config.request_auto_limit){
+			options.limit = api_config.request_auto_limit;
 		}
 		return next();
 	};

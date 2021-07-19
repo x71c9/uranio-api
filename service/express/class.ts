@@ -20,7 +20,7 @@ import {api_book} from 'uranio-books/api';
 
 import {register_exception_handler} from '../../tools/exc_handler';
 
-import {web_config} from '../../conf/defaults';
+import {api_config} from '../../conf/defaults';
 
 import {Book, AuthName} from '../../types';
 
@@ -79,7 +79,7 @@ class ExpressWebService implements Service {
 	listen(portcall: number | Callback, callback?:() => void): void {
 		switch(typeof portcall){
 			case 'function':{
-				this.express_app.listen(web_config.service_port, callback);
+				this.express_app.listen(api_config.service_port, callback);
 				break;
 			}
 			case 'number':{

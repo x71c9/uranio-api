@@ -8,7 +8,7 @@ import {FullConfiguration} from '../types';
 
 import {core_config} from 'uranio-core/conf/defaults';
 
-export const web_config:FullConfiguration = {
+export const api_config:FullConfiguration = {
 	
 	...core_config,
 	
