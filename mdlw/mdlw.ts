@@ -33,8 +33,6 @@ import {
 	LogBlls
 } from '../types';
 
-// const bll_requests = urn_core.bll.log.create('request');
-// const bll_errors = urn_core.bll.log.create('error');
 
 export async function route_middleware<A extends AtomName>(
 	atom_name: A,
@@ -130,7 +128,7 @@ async function _authorization(route_request:RouteRequest) {
 }
 
 function _limit(route_request:RouteRequest){
-	let options = route_request.query.options;
+	let options = route_request.query?.options;
 	if(!options){
 		options = {};
 	}
@@ -321,13 +319,13 @@ async function _log_route_request(
 		atom_name: route_request.atom_name,
 		auth_action: route_def.action
 	};
-	if(Object.keys(route_request.params).length > 0){
+	if(route_request.params && Object.keys(route_request.params).length > 0){
 		request_shape.params = JSON.stringify(route_request.params);
 	}
-	if(Object.keys(route_request.query).length > 0){
+	if(route_request.query && Object.keys(route_request.query).length > 0){
 		request_shape.query = JSON.stringify(route_request.query);
 	}
-	if(Object.keys(route_request.body).length > 0){
+	if(route_request.body && Object.keys(route_request.body).length > 0){
 		request_shape.body = JSON.stringify(route_request.body);
 	}
 	try{
@@ -352,13 +350,13 @@ async function _log_auth_route_request(
 		atom_name: auth_request.atom_name,
 		auth_action: urn_core.types.AuthAction.AUTH
 	};
-	if(Object.keys(auth_request.params).length > 0){
+	if(auth_request.params && Object.keys(auth_request.params).length > 0){
 		request_shape.params = JSON.stringify(auth_request.params);
 	}
-	if(Object.keys(auth_request.query).length > 0){
+	if(auth_request.query && Object.keys(auth_request.query).length > 0){
 		request_shape.query = JSON.stringify(auth_request.query);
 	}
-	if(Object.keys(auth_request.body).length > 0){
+	if(auth_request.body && Object.keys(auth_request.body).length > 0){
 		request_shape.body = JSON.stringify(auth_request.body);
 	}
 	const auth_request_clone = {...request_shape};
