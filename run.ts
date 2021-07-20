@@ -21,7 +21,7 @@ import * as types from './types';
 const event = {
 	rawURL: '',
 	rawQuery: '',
-	path: '/uranio/api/superusers/6666/dd',
+	path: '/uranio/api/superusers/6666',
 	httpMethod: types.RouteMethod.GET,
 	headers: {},
 	multiValueHeaders: {},
@@ -41,7 +41,7 @@ const context = {
 	logStreamName: '',
 	getRemainingTimeInMillis: () => 3
 };
-
-urn_api.lambda.handle(event, context).then((_r) => {
+const urn_lambda = urn_api.lambda.init();
+urn_lambda.handle(event, context).then((_r) => {
 	// console.log(r);
 });
