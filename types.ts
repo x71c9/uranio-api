@@ -65,7 +65,7 @@ export namespace Book {
 		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		export import Properties = urn_core.types.Book.Definition.Properties;
-
+		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		export import Property = urn_core.types.Book.Definition.Property;
 		
@@ -98,35 +98,40 @@ export const enum RouteMethod {
 	DELETE = 'DELETE'
 }
 
-export type Request = {
-	params: RouteRequestParams,
-	query: RouteRequestQuery,
-	body: any,
+export type RawRequest = {
+	params: RouteRequestParams
+	query: RouteRequestQuery | null
+	body: any
 	ip: string
+	headers?: RouteRequestHeaders
 }
 
 export type RouteRequest = {
-	atom_name: urn_core.types.AtomName,
-	route_name: keyof Book.Definition.Api.Routes,
-	params: RouteRequestParams,
-	query: RouteRequestQuery,
-	body: any,
-	ip: string,
-	headers?: RouteRequestHeaders,
-	passport?: urn_core.types.Passport,
+	atom_name: urn_core.types.AtomName
+	route_name: keyof Book.Definition.Api.Routes
+	params: RouteRequestParams
+	query: RouteRequestQuery | null
+	body: any
+	ip: string
+	headers?: RouteRequestHeaders
+	passport?: urn_core.types.Passport
 	// log?: urn_core.types.Atom<'request'>
 }
 
 type RouteRequestHeaders = {
-	[k:string]: string
+	[k:string]: string | undefined
 }
 
 type RouteRequestParams = {
-	[k:string]: string
+	[k:string]: string | undefined
 }
 
 type RouteRequestQuery = {
 	[k:string]: any
 }
 
+export type LogBlls = {
+	req: urn_core.bll.BLL<'request'>
+	err: urn_core.bll.BLL<'error'>
+}
 

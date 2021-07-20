@@ -26,28 +26,30 @@ import {
 	AuthName,
 	AtomShape,
 	Passport,
-	Request,
+	RawRequest,
 	RouteRequest,
 	RouteMethod,
 	Book,
+	LogBlls
 } from '../types';
 
 // const bll_requests = urn_core.bll.log.create('request');
 // const bll_errors = urn_core.bll.log.create('error');
 
 export async function route_middleware<A extends AtomName>(
-	atom_name:A,
-	route_name:keyof Book.Definition.Api.Routes,
-	req:Request
+	atom_name: A,
+	route_name: keyof Book.Definition.Api.Routes,
+	req: RawRequest,
+	log_blls: LogBlls
 ):Promise<urn_response.General<any, any>>{
 	
-	let route_request = _request_to_route_request(atom_name, route_name, req);
+	let route_request = _raw_request_to_route_request(atom_name, route_name, req);
 	
-	const atom_request = await _log_route_request(route_request);
+	const atom_request = await _log_route_request(route_request, log_blls.req);
 	
 	try{
 		const auth_reponse = await _authorization(route_request);
-		if(auth_reponse !== false){
+		if(auth_reponse){
 			route_request = auth_reponse;
 		}
 	}catch(ex){
@@ -58,13 +60,13 @@ export async function route_middleware<A extends AtomName>(
 			'INVALID_TOKEN',
 			'Invalid token.',
 		);
-		await _store_error(urn_res, atom_request, ex);
+		await _store_error(urn_res, atom_request, log_blls.err, ex);
 		// return res.status(400).send(urn_res);
 		return urn_res;
 	}
 	
 	route_request = _limit(route_request);
-	return await _validate_and_catch(route_request, atom_request);
+	return await _validate_and_catch(route_request, atom_request, log_blls.err);
 	
 }
 
@@ -74,23 +76,23 @@ export async function auth_route_middleware<A extends AuthName>(
 	atom_name: A,
 	route_name: string,
 	handler: AuthHandler,
-	req: Request
+	req: RawRequest,
+	log_blls:LogBlls
 ):Promise<urn_response.General<any, any>>{
 	
+	const auth_route_request = _raw_request_to_route_request(atom_name, route_name, req);
 	
-	const auth_route_request = _request_to_route_request(atom_name, route_name, req);
+	const atom_auth_request = await _log_auth_route_request(auth_route_request, log_blls.req);
 	
-	const atom_auth_request = await _log_auth_route_request(auth_route_request);
-	
-	return await _auth_validate_and_catch(auth_route_request, atom_auth_request, handler);
+	return await _auth_validate_and_catch(auth_route_request, atom_auth_request, handler, log_blls.err);
 	
 }
 
 
-function _request_to_route_request<A extends AtomName>(
+function _raw_request_to_route_request<A extends AtomName>(
 	atom_name:A,
 	route_name:keyof Book.Definition.Api.Routes,
-	req:Request
+	req:RawRequest
 ) {
 	const route_request:RouteRequest = {
 		params: req.params,
@@ -98,24 +100,11 @@ function _request_to_route_request<A extends AtomName>(
 		body: req.body,
 		atom_name: atom_name,
 		route_name: route_name,
+		headers: req.headers,
 		ip: req.ip
 	};
 	return route_request;
 }
-
-// async function _log(route_request:RouteRequest)
-//     :Promise<AtomShape<'request'>> {
-//   return await _log_route_request(route_request);
-// }
-
-// async function _auth_log(route_request:RouteRequest) {
-//   try {
-//     await _log_auth_route_request(route_request);
-//   }catch(ex){
-//     console.error('CANNOT AUTH LOG', ex);
-//     // TODO save on file CANNOT LOG
-//   }
-// }
 
 async function _authorization(route_request:RouteRequest) {
 	
@@ -151,7 +140,11 @@ function _limit(route_request:RouteRequest){
 	return route_request;
 }
 
-async function _validate_and_catch(route_request:RouteRequest, atom_request:AtomShape<'request'>){
+async function _validate_and_catch(
+	route_request:RouteRequest,
+	atom_request:AtomShape<'request'>,
+	bll_errs:urn_core.bll.BLL<'error'>
+){
 	try{
 		
 		const route_def = _get_route_def(route_request);
@@ -171,7 +164,7 @@ async function _validate_and_catch(route_request:RouteRequest, atom_request:Atom
 		
 	}catch(ex){
 		
-		return _handle_exception(ex, atom_request);
+		return _handle_exception(ex, atom_request, bll_errs);
 		
 	}
 }
@@ -179,7 +172,9 @@ async function _validate_and_catch(route_request:RouteRequest, atom_request:Atom
 async function _auth_validate_and_catch(
 	auth_route_request:RouteRequest,
 	auth_atom_route_request:AtomShape<'request'>,
-	handler:AuthHandler){
+	handler:AuthHandler,
+	bll_errs:urn_core.bll.BLL<'error'>
+){
 	try{
 		
 		const api_def = api_book[auth_route_request.atom_name as AuthName] as Book.BasicDefinition;
@@ -194,7 +189,12 @@ async function _auth_validate_and_catch(
 		
 		const auth_token = await handler(auth_route_request);
 		
-		const urn_response = urn_ret.return_success('Success', {token: auth_token});
+		const urn_response = urn_ret.return_success('Success', {
+			token: auth_token,
+			headers: {
+				'x-auth-token': auth_token
+			}
+		});
 		
 		// return res.header('x-auth-token', auth_token).status(200).send(urn_response);
 		return urn_response;
@@ -214,12 +214,12 @@ async function _auth_validate_and_catch(
 					error_code,
 					error_msg
 				);
-				await _store_error(urn_res, auth_atom_route_request, ex);
+				await _store_error(urn_res, auth_atom_route_request, bll_errs, ex);
 				// return res.status(status).json(urn_res);
 				return urn_res;
 			}
 			default:{
-				return _handle_exception(ex, auth_atom_route_request);
+				return _handle_exception(ex, auth_atom_route_request, bll_errs);
 			}
 		}
 		
@@ -293,17 +293,6 @@ function _get_route_def(route_request:RouteRequest)
 	return atom_api.routes[route_request.route_name]!;
 }
 
-// function _get_route_request(res:express.Response)
-//     :RouteRequest{
-//   const route_request = res.locals.urn as RouteRequest;
-//   if(!route_request){
-//     const err_msg = 'Express response locals.urn has not been set.';
-//     throw urn_exc.create_invalid_request('LOCALS_NOT_SET', err_msg);
-//   }
-//   // TODO _check_if_request_is_valid()
-//   return route_request;
-// }
-
 function _get_route_api(atom_name:AtomName):Book.Definition.Api{
 	
 	const atom_api = api_book[atom_name as keyof typeof api_book].api as Book.Definition.Api;
@@ -316,36 +305,10 @@ function _get_route_api(atom_name:AtomName):Book.Definition.Api{
 	
 }
 
-// function _get_api_route(atom_name:AtomName, route_name:string)
-//     :Book.Definition.Api.Routes.Route{
-//   const atom_api = _get_route_api(atom_name);
-	
-//   if(!atom_api.routes){
-//     //TODO implements generic routes
-//     atom_api.routes = {};
-//   }
-	
-//   if(!atom_api.routes[route_name]){
-//     const err_msg = `Invalid route name [${atom_name}] [${route_name}].`;
-//     throw urn_exc.create_invalid_request(`INVALID_ROUTE_NAME`, err_msg);
-//   }
-	
-//   return atom_api.routes[route_name];
-	
-// }
-
-// function _catch(handler:Handler):express.RequestHandler{
-//   return async (req: express.Request, res:express.Response, next:express.NextFunction) => {
-//     try{
-//       await handler(req, res, next);
-//     }catch(ex){
-//       _handle_exception(ex, res);
-//     }
-//   };
-// }
-
-async function _log_route_request(route_request:RouteRequest)
-		:Promise<AtomShape<'request'>>{
+async function _log_route_request(
+	route_request:RouteRequest,
+	bll_reqs:urn_core.bll.BLL<'request'>
+):Promise<AtomShape<'request'>>{
 	
 	// const atom_api = atom_book[route_request.atom_name].api as Book.Definition.Api;
 	
@@ -368,7 +331,8 @@ async function _log_route_request(route_request:RouteRequest)
 		request_shape.body = JSON.stringify(route_request.body);
 	}
 	try{
-		return await bll_requests.insert_new(request_shape);
+		// return await bll_requests.insert_new(request_shape);
+		return await bll_reqs.insert_new(request_shape);
 	}catch(ex){
 		console.error('CANNOT LOG REQUEST', ex);
 		// TODO save on file CANNOT LOG
@@ -376,8 +340,10 @@ async function _log_route_request(route_request:RouteRequest)
 	}
 }
 
-async function _log_auth_route_request(auth_request:RouteRequest)
-		:Promise<AtomShape<'request'>>{
+async function _log_auth_route_request(
+	auth_request:RouteRequest,
+	bll_reqs:urn_core.bll.BLL<'request'>
+):Promise<AtomShape<'request'>>{
 	const atom_api = _get_route_api(auth_request.atom_name);
 	
 	const request_shape:AtomShape<'request'> = {
@@ -402,7 +368,8 @@ async function _log_auth_route_request(auth_request:RouteRequest)
 		auth_request_clone.body = JSON.stringify(body);
 	}
 	try{
-		return await bll_requests.insert_new(auth_request_clone);
+		// return await bll_requests.insert_new(auth_request_clone);
+		return await bll_reqs.insert_new(auth_request_clone);
 	}catch(ex){
 		console.error('CANNOT LOG AUTH REQUEST', ex);
 		// TODO save on file CANNOT LOG
@@ -412,7 +379,8 @@ async function _log_auth_route_request(auth_request:RouteRequest)
 
 async function _handle_exception(
 	ex:urn_exception.ExceptionInstance,
-	atom_request:Partial<Atom<'request'>>
+	atom_request:Partial<Atom<'request'>>,
+	bll_errs:urn_core.bll.BLL<'error'>
 ){
 	let status = 500;
 	let msg = 'Internal Server Error';
@@ -447,7 +415,7 @@ async function _handle_exception(
 		error_code,
 		error_msg
 	);
-	await _store_error(urn_res, atom_request, ex);
+	await _store_error(urn_res, atom_request, bll_errs, ex);
 	// return res.status(status).json(urn_res);
 	return urn_res;
 	
@@ -456,7 +424,8 @@ async function _handle_exception(
 async function _store_error(
 	urn_res:urn_response.Fail,
 	atom_request:Partial<Atom<'request'>>,
-	ex?:urn_exception.ExceptionInstance
+	bll_errs:urn_core.bll.BLL<'error'>,
+	ex?:urn_exception.ExceptionInstance,
 ):Promise<Atom<'error'> | undefined>{
 	try{
 		const error_log:AtomShape<'error'> = {
@@ -471,7 +440,8 @@ async function _store_error(
 		if(ex && !ex.type){
 			error_log.stack = ex.stack;
 		}
-		return await bll_errors.insert_new(error_log);
+		// return await bll_errors.insert_new(error_log);
+		return await bll_errs.insert_new(error_log);
 	}catch(ex){
 		// TODO Save to file CANNOT LOG
 		console.error('CANNOT STORE ERROR', ex);

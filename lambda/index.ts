@@ -6,9 +6,12 @@
 
 // import {api_config} from '../conf/defaults';
 
-import {urn_log, urn_return, urn_exception, urn_response} from 'urn-lib';
+// import {urn_log, urn_return, urn_exception, urn_response} from 'urn-lib';
+import {urn_log, urn_return, urn_exception, urn_response, urn_util} from 'urn-lib';
 
 // import {atom_book} from 'uranio-books/atom';
+
+import urn_core from 'uranio-core';
 
 import {api_book} from 'uranio-books/api';
 
@@ -24,10 +27,9 @@ import {return_default_routes} from '../routes/';
 
 import {Event, Context, HandlerResponse, Headers, MultiValueHeaders} from './types';
 
+import {route_middleware, auth_route_middleware} from '../mdlw/';
 
-// export * from './types';
-
-export async function handle(event:Event, context:Context)
+export async function handle(event:Event, context:Context, log_blls:types.LogBlls)
 		:Promise<HandlerResponse>{
 	const path = event.path;
 	try{
@@ -44,7 +46,7 @@ export async function handle(event:Event, context:Context)
 		return _return_handler_response(res_err);
 	}
 	const {atom_name, route_name} = _process_event(event);
-	const urn_response = await _lambda_route(event, context, atom_name, route_name);
+	const urn_response = await _lambda_route(event, context, atom_name, route_name, log_blls);
 	return _return_handler_response(urn_response);
 }
 
@@ -52,11 +54,52 @@ async function _lambda_route(
 	event: Event,
 	context:Context,
 	atom_name:AtomName,
-	route_name:keyof Book.Definition.Api.Routes
+	route_name:keyof Book.Definition.Api.Routes,
+	log_blls:types.LogBlls
 ){
-	// return await _process_mdlw(event, context, route_middlewares(atom_name, route_name));
+	const raw_request = _lambda_to_raw_request(event, context);
+	if(_is_auth_route(event, atom_name)){
+		
+		const auth_bll = urn_core.bll.auth.create(atom_name as types.AuthName);
+		const auth_handler = async (route_request:types.RouteRequest) => {
+			const token = await auth_bll.authenticate(
+				route_request.body.email,
+				route_request.body.password
+			);
+			return token;
+		};
+		
+		return auth_route_middleware(atom_name as types.AuthName, route_name as string, auth_handler, raw_request, log_blls);
+	}else{
+		return route_middleware(atom_name, route_name, raw_request, log_blls);
+	}
 }
 
+function _lambda_to_raw_request(event:Event, context:Context){
+	
+	const raw_request:types.RawRequest = {
+		ip: context.identity?.sourceIp,
+		body: event.body,
+		headers: event.headers,
+		query: event.queryStringParameters,
+		// params: 
+	};
+	
+	return raw_request;
+	
+}
+
+function _is_auth_route(event:Event, atom_name:AtomName){
+	const atom_api = api_book[atom_name]['api'] as Book.Definition.Api;
+	if(urn_util.object.has_key(atom_api, 'auth')){
+		const auth_url = atom_api['auth'];
+		if(auth_url === event.path){
+			return true;
+		}
+		
+	}
+	return false;
+}
 
 // function _get_route_def(atom_name:AtomName, route_name:keyof Book.Definition.Api.Routes){
 //   const atom_api = _get_atom_api(atom_name);
