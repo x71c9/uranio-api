@@ -34,7 +34,11 @@ export function process_request_path(path:string)
 		splitted_no_prefix = splitted_no_prefix.slice(1);
 	}
 	const atom_path = splitted_no_prefix[0];
-	const route_path = splitted_no_prefix.slice(1).join('/');
+	let route_path = splitted_no_prefix.slice(1).join('/');
+	
+	if(route_path[route_path.length - 1] !== '/'){
+		route_path += '/';
+	}
 	
 	const api_request_paths = {
 		full_path,
@@ -69,9 +73,9 @@ export function get_route_name<A extends types.AtomName>(atom_name:A, route_path
 			if(route_def.url === route_path){
 				return route_name;
 			}else if(route_def.url.includes(':')){
-				if(route_path[route_path.length - 1] !== '/'){
-					route_path += '/';
-				}
+				// if(route_path[route_path.length - 1] !== '/'){
+				//   route_path += '/';
+				// }
 				if(route_def.url[route_def.url.length - 1] !== '/'){
 					route_def.url += '/';
 				}
@@ -124,6 +128,8 @@ export function get_params_from_route_path(
 			}
 			const atom_route_splitted = atom_route_url.split('/');
 			const splitted_route_path = route_path.split('/');
+			console.log(atom_route_url, route_path);
+			console.log(atom_route_splitted, splitted_route_path);
 			if(atom_route_splitted.length !== splitted_route_path.length){
 				throw urn_exc.create_invalid_request(
 					`INVALID_PATH_WRONG_FORMAT`,
