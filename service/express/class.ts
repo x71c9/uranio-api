@@ -14,6 +14,8 @@ const urn_exc = urn_exception.init(`EXPRESSCLASS`, `Express class module.`);
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 
+import urn_core from 'uranio-core';
+
 import {atom_book} from 'uranio-books/atom';
 
 import {api_book} from 'uranio-books/api';
@@ -39,6 +41,9 @@ class ExpressWebService implements Service {
 	
 	public express_app:express.Application;
 	
+	public bll_requests:urn_core.bll.BLL<'request'>;
+	public bll_errors:urn_core.bll.BLL<'error'>;
+	
 	constructor(public service_name='main'){
 		
 		this.express_app = express();
@@ -56,11 +61,19 @@ class ExpressWebService implements Service {
 		
 		register_exception_handler(service_name);
 		
+		this.bll_requests = urn_core.bll.log.create('request');
+		this.bll_errors = urn_core.bll.log.create('error');
+		
+		const log_blls = {
+			req: this.bll_requests,
+			err: this.bll_errors
+		};
+		
 		let atom_name:keyof typeof api_book;
 		for(atom_name in api_book){
 			const api_def = api_book[atom_name] as Book.BasicDefinition;
 			const atom_def = atom_book[atom_name] as Book.BasicDefinition;
-			const router = create_express_route(atom_name);
+			const router = create_express_route(atom_name, log_blls);
 			if(api_def.api){
 				if(atom_def.connection && atom_def.connection === 'log'){
 					this.express_app.use(`/logs/${api_def.api.url}`, router);
@@ -69,7 +82,7 @@ class ExpressWebService implements Service {
 				}
 			}
 			if(api_def.api && api_def.api.auth && typeof api_def.api.auth === 'string'){
-				this.express_app.use(`/${api_def.api.auth}`, create_express_auth_route(atom_name as AuthName));
+				this.express_app.use(`/${api_def.api.auth}`, create_express_auth_route(atom_name as AuthName, log_blls));
 			}
 		}
 	}

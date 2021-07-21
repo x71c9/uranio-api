@@ -12,6 +12,8 @@ import {FullConfiguration as CoreFullConfiguration} from 'uranio-core/types';
 
 import {ServiceName} from './service/';
 
+import {LambdaName} from './lambda/';
+
 export type Book = {
 	[k in urn_core.types.AtomName]?: Book.Definition<k>;
 }
@@ -74,7 +76,8 @@ export namespace Book {
 }
 
 type RequiredConfigParams = {
-	service: ServiceName
+	service: ServiceName,
+	lambda: LambdaName
 }
 
 type OptionalConfigParam = {
@@ -99,6 +102,7 @@ export const enum RouteMethod {
 }
 
 export type RawRequest = {
+	path: string,
 	params: RouteRequestParams
 	query: RouteRequestQuery
 	body?: any
@@ -134,4 +138,6 @@ export type LogBlls = {
 	req: urn_core.bll.BLL<'request'>
 	err: urn_core.bll.BLL<'error'>
 }
+
+export type AuthHandler = (route_request:RouteRequest) => Promise<string>;
 
