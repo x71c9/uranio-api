@@ -10,17 +10,17 @@ import {urn_log} from 'urn-lib';
 
 import {api_book} from 'uranio-books/api';
 
-import {
-	AtomName,
-	RouteMethod,
-	Book
-} from '../../../types';
+import * as types from '../../../types';
 
 import {return_default_routes} from '../../../routes/';
 
-import {route_middlewares} from '../mdlw';
+import {route_middleware} from '../../../mdlw/';
 
-export function create_express_route<A extends AtomName>(atom_name:A)
+// import {route_middlewares} from '../mdlw';
+
+import {express_request_to_raw_request, return_uranio_response_to_express} from './common';
+
+export function create_express_route<A extends types.AtomName>(atom_name:A, bll_logs:types.LogBlls)
 		:express.Router{
 	
 	urn_log.fn_debug(`Create Express Default Atom Router [${atom_name}]`);
@@ -28,7 +28,7 @@ export function create_express_route<A extends AtomName>(atom_name:A)
 	const router = express.Router();
 	
 	const atom_api = api_book[atom_name as keyof typeof api_book].api as
-		Book.Definition.Api;
+		types.Book.Definition.Api;
 	
 	if(!atom_api){
 		return router;
@@ -36,49 +36,31 @@ export function create_express_route<A extends AtomName>(atom_name:A)
 	
 	const default_routes = return_default_routes(atom_name);
 	
-	// for(const [route_name, route_def] of Object.entries(default_routes)){
-	//   switch(route_def.method){
-	//     case RouteMethod.GET: {
-	//       router.get(route_def.url, route_middlewares(atom_name, route_name));
-	//       break;
-	//     }
-	//     case RouteMethod.POST: {
-	//       router.post(route_def.url, route_middlewares(atom_name, route_name));
-	//       break;
-	//     }
-	//     case RouteMethod.DELETE: {
-	//       router.delete(route_def.url, route_middlewares(atom_name, route_name));
-	//       break;
-	//     }
-	//   }
-	// }
-	
 	if(!atom_api.routes){
-		
 		atom_api.routes = default_routes;
-		
 	}else{
-		
 		atom_api.routes = {
 			...default_routes,
 			...atom_api.routes
 		};
-		
 	}
 	
 	for(const [route_name, route_def] of Object.entries(atom_api.routes)){
 		
 		switch(route_def.method){
-			case RouteMethod.GET: {
-				router.get(route_def.url, route_middlewares(atom_name, route_name));
+			case types.RouteMethod.GET: {
+				// router.get(route_def.url, route_middlewares(atom_name, route_name));
+				router.delete(route_def.url, _return_express_middleware(atom_name, route_name, bll_logs));
 				break;
 			}
-			case RouteMethod.POST: {
-				router.post(route_def.url, route_middlewares(atom_name, route_name));
+			case types.RouteMethod.POST: {
+				// router.post(route_def.url, route_middlewares(atom_name, route_name));
+				router.delete(route_def.url, _return_express_middleware(atom_name, route_name, bll_logs));
 				break;
 			}
-			case RouteMethod.DELETE: {
-				router.delete(route_def.url, route_middlewares(atom_name, route_name));
+			case types.RouteMethod.DELETE: {
+				// router.delete(route_def.url, route_middlewares(atom_name, route_name));
+				router.delete(route_def.url, _return_express_middleware(atom_name, route_name, bll_logs));
 				break;
 			}
 		}
@@ -87,5 +69,25 @@ export function create_express_route<A extends AtomName>(atom_name:A)
 		
 	return router;
 	
+}
+
+function _return_express_middleware(
+	atom_name:types.AtomName,
+	route_name:string,
+	log_blls:types.LogBlls
+){
+	return async (
+		req: express.Request,
+		res: express.Response,
+		_next: express.NextFunction
+	) => {
+		
+		const raw_request = express_request_to_raw_request(req);
+		
+		const urn_res = await route_middleware(atom_name, route_name, raw_request, log_blls);
+		
+		return return_uranio_response_to_express(urn_res, res);
+		
+	};
 }
 

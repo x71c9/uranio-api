@@ -16,6 +16,8 @@ export const api_config:FullConfiguration = {
 	
 	service: 'express',
 	
-	service_port: 3000
+	service_port: 3000,
+	
+	lambda: 'netlify'
 	
 };

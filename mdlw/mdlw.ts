@@ -20,25 +20,14 @@ import {api_config} from '../conf/defaults';
 
 import * as req_validator from './validate';
 
-import {
-	Atom,
-	AtomName,
-	AuthName,
-	AtomShape,
-	Passport,
-	RawRequest,
-	RouteRequest,
-	RouteMethod,
-	Book,
-	LogBlls
-} from '../types';
+import * as types from '../types';
 
 
-export async function route_middleware<A extends AtomName>(
+export async function route_middleware<A extends types.AtomName>(
 	atom_name: A,
-	route_name: keyof Book.Definition.Api.Routes,
-	req: RawRequest,
-	log_blls: LogBlls
+	route_name: keyof types.Book.Definition.Api.Routes,
+	req: types.RawRequest,
+	log_blls: types.LogBlls
 ):Promise<urn_response.General<any, any>>{
 	
 	let route_request = _raw_request_to_route_request(atom_name, route_name, req);
@@ -68,14 +57,12 @@ export async function route_middleware<A extends AtomName>(
 	
 }
 
-type AuthHandler = (route_request:RouteRequest) => Promise<string>;
-
-export async function auth_route_middleware<A extends AuthName>(
+export async function auth_route_middleware<A extends types.AuthName>(
 	atom_name: A,
 	route_name: string,
-	handler: AuthHandler,
-	req: RawRequest,
-	log_blls:LogBlls
+	handler: types.AuthHandler,
+	req: types.RawRequest,
+	log_blls: types.LogBlls
 ):Promise<urn_response.General<any, any>>{
 	
 	const auth_route_request = _raw_request_to_route_request(atom_name, route_name, req);
@@ -87,12 +74,12 @@ export async function auth_route_middleware<A extends AuthName>(
 }
 
 
-function _raw_request_to_route_request<A extends AtomName>(
-	atom_name:A,
-	route_name:keyof Book.Definition.Api.Routes,
-	req:RawRequest
+function _raw_request_to_route_request<A extends types.AtomName>(
+	atom_name: A,
+	route_name: keyof types.Book.Definition.Api.Routes,
+	req: types.RawRequest
 ) {
-	const route_request:RouteRequest = {
+	const route_request:types.RouteRequest = {
 		params: req.params,
 		query: req.query,
 		atom_name: atom_name,
@@ -110,7 +97,7 @@ function _raw_request_to_route_request<A extends AtomName>(
 	return route_request;
 }
 
-async function _authorization(route_request:RouteRequest) {
+async function _authorization(route_request:types.RouteRequest) {
 	
 	const route_def = _get_route_def(route_request);
 	
@@ -127,13 +114,13 @@ async function _authorization(route_request:RouteRequest) {
 		return false;
 	}
 	
-	const decoded = jwt.verify(auth_token, api_config.jwt_private_key) as Passport;
+	const decoded = jwt.verify(auth_token, api_config.jwt_private_key) as types.Passport;
 	route_request.passport = decoded;
 	return route_request;
 	
 }
 
-function _limit(route_request:RouteRequest){
+function _limit(route_request:types.RouteRequest){
 	let options = route_request.query?.options;
 	if(!options){
 		options = {};
@@ -145,9 +132,9 @@ function _limit(route_request:RouteRequest){
 }
 
 async function _validate_and_catch(
-	route_request:RouteRequest,
-	atom_request:AtomShape<'request'>,
-	bll_errs:urn_core.bll.BLL<'error'>
+	route_request: types.RouteRequest,
+	atom_request: types.AtomShape<'request'>,
+	bll_errs: urn_core.bll.BLL<'error'>
 ){
 	try{
 		
@@ -174,14 +161,14 @@ async function _validate_and_catch(
 }
 
 async function _auth_validate_and_catch(
-	auth_route_request:RouteRequest,
-	auth_atom_route_request:AtomShape<'request'>,
-	handler:AuthHandler,
-	bll_errs:urn_core.bll.BLL<'error'>
+	auth_route_request: types.RouteRequest,
+	auth_atom_route_request: types.AtomShape<'request'>,
+	handler: types.AuthHandler,
+	bll_errs: urn_core.bll.BLL<'error'>
 ){
 	try{
 		
-		const api_def = api_book[auth_route_request.atom_name as AuthName] as Book.BasicDefinition;
+		const api_def = api_book[auth_route_request.atom_name as types.AuthName] as types.Book.BasicDefinition;
 		
 		if(!api_def.api){
 			throw urn_exc.create('NOAPIDEF', `Invalid api definition`);
@@ -230,7 +217,7 @@ async function _auth_validate_and_catch(
 	}
 }
 
-function _auth_validate(route_request:RouteRequest)
+function _auth_validate(route_request:types.RouteRequest)
 		:void{
 	
 	urn_log.fn_debug(`Validate Auth Route [${route_request.atom_name}]`);
@@ -240,14 +227,14 @@ function _auth_validate(route_request:RouteRequest)
 	
 }
 
-function _validate(route_request:RouteRequest)
+function _validate(route_request:types.RouteRequest)
 		:void{
 	
 	const route_def = _get_route_def(route_request);
 		
 	urn_log.fn_debug(`Validate Route ${route_def.url} [${route_request.atom_name}]`);
 	
-	if(route_def.method === RouteMethod.GET){
+	if(route_def.method === types.RouteMethod.GET){
 		req_validator.empty(route_request.body, 'body');
 	}
 	
@@ -278,8 +265,8 @@ function _validate(route_request:RouteRequest)
 	
 }
 
-function _get_route_def(route_request:RouteRequest)
-		:Book.Definition.Api.Routes.Route{
+function _get_route_def(route_request:types.RouteRequest)
+		:types.Book.Definition.Api.Routes.Route{
 	
 	const atom_api = _get_route_api(route_request.atom_name);
 	
@@ -297,9 +284,9 @@ function _get_route_def(route_request:RouteRequest)
 	return atom_api.routes[route_request.route_name]!;
 }
 
-function _get_route_api(atom_name:AtomName):Book.Definition.Api{
+function _get_route_api(atom_name:types.AtomName):types.Book.Definition.Api{
 	
-	const atom_api = api_book[atom_name as keyof typeof api_book].api as Book.Definition.Api;
+	const atom_api = api_book[atom_name as keyof typeof api_book].api as types.Book.Definition.Api;
 	
 	if(!atom_api){
 		throw urn_exc.create(`INVLID_API_DEF`,'Invalid api definition in api_book.');
@@ -310,16 +297,16 @@ function _get_route_api(atom_name:AtomName):Book.Definition.Api{
 }
 
 async function _log_route_request(
-	route_request:RouteRequest,
-	bll_reqs:urn_core.bll.BLL<'request'>
-):Promise<AtomShape<'request'>>{
+	route_request: types.RouteRequest,
+	bll_reqs: urn_core.bll.BLL<'request'>
+):Promise<types.AtomShape<'request'>>{
 	
 	// const atom_api = atom_book[route_request.atom_name].api as Book.Definition.Api;
 	
 	const atom_api = _get_route_api(route_request.atom_name);
 	const route_def = _get_route_def(route_request);
 	
-	const request_shape:AtomShape<'request'> = {
+	const request_shape:types.AtomShape<'request'> = {
 		url: `${route_def.method.toUpperCase()}: /${atom_api.url}${route_def.url}`,
 		atom_name: route_request.atom_name,
 		auth_action: route_def.action
@@ -347,12 +334,12 @@ async function _log_route_request(
 }
 
 async function _log_auth_route_request(
-	auth_request:RouteRequest,
-	bll_reqs:urn_core.bll.BLL<'request'>
-):Promise<AtomShape<'request'>>{
+	auth_request: types.RouteRequest,
+	bll_reqs: urn_core.bll.BLL<'request'>
+):Promise<types.AtomShape<'request'>>{
 	const atom_api = _get_route_api(auth_request.atom_name);
 	
-	const request_shape:AtomShape<'request'> = {
+	const request_shape:types.AtomShape<'request'> = {
 		url: `POST: /${atom_api.auth}`,
 		ip: auth_request.ip,
 		atom_name: auth_request.atom_name,
@@ -384,9 +371,9 @@ async function _log_auth_route_request(
 }
 
 async function _handle_exception(
-	ex:urn_exception.ExceptionInstance,
-	atom_request:Partial<Atom<'request'>>,
-	bll_errs:urn_core.bll.BLL<'error'>
+	ex: urn_exception.ExceptionInstance,
+	atom_request: Partial<types.Atom<'request'>>,
+	bll_errs: urn_core.bll.BLL<'error'>
 ){
 	let status = 500;
 	let msg = 'Internal Server Error';
@@ -428,13 +415,13 @@ async function _handle_exception(
 }
 
 async function _store_error(
-	urn_res:urn_response.Fail,
-	atom_request:Partial<Atom<'request'>>,
-	bll_errs:urn_core.bll.BLL<'error'>,
-	ex?:urn_exception.ExceptionInstance,
-):Promise<Atom<'error'> | undefined>{
+	urn_res: urn_response.Fail,
+	atom_request: Partial<types.Atom<'request'>>,
+	bll_errs: urn_core.bll.BLL<'error'>,
+	ex?: urn_exception.ExceptionInstance,
+):Promise<types.Atom<'error'> | undefined>{
 	try{
-		const error_log:AtomShape<'error'> = {
+		const error_log:types.AtomShape<'error'> = {
 			status: urn_res.status,
 			msg: '' + urn_res.message,
 			error_code: urn_res.err_code,

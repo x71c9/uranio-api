@@ -6,9 +6,19 @@
 
 import * as types from '../types';
 
+export type LambdaName = 'netlify'; // | 'aws'
+
+export interface Lambda {
+	
+	handle: (event:LambdaEvent, context:LambdaContext) => Promise<HandlerResponse>
+	
+}
+
+
 // From https://github.com/netlify/functions/tree/main/src/function
 
-export interface Event {
+
+export interface LambdaEvent {
 	rawURL: string,
 	rawQuery: string,
 	path: string,
@@ -39,7 +49,7 @@ interface EventMultiValueQueryStringParameters {
 
 // From https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html
 
-export interface Context {
+export interface LambdaContext {
 	callbackWaitsForEmptyEventLoop: boolean,
 	functionName: string
 	functionVersion: string
@@ -53,18 +63,18 @@ export interface Context {
 	getRemainingTimeInMillis(): number
 }
 
-export type Headers = {
+export type LambdaHeaders = {
 	[header:string]: boolean | number | string
 }
 
-export type MultiValueHeaders = {
+export type LambdaMultiValueHeaders = {
 	[header:string]: ReadonlyArray<boolean | number | string>
 }
 
 export interface HandlerResponse {
 	statusCode: number
-	headers?: Headers
-	multiValueHeaders?: MultiValueHeaders
+	headers?: LambdaHeaders
+	multiValueHeaders?: LambdaMultiValueHeaders
 	body?:any
 	isBase64Encoded?: boolean
 }
@@ -74,8 +84,7 @@ export interface HandlerCallback {
 }
 
 export interface Handler {
-	(event: Event, context: Context, callback: HandlerCallback): void | Response | Promise<Response>
+	(event: LambdaEvent, context: LambdaContext, callback: HandlerCallback): void | Response | Promise<Response>
 }
-
 
 

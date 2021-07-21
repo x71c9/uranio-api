@@ -10,11 +10,15 @@ import {urn_log} from 'urn-lib';
 
 import urn_core from 'uranio-core';
 
-import {AuthName, RouteRequest} from '../../../types';
+import * as types from '../../../types';
 
-import {auth_route_middlewares} from '../mdlw';
+// import {auth_route_middlewares} from '../mdlw';
 
-export function create_express_auth_route<A extends AuthName>(atom_name:A)
+import {auth_route_middleware} from '../../../mdlw/';
+
+import {express_request_to_raw_request, return_uranio_response_to_express} from './common';
+
+export function create_express_auth_route<A extends types.AuthName>(atom_name:A, log_blls:types.LogBlls)
 		:express.Router{
 	
 	urn_log.fn_debug(`Create Express Auth Atom Router [${atom_name}]`);
@@ -23,76 +27,44 @@ export function create_express_auth_route<A extends AuthName>(atom_name:A)
 	
 	const auth_bll = urn_core.bll.auth.create(atom_name);
 	
-	router.post('/', auth_route_middlewares(atom_name, 'auth',
-		async (route_request:RouteRequest) => {
-			const token = await auth_bll.authenticate(
-				route_request.body.email,
-				route_request.body.password
-			);
-			return token;
-		}
-	));
+	// router.post('/', auth_route_middlewares(atom_name, 'auth',
+	//   async (route_request:RouteRequest) => {
+	//     const token = await auth_bll.authenticate(
+	//       route_request.body.email,
+	//       route_request.body.password
+	//     );
+	//     return token;
+	//   }
+	// ));
 	
+	const handler = async (route_request:types.RouteRequest) => {
+		const token = await auth_bll.authenticate(
+			route_request.body.email,
+			route_request.body.password
+		);
+		return token;
+	};
+	router.post('/', _return_express_auth_middleware(atom_name, 'auth', log_blls, handler));
 	return router;
 	
 }
 
-// export function create_express_auth_route<A extends AuthName>(atom_name:A)
-//     :express.Router{
-	
-//   const router = express.Router();
-	
-//   const auth_bll = urn_core.bll.auth.create(atom_name);
-	
-//   router.post('/', auth_route_middlewares(atom_name, 'auth', AuthAction.AUTH, async (req:express.Request, res:express.Response) => {
+function _return_express_auth_middleware(
+	atom_name: types.AuthName,
+	route_name: string,
+	log_blls: types.LogBlls,
+	handler: types.AuthHandler
+){
+	return async (
+		req: express.Request,
+		res: express.Response,
+		_next: express.NextFunction
+	) => {
 		
-//     req_validator.empty(req.params, 'params');
-//     req_validator.empty(req.query, 'query');
+		const raw_request = express_request_to_raw_request(req);
 		
-//     try {
-			
-//       const token = await auth_bll.authenticate(req.body.email, req.body.password);
-//       return res.header('x-auth-token', token).status(200).send({});
-			
-//     }catch(ex){
-			
-//       switch(ex.type){
-//         case urn_exception.ExceptionType.NOT_FOUND:{
-//           const urn_res = urn_ret.return_error(
-//             404,
-//             `Not found`,
-//             `${atom_name.toUpperCase()}_NOT_FOUND`,
-//             `[${atom_name}] not found.`
-//           );
-//           await store_error(urn_res, res);
-//           return res.status(404).send(urn_res);
-//         }
-//         case urn_exception.ExceptionType.INVALID_REQUEST:{
-//           if(ex.error_code === 'AUTH_INVALID_PASSWORD'){
-//             const urn_res = urn_ret.return_error(
-//               400,
-//               `Invalid request`,
-//               `AUTH_INVALID_PASSWORD`,
-//               `Invalid password.`
-//             );
-//             await store_error(urn_res, res);
-//             return res.status(400).send(urn_res);
-//           }else{
-//             throw ex;
-//           }
-//         }
-//       }
-//       throw ex;
-			
-//     }
+		const urn_res = await auth_route_middleware(atom_name, route_name, handler, raw_request, log_blls);
 		
-//   }));
-
-//   return router;
-// }
-
-
-// export {
-//   router as auth_route,
-//   super_router as superauth_route
-// };
+		return return_uranio_response_to_express(urn_res, res);
+	};
+}
