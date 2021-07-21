@@ -21,7 +21,7 @@ import * as types from './types';
 const event = {
 	rawURL: '',
 	rawQuery: '',
-	path: '/uranio/api/superusers/6666',
+	path: '/uranio/api/groups/89e4738924792423',
 	httpMethod: types.RouteMethod.GET,
 	headers: {},
 	multiValueHeaders: {},
@@ -43,5 +43,5 @@ const context = {
 };
 const urn_lambda = urn_api.lambda.init();
 urn_lambda.handle(event, context).then((_r) => {
-	// console.log(r);
+	console.log(_r);
 });

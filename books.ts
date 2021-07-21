@@ -57,7 +57,8 @@ export const atom = {
 			},
 			ip: {
 				type: uranio.types.BookPropertyType.TEXT,
-				label: 'IP'
+				label: 'IP',
+				optional: true
 			},
 			params: {
 				type: uranio.types.BookPropertyType.TEXT,

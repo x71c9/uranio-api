@@ -95,12 +95,18 @@ function _raw_request_to_route_request<A extends AtomName>(
 	const route_request:RouteRequest = {
 		params: req.params,
 		query: req.query,
-		body: req.body,
 		atom_name: atom_name,
 		route_name: route_name,
-		headers: req.headers,
-		ip: req.ip
 	};
+	if(req.body){
+		route_request.body = req.body;
+	}
+	if(req.headers){
+		route_request.headers = req.headers;
+	}
+	if(req.ip){
+		route_request.ip = req.ip;
+	}
 	return route_request;
 }
 
@@ -315,10 +321,12 @@ async function _log_route_request(
 	
 	const request_shape:AtomShape<'request'> = {
 		url: `${route_def.method.toUpperCase()}: /${atom_api.url}${route_def.url}`,
-		ip: route_request.ip,
 		atom_name: route_request.atom_name,
 		auth_action: route_def.action
 	};
+	if(route_request.ip){
+		route_request.ip;
+	}
 	if(route_request.params && Object.keys(route_request.params).length > 0){
 		request_shape.params = JSON.stringify(route_request.params);
 	}
