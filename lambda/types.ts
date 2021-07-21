@@ -65,7 +65,7 @@ export interface HandlerResponse {
 	statusCode: number
 	headers?: Headers
 	multiValueHeaders?: MultiValueHeaders
-	body?:string
+	body?:any
 	isBase64Encoded?: boolean
 }
 

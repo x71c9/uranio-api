@@ -103,14 +103,24 @@ function _lambda_to_raw_request(
 	route_name: keyof types.Book.Definition.Api.Routes
 ){
 	const query = (event.queryStringParameters === null) ? {} : event.queryStringParameters;
-	const path = (event.path.includes('/uranio/api/')) ? event.path.split('/uranio/api/')[1] : event.path;
+	let path = (event.path.includes('/uranio/api/')) ? event.path.split('/uranio/api/')[1] : event.path;
+	if(path[path.length - 1] !== '/'){
+		path += '/';
+	}
+	const ip = context.identity?.sourceIp || event.headers['client-ip'] || event.headers['X-Nf-Client-Connection-Ip'];
 	const raw_request:types.RawRequest = {
-		ip: context.identity?.sourceIp,
-		body: event.body,
-		headers: event.headers,
 		query: query,
 		params: _get_params_from_path(atom_name, route_name, path)
 	};
+	if(ip){
+		raw_request.ip = ip;
+	}
+	if(event.body){
+		raw_request.body = event.body;
+	}
+	if(event.headers){
+		raw_request.headers = event.headers;
+	}
 	return raw_request;
 }
 
@@ -123,16 +133,19 @@ function _get_params_from_path(
 	for(const route_key in atom_api.routes){
 		if(route_key === route_name){
 			const params:types.RouteRequestParams = {};
-			const atom_route_url = atom_api.routes[route_key].url;
-			const atom_route_splitted = atom_route_url.split('/');
-			const splitted_path = path.split('/');
+			let atom_route_url = atom_api.routes[route_key].url;
+			if(atom_route_url[atom_route_url.length - 1] !== '/'){
+				atom_route_url += '/';
+			}
+			const atom_route_splitted = atom_route_url.split('/').slice(1);
+			const splitted_path = path.split('/').slice(1);
 			if(atom_route_splitted.length !== splitted_path.length){
 				throw urn_exc.create_invalid_request(
 					`INVALID_PATH_WRONG_FORMAT`,
 					`Invalid path. Format wrong for atom [${atom_name}] route [${route_name}]`
 				);
 			}
-			for(let i = 0; i <  atom_route_splitted.length; i++){
+			for(let i = 0; i < atom_route_splitted.length; i++){
 				const split = atom_route_splitted[i];
 				if(split[0] === ':'){
 					const param_name = split.substr(1,split.length);
@@ -223,6 +236,12 @@ function _get_route_name(
 			if(route_def.url === route_url){
 				return route_name;
 			}else if(route_def.url.includes(':')){
+				if(route_url[route_url.length - 1] !== '/'){
+					route_url += '/';
+				}
+				if(route_def.url[route_def.url.length - 1] !== '/'){
+					route_def.url += '/';
+				}
 				const splitted_route_def_url = route_def.url.split('/');
 				const splitted_route_url = route_url.split('/');
 				if(splitted_route_def_url.length !== splitted_route_url.length){
@@ -300,13 +319,20 @@ function _return_handler_response(
 	multi_value_headers?:MultiValueHeaders,
 	is_base64?: boolean
 ):HandlerResponse{
-	const handler_response = {
+	const handler_response:HandlerResponse = {
 		statusCode: urn_resp.status,
-		body: JSON.stringify(urn_resp),
-		headers: headers,
-		multiValueHeaders: multi_value_headers,
-		isBase64Encoded: is_base64
+		// body: JSON.stringify(urn_resp),
+		body: urn_resp
 	};
+	if(headers){
+		handler_response.headers = headers;
+	}
+	if(multi_value_headers){
+		handler_response.multiValueHeaders = multi_value_headers;
+	}
+	if(typeof is_base64 === 'boolean'){
+		handler_response.isBase64Encoded = is_base64;
+	}
 	return handler_response;
 }
 

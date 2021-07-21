@@ -101,8 +101,8 @@ export const enum RouteMethod {
 export type RawRequest = {
 	params: RouteRequestParams
 	query: RouteRequestQuery
-	body: any
-	ip: string
+	body?: any
+	ip?: string
 	headers?: RouteRequestHeaders
 }
 
@@ -111,8 +111,8 @@ export type RouteRequest = {
 	route_name: keyof Book.Definition.Api.Routes
 	params: RouteRequestParams
 	query: RouteRequestQuery
-	body: any
-	ip: string
+	body?: any
+	ip?: string
 	headers?: RouteRequestHeaders
 	passport?: urn_core.types.Passport
 	// log?: urn_core.types.Atom<'request'>
