@@ -23,15 +23,10 @@ import * as req_validator from './validate';
 import * as types from '../types';
 
 
-export async function route_middleware<A extends types.AtomName>(
-	atom_name: A,
-	route_name: keyof types.Book.Definition.Api.Routes,
-	req: types.RawRequest,
-	log_blls: types.LogBlls
-):Promise<urn_response.General<any, any>>{
+export async function route_middleware(api_request:types.ApiRequest, log_blls: types.LogBlls)
+		:Promise<urn_response.General<any, any>>{
 	
-	let route_request = _raw_request_to_route_request(atom_name, route_name, req);
-	
+	let route_request = _api_request_to_route_request(api_request);
 	const atom_request = await _log_route_request(route_request, log_blls.req);
 	
 	try{
@@ -48,7 +43,6 @@ export async function route_middleware<A extends types.AtomName>(
 			'Invalid token.',
 		);
 		await _store_error(urn_res, atom_request, log_blls.err, ex);
-		// return res.status(400).send(urn_res);
 		return urn_res;
 	}
 	
@@ -57,42 +51,33 @@ export async function route_middleware<A extends types.AtomName>(
 	
 }
 
-export async function auth_route_middleware<A extends types.AuthName>(
-	atom_name: A,
-	route_name: string,
-	handler: types.AuthHandler,
-	req: types.RawRequest,
-	log_blls: types.LogBlls
+export async function auth_route_middleware(
+	api_request: types.ApiRequest,
+	log_blls: types.LogBlls,
+	handler: types.AuthHandler
 ):Promise<urn_response.General<any, any>>{
-	
-	const auth_route_request = _raw_request_to_route_request(atom_name, route_name, req);
-	
+	const auth_route_request = _api_request_to_route_request(api_request);
 	const atom_auth_request = await _log_auth_route_request(auth_route_request, log_blls.req);
-	
 	return await _auth_validate_and_catch(auth_route_request, atom_auth_request, handler, log_blls.err);
-	
 }
 
 
-function _raw_request_to_route_request<A extends types.AtomName>(
-	atom_name: A,
-	route_name: keyof types.Book.Definition.Api.Routes,
-	req: types.RawRequest
-) {
+function _api_request_to_route_request(api_request:types.ApiRequest) {
 	const route_request:types.RouteRequest = {
-		params: req.params,
-		query: req.query,
-		atom_name: atom_name,
-		route_name: route_name,
+		full_path: api_request.full_path,
+		params: api_request.params,
+		query: api_request.query,
+		atom_name: api_request.atom_name,
+		route_name: api_request.route_name,
 	};
-	if(req.body){
-		route_request.body = req.body;
+	if(api_request.body){
+		route_request.body = api_request.body;
 	}
-	if(req.headers){
-		route_request.headers = req.headers;
+	if(api_request.headers){
+		route_request.headers = api_request.headers;
 	}
-	if(req.ip){
-		route_request.ip = req.ip;
+	if(api_request.ip){
+		route_request.ip = api_request.ip;
 	}
 	return route_request;
 }
@@ -109,7 +94,9 @@ async function _authorization(route_request:types.RouteRequest) {
 		return false;
 	}
 	
-	const auth_token = route_request.headers['x-auth-token'];
+	const auth_header = route_request.headers['x-auth-token'];
+	const auth_token = (Array.isArray(auth_header)) ? auth_header[0] : auth_header;
+	
 	if(!auth_token){
 		return false;
 	}

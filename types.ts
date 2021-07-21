@@ -77,7 +77,9 @@ export namespace Book {
 
 type RequiredConfigParams = {
 	service: ServiceName,
-	lambda: LambdaName
+	lambda: LambdaName,
+	prefix_api: string,
+	prefix_log: string
 }
 
 type OptionalConfigParam = {
@@ -101,13 +103,23 @@ export const enum RouteMethod {
 	DELETE = 'DELETE'
 }
 
-export type RawRequest = {
-	path: string,
+export type ApiRequestPaths = {
+	full_path: string
+	route_path: string
+	atom_path: string
+	connection_path: string
+}
+
+export type ApiRequest =
+	ApiRequestPaths & {
+	atom_name: urn_core.types.AtomName
+	route_name: keyof Book.Definition.Api.Routes
+	is_auth: boolean
 	params: RouteRequestParams
 	query: RouteRequestQuery
 	body?: any
-	ip?: string
 	headers?: RouteRequestHeaders
+	ip?: string
 }
 
 export type RouteRequest = {
@@ -115,6 +127,7 @@ export type RouteRequest = {
 	route_name: keyof Book.Definition.Api.Routes
 	params: RouteRequestParams
 	query: RouteRequestQuery
+	full_path: string
 	body?: any
 	ip?: string
 	headers?: RouteRequestHeaders
@@ -123,7 +136,7 @@ export type RouteRequest = {
 }
 
 type RouteRequestHeaders = {
-	[k:string]: string | undefined
+	[k:string]: string | string[] | undefined
 }
 
 export type RouteRequestParams = {
