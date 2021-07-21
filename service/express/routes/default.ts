@@ -18,7 +18,7 @@ import {route_middleware} from '../../../mdlw/';
 
 // import {route_middlewares} from '../mdlw';
 
-import {express_request_to_raw_request, return_uranio_response_to_express} from './common';
+import {express_request_to_api_request, return_uranio_response_to_express} from './common';
 
 export function create_express_route<A extends types.AtomName>(atom_name:A, bll_logs:types.LogBlls)
 		:express.Router{
@@ -45,22 +45,22 @@ export function create_express_route<A extends types.AtomName>(atom_name:A, bll_
 		};
 	}
 	
-	for(const [route_name, route_def] of Object.entries(atom_api.routes)){
+	for(const [_route_name, route_def] of Object.entries(atom_api.routes)){
 		
 		switch(route_def.method){
 			case types.RouteMethod.GET: {
 				// router.get(route_def.url, route_middlewares(atom_name, route_name));
-				router.delete(route_def.url, _return_express_middleware(atom_name, route_name, bll_logs));
+				router.get(route_def.url, _return_express_middleware(bll_logs));
 				break;
 			}
 			case types.RouteMethod.POST: {
 				// router.post(route_def.url, route_middlewares(atom_name, route_name));
-				router.delete(route_def.url, _return_express_middleware(atom_name, route_name, bll_logs));
+				router.post(route_def.url, _return_express_middleware(bll_logs));
 				break;
 			}
 			case types.RouteMethod.DELETE: {
 				// router.delete(route_def.url, route_middlewares(atom_name, route_name));
-				router.delete(route_def.url, _return_express_middleware(atom_name, route_name, bll_logs));
+				router.delete(route_def.url, _return_express_middleware(bll_logs));
 				break;
 			}
 		}
@@ -72,8 +72,6 @@ export function create_express_route<A extends types.AtomName>(atom_name:A, bll_
 }
 
 function _return_express_middleware(
-	atom_name:types.AtomName,
-	route_name:string,
 	log_blls:types.LogBlls
 ){
 	return async (
@@ -82,9 +80,9 @@ function _return_express_middleware(
 		_next: express.NextFunction
 	) => {
 		
-		const raw_request = express_request_to_raw_request(req);
+		const api_request = express_request_to_api_request(req);
 		
-		const urn_res = await route_middleware(atom_name, route_name, raw_request, log_blls);
+		const urn_res = await route_middleware(api_request, log_blls);
 		
 		return return_uranio_response_to_express(urn_res, res);
 		

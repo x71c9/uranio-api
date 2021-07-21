@@ -20,7 +20,7 @@ import {atom_book} from 'uranio-books/atom';
 
 import {api_book} from 'uranio-books/api';
 
-import {register_exception_handler} from '../../tools/exc_handler';
+import {register_exception_handler} from '../../util/exc_handler';
 
 import {api_config} from '../../conf/defaults';
 

@@ -18,6 +18,10 @@ export const api_config:FullConfiguration = {
 	
 	service_port: 3000,
 	
-	lambda: 'netlify'
+	lambda: 'netlify',
+	
+	prefix_api: '/uranio/api/',
+	
+	prefix_log: 'logs'
 	
 };
