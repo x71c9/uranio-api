@@ -50,7 +50,7 @@ class ExpressWebService implements Service {
 		this.express_app.use(cors());
 		this.express_app.use(express.json());
 		this.express_app.use(express.urlencoded({extended: true}));
-		this.express_app.use(function(err:any, _:express.Request, res:express.Response, next:express.NextFunction){
+		this.express_app.use(function(err:any, _req:express.Request, res:express.Response, next:express.NextFunction){
 			if(err.status === 400 && "body" in err) {
 				const respo = urn_ret.return_error(400, 'JSON parse error', 'INVALID_JSON_REQUEST', err.message);
 				res.status(respo.status).json(respo);
@@ -76,7 +76,7 @@ class ExpressWebService implements Service {
 			const router = create_express_route(atom_name, log_blls);
 			if(api_def.api){
 				if(atom_def.connection && atom_def.connection === 'log'){
-					this.express_app.use(`/logs/${api_def.api.url}`, router);
+					this.express_app.use(`/${api_config.prefix_log}/${api_def.api.url}`, router);
 				}else{
 					this.express_app.use(`/${api_def.api.url}`, router);
 				}

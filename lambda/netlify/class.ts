@@ -4,7 +4,8 @@
  * @packageDocumentation
  */
 
-import {urn_log, urn_return, urn_response, urn_exception} from 'urn-lib';
+// import {urn_log, urn_return, urn_response, urn_exception} from 'urn-lib';
+import {urn_log, urn_response} from 'urn-lib';
 
 import urn_core from 'uranio-core';
 
@@ -14,7 +15,7 @@ import urn_core from 'uranio-core';
 
 // const urn_exc = urn_exception.init(`NETLIFYLAMBDACLASS`, `Netlify lambda class module.`);
 
-const urn_ret = urn_return.create(urn_log.util.return_injector);
+// const urn_ret = urn_return.create(urn_log.util.return_injector);
 
 // import {api_config} from '../../conf/defaults';
 
@@ -24,7 +25,8 @@ import {
 	get_route_name,
 	is_auth_request,
 	get_params_from_route_path,
-	get_auth_action
+	get_auth_action,
+	// handle_exception
 } from '../../util/request';
 
 // import {return_default_routes} from '../../routes/';
@@ -56,20 +58,12 @@ class NetlifyLambda implements Lambda {
 	
 	public async handle(event:LambdaEvent, context:LambdaContext)
 			:Promise<HandlerResponse> {
-		try{
-			const urn_res = await this.lambda_route(event, context);
-			return _return_handler_response(urn_res);
-		}catch(ex){
-			return _return_handler_response(_handle_exception(ex));
-		}
+		const urn_res = await this.lambda_route(event, context);
+		return _return_handler_response(urn_res);
 	}
 	
 	public async lambda_route(event:LambdaEvent, context:LambdaContext){
-		
 		const api_request = _lambda_request_to_api_request(event, context);
-		
-		// _validate_log_path(event.path, api_request.atom_name);
-		
 		const log_blls = {
 			req: this.bll_requests,
 			err: this.bll_errors
@@ -92,7 +86,6 @@ class NetlifyLambda implements Lambda {
 		}else{
 			return route_middleware(api_request, log_blls);
 		}
-		
 	}
 	
 }
@@ -348,30 +341,30 @@ function _return_handler_response(
 	return handler_response;
 }
 
-function _handle_exception(ex:any){
-	let status = 500;
-	let msg = 'Internal Server Error';
-	let error_code = '500';
-	let error_msg = ex.message;
-	if(ex.type){
-		error_code = ex.module_code + '_' + ex.error_code;
-		error_msg = ex.msg;
-	}
-	switch(ex.type){
-		case urn_exception.ExceptionType.INVALID_REQUEST:{
-			status = 400;
-			msg = 'Invalid Request';
-			break;
-		}
-	}
-	const urn_error = urn_ret.return_error(
-		status,
-		msg,
-		error_code,
-		error_msg
-	);
-	return urn_error;
-}
+// function _handle_exception(ex:any){
+//   let status = 500;
+//   let msg = 'Internal Server Error';
+//   let error_code = '500';
+//   let error_msg = ex.message;
+//   if(ex.type){
+//     error_code = ex.module_code + '_' + ex.error_code;
+//     error_msg = ex.msg;
+//   }
+//   switch(ex.type){
+//     case urn_exception.ExceptionType.INVALID_REQUEST:{
+//       status = 400;
+//       msg = 'Invalid Request';
+//       break;
+//     }
+//   }
+//   const urn_error = urn_ret.return_error(
+//     status,
+//     msg,
+//     error_code,
+//     error_msg
+//   );
+//   return urn_error;
+// }
 
 export function create():NetlifyLambda{
 	urn_log.fn_debug(`Create NetlifyLambda`);

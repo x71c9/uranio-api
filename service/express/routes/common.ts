@@ -8,7 +8,7 @@ import express from 'express';
 
 import {urn_response, urn_exception} from 'urn-lib';
 
-const urn_exc = urn_exception.init(`COMMONEXPRESSROUTE`, `Common express routes  module.`);
+const urn_exc = urn_exception.init(`COMMONEXPRESS`, `Common express routes module.`);
 
 import {
 	process_request_path,

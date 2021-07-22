@@ -4,13 +4,17 @@
  * @packageDocumentation
  */
 
-import {urn_exception} from 'urn-lib';
+import {urn_response, urn_return, urn_log, urn_exception} from 'urn-lib';
+
+import urn_core from 'uranio-core';
 
 import {api_book} from 'uranio-books/api';
 
 import {api_config} from '../conf/defaults';
 
 import {return_default_routes} from '../routes/';
+
+const urn_ret = urn_return.create(urn_log.util.return_injector);
 
 const urn_exc = urn_exception.init(`UTILREQUEST`, `Util request module.`);
 
@@ -141,8 +145,6 @@ export function get_params_from_route_path(
 			}
 			const atom_route_splitted = atom_route_url.split('/');
 			const splitted_route_path = route_path.split('/');
-			console.log(atom_route_url, route_path);
-			console.log(atom_route_splitted, splitted_route_path);
 			if(atom_route_splitted.length !== splitted_route_path.length){
 				throw urn_exc.create_invalid_request(
 					`INVALID_PATH_WRONG_FORMAT`,
@@ -180,4 +182,90 @@ function _get_atom_api(atom_name:types.AtomName){
 	}
 	return atom_api;
 }
+
+export async function store_error(
+	urn_res: urn_response.Fail,
+	atom_request: Partial<types.Atom<'request'>>,
+	bll_errs: urn_core.bll.BLL<'error'>,
+	ex?: urn_exception.ExceptionInstance,
+):Promise<types.Atom<'error'> | undefined>{
+	try{
+		const error_log:types.AtomShape<'error'> = {
+			status: urn_res.status,
+			msg: '' + urn_res.message,
+			error_code: urn_res.err_code,
+			error_msg: urn_res.err_msg,
+		};
+		if(atom_request._id !== undefined){
+			error_log.request = atom_request._id;
+		}
+		if(ex && !ex.type){
+			error_log.stack = ex.stack;
+		}
+		return await bll_errs.insert_new(error_log);
+	}catch(ex){
+		// ****
+		// TODO Save to file CANNOT LOG
+		// ****
+		console.error('CANNOT STORE ERROR', ex);
+		return undefined;
+	}
+}
+
+export function handle_exception(ex:urn_exception.ExceptionInstance)
+		:urn_response.Fail<any>{
+	let status = 500;
+	let msg = 'Internal Server Error';
+	let error_code = '500';
+	let error_msg = ex.message;
+	if(ex.type){
+		error_code = ex.module_code + '_' + ex.error_code;
+		error_msg = ex.msg;
+	}
+	switch(ex.type){
+		case urn_exception.ExceptionType.UNAUTHORIZED:{
+			status = 401;
+			msg = 'Unauthorized';
+			break;
+		}
+		case urn_exception.ExceptionType.NOT_FOUND:{
+			status = 404;
+			msg = 'Not Found';
+			error_code = 'RECORD_NOT_FOUND';
+			error_msg = 'Record not found.';
+			break;
+		}
+		case urn_exception.ExceptionType.INVALID_REQUEST:{
+			status = 400;
+			msg = 'Invalid Request';
+			break;
+		}
+		case urn_exception.ExceptionType.AUTH_NOT_FOUND:
+		case urn_exception.ExceptionType.AUTH_INVALID_PASSWORD:{
+			status = 400;
+			msg = 'Invalid auth request';
+			error_code = 'INVALID_AUTH_REQUEST';
+			error_msg = 'User or password are not valid.';
+			break;
+		}
+	}
+	const urn_res = urn_ret.return_error(
+		status,
+		msg,
+		error_code,
+		error_msg
+	);
+	return urn_res;
+}
+
+export async function handle_and_store_exception(
+	ex: urn_exception.ExceptionInstance,
+	atom_request: Partial<types.Atom<'request'>>,
+	bll_errs: urn_core.bll.BLL<'error'>
+):Promise<urn_response.Fail<any>>{
+	const urn_res = handle_exception(ex);
+	await store_error(urn_res, atom_request, bll_errs, ex);
+	return urn_res;
+}
+
 

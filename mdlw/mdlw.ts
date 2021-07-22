@@ -18,51 +18,53 @@ import urn_core from 'uranio-core';
 
 import {api_config} from '../conf/defaults';
 
+import {handle_and_store_exception} from '../util/request';
+
 import * as req_validator from './validate';
 
 import * as types from '../types';
 
+type Operation = (
+	api_request: types.ApiRequest,
+	log_blls: types.LogBlls,
+	auth_handler?: types.AuthHandler
+) => Promise<urn_response.General<any,any>>
+
+async function _catch(operation:Operation, api_request:types.ApiRequest, log_blls:types.LogBlls, auth_handler?:types.AuthHandler){
+	try{
+		return await operation(api_request, log_blls, auth_handler);
+	}catch(ex){
+		const atom_request = _api_request_to_atom_request(api_request);
+		return await handle_and_store_exception(ex, atom_request, log_blls.err);
+	}
+}
 
 export async function route_middleware(api_request:types.ApiRequest, log_blls: types.LogBlls)
 		:Promise<urn_response.General<any, any>>{
-	
-	// let api_request = _api_request_to_route_request(api_request);
-	const atom_request = await _log_route_request(api_request, log_blls.req);
-	
-	try{
+	return _catch(async (api_request: types.ApiRequest, log_blls:types.LogBlls) => {
+		await _log_route_request(api_request, log_blls.req);
 		const auth_reponse = await _authorization(api_request);
 		if(auth_reponse){
 			api_request = auth_reponse;
 		}
-	}catch(ex){
-		ex.stack = '';
-		const urn_res = urn_ret.return_error(
-			400,
-			'Invalid request',
-			'INVALID_TOKEN',
-			'Invalid token.',
-		);
-		await _store_error(urn_res, atom_request, log_blls.err, ex);
-		return urn_res;
-	}
-	
-	api_request = _limit(api_request);
-	return await _validate_and_catch(api_request, atom_request, log_blls.err);
-	
+		api_request = _limit(api_request);
+		return await _validate_and_call(api_request);
+	}, api_request, log_blls);
 }
 
 export async function auth_route_middleware(
 	api_request: types.ApiRequest,
 	log_blls: types.LogBlls,
-	handler: types.AuthHandler
+	auth_handler: types.AuthHandler
 ):Promise<urn_response.General<any, any>>{
-	// const auth_route_request = _api_request_to_route_request(api_request);
-	// const atom_auth_request = await _log_auth_route_request(auth_route_request, log_blls.req);
-	const atom_auth_request = await _log_auth_route_request(api_request, log_blls.req);
-	// return await _auth_validate_and_catch(auth_route_request, atom_auth_request, handler, log_blls.err);
-	return await _auth_validate_and_catch(api_request, atom_auth_request, handler, log_blls.err);
+	return _catch(async (api_request: types.ApiRequest, log_blls:types.LogBlls, auth_handler?:types.AuthHandler) => {
+		await _log_auth_route_request(api_request, log_blls.req);
+		if(!auth_handler){
+			throw urn_exc.create(`MISSING_AUTH_HANDLER`, `Missing auth handler.`);
+		}
+		return await _auth_validate_and_call(api_request, auth_handler);
+	}, api_request, log_blls, auth_handler);
 }
-
 
 // function _api_request_to_route_request(api_request:types.ApiRequest) {
 //   const api_request:types.ApiRequest = {
@@ -86,28 +88,25 @@ export async function auth_route_middleware(
 // }
 
 async function _authorization(api_request:types.ApiRequest) {
-	
 	const route_def = _get_route_def(api_request);
-	
 	if(urn_core.bll.auth.is_public_request(api_request.atom_name, route_def.action)){
 		return false;
 	}
-	
 	if(api_request.headers === undefined){
 		return false;
 	}
-	
 	const auth_header = api_request.headers['x-auth-token'];
 	const auth_token = (Array.isArray(auth_header)) ? auth_header[0] : auth_header;
-	
 	if(!auth_token){
 		return false;
 	}
-	
-	const decoded = jwt.verify(auth_token, api_config.jwt_private_key) as types.Passport;
-	api_request.passport = decoded;
-	return api_request;
-	
+	try{
+		const decoded = jwt.verify(auth_token, api_config.jwt_private_key) as types.Passport;
+		api_request.passport = decoded;
+		return api_request;
+	}catch(ex){
+		throw urn_exc.create_unauthorized(`INVALID_TOKEN`, `Invalid token.`, ex);
+	}
 }
 
 function _limit(api_request:types.ApiRequest){
@@ -121,90 +120,50 @@ function _limit(api_request:types.ApiRequest){
 	return api_request;
 }
 
-async function _validate_and_catch(
-	api_request: types.ApiRequest,
-	atom_request: types.AtomShape<'request'>,
-	bll_errs: urn_core.bll.BLL<'error'>
-){
-	try{
-		
-		const route_def = _get_route_def(api_request);
-		
-		urn_log.fn_debug(`Router ${route_def.method} ${route_def.url} [${api_request.atom_name}]`);
-		
-		_validate(api_request);
-		
-		let call_response = await route_def.call(api_request);
-		
-		call_response = urn_core.atm.util
-			.hide_hidden_properties(api_request.atom_name, call_response);
-		
-		const urn_response = urn_ret.return_success('Success', call_response);
-		
-		return urn_response;
-		
-	}catch(ex){
-		
-		return _handle_exception(ex, atom_request, bll_errs);
-		
-	}
+async function _validate_and_call(api_request: types.ApiRequest){
+	
+	const route_def = _get_route_def(api_request);
+	
+	urn_log.fn_debug(`Router ${route_def.method} ${route_def.url} [${api_request.atom_name}]`);
+	
+	_validate(api_request);
+	
+	let call_response = await route_def.call(api_request);
+	
+	call_response = urn_core.atm.util
+		.hide_hidden_properties(api_request.atom_name, call_response);
+	
+	const urn_response = urn_ret.return_success('Success', call_response);
+	
+	return urn_response;
+	
 }
 
-async function _auth_validate_and_catch(
+async function _auth_validate_and_call(
 	auth_route_request: types.ApiRequest,
-	auth_atom_route_request: types.AtomShape<'request'>,
 	handler: types.AuthHandler,
-	bll_errs: urn_core.bll.BLL<'error'>
 ){
-	try{
-		
-		const api_def = api_book[auth_route_request.atom_name as types.AuthName] as types.Book.BasicDefinition;
-		
-		if(!api_def.api){
-			throw urn_exc.create('NOAPIDEF', `Invalid api definition`);
-		}
-		
-		urn_log.fn_debug(`Router Auth ${api_def.api.url} [${auth_route_request.atom_name}]`);
-		
-		_auth_validate(auth_route_request);
-		
-		const auth_token = await handler(auth_route_request);
-		
-		const urn_response = urn_ret.return_success('Success', {
-			token: auth_token,
-			headers: {
-				'x-auth-token': auth_token
-			}
-		});
-		
-		// return res.header('x-auth-token', auth_token).status(200).send(urn_response);
-		return urn_response;
-		
-	}catch(ex){
-		
-		switch(ex.type){
-			case urn_exception.ExceptionType.AUTH_NOT_FOUND:
-			case urn_exception.ExceptionType.AUTH_INVALID_PASSWORD:{
-				const status = 400;
-				const msg = 'Invalid auth request';
-				const error_code = 'INVALID_AUTH_REQUEST';
-				const error_msg = 'User or password are not valid.';
-				const urn_res = urn_ret.return_error(
-					status,
-					msg,
-					error_code,
-					error_msg
-				);
-				await _store_error(urn_res, auth_atom_route_request, bll_errs, ex);
-				// return res.status(status).json(urn_res);
-				return urn_res;
-			}
-			default:{
-				return _handle_exception(ex, auth_atom_route_request, bll_errs);
-			}
-		}
-		
+	const api_def = api_book[auth_route_request.atom_name as types.AuthName] as types.Book.BasicDefinition;
+	
+	if(!api_def.api){
+		throw urn_exc.create('NOAPIDEF', `Invalid api definition`);
 	}
+	
+	urn_log.fn_debug(`Router Auth ${api_def.api.url} [${auth_route_request.atom_name}]`);
+	
+	_auth_validate(auth_route_request);
+	
+	const auth_token = await handler(auth_route_request);
+	
+	const urn_response = urn_ret.return_success('Success', {
+		token: auth_token,
+		headers: {
+			'x-auth-token': auth_token
+		}
+	});
+	
+	return urn_response;
+	
 }
 
 function _auth_validate(api_request:types.ApiRequest)
@@ -286,16 +245,8 @@ function _get_route_api(atom_name:types.AtomName):types.Book.Definition.Api{
 	
 }
 
-async function _log_route_request(
-	api_request: types.ApiRequest,
-	bll_reqs: urn_core.bll.BLL<'request'>
-):Promise<types.AtomShape<'request'>>{
-	
-	// const atom_api = atom_book[api_request.atom_name].api as Book.Definition.Api;
-	
-	// const atom_api = _get_route_api(api_request.atom_name);
-	// const route_def = _get_route_def(api_request);
-	
+function _api_request_to_atom_request(api_request: types.ApiRequest)
+		:types.AtomShape<'request'>{
 	const request_shape:types.AtomShape<'request'> = {
 		full_path: api_request.full_path,
 		route_path: api_request.route_path,
@@ -318,6 +269,16 @@ async function _log_route_request(
 	if(api_request.body && Object.keys(api_request.body).length > 0){
 		request_shape.body = JSON.stringify(api_request.body);
 	}
+	return request_shape;
+}
+
+async function _log_route_request(
+	api_request: types.ApiRequest,
+	bll_reqs: urn_core.bll.BLL<'request'>
+):Promise<types.AtomShape<'request'>>{
+	
+	const request_shape = _api_request_to_atom_request(api_request);
+	
 	try{
 		// return await bll_requests.insert_new(request_shape);
 		return await bll_reqs.insert_new(request_shape);
@@ -369,74 +330,73 @@ async function _log_auth_route_request(
 	}
 }
 
-async function _handle_exception(
-	ex: urn_exception.ExceptionInstance,
-	atom_request: Partial<types.Atom<'request'>>,
-	bll_errs: urn_core.bll.BLL<'error'>
-){
-	let status = 500;
-	let msg = 'Internal Server Error';
-	let error_code = '500';
-	let error_msg = ex.message;
-	if(ex.type){
-		error_code = ex.module_code + '_' + ex.error_code;
-		error_msg = ex.msg;
-	}
-	switch(ex.type){
-		case urn_exception.ExceptionType.UNAUTHORIZED:{
-			status = 401;
-			msg = 'Unauthorized';
-			break;
-		}
-		case urn_exception.ExceptionType.NOT_FOUND:{
-			status = 404;
-			msg = 'Not Found';
-			error_code = 'RECORD_NOT_FOUND';
-			error_msg = 'Record not found.';
-			break;
-		}
-		case urn_exception.ExceptionType.INVALID_REQUEST:{
-			status = 400;
-			msg = 'Invalid Request';
-			break;
-		}
-	}
-	const urn_res = urn_ret.return_error(
-		status,
-		msg,
-		error_code,
-		error_msg
-	);
-	await _store_error(urn_res, atom_request, bll_errs, ex);
-	// return res.status(status).json(urn_res);
-	return urn_res;
-	
-}
+// async function _handle_exception(
+//   ex: urn_exception.ExceptionInstance,
+//   atom_request: Partial<types.Atom<'request'>>,
+//   bll_errs: urn_core.bll.BLL<'error'>
+// ){
+//   let status = 500;
+//   let msg = 'Internal Server Error';
+//   let error_code = '500';
+//   let error_msg = ex.message;
+//   if(ex.type){
+//     error_code = ex.module_code + '_' + ex.error_code;
+//     error_msg = ex.msg;
+//   }
+//   switch(ex.type){
+//     case urn_exception.ExceptionType.UNAUTHORIZED:{
+//       status = 401;
+//       msg = 'Unauthorized';
+//       break;
+//     }
+//     case urn_exception.ExceptionType.NOT_FOUND:{
+//       status = 404;
+//       msg = 'Not Found';
+//       error_code = 'RECORD_NOT_FOUND';
+//       error_msg = 'Record not found.';
+//       break;
+//     }
+//     case urn_exception.ExceptionType.INVALID_REQUEST:{
+//       status = 400;
+//       msg = 'Invalid Request';
+//       break;
+//     }
+//   }
+//   const urn_res = urn_ret.return_error(
+//     status,
+//     msg,
+//     error_code,
+//     error_msg
+//   );
+//   await _store_error(urn_res, atom_request, bll_errs, ex);
+//   // return res.status(status).json(urn_res);
+//   return urn_res;
+// }
 
-async function _store_error(
-	urn_res: urn_response.Fail,
-	atom_request: Partial<types.Atom<'request'>>,
-	bll_errs: urn_core.bll.BLL<'error'>,
-	ex?: urn_exception.ExceptionInstance,
-):Promise<types.Atom<'error'> | undefined>{
-	try{
-		const error_log:types.AtomShape<'error'> = {
-			status: urn_res.status,
-			msg: '' + urn_res.message,
-			error_code: urn_res.err_code,
-			error_msg: urn_res.err_msg,
-		};
-		if(atom_request._id !== undefined){
-			error_log.request = atom_request._id;
-		}
-		if(ex && !ex.type){
-			error_log.stack = ex.stack;
-		}
-		// return await bll_errors.insert_new(error_log);
-		return await bll_errs.insert_new(error_log);
-	}catch(ex){
-		// TODO Save to file CANNOT LOG
-		console.error('CANNOT STORE ERROR', ex);
-		return undefined;
-	}
-}
+// async function _store_error(
+//   urn_res: urn_response.Fail,
+//   atom_request: Partial<types.Atom<'request'>>,
+//   bll_errs: urn_core.bll.BLL<'error'>,
+//   ex?: urn_exception.ExceptionInstance,
+// ):Promise<types.Atom<'error'> | undefined>{
+//   try{
+//     const error_log:types.AtomShape<'error'> = {
+//       status: urn_res.status,
+//       msg: '' + urn_res.message,
+//       error_code: urn_res.err_code,
+//       error_msg: urn_res.err_msg,
+//     };
+//     if(atom_request._id !== undefined){
+//       error_log.request = atom_request._id;
+//     }
+//     if(ex && !ex.type){
+//       error_log.stack = ex.stack;
+//     }
+//     // return await bll_errors.insert_new(error_log);
+//     return await bll_errs.insert_new(error_log);
+//   }catch(ex){
+//     // TODO Save to file CANNOT LOG
+//     console.error('CANNOT STORE ERROR', ex);
+//     return undefined;
+//   }
+// }
