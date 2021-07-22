@@ -26,13 +26,13 @@ import * as types from '../types';
 export async function route_middleware(api_request:types.ApiRequest, log_blls: types.LogBlls)
 		:Promise<urn_response.General<any, any>>{
 	
-	let route_request = _api_request_to_route_request(api_request);
-	const atom_request = await _log_route_request(route_request, log_blls.req);
+	// let api_request = _api_request_to_route_request(api_request);
+	const atom_request = await _log_route_request(api_request, log_blls.req);
 	
 	try{
-		const auth_reponse = await _authorization(route_request);
+		const auth_reponse = await _authorization(api_request);
 		if(auth_reponse){
-			route_request = auth_reponse;
+			api_request = auth_reponse;
 		}
 	}catch(ex){
 		ex.stack = '';
@@ -46,8 +46,8 @@ export async function route_middleware(api_request:types.ApiRequest, log_blls: t
 		return urn_res;
 	}
 	
-	route_request = _limit(route_request);
-	return await _validate_and_catch(route_request, atom_request, log_blls.err);
+	api_request = _limit(api_request);
+	return await _validate_and_catch(api_request, atom_request, log_blls.err);
 	
 }
 
@@ -56,45 +56,48 @@ export async function auth_route_middleware(
 	log_blls: types.LogBlls,
 	handler: types.AuthHandler
 ):Promise<urn_response.General<any, any>>{
-	const auth_route_request = _api_request_to_route_request(api_request);
-	const atom_auth_request = await _log_auth_route_request(auth_route_request, log_blls.req);
-	return await _auth_validate_and_catch(auth_route_request, atom_auth_request, handler, log_blls.err);
+	// const auth_route_request = _api_request_to_route_request(api_request);
+	// const atom_auth_request = await _log_auth_route_request(auth_route_request, log_blls.req);
+	const atom_auth_request = await _log_auth_route_request(api_request, log_blls.req);
+	// return await _auth_validate_and_catch(auth_route_request, atom_auth_request, handler, log_blls.err);
+	return await _auth_validate_and_catch(api_request, atom_auth_request, handler, log_blls.err);
 }
 
 
-function _api_request_to_route_request(api_request:types.ApiRequest) {
-	const route_request:types.RouteRequest = {
-		full_path: api_request.full_path,
-		params: api_request.params,
-		query: api_request.query,
-		atom_name: api_request.atom_name,
-		route_name: api_request.route_name,
-	};
-	if(api_request.body){
-		route_request.body = api_request.body;
-	}
-	if(api_request.headers){
-		route_request.headers = api_request.headers;
-	}
-	if(api_request.ip){
-		route_request.ip = api_request.ip;
-	}
-	return route_request;
-}
+// function _api_request_to_route_request(api_request:types.ApiRequest) {
+//   const api_request:types.ApiRequest = {
+//     full_path: api_request.full_path,
+//     method: api_request.method,
+//     params: api_request.params,
+//     query: api_request.query,
+//     atom_name: api_request.atom_name,
+//     route_name: api_request.route_name,
+//   };
+//   if(api_request.body){
+//     api_request.body = api_request.body;
+//   }
+//   if(api_request.headers){
+//     api_request.headers = api_request.headers;
+//   }
+//   if(api_request.ip){
+//     api_request.ip = api_request.ip;
+//   }
+//   return api_request;
+// }
 
-async function _authorization(route_request:types.RouteRequest) {
+async function _authorization(api_request:types.ApiRequest) {
 	
-	const route_def = _get_route_def(route_request);
+	const route_def = _get_route_def(api_request);
 	
-	if(urn_core.bll.auth.is_public_request(route_request.atom_name, route_def.action)){
+	if(urn_core.bll.auth.is_public_request(api_request.atom_name, route_def.action)){
 		return false;
 	}
 	
-	if(route_request.headers === undefined){
+	if(api_request.headers === undefined){
 		return false;
 	}
 	
-	const auth_header = route_request.headers['x-auth-token'];
+	const auth_header = api_request.headers['x-auth-token'];
 	const auth_token = (Array.isArray(auth_header)) ? auth_header[0] : auth_header;
 	
 	if(!auth_token){
@@ -102,39 +105,39 @@ async function _authorization(route_request:types.RouteRequest) {
 	}
 	
 	const decoded = jwt.verify(auth_token, api_config.jwt_private_key) as types.Passport;
-	route_request.passport = decoded;
-	return route_request;
+	api_request.passport = decoded;
+	return api_request;
 	
 }
 
-function _limit(route_request:types.RouteRequest){
-	let options = route_request.query?.options;
+function _limit(api_request:types.ApiRequest){
+	let options = api_request.query?.options;
 	if(!options){
 		options = {};
 	}
 	if(!options.limit || options.limit > api_config.request_auto_limit){
 		options.limit = api_config.request_auto_limit;
 	}
-	return route_request;
+	return api_request;
 }
 
 async function _validate_and_catch(
-	route_request: types.RouteRequest,
+	api_request: types.ApiRequest,
 	atom_request: types.AtomShape<'request'>,
 	bll_errs: urn_core.bll.BLL<'error'>
 ){
 	try{
 		
-		const route_def = _get_route_def(route_request);
+		const route_def = _get_route_def(api_request);
 		
-		urn_log.fn_debug(`Router ${route_def.method} ${route_def.url} [${route_request.atom_name}]`);
+		urn_log.fn_debug(`Router ${route_def.method} ${route_def.url} [${api_request.atom_name}]`);
 		
-		_validate(route_request);
+		_validate(api_request);
 		
-		let call_response = await route_def.call(route_request);
+		let call_response = await route_def.call(api_request);
 		
 		call_response = urn_core.atm.util
-			.hide_hidden_properties(route_request.atom_name, call_response);
+			.hide_hidden_properties(api_request.atom_name, call_response);
 		
 		const urn_response = urn_ret.return_success('Success', call_response);
 		
@@ -148,7 +151,7 @@ async function _validate_and_catch(
 }
 
 async function _auth_validate_and_catch(
-	auth_route_request: types.RouteRequest,
+	auth_route_request: types.ApiRequest,
 	auth_atom_route_request: types.AtomShape<'request'>,
 	handler: types.AuthHandler,
 	bll_errs: urn_core.bll.BLL<'error'>
@@ -204,25 +207,25 @@ async function _auth_validate_and_catch(
 	}
 }
 
-function _auth_validate(route_request:types.RouteRequest)
+function _auth_validate(api_request:types.ApiRequest)
 		:void{
 	
-	urn_log.fn_debug(`Validate Auth Route [${route_request.atom_name}]`);
+	urn_log.fn_debug(`Validate Auth Route [${api_request.atom_name}]`);
 	
-	req_validator.empty(route_request.params, 'params');
-	req_validator.empty(route_request.query, 'query');
+	req_validator.empty(api_request.params, 'params');
+	req_validator.empty(api_request.query, 'query');
 	
 }
 
-function _validate(route_request:types.RouteRequest)
+function _validate(api_request:types.ApiRequest)
 		:void{
 	
-	const route_def = _get_route_def(route_request);
+	const route_def = _get_route_def(api_request);
 		
-	urn_log.fn_debug(`Validate Route ${route_def.url} [${route_request.atom_name}]`);
+	urn_log.fn_debug(`Validate Route ${route_def.url} [${api_request.atom_name}]`);
 	
 	if(route_def.method === types.RouteMethod.GET){
-		req_validator.empty(route_request.body, 'body');
+		req_validator.empty(api_request.body, 'body');
 	}
 	
 	if(route_def.url.indexOf(':') !== -1){
@@ -234,41 +237,41 @@ function _validate(route_request:types.RouteRequest)
 				param_names.push(splitted[1]!);
 			}
 		}
-		req_validator.only_valid_param_keys(route_request.params, param_names);
+		req_validator.only_valid_param_keys(api_request.params, param_names);
 	}else{
-		req_validator.empty(route_request.params, 'params');
+		req_validator.empty(api_request.params, 'params');
 	}
 	
 	if(route_def.query){
-		req_validator.only_valid_query_keys(route_request.query, route_def.query);
+		req_validator.only_valid_query_keys(api_request.query, route_def.query);
 		if(Array.isArray(route_def.query)){
 			for(let i = 0; i < route_def.query.length; i++){
-				route_request.query[route_def.query[i]!] = req_validator.process_request_query(route_request.query[route_def.query[i]!]);
+				api_request.query[route_def.query[i]!] = req_validator.process_request_query(api_request.query[route_def.query[i]!]);
 			}
 		}
 	}else{
-		req_validator.empty(route_request.query, 'query');
+		req_validator.empty(api_request.query, 'query');
 	}
 	
 }
 
-function _get_route_def(route_request:types.RouteRequest)
+function _get_route_def(api_request:types.ApiRequest)
 		:types.Book.Definition.Api.Routes.Route{
 	
-	const atom_api = _get_route_api(route_request.atom_name);
+	const atom_api = _get_route_api(api_request.atom_name);
 	
 	if(!atom_api.routes){
 		// TODO implement generic routes.
 		atom_api.routes = {};
 	}
 	
-	if(!atom_api.routes[route_request.route_name]){
+	if(!atom_api.routes[api_request.route_name]){
 		throw urn_exc.create(`INVALID_ROUTE_NAME`, `Invalid route name.`);
 	}
 	
 	// TODO _check_if_def_is_valid();
 	
-	return atom_api.routes[route_request.route_name]!;
+	return atom_api.routes[api_request.route_name]!;
 }
 
 function _get_route_api(atom_name:types.AtomName):types.Book.Definition.Api{
@@ -284,31 +287,36 @@ function _get_route_api(atom_name:types.AtomName):types.Book.Definition.Api{
 }
 
 async function _log_route_request(
-	route_request: types.RouteRequest,
+	api_request: types.ApiRequest,
 	bll_reqs: urn_core.bll.BLL<'request'>
 ):Promise<types.AtomShape<'request'>>{
 	
-	// const atom_api = atom_book[route_request.atom_name].api as Book.Definition.Api;
+	// const atom_api = atom_book[api_request.atom_name].api as Book.Definition.Api;
 	
-	const atom_api = _get_route_api(route_request.atom_name);
-	const route_def = _get_route_def(route_request);
+	// const atom_api = _get_route_api(api_request.atom_name);
+	// const route_def = _get_route_def(api_request);
 	
 	const request_shape:types.AtomShape<'request'> = {
-		url: `${route_def.method.toUpperCase()}: /${atom_api.url}${route_def.url}`,
-		atom_name: route_request.atom_name,
-		auth_action: route_def.action
+		full_path: api_request.full_path,
+		route_path: api_request.route_path,
+		atom_path: api_request.atom_path,
+		connection_path: api_request.connection_path,
+		method: api_request.method,
+		atom_name: api_request.atom_name,
+		route_name: api_request.route_name,
+		auth_action: api_request.auth_action
 	};
-	if(route_request.ip){
-		route_request.ip;
+	if(api_request.ip){
+		api_request.ip;
 	}
-	if(route_request.params && Object.keys(route_request.params).length > 0){
-		request_shape.params = JSON.stringify(route_request.params);
+	if(api_request.params && Object.keys(api_request.params).length > 0){
+		request_shape.params = JSON.stringify(api_request.params);
 	}
-	if(route_request.query && Object.keys(route_request.query).length > 0){
-		request_shape.query = JSON.stringify(route_request.query);
+	if(api_request.query && Object.keys(api_request.query).length > 0){
+		request_shape.query = JSON.stringify(api_request.query);
 	}
-	if(route_request.body && Object.keys(route_request.body).length > 0){
-		request_shape.body = JSON.stringify(route_request.body);
+	if(api_request.body && Object.keys(api_request.body).length > 0){
+		request_shape.body = JSON.stringify(api_request.body);
 	}
 	try{
 		// return await bll_requests.insert_new(request_shape);
@@ -321,16 +329,20 @@ async function _log_route_request(
 }
 
 async function _log_auth_route_request(
-	auth_request: types.RouteRequest,
+	auth_request: types.ApiRequest,
 	bll_reqs: urn_core.bll.BLL<'request'>
 ):Promise<types.AtomShape<'request'>>{
-	const atom_api = _get_route_api(auth_request.atom_name);
+	// const atom_api = _get_route_api(auth_request.atom_name);
 	
 	const request_shape:types.AtomShape<'request'> = {
-		url: `POST: /${atom_api.auth}`,
-		ip: auth_request.ip,
+		full_path: auth_request.full_path,
+		route_path: auth_request.route_path,
+		atom_path: auth_request.atom_path,
+		connection_path: auth_request.connection_path,
+		method: auth_request.method,
 		atom_name: auth_request.atom_name,
-		auth_action: urn_core.types.AuthAction.AUTH
+		route_name: auth_request.route_name,
+		auth_action: auth_request.auth_action
 	};
 	if(auth_request.params && Object.keys(auth_request.params).length > 0){
 		request_shape.params = JSON.stringify(auth_request.params);

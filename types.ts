@@ -54,7 +54,7 @@ export namespace Book {
 				
 				export namespace Route {
 					
-					export type Call = (route_request: RouteRequest) => any
+					export type Call = (route_request: ApiRequest) => any
 					
 				}
 				
@@ -112,38 +112,32 @@ export type ApiRequestPaths = {
 
 export type ApiRequest =
 	ApiRequestPaths & {
+	method: RouteMethod,
 	atom_name: urn_core.types.AtomName
-	route_name: keyof Book.Definition.Api.Routes
+	route_name: string
 	is_auth: boolean
-	params: RouteRequestParams
-	query: RouteRequestQuery
+	auth_action: urn_core.types.AuthAction
+	params: ApiRequestParams
+	query: ApiRequestQuery
 	body?: any
-	headers?: RouteRequestHeaders
-	ip?: string
-}
-
-export type RouteRequest = {
-	atom_name: urn_core.types.AtomName
-	route_name: keyof Book.Definition.Api.Routes
-	params: RouteRequestParams
-	query: RouteRequestQuery
-	full_path: string
-	body?: any
-	ip?: string
-	headers?: RouteRequestHeaders
+	headers?: ApiRequestHeaders
+	ip?: string,
 	passport?: urn_core.types.Passport
-	// log?: urn_core.types.Atom<'request'>
 }
 
-type RouteRequestHeaders = {
-	[k:string]: string | string[] | undefined
-}
+// export type RouteRequest = ApiRequest & {
+//   passport?: urn_core.types.Passport
+// }
 
-export type RouteRequestParams = {
+export type ApiRequestHeaders = {
 	[k:string]: string | undefined
 }
 
-type RouteRequestQuery = {
+export type ApiRequestParams = {
+	[k:string]: string |  undefined
+}
+
+export type ApiRequestQuery = {
 	[k:string]: any
 }
 
@@ -152,5 +146,5 @@ export type LogBlls = {
 	err: urn_core.bll.BLL<'error'>
 }
 
-export type AuthHandler = (route_request:RouteRequest) => Promise<string>;
+export type AuthHandler = (api_request:ApiRequest) => Promise<string>;
 

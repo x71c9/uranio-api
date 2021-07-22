@@ -23,7 +23,8 @@ import {
 	get_atom_name_from_atom_path,
 	get_route_name,
 	is_auth_request,
-	get_params_from_route_path
+	get_params_from_route_path,
+	get_auth_action
 } from '../../util/request';
 
 // import {return_default_routes} from '../../routes/';
@@ -80,10 +81,10 @@ class NetlifyLambda implements Lambda {
 			// We do it anyway a bll for each call depending on the `path`.
 			// ****
 			const auth_bll = urn_core.bll.auth.create(api_request.atom_name as types.AuthName);
-			const auth_handler = async (route_request:types.RouteRequest) => {
+			const auth_handler = async (api_request:types.ApiRequest) => {
 				const token = await auth_bll.authenticate(
-					route_request.body.email,
-					route_request.body.password
+					api_request.body.email,
+					api_request.body.password
 				);
 				return token;
 			};
@@ -236,15 +237,21 @@ function _lambda_request_to_api_request(event: LambdaEvent, context: LambdaConte
 	const route_name = get_route_name(atom_name, api_request_paths.route_path, event.httpMethod);
 	
 	const is_auth = is_auth_request(atom_name, api_request_paths.atom_path);
+	const auth_action = get_auth_action(atom_name, route_name);
 	
 	const ip = context.identity?.sourceIp || event.headers['client-ip'] || event.headers['X-Nf-Client-Connection-Ip'];
 	const params = get_params_from_route_path(atom_name, route_name, api_request_paths.route_path);
 	
 	const api_request:types.ApiRequest = {
 		...api_request_paths,
+		// ****
+		// TODO HTTP methods need to be all implemented.
+		// ****
+		method: event.httpMethod,
 		atom_name: atom_name,
 		route_name: route_name,
 		is_auth: is_auth,
+		auth_action: auth_action,
 		params: params,
 		query: event.queryStringParameters || {},
 	};
