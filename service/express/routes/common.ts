@@ -6,13 +6,16 @@
 
 import express from 'express';
 
-import {urn_response} from 'urn-lib';
+import {urn_response, urn_exception} from 'urn-lib';
+
+const urn_exc = urn_exception.init(`COMMONEXPRESSROUTE`, `Common express routes  module.`);
 
 import {
 	process_request_path,
 	get_atom_name_from_atom_path,
 	get_route_name,
 	is_auth_request,
+	get_auth_action
 } from '../../../util/request';
 
 import * as types from '../../../types';
@@ -25,7 +28,11 @@ export function express_request_to_api_request(req:express.Request)
 	const atom_name = get_atom_name_from_atom_path(api_request_paths.atom_path);
 	
 	let method = types.RouteMethod.GET;
-	switch(req.method){
+	switch(req.method.toUpperCase()){
+		case 'GET':{
+			method = types.RouteMethod.GET;
+			break;
+		}
 		case 'POST':{
 			method = types.RouteMethod.POST;
 			break;
@@ -33,6 +40,9 @@ export function express_request_to_api_request(req:express.Request)
 		case 'DELETE':{
 			method = types.RouteMethod.DELETE;
 			break;
+		}
+		default:{
+			throw urn_exc.create(`INVALID_HTTP_METHOD`, `Invalid http method [${req.method}]`);
 		}
 	}
 	
@@ -47,12 +57,18 @@ export function express_request_to_api_request(req:express.Request)
 		is_auth: is_auth,
 		params: req.params,
 		query: req.query,
+		method: method,
+		auth_action: get_auth_action(atom_name, route_name)
 	};
 	if(req.body){
 		api_request.body = req.body;
 	}
 	if(req.headers){
-		api_request.headers = req.headers;
+		const headers:types.ApiRequestHeaders = {};
+		for(const [name, value] of Object.entries(req.headers)){
+			headers[name] = (Array.isArray(value)) ? JSON.stringify(value) : value;
+		}
+		api_request.headers = headers;
 	}
 	if(req.ip){
 		api_request.ip = req.ip;

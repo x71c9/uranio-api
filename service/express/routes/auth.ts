@@ -27,7 +27,7 @@ export function create_express_auth_route<A extends types.AuthName>(atom_name:A,
 	
 	const auth_bll = urn_core.bll.auth.create(atom_name);
 	
-	const handler = async (route_request:types.RouteRequest) => {
+	const handler = async (route_request:types.ApiRequest) => {
 		const token = await auth_bll.authenticate(
 			route_request.body.email,
 			route_request.body.password

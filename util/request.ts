@@ -49,6 +49,19 @@ export function process_request_path(path:string)
 	return api_request_paths;
 }
 
+export function get_auth_action(atom_name:types.AtomName, route_name:keyof types.Book.Definition.Api.Routes)
+		:types.AuthAction{
+	const atom_api = _get_atom_api(atom_name);
+	if(!atom_api.routes || !atom_api.routes[route_name]){
+		throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name [${route_name}] from atom [${atom_name}].`);
+	}
+	const auth_action = atom_api.routes[route_name].action;
+	if(!(auth_action in types.AuthAction)){
+		throw urn_exc.create(`INVALID_AUTH_ACTION`, `Invalid auth action [${auth_action}] for [${auth_action}][${route_name}].`);
+	}
+	return auth_action;
+}
+
 export function get_atom_name_from_atom_path(atom_path:string)
 		:types.AtomName{
 	let atom_name:keyof typeof api_book;
@@ -62,7 +75,7 @@ export function get_atom_name_from_atom_path(atom_path:string)
 }
 
 export function get_route_name<A extends types.AtomName>(atom_name:A, route_path:string, http_method:types.RouteMethod)
-		:keyof types.Book.Definition.Api.Routes{
+		:string{
 	const atom_api = _get_atom_api(atom_name);
 	if(!atom_api.routes){
 		throw urn_exc.create(`INVALID_API_DEF`, `Invalid api_def. Missing "routes" property.`);
@@ -117,11 +130,11 @@ export function get_params_from_route_path(
 	atom_name: types.AtomName,
 	route_name: keyof types.Book.Definition.Api.Routes,
 	route_path: string
-):types.RouteRequestParams{
+):types.ApiRequestParams{
 	const atom_api = _get_atom_api(atom_name);
 	for(const route_key in atom_api.routes){
 		if(route_key === route_name){
-			const params:types.RouteRequestParams = {};
+			const params:types.ApiRequestParams = {};
 			let atom_route_url = atom_api.routes[route_key].url;
 			if(atom_route_url[atom_route_url.length - 1] !== '/'){
 				atom_route_url += '/';
