@@ -16,7 +16,7 @@ import {return_default_routes} from '../routes/';
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 
-const urn_exc = urn_exception.init(`UTILREQUEST`, `Util request module.`);
+const urn_exc = urn_exception.init(`UTILREQUEST`, `Util request module`);
 
 import * as types from '../types';
 
@@ -34,15 +34,11 @@ export function process_request_path(path:string)
 	let splitted_no_prefix = no_prefix_path.split('/');
 	let connection_path = '';
 	if(splitted_no_prefix[0] === api_config.prefix_log){
-		connection_path = splitted_no_prefix[0];
+		connection_path = '/' + splitted_no_prefix[0];
 		splitted_no_prefix = splitted_no_prefix.slice(1);
 	}
-	const atom_path = splitted_no_prefix[0];
-	let route_path = splitted_no_prefix.slice(1).join('/');
-	
-	if(route_path[route_path.length - 1] !== '/'){
-		route_path += '/';
-	}
+	const atom_path = '/' + splitted_no_prefix[0];
+	const route_path = '/' + splitted_no_prefix.slice(1).join('/') + '/';
 	
 	const api_request_paths = {
 		full_path,
