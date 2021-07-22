@@ -21,7 +21,7 @@ import * as types from './types';
 const event = {
 	rawURL: '',
 	rawQuery: '',
-	path: '/uranio/api/logs/errors',
+	path: '/uranio/api/products/kdfhdklsjaflks',
 	httpMethod: types.RouteMethod.GET,
 	headers: {},
 	multiValueHeaders: {},

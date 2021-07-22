@@ -133,12 +133,12 @@ export const bll = {
 export const api = {
 	error: {
 		api:{
-			url: 'errors'
+			url: '/errors'
 		}
 	},
 	request: {
 		api:{
-			url: 'requests'
+			url: '/requests'
 		}
 	}
 } as const;

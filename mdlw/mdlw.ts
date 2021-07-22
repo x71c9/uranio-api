@@ -59,8 +59,8 @@ export async function auth_route_middleware(
 ):Promise<urn_response.General<any, any>>{
 	return _catch(async (api_request: types.ApiRequest, log_blls:types.LogBlls, auth_handler?:types.AuthHandler) => {
 		await _log_auth_route_request(api_request, log_blls.req);
-		if(!auth_handler){
-			throw urn_exc.create(`MISSING_AUTH_HANDLER`, `Missing auth handler.`);
+		if(typeof auth_handler !== 'function'){
+			throw urn_exc.create(`INVALID_AUTH_HANDLER`, `Missing or invalid auth handler.`);
 		}
 		return await _auth_validate_and_call(api_request, auth_handler);
 	}, api_request, log_blls, auth_handler);
@@ -124,7 +124,7 @@ async function _validate_and_call(api_request: types.ApiRequest){
 	
 	const route_def = _get_route_def(api_request);
 	
-	urn_log.fn_debug(`Router ${route_def.method} ${route_def.url} [${api_request.atom_name}]`);
+	urn_log.fn_debug(`Router ${route_def.method} [${api_request.atom_name}] ${api_request.full_path}`);
 	
 	_validate(api_request);
 	
