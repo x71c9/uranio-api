@@ -23,6 +23,7 @@ import * as types from '../types';
 export function process_request_path(path:string)
 		:types.ApiRequestPaths{
 	const full_path = path;
+	console.log(full_path);
 	if(full_path.indexOf(api_config.prefix_api) !== 0){
 		throw urn_exc.create_invalid_request(`INVALID_PATH_WRONG_PREFIX`, `Invalid path. Invalid prefix.`);
 	}
@@ -31,9 +32,9 @@ export function process_request_path(path:string)
 		throw urn_exc.create_invalid_request(`INVALID_EMPTY_PATH`, `Invalid path. Path is empty.`);
 	}
 	const no_prefix_path = splitted_prefixed[1];
-	let splitted_no_prefix = no_prefix_path.split('/');
+	let splitted_no_prefix = no_prefix_path.split('/').slice(1);
 	let connection_path = '';
-	if(splitted_no_prefix[0] === api_config.prefix_log){
+	if('/' + splitted_no_prefix[0] === api_config.prefix_log){
 		connection_path = '/' + splitted_no_prefix[0];
 		splitted_no_prefix = splitted_no_prefix.slice(1);
 	}

@@ -76,13 +76,16 @@ class ExpressWebService implements Service {
 			const router = create_express_route(atom_name, log_blls);
 			if(api_def.api){
 				if(atom_def.connection && atom_def.connection === 'log'){
-					this.express_app.use(`/${api_config.prefix_log}/${api_def.api.url}`, router);
+					// console.log(`${api_config.prefix_api}${api_config.prefix_log}${api_def.api.url}`);
+					this.express_app.use(`${api_config.prefix_api}${api_config.prefix_log}${api_def.api.url}`, router);
 				}else{
-					this.express_app.use(`/${api_def.api.url}`, router);
+					// console.log(`${api_config.prefix_api}${api_def.api.url}`);
+					this.express_app.use(`${api_config.prefix_api}${api_def.api.url}`, router);
 				}
 			}
 			if(api_def.api && api_def.api.auth && typeof api_def.api.auth === 'string'){
-				this.express_app.use(`/${api_def.api.auth}`, create_express_auth_route(atom_name as AuthName, log_blls));
+				// console.log(`${api_config.prefix_api}${api_def.api.auth}`);
+				this.express_app.use(`${api_config.prefix_api}${api_def.api.auth}`, create_express_auth_route(atom_name as AuthName, log_blls));
 			}
 		}
 	}

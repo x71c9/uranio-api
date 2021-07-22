@@ -20,8 +20,8 @@ export const api_config:FullConfiguration = {
 	
 	lambda: 'netlify',
 	
-	prefix_api: '/uranio/api/',
+	prefix_api: '/uranio/api',
 	
-	prefix_log: 'logs'
+	prefix_log: '/logs'
 	
 };

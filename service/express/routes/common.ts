@@ -10,6 +10,8 @@ import {urn_response, urn_exception} from 'urn-lib';
 
 const urn_exc = urn_exception.init(`COMMONEXPRESS`, `Common express routes module.`);
 
+// import {api_config} from '../../../conf/defaults';
+
 import {
 	process_request_path,
 	get_atom_name_from_atom_path,
@@ -23,7 +25,7 @@ import * as types from '../../../types';
 export function express_request_to_api_request(req:express.Request)
 		:types.ApiRequest{
 	
-	const api_request_paths = process_request_path(req.path);
+	const api_request_paths = process_request_path(req.originalUrl);
 	
 	const atom_name = get_atom_name_from_atom_path(api_request_paths.atom_path);
 	

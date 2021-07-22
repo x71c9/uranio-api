@@ -46,7 +46,6 @@ export function create_express_route<A extends types.AtomName>(atom_name:A, bll_
 	}
 	
 	for(const [_route_name, route_def] of Object.entries(atom_api.routes)){
-		
 		switch(route_def.method){
 			case types.RouteMethod.GET: {
 				// router.get(route_def.url, route_middlewares(atom_name, route_name));
@@ -64,7 +63,6 @@ export function create_express_route<A extends types.AtomName>(atom_name:A, bll_
 				break;
 			}
 		}
-		
 	}
 		
 	return router;
