@@ -10,7 +10,7 @@ import cors from 'cors';
 
 import {urn_log, urn_return, urn_exception} from 'urn-lib';
 
-const urn_exc = urn_exception.init(`EXPRESSCLASS`, `Express class module.`);
+const urn_exc = urn_exception.init(`EXPRESSCLASS`, `Express class module`);
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 

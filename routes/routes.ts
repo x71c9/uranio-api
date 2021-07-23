@@ -12,7 +12,6 @@ import * as book_types from '../types';
 
 import {
 	AtomName,
-	// AuthName,
 	Book
 } from '../types';
 

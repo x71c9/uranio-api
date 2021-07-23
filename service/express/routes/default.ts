@@ -16,8 +16,6 @@ import {return_default_routes} from '../../../routes/';
 
 import {route_middleware} from '../../../mdlw/';
 
-// import {route_middlewares} from '../mdlw';
-
 import {express_request_to_api_request, return_uranio_response_to_express} from './common';
 
 export function create_express_route<A extends types.AtomName>(atom_name:A, bll_logs:types.LogBlls)
@@ -48,17 +46,14 @@ export function create_express_route<A extends types.AtomName>(atom_name:A, bll_
 	for(const [_route_name, route_def] of Object.entries(atom_api.routes)){
 		switch(route_def.method){
 			case types.RouteMethod.GET: {
-				// router.get(route_def.url, route_middlewares(atom_name, route_name));
 				router.get(route_def.url, _return_express_middleware(bll_logs));
 				break;
 			}
 			case types.RouteMethod.POST: {
-				// router.post(route_def.url, route_middlewares(atom_name, route_name));
 				router.post(route_def.url, _return_express_middleware(bll_logs));
 				break;
 			}
 			case types.RouteMethod.DELETE: {
-				// router.delete(route_def.url, route_middlewares(atom_name, route_name));
 				router.delete(route_def.url, _return_express_middleware(bll_logs));
 				break;
 			}
@@ -69,9 +64,8 @@ export function create_express_route<A extends types.AtomName>(atom_name:A, bll_
 	
 }
 
-function _return_express_middleware(
-	log_blls:types.LogBlls
-){
+function _return_express_middleware(log_blls:types.LogBlls){
+	
 	return async (
 		req: express.Request,
 		res: express.Response,
