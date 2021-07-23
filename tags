@@ -4,54 +4,467 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ACL	core/acl/acl.ts	/^export class ACL<A extends AtomName> implements AccessLayer<A>{$/;"	c
+AccessLayer	core/typ/layer.ts	/^export interface AccessLayer<A extends AtomName> {$/;"	i
+Api	core/typ/book.ts	/^		export type Api = {$/;"	t
 Api	types.ts	/^		export type Api = {$/;"	t
-Book	types.ts	/^export type Book = urn_core.types.Book;$/;"	t
-Call	types.ts	/^					export type Call = (route_request: RouteRequest) => any$/;"	t
+ApiRequest	types.ts	/^export type ApiRequest =$/;"	t
+ApiRequestHeaders	types.ts	/^export type ApiRequestHeaders = {$/;"	t
+ApiRequestParams	types.ts	/^export type ApiRequestParams = {$/;"	t
+ApiRequestPaths	types.ts	/^export type ApiRequestPaths = {$/;"	t
+ApiRequestQuery	types.ts	/^export type ApiRequestQuery = {$/;"	t
+Atom	core/typ/atom.ts	/^export type Atom<A extends AtomName> =$/;"	t
+Atom	core/typ/book.ts	/^				export interface Atom {$/;"	i
+Atom	core/typ/book.ts	/^			export interface Atom extends SharedFields {$/;"	i
+AtomArray	core/typ/book.ts	/^			export interface AtomArray extends SharedFields {$/;"	i
+AtomHardProperties	core/typ/atom.ts	/^type AtomHardProperties = {$/;"	t
+AtomMoleculeBondPropertyType	core/typ/atom.ts	/^export type AtomMoleculeBondPropertyType<$/;"	t
+AtomName	core/typ/atom.ts	/^export type AtomName = keyof typeof atom_book;$/;"	t
+AtomOrMolecule	core/typ/atom.ts	/^type AtomOrMolecule = 'atom' | 'molecule';$/;"	t
+AtomPrimitiveShape	core/typ/atom.ts	/^type AtomPrimitiveShape<A extends AtomName> =$/;"	t
+AtomShape	core/typ/atom.ts	/^export type AtomShape<A extends AtomName> =$/;"	t
+AuthAction	core/typ/auth.ts	/^export enum AuthAction {$/;"	e
+AuthAtom	core/typ/atom.ts	/^export type AuthAtom<A extends AuthName> =$/;"	t
+AuthAtomShape	core/typ/atom.ts	/^export type AuthAtomShape<A extends AuthName> =$/;"	t
+AuthBLL	core/bll/auth.ts	/^export class AuthBLL<A extends AtomName> extends SecurityBLL<A>{$/;"	c
+AuthHandler	types.ts	/^export type AuthHandler = (api_request:ApiRequest) => Promise<string>;$/;"	t
+AuthName	core/typ/atom.ts	/^export type AuthName = keyof ExtractAuthName<typeof atom_book>;$/;"	t
+AuthenticationBLL	core/bll/authenticate.ts	/^class AuthenticationBLL<A extends AuthName> {$/;"	c
+AuthenticationBLLInstance	core/bll/authenticate.ts	/^export type AuthenticationBLLInstance = InstanceType<typeof AuthenticationBLL>;$/;"	t
+BLL	core/bll/bll.ts	/^export class BLL<A extends AtomName> extends AuthBLL<A>{}$/;"	c
+BLLInstance	core/bll/create.ts	/^export type BLLInstance = InstanceType<typeof BLL>;$/;"	t
+BasicBLL	core/bll/basic.ts	/^export class BasicBLL<A extends AtomName> {$/;"	c
+BasicDAL	core/dal/basic.ts	/^export class BasicDAL<A extends AtomName> implements AccessLayer<A>{$/;"	c
+BasicDefinition	core/typ/book.ts	/^	export type BasicDefinition = {$/;"	t
+BasicDefinition	types.ts	/^	export type BasicDefinition =$/;"	t
+Binary	core/typ/book.ts	/^			export interface Binary extends SharedFields {$/;"	i
+BllReturnType	core/bll/create.ts	/^type BllReturnType<T, A extends AtomName> = T extends (...args:any) => BLL<A> ?$/;"	t
+BondPropertyDefinition	core/typ/atom.ts	/^type BondPropertyDefinition = {type: BookPropertyType.ATOM} | {type: BookPropertyType.ATOM_ARRAY};$/;"	t
+BondShape	core/typ/atom.ts	/^type BondShape<A extends AtomName, AoM extends AtomOrMolecule, D extends Depth> =$/;"	t
+Book	core/typ/book.ts	/^export type Book = {$/;"	t
+Book	types.ts	/^export type Book = {$/;"	t
+Call	types.ts	/^					export type Call = (route_request: ApiRequest) => any$/;"	t
+Callback	service/express/class.ts	/^type Callback = () => void;$/;"	t
+Comparsion	core/typ/query.ts	/^	type Comparsion<T> =$/;"	t
+Configuration	core/typ/conf.ts	/^export type Configuration = RequiredConfigParams & Partial<OptionalConfigParam>;$/;"	t
 Configuration	types.ts	/^export type Configuration =$/;"	t
-Definition	types.ts	/^	export type Definition =$/;"	t
+ConnectionInstance	core/rel/mongo/connection.ts	/^export type ConnectionInstance = InstanceType<typeof MongooseDBConnection>;$/;"	t
+ConnectionName	core/typ/book.ts	/^export type ConnectionName = 'main' | 'trash' | 'log';$/;"	t
+CustomBLL	core/bll/create.ts	/^type CustomBLL<A extends AtomName> =$/;"	t
+DAL	core/dal/dal.ts	/^export class DAL<A extends AtomName> extends SelfishDAL<A>{}$/;"	c
+DatabaseType	core/typ/conf.ts	/^export type DatabaseType = 'mongo'; \/\/ | 'mysql'$/;"	t
+Definition	core/typ/book.ts	/^	export type Definition<A extends AtomName> =$/;"	t
+Definition	types.ts	/^	export type Definition<A extends urn_core.types.AtomName> =$/;"	t
+DefinitionPropertyInferBondAtomName	core/typ/atom.ts	/^type DefinitionPropertyInferBondAtomName<P> =$/;"	t
+DefinitionPropertyInferType	core/typ/atom.ts	/^type DefinitionPropertyInferType<P> = P extends {type: infer I} ? I : never;$/;"	t
+DefinitionPropertyIsBondArray	core/typ/atom.ts	/^type DefinitionPropertyIsBondArray<P> =$/;"	t
+DefinitionTypeOfCommonProperty	core/typ/atom.ts	/^type DefinitionTypeOfCommonProperty<k extends KeyOfCommonProperties> =$/;"	t
+DefinitionTypeOfDefintionProperty	core/typ/atom.ts	/^type DefinitionTypeOfDefintionProperty<A extends AtomName, k extends KeyOfPropertyOfAtomDefinition<A>> =$/;"	t
+DefinitionTypeOfHardProperty	core/typ/atom.ts	/^type DefinitionTypeOfHardProperty<k extends KeyOfHardProperties> =$/;"	t
+Depth	core/typ/atom.ts	/^export type Depth = undefined | typeof core_config['max_query_depth_allowed'];$/;"	t
+Email	core/typ/book.ts	/^			export interface Email extends SharedFields {$/;"	i
+EncryptDAL	core/dal/encrypt.ts	/^export class EncryptDAL<A extends AtomName> extends ValidateDAL<A>{$/;"	c
+Encrypted	core/typ/book.ts	/^			export interface Encrypted extends SharedFields {$/;"	i
+Enum	core/typ/book.ts	/^			export type Enum =$/;"	t
+EnumNumber	core/typ/book.ts	/^			export interface EnumNumber extends SharedFields {$/;"	i
+EnumString	core/typ/book.ts	/^			export interface EnumString extends SharedFields {$/;"	i
+Equal	core/typ/query.ts	/^	export type Equal<A extends AtomName> =$/;"	t
+EventHeaders	lambda/types.ts	/^interface EventHeaders {$/;"	i
+EventMultiValueHeaders	lambda/types.ts	/^interface EventMultiValueHeaders {$/;"	i
+EventMultiValueQueryStringParameters	lambda/types.ts	/^interface EventMultiValueQueryStringParameters {$/;"	i
+EventQueryStringParameters	lambda/types.ts	/^interface EventQueryStringParameters {$/;"	i
+ExcludeBondAndBondArray	core/typ/atom.ts	/^type ExcludeBondAndBondArray<P> = OmitSubType<P, BondPropertyDefinition>;$/;"	t
+ExcludeOptional	core/typ/atom.ts	/^type ExcludeOptional<P> = OmitSubType<P, {optional: true}>;$/;"	t
+ExpressQueryParam	lambda/netlify/types.ts	/^export type ExpressQueryParam =$/;"	t
 ExpressQueryParam	service/express/types.ts	/^export type ExpressQueryParam =$/;"	t
 ExpressWebService	service/express/class.ts	/^class ExpressWebService implements Service {$/;"	c
+Expression	core/typ/query.ts	/^	export type Expression<A extends AtomName> = Equal<A> | WithComparsion<A>;$/;"	t
+ExtractAuthName	core/typ/atom.ts	/^type ExtractAuthName<P> = PickSubType<P, {api: {auth: string}}>;$/;"	t
+ExtractBond	core/typ/atom.ts	/^type ExtractBond<P> = PickSubType<P, BondPropertyDefinition>;$/;"	t
+ExtractLogAtom	core/typ/atom.ts	/^type ExtractLogAtom<P> = PickSubType<P, {connection: 'log'}>;$/;"	t
+ExtractOptional	core/typ/atom.ts	/^type ExtractOptional<P> = PickSubType<P, {optional: true}>;$/;"	t
+Float	core/typ/book.ts	/^				export interface Float {$/;"	i
+Float	core/typ/book.ts	/^			export interface Float extends SharedFields {$/;"	i
+FullConfiguration	core/typ/conf.ts	/^export type FullConfiguration = RequiredConfigParams & OptionalConfigParam;$/;"	t
 FullConfiguration	types.ts	/^export type FullConfiguration =$/;"	t
+Handler	lambda/types.ts	/^export interface Handler {$/;"	i
+HandlerCallback	lambda/types.ts	/^export interface HandlerCallback {$/;"	i
+HandlerResponse	lambda/types.ts	/^export interface HandlerResponse {$/;"	i
+ID	core/typ/book.ts	/^			export interface ID extends SharedFields {$/;"	i
+Integer	core/typ/book.ts	/^			export interface Integer extends SharedFields {$/;"	i
+KeyOfCommonProperties	core/typ/atom.ts	/^export type KeyOfCommonProperties = keyof typeof atom_common_properties;$/;"	t
+KeyOfHardProperties	core/typ/atom.ts	/^export type KeyOfHardProperties = keyof typeof atom_hard_properties;$/;"	t
+KeyOfPropertyOfAtomDefinition	core/typ/atom.ts	/^export type KeyOfPropertyOfAtomDefinition<A extends AtomName> = keyof PropertiesOfAtomDefinition<A>;$/;"	t
+Lambda	lambda/types.ts	/^export interface Lambda {$/;"	i
+LambdaContext	lambda/types.ts	/^export interface LambdaContext {$/;"	i
+LambdaEvent	lambda/types.ts	/^export interface LambdaEvent {$/;"	i
+LambdaHeaders	lambda/types.ts	/^export type LambdaHeaders = {$/;"	t
+LambdaMultiValueHeaders	lambda/types.ts	/^export type LambdaMultiValueHeaders = {$/;"	t
+LambdaName	lambda/types.ts	/^export type LambdaName = 'netlify'; \/\/ | 'aws'$/;"	t
+LogBLL	core/bll/log.ts	/^class LogBLL<A extends LogName> extends BasicBLL<A>{$/;"	c
+LogBlls	types.ts	/^export type LogBlls = {$/;"	t
+LogDAL	core/dal/log.ts	/^export class LogDAL<A extends LogName> extends DAL<A>{$/;"	c
+LogName	core/typ/atom.ts	/^export type LogName = keyof ExtractLogAtom<typeof atom_book>;$/;"	t
+Logical	core/typ/query.ts	/^	export type Logical<A extends AtomName> =$/;"	t
+LongText	core/typ/book.ts	/^			export interface LongText extends SharedFields {$/;"	i
+MapType	core/typ/auth.ts	/^export type MapType<T> =$/;"	t
+Molecule	core/typ/atom.ts	/^export type Molecule<A extends AtomName, D extends Depth = 0> =$/;"	t
+MongooseDBConnection	core/rel/mongo/connection.ts	/^class MongooseDBConnection {$/;"	c
+MongooseLogRelation	core/rel/mongo/log.ts	/^export class MongooseLogRelation<A extends AtomName> extends MongooseRelation<A>$/;"	c
+MongooseRelation	core/rel/mongo/relation.ts	/^export class MongooseRelation<A extends AtomName> implements Relation<A> {$/;"	c
+MongooseTrashRelation	core/rel/mongo/trash.ts	/^export class MongooseTrashRelation<A extends AtomName> extends MongooseRelation<A>$/;"	c
+NetlifyLambda	lambda/netlify/class.ts	/^class NetlifyLambda implements Lambda {$/;"	c
+Number	core/typ/book.ts	/^				export interface Number {$/;"	i
+Number	core/typ/book.ts	/^			export type Number =$/;"	t
+OmitSubType	core/typ/atom.ts	/^type OmitSubType<Base, Condition> = Omit<Base, {$/;"	t
+Operation	mdlw/mdlw.ts	/^type Operation = ($/;"	t
+OptionalBond	core/typ/atom.ts	/^type OptionalBond<P> = PickSubType<ExtractBond<P>, {optional: true}>;$/;"	t
+OptionalConfigParam	core/typ/conf.ts	/^type OptionalConfigParam = {$/;"	t
 OptionalConfigParam	types.ts	/^type OptionalConfigParam = {$/;"	t
+OptionalKeyOfAtomCommonProperties	core/typ/atom.ts	/^type OptionalKeyOfAtomCommonProperties =$/;"	t
+OptionalKeyOfAtomPrimitiveProperties	core/typ/atom.ts	/^type OptionalKeyOfAtomPrimitiveProperties<A extends AtomName> =$/;"	t
+OptionalKeyOfBondProperties	core/typ/atom.ts	/^type OptionalKeyOfBondProperties<A extends AtomName> =$/;"	t
+OptionalPrimitive	core/typ/atom.ts	/^type OptionalPrimitive<P> = PickSubType<ExcludeBondAndBondArray<P>, {optional: true}>;$/;"	t
+Options	core/typ/query.ts	/^	export type Options<A extends AtomName, D extends Depth = 0> = {$/;"	t
+Passport	core/typ/auth.ts	/^export type Passport = {$/;"	t
+PassportKey	core/typ/auth.ts	/^export type PassportKey = keyof typeof abstract_passport;$/;"	t
+PickSubType	core/typ/atom.ts	/^type PickSubType<Base, Condition> = Pick<Base, {$/;"	t
+PopulateObject	core/rel/mongo/types.ts	/^export type PopulateObject = {$/;"	t
+Properties	core/typ/book.ts	/^		export type Properties = {$/;"	t
+PropertiesOfAtomDefinition	core/typ/atom.ts	/^type PropertiesOfAtomDefinition<A extends AtomName> = typeof atom_book[A]['properties'];$/;"	t
+Property	core/typ/book.ts	/^		export type Property =$/;"	t
+Query	core/typ/query.ts	/^export type Query<A extends AtomName> = Query.Expression<A> | Query.Logical<A>;$/;"	t
+QueryAtomKey	core/typ/query.ts	/^	type QueryAtomKey<A extends AtomName> =$/;"	t
+QueryAtomRealType	core/typ/query.ts	/^	type QueryAtomRealType<A extends AtomName, P extends QueryAtomKey<A>> =$/;"	t
+QueryString	lambda/netlify/types.ts	/^import QueryString from 'qs';$/;"	I
 QueryString	service/express/types.ts	/^import QueryString from 'qs';$/;"	I
+RealType	core/typ/book.ts	/^export type RealType<AT extends BookPropertyType> =$/;"	t
+RealTypeOfAtomCommonProperty	core/typ/atom.ts	/^export type RealTypeOfAtomCommonProperty<k extends KeyOfCommonProperties> =$/;"	t
+RealTypeOfAtomHardProperty	core/typ/atom.ts	/^export type RealTypeOfAtomHardProperty<k extends KeyOfHardProperties> =$/;"	t
+RealTypeOfAtomProperty	core/typ/atom.ts	/^export type RealTypeOfAtomProperty<A extends AtomName, k extends KeyOfPropertyOfAtomDefinition<A>> =$/;"	t
+RealTypeOfMoleculeBondProperty	core/typ/atom.ts	/^type RealTypeOfMoleculeBondProperty<A extends AtomName, k extends KeyOfPropertyOfAtomDefinition<A>, D extends Depth> =$/;"	t
+RecycleDAL	core/dal/recycle.ts	/^export class RecycleDAL<A extends AtomName> extends EncryptDAL<A>{$/;"	c
+Relation	core/rel/types.ts	/^export interface Relation<A extends AtomName> {$/;"	i
+RelationDAL	core/dal/rel.ts	/^export class RelationDAL<A extends AtomName> extends BasicDAL<A>{$/;"	c
+RequiredBond	core/typ/atom.ts	/^type RequiredBond<P> = OmitSubType<ExtractBond<P>, {optional: true}>;$/;"	t
+RequiredConfigParams	core/typ/conf.ts	/^type RequiredConfigParams = {$/;"	t
 RequiredConfigParams	types.ts	/^type RequiredConfigParams = {$/;"	t
+RequiredKeyOfAtomCommonProperties	core/typ/atom.ts	/^type RequiredKeyOfAtomCommonProperties =$/;"	t
+RequiredKeyOfAtomPrimitiveProperties	core/typ/atom.ts	/^type RequiredKeyOfAtomPrimitiveProperties<A extends AtomName> =$/;"	t
+RequiredKeyOfBondProperties	core/typ/atom.ts	/^type RequiredKeyOfBondProperties<A extends AtomName> =$/;"	t
+RequiredPrimitive	core/typ/atom.ts	/^type RequiredPrimitive<P> = OmitSubType<ExcludeBondAndBondArray<P>, {optional: true}>;$/;"	t
 Route	types.ts	/^				export type Route = {$/;"	t
-RouteRequest	types.ts	/^export type RouteRequest = {$/;"	t
-RouteRequestParams	types.ts	/^type RouteRequestParams = {$/;"	t
-RouteRequestQuery	types.ts	/^type RouteRequestQuery = {$/;"	t
 Routes	types.ts	/^			export type Routes = {$/;"	t
+Security	core/typ/book.ts	/^		export type Security = {$/;"	t
+SecurityBLL	core/bll/security.ts	/^export class SecurityBLL<A extends AtomName> extends BasicBLL<A> {$/;"	c
+SelfishDAL	core/dal/selfish.ts	/^export class SelfishDAL<A extends AtomName> extends RecycleDAL<A>{$/;"	c
 Service	service/types.ts	/^export interface Service {$/;"	i
-_authorization	service/express/mdlw.ts	/^function _authorization() {$/;"	f
-_get_route_api	service/express/mdlw.ts	/^function _get_route_api(atom_name:AtomName):Book.Definition.Api{$/;"	f
-_get_route_def	service/express/mdlw.ts	/^function _get_route_def(route_request:RouteRequest)$/;"	f
-_get_route_request	service/express/mdlw.ts	/^function _get_route_request(res:express.Response)$/;"	f
-_handle_exception	service/express/mdlw.ts	/^async function _handle_exception($/;"	f
-_locals	service/express/mdlw.ts	/^function _locals<A extends AtomName>(atom_name:A, route_name:string) {$/;"	f
-_log	service/express/mdlw.ts	/^function _log() {$/;"	f
-_log_request	service/express/mdlw.ts	/^async function _log_request(route_request:RouteRequest)$/;"	f
-_validate	service/express/mdlw.ts	/^function _validate(route_request:RouteRequest)$/;"	f
-_validate_and_catch	service/express/mdlw.ts	/^function _validate_and_catch()$/;"	f
-atom_book	book.ts	/^export const atom_book = {$/;"	v
+ServiceName	service/types.ts	/^export type ServiceName = 'express'; \/\/ | 'hapi' | 'nest_js'$/;"	t
+Set	core/typ/book.ts	/^			export type Set =$/;"	t
+SetNumber	core/typ/book.ts	/^				export interface SetNumber {$/;"	i
+SetNumber	core/typ/book.ts	/^			export interface SetNumber extends SharedFields {$/;"	i
+SetString	core/typ/book.ts	/^				export interface SetString {$/;"	i
+SetString	core/typ/book.ts	/^			export interface SetString extends SharedFields {$/;"	i
+SharedFields	core/typ/book.ts	/^			interface SharedFields {$/;"	i
+String	core/typ/book.ts	/^				export interface String {$/;"	i
+String	core/typ/book.ts	/^			export type String =$/;"	t
+Text	core/typ/book.ts	/^			export interface Text extends SharedFields {$/;"	i
+Time	core/typ/book.ts	/^				export interface Time {$/;"	i
+Time	core/typ/book.ts	/^			export interface Time extends SharedFields {$/;"	i
+TransposedBook	core/typ/book.ts	/^export type TransposedBook = {$/;"	t
+ValidateDAL	core/dal/validate.ts	/^export class ValidateDAL<A extends AtomName> extends RelationDAL<A>{$/;"	c
+WithComparsion	core/typ/query.ts	/^	type WithComparsion<A extends AtomName> =$/;"	t
+_add_schema_middleware	core/rel/mongo/models.ts	/^function _add_schema_middleware<A extends AtomName>($/;"	f
+_al	core/bll/basic.ts	/^	protected _al:AccessLayer<A>;$/;"	m
+_api_request_to_atom_request	mdlw/mdlw.ts	/^function _api_request_to_atom_request(api_request: types.ApiRequest)$/;"	f
+_auth_validate	mdlw/mdlw.ts	/^function _auth_validate(api_request:types.ApiRequest)$/;"	f
+_auth_validate_and_call	mdlw/mdlw.ts	/^async function _auth_validate_and_call($/;"	f
+_authorization	mdlw/mdlw.ts	/^async function _authorization(api_request:types.ApiRequest) {$/;"	f
+_basic_bll	core/bll/authenticate.ts	/^	private _basic_bll:BasicBLL<A>;$/;"	m
+_can_atom_write	core/acl/acl.ts	/^	protected async _can_atom_write(id:string)$/;"	m
+_can_uniform_read	core/acl/acl.ts	/^	protected _can_uniform_read()$/;"	m
+_can_uniform_write	core/acl/acl.ts	/^	protected _can_uniform_write()$/;"	m
+_catch	mdlw/mdlw.ts	/^async function _catch(operation:Operation, api_request:types.ApiRequest, log_blls:types.LogBlls, auth_handler?:types.AuthHandler){$/;"	f
+_check_passport_key_type	core/bll/authenticate.ts	/^function _check_passport_key_type(passport:Passport, key:PassportKey)$/;"	f
+_check_unique	core/dal/validate.ts	/^	protected async _check_unique(partial_atom:Partial<AtomShape<A>>, id?:string)$/;"	m
+_clean_atom	core/rel/mongo/relation.ts	/^function _clean_atom<A extends AtomName>(atom_name:A, atom:Atom<A>)$/;"	f
+_clean_molecule	core/rel/mongo/relation.ts	/^function _clean_molecule<A extends AtomName, D extends Depth>(atom_name:A, molecule:Molecule<A,D>)$/;"	f
+_conn_name	core/rel/mongo/relation.ts	/^	protected _conn_name:ConnectionName;$/;"	m
+_connection	core/rel/mongo/connection.ts	/^	private _connection:mongoose.Connection;$/;"	m
+_convert_for_trash	core/rel/mongo/models.ts	/^function _convert_for_trash(schema_definition:mongoose.SchemaDefinition)$/;"	f
+_create_log_models	core/rel/mongo/models.ts	/^function _create_log_models(){$/;"	f
+_create_main_models	core/rel/mongo/models.ts	/^function _create_main_models(){$/;"	f
+_create_models	core/rel/mongo/models.ts	/^function _create_models(mongoose_db_connection:mongo_connection.ConnectionInstance, connection?:ConnectionName){$/;"	f
+_create_trash_models	core/rel/mongo/models.ts	/^function _create_trash_models(){$/;"	f
+_custom_validate_bond_atom	core/atm/validate.ts	/^function _custom_validate_bond_atom<A extends AtomName, D extends Depth>($/;"	f
+_custom_validate_number	core/atm/validate.ts	/^function _custom_validate_number<A extends AtomName>($/;"	f
+_custom_validate_set_number	core/atm/validate.ts	/^function _custom_validate_set_number<A extends AtomName>($/;"	f
+_custom_validate_set_string	core/atm/validate.ts	/^function _custom_validate_set_string<A extends AtomName>($/;"	f
+_custom_validate_string	core/atm/validate.ts	/^function _custom_validate_string<A extends AtomName>($/;"	f
+_custom_validate_time	core/atm/validate.ts	/^function _custom_validate_time<A extends AtomName>($/;"	f
+_dal	core/acl/acl.ts	/^	protected _dal:urn_dal.DAL<A>;$/;"	m
+_delete_cascade	core/rel/mongo/models.ts	/^async function _delete_cascade($/;"	f
+_encrypt_changed_properties	core/dal/encrypt.ts	/^	protected async _encrypt_changed_properties(id:string, atom:Atom<A> | Partial<AtomShape<A>>)$/;"	m
+_encrypt_changed_properties	core/dal/encrypt.ts	/^	protected async _encrypt_changed_properties(id:string, atom:Atom<A>)$/;"	m
+_encrypt_changed_properties	core/dal/encrypt.ts	/^	protected async _encrypt_changed_properties(id:string, atom:Partial<AtomShape<A>>)$/;"	m
+_fix_atom_on_validation_error	core/dal/selfish.ts	/^	private async _fix_atom_on_validation_error(atom:Atom<A>)$/;"	m
+_fix_molecule_on_validation_error	core/dal/selfish.ts	/^	private async _fix_molecule_on_validation_error<D extends Depth>(molecule:Molecule<A,D>, depth?:D)$/;"	m
+_generate_date_schema_options	core/rel/mongo/schema.ts	/^function _generate_date_schema_options($/;"	f
+_generate_enum_schema_options	core/rel/mongo/schema.ts	/^function _generate_enum_schema_options($/;"	f
+_generate_mongoose_schema_type_options	core/rel/mongo/schema.ts	/^function _generate_mongoose_schema_type_options(atom_name: AtomName, prop_def:Book.Definition.Property, prop_key:string)$/;"	f
+_generate_number_schema_options	core/rel/mongo/schema.ts	/^function _generate_number_schema_options($/;"	f
+_generate_passport	core/bll/authenticate.ts	/^	private _generate_passport(auth_atom:AuthAtom<A>)$/;"	m
+_generate_populate_obj	core/rel/mongo/relation.ts	/^function _generate_populate_obj<A extends AtomName>(atom_name:A, depth?:number, depth_query?:Query<A>)$/;"	f
+_generate_string_schema_options	core/rel/mongo/schema.ts	/^function _generate_string_schema_options($/;"	f
+_generate_subatomkey_populate_obj	core/rel/mongo/relation.ts	/^function _generate_subatomkey_populate_obj<A extends AtomName>($/;"	f
+_generate_token	core/bll/authenticate.ts	/^	private _generate_token(auth_atom:AuthAtom<A>)$/;"	m
+_get_atom_api	mdlw/mdlw.ts	/^function _get_atom_api(atom_name:types.AtomName)$/;"	f
+_get_atom_api	util/request.ts	/^function _get_atom_api(atom_name:types.AtomName){$/;"	f
+_get_conn_name	core/rel/mongo/log.ts	/^	protected _get_conn_name():ConnectionName{$/;"	m
+_get_conn_name	core/rel/mongo/relation.ts	/^	protected _get_conn_name():ConnectionName{$/;"	m
+_get_conn_name	core/rel/mongo/trash.ts	/^	protected _get_conn_name():ConnectionName{$/;"	m
+_get_route_def	mdlw/mdlw.ts	/^function _get_route_def(api_request:types.ApiRequest)$/;"	f
+_has_all_properties	core/atm/validate.ts	/^function _has_all_properties<A extends AtomName>(atom_name:A, atom_shape:AtomShape<A>)$/;"	f
+_has_no_other_properties	core/atm/validate.ts	/^function _has_no_other_properties<A extends AtomName>(atom_name:A, partial_atom:Partial<AtomShape<A>>)$/;"	f
+_hide_hidden_properties_single_molecule	core/atm/util.ts	/^function _hide_hidden_properties_single_molecule<A extends AtomName, D extends Depth>(atom_name:A, molecule:Molecule<A,D>)$/;"	f
+_is_base_query_type	core/vali/query.ts	/^function _is_base_query_type(val:any)$/;"	f
+_is_valid_id	core/rel/mongo/relation.ts	/^function _is_valid_id(id:string)$/;"	f
+_lambda_request_to_api_request	lambda/netlify/class.ts	/^function _lambda_request_to_api_request(event: LambdaEvent, context: LambdaContext){$/;"	f
+_lambda_response	lambda/netlify/class.ts	/^function _lambda_response($/;"	f
+_limit	mdlw/mdlw.ts	/^function _limit(api_request:types.ApiRequest){$/;"	f
+_log_auth_route_request	mdlw/mdlw.ts	/^async function _log_auth_route_request($/;"	f
+_log_route_request	mdlw/mdlw.ts	/^async function _log_route_request($/;"	f
+_on_close	core/rel/mongo/connection.ts	/^	private _on_close()$/;"	m
+_on_connected	core/rel/mongo/connection.ts	/^	private _on_connected()$/;"	m
+_on_connecting	core/rel/mongo/connection.ts	/^	private _on_connecting()$/;"	m
+_on_disconnected	core/rel/mongo/connection.ts	/^	private _on_disconnected()$/;"	m
+_on_disconnecting	core/rel/mongo/connection.ts	/^	private _on_disconnecting()$/;"	m
+_on_error	core/rel/mongo/connection.ts	/^	private _on_error(e:Error)$/;"	m
+_on_reconnect_failed	core/rel/mongo/connection.ts	/^	private _on_reconnect_failed()$/;"	m
+_on_reconnect_tries	core/rel/mongo/connection.ts	/^	private _on_reconnect_tries()$/;"	m
+_on_reconnected	core/rel/mongo/connection.ts	/^	private _on_reconnected()$/;"	m
+_raw	core/rel/mongo/relation.ts	/^	protected _raw:mongoose.Model<mongoose.Document>;$/;"	m
+_read	core/acl/acl.ts	/^	protected _read?:RealType<BookPropertyType.ID>;$/;"	m
+_read_query	core/acl/acl.ts	/^	protected _read_query:Query<A>;$/;"	m
+_replace_atom_on_error	core/dal/selfish.ts	/^	protected async _replace_atom_on_error(id:string, atom:Atom<A>)$/;"	m
+_replace_molecule_on_error	core/dal/selfish.ts	/^	protected async _replace_molecule_on_error<D extends Depth>(id:string, molecule:Molecule<A,D>, depth?:D)$/;"	m
+_return_acl	core/bll/security.ts	/^function _return_acl<A extends AtomName>(atom_name:A, passport?:Passport) {$/;"	f
+_return_express_auth_middleware	service/express/routes/auth.ts	/^function _return_express_auth_middleware($/;"	f
+_return_express_middleware	service/express/routes/default.ts	/^function _return_express_middleware(log_blls:types.LogBlls){$/;"	f
+_security_type	core/acl/acl.ts	/^	protected _security_type:BookSecurityType;$/;"	m
+_set_and_remove_headers	service/express/routes/common.ts	/^function _set_and_remove_headers(urn_res:urn_response.General<any,any>, res:express.Response)$/;"	f
+_validate	mdlw/mdlw.ts	/^function _validate(api_request:types.ApiRequest)$/;"	f
+_validate_and_call	mdlw/mdlw.ts	/^async function _validate_and_call(api_request: types.ApiRequest){$/;"	f
+_validate_bond_type	core/atm/validate.ts	/^function _validate_bond_type<A extends AtomName>($/;"	f
+_validate_custom_bond_type	core/atm/validate.ts	/^function _validate_custom_bond_type<A extends AtomName>($/;"	f
+_validate_custom_type	core/atm/validate.ts	/^function _validate_custom_type<A extends AtomName>($/;"	f
+_validate_expression	core/vali/query.ts	/^function _validate_expression<A extends AtomName>(field:Query.Expression<A>, atom_name:A)$/;"	f
+_validate_hard_properties	core/atm/validate.ts	/^function _validate_hard_properties<A extends AtomName>(atom:Atom<A>)$/;"	f
+_validate_molecule_bond_properties	core/atm/validate.ts	/^function _validate_molecule_bond_properties<A extends AtomName, D extends Depth>($/;"	f
+_validate_partial_atom_bond_properties	core/atm/validate.ts	/^function _validate_partial_atom_bond_properties<A extends AtomName>($/;"	f
+_validate_primitive_properties	core/atm/validate.ts	/^function _validate_primitive_properties<A extends AtomName>($/;"	f
+_validate_primitive_type	core/atm/validate.ts	/^function _validate_primitive_type<A extends AtomName>($/;"	f
+_write	core/acl/acl.ts	/^	protected _write?:RealType<BookPropertyType.ID>;$/;"	m
+abstract_passport	core/typ/static.ts	/^export const abstract_passport = {$/;"	v
+alter_by_id	core/acl/acl.ts	/^	public async alter_by_id(id:string, partial_atom:Partial<AtomShape<A>>)$/;"	m
+alter_by_id	core/dal/basic.ts	/^	public async alter_by_id(id:string, partial_atom:Partial<AtomShape<A>>)$/;"	m
+alter_by_id	core/dal/encrypt.ts	/^	public async alter_by_id(id:string, partial_atom:Partial<AtomShape<A>>)$/;"	m
+alter_by_id	core/dal/validate.ts	/^	public async alter_by_id(id:string, partial_atom:Partial<AtomShape<A>>)$/;"	m
+alter_by_id	core/rel/mongo/relation.ts	/^	public async alter_by_id(id:string, partial_atom:Partial<AtomShape<A>>)$/;"	m
+any	core/atm/validate.ts	/^export function any<A extends AtomName, D extends Depth>($/;"	f
+any	core/atm/validate.ts	/^export function any<A extends AtomName>($/;"	f
+api	books.ts	/^export const api = {$/;"	v
+api	core/books.ts	/^export const api = {$/;"	v
+api_config	conf/defaults.ts	/^export const api_config:FullConfiguration = {$/;"	v
+atom	books.ts	/^export const atom = {$/;"	v
+atom	core/atm/validate.ts	/^export function atom<A extends AtomName>(atom_name:A, atom:Atom<A>)$/;"	f
+atom	core/books.ts	/^export const atom = {$/;"	v
+atom_common_properties	core/typ/static.ts	/^export const atom_common_properties = {$/;"	v
+atom_hard_properties	core/typ/static.ts	/^export const atom_hard_properties = {$/;"	v
+atom_partial	core/atm/validate.ts	/^export function atom_partial<A extends AtomName>(atom_name:A, partial_atom:Partial<AtomShape<A>>)$/;"	f
+atom_partial	core/atm/validate.ts	/^export function atom_partial<A extends AtomName>(atom_name:A, partial_atom:Partial<AtomShape<A>>):true;$/;"	f
+atom_partial	core/atm/validate.ts	/^export function atom_partial<A extends AuthName>(atom_name:A, partial_atom:Partial<AtomShape<A>>):true;$/;"	f
+atom_shape	core/atm/validate.ts	/^export function atom_shape<A extends AtomName>(atom_name:A, atom_shape:AtomShape<A>)$/;"	f
+auth_route_middleware	mdlw/mdlw.ts	/^export async function auth_route_middleware($/;"	f
+authenticate	core/bll/authenticate.ts	/^	public async authenticate(email: string, password: string)$/;"	m
+bcrypt	core/atm/encrypt.ts	/^import bcrypt from 'bcryptjs';$/;"	I
+bcrypt	core/bll/authenticate.ts	/^import bcrypt from 'bcryptjs';$/;"	I
+bll	books.ts	/^export const bll = {$/;"	v
+bll	core/books.ts	/^export const bll = {$/;"	v
+bll_errors	lambda/netlify/class.ts	/^	public bll_errors:urn_core.bll.BLL<'error'>;$/;"	m
+bll_errors	service/express/class.ts	/^	public bll_errors:urn_core.bll.BLL<'error'>;$/;"	m
+bll_requests	lambda/netlify/class.ts	/^	public bll_requests:urn_core.bll.BLL<'request'>;$/;"	m
+bll_requests	service/express/class.ts	/^	public bll_requests:urn_core.bll.BLL<'request'>;$/;"	m
+close	core/rel/mongo/connection.ts	/^	public async close()$/;"	m
+core	client.ts	/^import core from 'uranio-core\/client';$/;"	I
+core	main.ts	/^import core from 'uranio-core';$/;"	I
+core_config	core/conf/defaults.ts	/^export const core_config:FullConfiguration = {$/;"	v
 cors	service/express/class.ts	/^import cors from 'cors';$/;"	I
+create	core/acl/acl.ts	/^export function create<A extends AtomName>(atom_name:A, user_groups:RealType<BookPropertyType.ID>[])$/;"	f
+create	core/bll/authenticate.ts	/^export function create<A extends AuthName>(atom_name:A)$/;"	f
+create	core/bll/basic.ts	/^export function create<A extends AtomName>(atom_name:A)$/;"	f
+create	core/bll/create.ts	/^export function create<A extends AtomName>(atom_name:A, passport?:Passport)$/;"	f
+create	core/bll/log.ts	/^export function create<A extends LogName>(log_name:A)$/;"	f
+create	core/dal/dal.ts	/^export function create<A extends AtomName>(atom_name:A)$/;"	f
+create	core/rel/mongo/connection.ts	/^export function create(con_name:ConnectionName, mongo_connection:string, db_name:string)$/;"	f
+create	core/rel/mongo/relation.ts	/^export function create<A extends AtomName>(atom_name: A)$/;"	f
+create	lambda/index.ts	/^export function create(lambda_name?:LambdaName)$/;"	f
+create	lambda/netlify/class.ts	/^export function create():NetlifyLambda{$/;"	f
 create	service/express/class.ts	/^export function create():ExpressWebService{$/;"	f
-create_route	service/express/routes/default.ts	/^export function create_route<A extends AtomName>(atom_name:A)$/;"	f
+create	service/index.ts	/^export function create(service_name?:ServiceName)$/;"	f
+create_basic	core/dal/basic.ts	/^export function create_basic<A extends AtomName>(atom_name:A, db_relation:urn_rel.Relation<A>)$/;"	f
+create_encrypt	core/dal/encrypt.ts	/^export function create_encrypt<A extends AtomName>(atom_name:A)$/;"	f
+create_express_auth_route	service/express/routes/auth.ts	/^export function create_express_auth_route<A extends types.AuthName>(atom_name:A, log_blls:types.LogBlls)$/;"	f
+create_express_route	service/express/routes/default.ts	/^export function create_express_route<A extends types.AtomName>(atom_name:A, bll_logs:types.LogBlls)$/;"	f
+create_log	core/dal/log.ts	/^export function create_log<A extends LogName>(log_name:A)$/;"	f
+create_main	core/dal/rel.ts	/^export function create_main<A extends AtomName>(atom_name:A)$/;"	f
+create_model	core/rel/mongo/connection.ts	/^	public create_model<A extends AtomName>(relation_name:A, schema:mongoose.Schema)$/;"	m
+create_recycle	core/dal/recycle.ts	/^export function create_recycle<A extends AtomName>(atom_name:A)$/;"	f
+create_security	core/bll/security.ts	/^export function create_security<A extends AtomName>(atom_name:A, passport?:Passport)$/;"	f
+create_selfish	core/dal/selfish.ts	/^export function create_selfish<A extends AtomName>(atom_name:A)$/;"	f
+create_validate	core/dal/validate.ts	/^export function create_validate<A extends AtomName>(atom_name:A)$/;"	f
+delete_by_id	core/acl/acl.ts	/^	public async delete_by_id(id:string)$/;"	m
+delete_by_id	core/dal/basic.ts	/^	public async delete_by_id(id:string)$/;"	m
+delete_by_id	core/dal/recycle.ts	/^	public async delete_by_id(id:string)$/;"	m
+delete_by_id	core/dal/validate.ts	/^	public async delete_by_id(id:string)$/;"	m
+delete_by_id	core/rel/mongo/relation.ts	/^	public async delete_by_id(id:string)$/;"	m
+empty	mdlw/validate.ts	/^export function empty(p:unknown, param_name:string)$/;"	f
 empty	service/express/routes/validate.ts	/^export function empty(p:unknown, param_name:string)$/;"	f
+encrypt_property	core/atm/validate.ts	/^export function encrypt_property<A extends AtomName>($/;"	f
+enum	core/typ/book.ts	/^export const enum BookPermissionType {$/;"	v
+enum	core/typ/book.ts	/^export const enum BookPropertyType {$/;"	v
+enum	core/typ/book.ts	/^export const enum BookSecurityType {$/;"	v
 enum	types.ts	/^export const enum RouteMethod {$/;"	v
 express	service/express/class.ts	/^import express from 'express';$/;"	I
-express	service/express/mdlw.ts	/^import express from 'express';$/;"	I
+express	service/express/routes/auth.ts	/^import express from 'express';$/;"	I
+express	service/express/routes/common.ts	/^import express from 'express';$/;"	I
 express	service/express/routes/default.ts	/^import express from 'express';$/;"	I
-handleException	tools/exc_handler.ts	/^async function handleException(ex:Error)$/;"	f
-handleRejectedPromise	tools/exc_handler.ts	/^async function handleRejectedPromise(reason:any, promise:Promise<any>)$/;"	f
-jwt	service/express/mdlw.ts	/^import jwt from 'jsonwebtoken';$/;"	I
+express_app	service/express/class.ts	/^	public express_app:express.Application;$/;"	m
+express_request_to_api_request	service/express/routes/common.ts	/^export function express_request_to_api_request(req:express.Request)$/;"	f
+filter_uniform_bond_properties	core/acl/acl.ts	/^	public filter_uniform_bond_properties<D extends Depth>(molecule:Molecule<A,D>, depth = 0)$/;"	m
+find	core/bll/basic.ts	/^	public async find<D extends Depth>(query:Query<A>, options?:Query.Options<A,D>)$/;"	m
+find_by_id	core/bll/basic.ts	/^	public async find_by_id<D extends Depth>(id:string, options?:Query.Options<A,D>)$/;"	m
+find_one	core/bll/basic.ts	/^	public async find_one<D extends Depth>(query:Query<A>, options?:Query.Options<A,D>)$/;"	m
+fix	core/atm/index.ts	/^export const fix = {$/;"	v
+generate_mongo_schema_def	core/rel/mongo/schema.ts	/^export function generate_mongo_schema_def<A extends AtomName>(atom_name:A)$/;"	f
+get_atom_name_from_atom_path	util/request.ts	/^export function get_atom_name_from_atom_path(atom_path:string)$/;"	f
+get_auth_action	util/request.ts	/^export function get_auth_action(atom_name:types.AtomName, route_name:keyof types.Book.Definition.Api.Routes)$/;"	f
+get_bond	core/atm/keys.ts	/^export function get_bond<A extends AtomName>(atom_name:A)$/;"	f
+get_bond_array	core/atm/keys.ts	/^export function get_bond_array<A extends AtomName>(atom_name:A)$/;"	f
+get_bond_non_array	core/atm/keys.ts	/^export function get_bond_non_array<A extends AtomName>(atom_name:A)$/;"	f
+get_encrypted	core/atm/keys.ts	/^export function get_encrypted<A extends AtomName>(atom_name:A)$/;"	f
+get_hidden	core/atm/keys.ts	/^export function get_hidden<A extends AtomName>(atom_name:A)$/;"	f
+get_params_from_route_path	util/request.ts	/^export function get_params_from_route_path($/;"	f
+get_route_name	util/request.ts	/^export function get_route_name<A extends types.AtomName>(atom_name:A, route_path:string, http_method:types.RouteMethod)$/;"	f
+get_subatom_name	core/atm/util.ts	/^export function get_subatom_name<A extends AtomName>(atom_name:A ,atom_key:string)$/;"	f
+get_unique	core/atm/keys.ts	/^export function get_unique<A extends AtomName>(atom_name:A)$/;"	f
+handle	lambda/netlify/class.ts	/^	public async handle(event:LambdaEvent, context:LambdaContext)$/;"	m
+handle_and_store_exception	util/request.ts	/^export async function handle_and_store_exception($/;"	f
+handle_exception	util/exc_handler.ts	/^function handle_exception(service_name:string):(...args:any[]) => any {$/;"	f
+handle_exception	util/request.ts	/^export function handle_exception(ex:urn_exception.ExceptionInstance)$/;"	f
+handle_rejected_promise	util/exc_handler.ts	/^function handle_rejected_promise(service_name:string):(...args:any[]) => any {$/;"	f
+has_property	core/atm/util.ts	/^export function has_property<A extends AtomName>(atom_name:A, key:keyof Atom<A>):boolean;$/;"	f
+has_property	core/atm/util.ts	/^export function has_property<A extends AtomName>(atom_name:A, key:keyof Atom<A>|string)$/;"	f
+has_property	core/atm/util.ts	/^export function has_property<A extends AtomName>(atom_name:A, key:string):boolean;$/;"	f
+hide_hidden_properties	core/atm/util.ts	/^export function hide_hidden_properties<A extends AtomName, D extends Depth>(atom_name:A, molecules:Molecule<A,D>):Molecule<A,D>;$/;"	f
+hide_hidden_properties	core/atm/util.ts	/^export function hide_hidden_properties<A extends AtomName, D extends Depth>(atom_name:A, molecules:Molecule<A,D>[]):Molecule<A,D>[];$/;"	f
+hide_hidden_properties	core/atm/util.ts	/^export function hide_hidden_properties<A extends AtomName, D extends Depth>(atom_name:A, molecules:Molecule<A,D>|Molecule<A,D>[])$/;"	f
+init	core/main.ts	/^export function init(config:types.Configuration)$/;"	f
+insert_new	core/bll/auth.ts	/^	public async insert_new(atom_shape:AtomShape<A>)$/;"	m
+insert_new	core/bll/basic.ts	/^	public async insert_new(atom_shape:AtomShape<A>)$/;"	m
+insert_one	core/acl/acl.ts	/^	public async insert_one(atom_shape:AtomShape<A>)$/;"	m
+insert_one	core/dal/basic.ts	/^	public async insert_one(atom_shape:AtomShape<A>)$/;"	m
+insert_one	core/dal/encrypt.ts	/^	public async insert_one(atom_shape:AtomShape<A>)$/;"	m
+insert_one	core/dal/validate.ts	/^	public async insert_one(atom_shape:AtomShape<A>)$/;"	m
+insert_one	core/rel/mongo/relation.ts	/^	public async insert_one(atom_shape:AtomShape<A>)$/;"	m
+is_atom	core/atm/util.ts	/^export function is_atom<A extends AtomName>(atom_name:A, atom:Atom<A>)$/;"	f
+is_auth_atom	core/atm/util.ts	/^export function is_auth_atom<A extends AuthName>(atom:unknown)$/;"	f
+is_auth_atom_name	core/atm/util.ts	/^export function is_auth_atom_name<A extends AtomName>(atom_name:A)$/;"	f
+is_auth_request	util/request.ts	/^export function is_auth_request(atom_name: types.AtomName, atom_path: string)$/;"	f
+is_molecule	core/atm/util.ts	/^export function is_molecule<A extends AtomName, D extends Depth>(atom_name:A, molecule:Molecule<A,D>)$/;"	f
+is_optional_property	core/atm/util.ts	/^export function is_optional_property<A extends AtomName>(atom_name:A, key:keyof Atom<A>)$/;"	f
+is_public_request	core/bll/authenticate.ts	/^export function is_public_request<A extends AtomName>(atom_name:A, action: AuthAction)$/;"	f
+is_superuser	core/bll/authenticate.ts	/^export function is_superuser(passport?:Passport)$/;"	f
+is_valid_id	core/rel/mongo/relation.ts	/^	public is_valid_id(id:string)$/;"	m
+is_valid_passport	core/bll/authenticate.ts	/^export function is_valid_passport(passport:Passport)$/;"	f
+jwt	core/bll/authenticate.ts	/^import jwt from 'jsonwebtoken';$/;"	I
+jwt	mdlw/mdlw.ts	/^import jwt from 'jsonwebtoken';$/;"	I
+keys	core/atm/index.ts	/^export const keys = {$/;"	v
+lambda_route	lambda/netlify/class.ts	/^	public async lambda_route(event:LambdaEvent, context:LambdaContext){$/;"	m
+log_create	core/rel/mongo/log.ts	/^export function log_create<A extends AtomName>(atom_name: A)$/;"	f
+molecule	core/atm/validate.ts	/^export function molecule<A extends AtomName, D extends Depth>($/;"	f
+molecule_primitive_properties	core/atm/validate.ts	/^export function molecule_primitive_properties<A extends AtomName, D extends Depth>($/;"	f
+molecule_to_atom	core/atm/util.ts	/^export function molecule_to_atom<A extends AtomName, D extends Depth>($/;"	f
+mongoose	core/rel/mongo/connection.ts	/^import mongoose from 'mongoose';$/;"	I
+mongoose	core/rel/mongo/models.ts	/^import mongoose from 'mongoose';$/;"	I
+mongoose	core/rel/mongo/relation.ts	/^import mongoose from 'mongoose';$/;"	I
+mongoose	core/rel/mongo/schema.ts	/^import mongoose from 'mongoose';$/;"	I
+mongoose	core/rel/mongo/types.ts	/^import mongoose from 'mongoose';$/;"	I
+name	core/rel/mongo/connection.ts	/^	public name:ConnectionName;$/;"	m
+only_valid_param_keys	mdlw/validate.ts	/^export function only_valid_param_keys(params:unknown, valid_params_keys:string[])$/;"	f
 only_valid_param_keys	service/express/routes/validate.ts	/^export function only_valid_param_keys(params:unknown, valid_params_keys:string[])$/;"	f
+only_valid_query_keys	mdlw/validate.ts	/^export function only_valid_query_keys(query:unknown, valid_query_keys:string[])$/;"	f
 only_valid_query_keys	service/express/routes/validate.ts	/^export function only_valid_query_keys(query:unknown, valid_query_keys:string[])$/;"	f
+passport_has_all_keys	core/bll/authenticate.ts	/^function passport_has_all_keys(passport:Passport)$/;"	f
+passport_has_correct_type_values	core/bll/authenticate.ts	/^function passport_has_correct_type_values(passport:Passport)$/;"	f
+passport_has_no_other_keys	core/bll/authenticate.ts	/^function passport_has_no_other_keys(passport:Passport)$/;"	f
+process_request_path	util/request.ts	/^export function process_request_path(path:string)$/;"	f
+process_request_query	mdlw/validate.ts	/^export function process_request_query<A extends AtomName>(query:Query<A>|undefined)$/;"	f
 process_request_query	service/express/routes/validate.ts	/^export function process_request_query<A extends AtomName>(query:ExpressQueryParam)$/;"	f
-registerExceptionHandler	tools/exc_handler.ts	/^function registerExceptionHandler():void {$/;"	f
-route_middlewares	service/express/mdlw.ts	/^export function route_middlewares<A extends AtomName>($/;"	f
-store_error	service/express/mdlw.ts	/^export async function store_error(urn_res:urn_response.Fail, res:express.Response, ex?:urn_exception.ExceptionInstance)$/;"	f
-urn_core	service/express/mdlw.ts	/^import urn_core from 'urn_core';$/;"	I
-urn_core	tools/exc_handler.ts	/^import urn_core from 'urn_core';$/;"	I
-urn_core	types.ts	/^import urn_core from 'urn_core';$/;"	I
-urn_web	run.ts	/^import urn_web from 'urn_web';$/;"	I
-web_atom_book	book.ts	/^export const web_atom_book = {$/;"	v
-web_config	conf/defaults.ts	/^export const web_config:FullConfiguration = {$/;"	v
+properties	core/atm/encrypt.ts	/^export async function properties<A extends AtomName>(atom_name:A, atom:AtomShape<A>):Promise<AtomShape<A>>$/;"	f
+properties	core/atm/encrypt.ts	/^export async function properties<A extends AtomName>(atom_name:A, atom:Partial<AtomShape<A>>)$/;"	f
+property	core/atm/encrypt.ts	/^export async function property<A extends AtomName>$/;"	f
+property	core/atm/fix.ts	/^export function property<A extends AtomName, D extends Depth>($/;"	f
+property	core/atm/fix.ts	/^export function property<A extends AtomName>($/;"	f
+property	core/atm/validate.ts	/^export function property<A extends AtomName>($/;"	f
+readyState	core/rel/mongo/connection.ts	/^	public readyState:number;$/;"	m
+register_exception_handler	util/exc_handler.ts	/^export function register_exception_handler(name:string):void {$/;"	f
+remove_by_id	core/bll/basic.ts	/^	public async remove_by_id(id:string)$/;"	m
+remove_one	core/bll/basic.ts	/^	public async remove_one<D extends Depth>(molecule:Molecule<A,D>)$/;"	m
+replace_by_id	core/rel/mongo/relation.ts	/^	public async replace_by_id(id:string, atom:AtomShape<A>)$/;"	m
+return_default_routes	routes/routes.ts	/^export function return_default_routes(atom_name:AtomName)$/;"	f
+return_uranio_response_to_express	service/express/routes/common.ts	/^export function return_uranio_response_to_express(urn_res:urn_response.General<any,any>, res:express.Response)$/;"	f
+route_middleware	mdlw/mdlw.ts	/^export async function route_middleware(api_request:types.ApiRequest, log_blls: types.LogBlls)$/;"	f
+select	core/acl/acl.ts	/^	public async select<D extends Depth>(query:Query<A>, options?:Query.Options<A,D>)$/;"	m
+select	core/dal/basic.ts	/^	public async select<D extends Depth = 0>(query:Query<A>, options?:Query.Options<A,D>)$/;"	m
+select	core/dal/validate.ts	/^	public async select<D extends Depth = 0>(query:Query<A>, options?:Query.Options<A, D>)$/;"	m
+select	core/rel/mongo/relation.ts	/^	public async select<D extends Depth>(query:Query<A>, options?:Query.Options<A,D>)$/;"	m
+select_by_id	core/acl/acl.ts	/^	public async select_by_id<D extends Depth>(id:string, options?:Query.Options<A,D>)$/;"	m
+select_by_id	core/dal/basic.ts	/^	public async select_by_id<D extends Depth = 0>(id:string, options?:Query.Options<A,D>)$/;"	m
+select_by_id	core/dal/validate.ts	/^	public async select_by_id<D extends Depth = 0>(id:string, options?:Query.Options<A,D>)$/;"	m
+select_by_id	core/rel/mongo/relation.ts	/^	public async select_by_id<D extends Depth>(id:string, options?:Query.Options<A,D>)$/;"	m
+select_one	core/acl/acl.ts	/^	public async select_one<D extends Depth>(query:Query<A>, options?:Query.Options<A,D>)$/;"	m
+select_one	core/dal/basic.ts	/^	public async select_one<D extends Depth = 0>(query:Query<A>, options?:Query.Options<A,D>)$/;"	m
+select_one	core/dal/validate.ts	/^	public async select_one<D extends Depth = 0>(query:Query<A>, options?:Query.Options<A,D>)$/;"	m
+select_one	core/rel/mongo/relation.ts	/^	public async select_one<D extends Depth>(query:Query<A>, options?:Query.Options<A,D>)$/;"	m
+store_error	util/request.ts	/^export async function store_error($/;"	f
+trash_create	core/rel/mongo/trash.ts	/^export function trash_create<A extends AtomName>(atom_name: A)$/;"	f
+trash_dal	core/dal/recycle.ts	/^	public trash_dal?:BasicDAL<A>;$/;"	m
+update_by_id	core/bll/basic.ts	/^	public async update_by_id(id:string, partial_atom:Partial<AtomShape<A>>)$/;"	m
+update_one	core/bll/basic.ts	/^	public async update_one(atom:Atom<A>)$/;"	m
+uranio	books.ts	/^import uranio from 'uranio';$/;"	I
+uranio	core/books.ts	/^import uranio from 'uranio';$/;"	I
+uri	core/rel/mongo/connection.ts	/^	public uri:string;$/;"	m
+urn_api	run.ts	/^import urn_api from '.\/index';$/;"	I
+urn_core	lambda/netlify/class.ts	/^import urn_core from 'uranio-core';$/;"	I
+urn_core	mdlw/mdlw.ts	/^import urn_core from 'uranio-core';$/;"	I
+urn_core	routes/routes.ts	/^import urn_core from 'uranio-core';$/;"	I
+urn_core	service/express/class.ts	/^import urn_core from 'uranio-core';$/;"	I
+urn_core	service/express/routes/auth.ts	/^import urn_core from 'uranio-core';$/;"	I
+urn_core	types.ts	/^import urn_core from 'uranio-core';$/;"	I
+urn_core	util/exc_handler.ts	/^import urn_core from 'uranio-core';$/;"	I
+urn_core	util/request.ts	/^import urn_core from 'uranio-core';$/;"	I
+urn_lib	main.ts	/^import urn_lib from 'urn-lib';$/;"	I
+util	core/atm/index.ts	/^export const util = {$/;"	v
+validate	core/atm/index.ts	/^export const validate = {$/;"	v
+validate	core/dal/selfish.ts	/^	protected async validate(molecule:Atom<A>):Promise<Atom<A>>;$/;"	m
+validate	core/dal/selfish.ts	/^	protected async validate(molecule:Atom<A>, depth?:0):Promise<Atom<A>>;$/;"	m
+validate	core/dal/selfish.ts	/^	protected async validate<D extends Depth>(molecule:Molecule<A,D> | Atom<A>, depth?:D)$/;"	m
+validate	core/dal/selfish.ts	/^	protected async validate<D extends Depth>(molecule:Molecule<A,D>, depth?:D):Promise<Molecule<A,D>>;$/;"	m
+validate	core/dal/validate.ts	/^	protected async validate(molecule:Atom<A>):Promise<Atom<A>>;$/;"	m
+validate	core/dal/validate.ts	/^	protected async validate(molecule:Atom<A>, depth?:0):Promise<Atom<A>>;$/;"	m
+validate	core/dal/validate.ts	/^	protected async validate<D extends Depth>(molecule:Molecule<A,D> | Atom<A>, depth?:D)$/;"	m
+validate	core/dal/validate.ts	/^	protected async validate<D extends Depth>(molecule:Molecule<A,D>, depth?:D):Promise<Molecule<A,D>>$/;"	m
+validate_filter	core/vali/query.ts	/^function validate_filter<A extends AtomName>(query:Query<A>, atom_name:A)$/;"	f
+validate_filter_options_params	core/vali/query.ts	/^export function validate_filter_options_params<A extends AtomName, D extends Depth>$/;"	f
+validate_options	core/vali/query.ts	/^function validate_options<A extends AtomName, D extends Depth>(options:Query.Options<A,D>, atom_name:A)$/;"	f

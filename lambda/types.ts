@@ -14,9 +14,7 @@ export interface Lambda {
 	
 }
 
-
 // From https://github.com/netlify/functions/tree/main/src/function
-
 
 export interface LambdaEvent {
 	rawURL: string,
@@ -29,22 +27,6 @@ export interface LambdaEvent {
 	multiValueQueryStringParametes: EventMultiValueQueryStringParameters | null,
 	body: string | null,
 	isBase64Encoded: boolean
-}
-
-interface EventHeaders {
-	[name:string]: string | undefined
-}
-
-interface EventMultiValueHeaders {
-	[name:string]: string[] | undefined
-}
-
-interface EventQueryStringParameters {
-	[name:string]: string | undefined
-}
-
-interface EventMultiValueQueryStringParameters {
-	[name:string]: string[] | undefined
 }
 
 // From https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html
@@ -63,14 +45,6 @@ export interface LambdaContext {
 	getRemainingTimeInMillis(): number
 }
 
-export type LambdaHeaders = {
-	[header:string]: boolean | number | string
-}
-
-export type LambdaMultiValueHeaders = {
-	[header:string]: ReadonlyArray<boolean | number | string>
-}
-
 export interface HandlerResponse {
 	statusCode: number
 	headers?: LambdaHeaders
@@ -79,12 +53,37 @@ export interface HandlerResponse {
 	isBase64Encoded?: boolean
 }
 
+interface EventHeaders {
+	[name:string]: string | undefined
+}
+
+interface EventMultiValueHeaders {
+	[name:string]: string[] | undefined
+}
+
+interface EventQueryStringParameters {
+	[name:string]: string | undefined
+}
+
+interface EventMultiValueQueryStringParameters {
+	[name:string]: string[] | undefined
+}
+
+export interface LambdaHeaders {
+	[header:string]: boolean | number | string
+}
+
+export interface LambdaMultiValueHeaders {
+	[header:string]: ReadonlyArray<boolean | number | string>
+}
+
 export interface HandlerCallback {
-	(error: any, response: Response): void
+	(error:any, response:Response):void
 }
 
 export interface Handler {
-	(event: LambdaEvent, context: LambdaContext, callback: HandlerCallback): void | Response | Promise<Response>
+	(event:LambdaEvent, context:LambdaContext, callback:HandlerCallback):
+		void | Response | Promise<Response>
 }
 
 
