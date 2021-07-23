@@ -8,9 +8,7 @@ import express from 'express';
 
 import {urn_response, urn_exception} from 'urn-lib';
 
-const urn_exc = urn_exception.init(`COMMONEXPRESS`, `Common express routes module.`);
-
-// import {api_config} from '../../../conf/defaults';
+const urn_exc = urn_exception.init(`COMMONEXPRESS`, `Common express routes module`);
 
 import {
 	process_request_path,
@@ -96,3 +94,4 @@ export function return_uranio_response_to_express(urn_res:urn_response.General<a
 	res = _set_and_remove_headers(urn_res, res);
 	return res.status(urn_res.status).send(urn_res);
 }
+
