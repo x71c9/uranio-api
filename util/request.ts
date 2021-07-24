@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import {urn_response, urn_return, urn_log, urn_exception} from 'urn-lib';
+import {urn_util, urn_response, urn_return, urn_log, urn_exception} from 'urn-lib';
 
 import urn_core from 'uranio-core';
 
@@ -20,16 +20,22 @@ const urn_exc = urn_exception.init(`UTILREQUEST`, `Util request module`);
 
 import * as types from '../types';
 
-export function process_request_path(path:string)
+export function process_request_path(full_path:string)
 		:types.ApiRequestPaths{
-	const full_path = path;
-	console.log(full_path);
+	let api_request_paths:types.ApiRequestPaths = {
+		full_path,
+		route_path: '',
+		atom_path: '',
+		connection_path: ''
+	};
 	if(full_path.indexOf(api_config.prefix_api) !== 0){
-		throw urn_exc.create_invalid_request(`INVALID_PATH_WRONG_PREFIX`, `Invalid path. Invalid prefix.`);
+		// throw urn_exc.create_invalid_request(`INVALID_PATH_WRONG_PREFIX`, `Invalid path. Invalid prefix.`);
+		return api_request_paths;
 	}
 	const splitted_prefixed = full_path.split(api_config.prefix_api);
 	if(splitted_prefixed.length < 2){
-		throw urn_exc.create_invalid_request(`INVALID_EMPTY_PATH`, `Invalid path. Path is empty.`);
+		// throw urn_exc.create_invalid_request(`INVALID_EMPTY_PATH`, `Invalid path. Path is empty.`);
+		return api_request_paths;
 	}
 	const no_prefix_path = splitted_prefixed[1];
 	let splitted_no_prefix = no_prefix_path.split('/').slice(1);
@@ -39,9 +45,11 @@ export function process_request_path(path:string)
 		splitted_no_prefix = splitted_no_prefix.slice(1);
 	}
 	const atom_path = '/' + splitted_no_prefix[0];
-	const route_path = '/' + splitted_no_prefix.slice(1).join('/') + '/';
-	
-	const api_request_paths = {
+	let route_path = '/' + splitted_no_prefix.slice(1).join('/');
+	if(route_path !== '/'){
+		route_path += '/';
+	}
+	api_request_paths = {
 		full_path,
 		route_path,
 		atom_path,
@@ -64,7 +72,7 @@ export function get_auth_action(atom_name:types.AtomName, route_name:keyof types
 }
 
 export function get_atom_name_from_atom_path(atom_path:string)
-		:types.AtomName{
+		:types.AtomName | undefined{
 	let atom_name:keyof typeof api_book;
 	for(atom_name in api_book){
 		const api_def = api_book[atom_name] as types.Book.Definition<typeof atom_name>;
@@ -72,14 +80,16 @@ export function get_atom_name_from_atom_path(atom_path:string)
 			return atom_name;
 		}
 	}
-	throw urn_exc.create(`INVALID_API_URL`, `Invalid api url.`);
+	return undefined;
+	// throw urn_exc.create(`INVALID_API_URL`, `Invalid api url.`);
 }
 
 export function get_route_name<A extends types.AtomName>(atom_name:A, route_path:string, http_method:types.RouteMethod)
-		:string{
+		:string | undefined{
 	const atom_api = _get_atom_api(atom_name);
 	if(!atom_api.routes){
-		throw urn_exc.create(`INVALID_API_DEF`, `Invalid api_def. Missing "routes" property.`);
+		// throw urn_exc.create(`INVALID_API_DEF`, `Invalid api_def. Missing "routes" property.`);
+		return undefined;
 	}
 	for(const route_name in atom_api.routes){
 		const route_def = atom_api.routes[route_name];
@@ -103,19 +113,21 @@ export function get_route_name<A extends types.AtomName>(atom_name:A, route_path
 					if(url_part[0] === ':' || url_part === splitted_route_url[i]){
 						continue;
 					}
-					throw urn_exc.create_invalid_request(
-						`IVALID_ROUTE_PATH`,
-						`Invalid route path.`
-					);
+					// throw urn_exc.create_invalid_request(
+					//   `IVALID_ROUTE_PATH`,
+					//   `Invalid route path.`
+					// );
+					return undefined;
 				}
 				return route_name;
 			}
 		}
 	}
-	throw urn_exc.create_invalid_request(
-		`INVALID_PATH_ROUTE_NOT_FOUND`,
-		`Invalid path. Route not found or invalid.`
-	);
+	// throw urn_exc.create_invalid_request(
+	//   `INVALID_PATH_ROUTE_NOT_FOUND`,
+	//   `Invalid path. Route not found or invalid.`
+	// );
+	return undefined;
 }
 
 export function is_auth_request(atom_name: types.AtomName, atom_path: string)
@@ -143,10 +155,11 @@ export function get_params_from_route_path(
 			const atom_route_splitted = atom_route_url.split('/');
 			const splitted_route_path = route_path.split('/');
 			if(atom_route_splitted.length !== splitted_route_path.length){
-				throw urn_exc.create_invalid_request(
-					`INVALID_PATH_WRONG_FORMAT`,
-					`Invalid path. Format wrong for atom [${atom_name}] route [${route_name}]`
-				);
+				// throw urn_exc.create_invalid_request(
+				//   `INVALID_PATH_WRONG_FORMAT`,
+				//   `Invalid path. Format wrong for atom [${atom_name}] route [${route_name}]`
+				// );
+				return {};
 			}
 			for(let i = 0; i < atom_route_splitted.length; i++){
 				const split = atom_route_splitted[i];
@@ -159,10 +172,11 @@ export function get_params_from_route_path(
 			return params;
 		}
 	}
-	throw urn_exc.create_invalid_request(
-		`INVALID_ROUTE_ATOM_NAME`,
-		`Invalid route or atom name.`
-	);
+	// throw urn_exc.create_invalid_request(
+	//   `INVALID_ROUTE_ATOM_NAME`,
+	//   `Invalid route or atom name.`
+	// );
+	return {};
 }
 
 function _get_atom_api(atom_name:types.AtomName){
@@ -257,12 +271,70 @@ export function handle_exception(ex:urn_exception.ExceptionInstance)
 
 export async function handle_and_store_exception(
 	ex: urn_exception.ExceptionInstance,
-	atom_request: Partial<types.Atom<'request'>>,
+	partial_api_request: Partial<types.ApiRequest>,
 	bll_errs: urn_core.bll.BLL<'error'>
 ):Promise<urn_response.Fail<any>>{
 	const urn_res = handle_exception(ex);
+	const atom_request = partial_api_request_to_atom_request(partial_api_request);
 	await store_error(urn_res, atom_request, bll_errs, ex);
 	return urn_res;
 }
 
+export function partial_api_request_to_atom_request(partial_api_request:Partial<types.ApiRequest>)
+		:types.AtomShape<'request'>{
+	const request_shape:types.AtomShape<'request'> = {
+		full_path: partial_api_request.full_path || 'NOFULLPATH',
+		route_path: partial_api_request.route_path,
+		atom_path: partial_api_request.atom_path,
+		connection_path: partial_api_request.connection_path,
+		method: partial_api_request.method,
+		atom_name: partial_api_request.atom_name,
+		route_name: partial_api_request.route_name,
+		auth_action: partial_api_request.auth_action
+	};
+	if(partial_api_request.ip){
+		partial_api_request.ip;
+	}
+	if(partial_api_request.params && Object.keys(partial_api_request.params).length > 0){
+		request_shape.params = urn_util.json.safe_stringify(partial_api_request.params);
+	}
+	if(partial_api_request.query && Object.keys(partial_api_request.query).length > 0){
+		request_shape.query = urn_util.json.safe_stringify(partial_api_request.query);
+	}
+	if(partial_api_request.body && Object.keys(partial_api_request.body).length > 0){
+		request_shape.body = urn_util.json.safe_stringify(partial_api_request.body);
+	}
+	return request_shape;
+}
 
+export function validate_request(api_request:Partial<types.ApiRequest>)
+		:types.ApiRequest{
+	if(typeof api_request.full_path !== 'string' || api_request.full_path === ''){
+		throw urn_exc.create_invalid_request(`INVALID_REQUEST_FULL_PATH`, `Invalid request. Invalid full_path.`);
+	}
+	if(typeof api_request.route_path !== 'string' || api_request.route_path === ''){
+		throw urn_exc.create_invalid_request(`INVALID_REQUEST_ROUTE_PATH`, `Invalid request. Invalid route_path.`);
+	}
+	if(typeof api_request.atom_path !== 'string' || api_request.atom_path === ''){
+		throw urn_exc.create_invalid_request(`INVALID_REQUEST_ATOM_PATH`, `Invalid request. Invalid atom_path.`);
+	}
+	// if(typeof api_request.connection_path !== 'string'){
+	//   throw urn_exc.create_invalid_request(`INVALID_REQUEST_CONN_PATH`, `Invalid request. Invalid connection_path.`);
+	// }
+	if(typeof api_request.method !== 'string' || api_request.method as string === ''){
+		throw urn_exc.create_invalid_request(`INVALID_REQUEST_METHOD`, `Invalid request. Invalid method.`);
+	}
+	if(typeof api_request.atom_name !== 'string' || api_request.atom_name as string === ''){
+		throw urn_exc.create_invalid_request(`INVALID_REQUEST_ATOM_NAME`, `Invalid request. Invalid atom_name.`);
+	}
+	if(typeof api_request.route_name !== 'string' || api_request.route_name === ''){
+		throw urn_exc.create_invalid_request(`INVALID_REQUEST_ROUTE_NAME`, `Invalid request. Invalid route_name.`);
+	}
+	if(typeof api_request.is_auth !== 'boolean'){
+		throw urn_exc.create_invalid_request(`INVALID_REQUEST_IS_AUTH`, `Invalid request. Invalid is_auth.`);
+	}
+	if(typeof api_request.auth_action !== 'string' || api_request.auth_action as string === ''){
+		throw urn_exc.create_invalid_request(`INVALID_REQUEST_AUTH_ACTION`, `Invalid request. Invalid auth_action.`);
+	}
+	return api_request as types.ApiRequest;
+}

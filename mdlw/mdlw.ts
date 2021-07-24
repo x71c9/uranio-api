@@ -20,38 +20,36 @@ import {api_config} from '../conf/defaults';
 
 import {return_default_routes} from '../routes/';
 
-import {handle_and_store_exception} from '../util/request';
+import {partial_api_request_to_atom_request} from '../util/request';
 
 import * as req_validator from './validate';
 
 import * as types from '../types';
 
-type Operation = (
-	api_request: types.ApiRequest,
-	log_blls: types.LogBlls,
-	auth_handler?: types.AuthHandler
-) => Promise<urn_response.General<any,any>>
+// type Operation = (
+//   api_request: types.ApiRequest,
+//   log_blls: types.LogBlls,
+//   auth_handler?: types.AuthHandler
+// ) => Promise<urn_response.General<any,any>>
 
-async function _catch(operation:Operation, api_request:types.ApiRequest, log_blls:types.LogBlls, auth_handler?:types.AuthHandler){
-	try{
-		return await operation(api_request, log_blls, auth_handler);
-	}catch(ex){
-		const atom_request = _api_request_to_atom_request(api_request);
-		return await handle_and_store_exception(ex, atom_request, log_blls.err);
-	}
-}
+// async function _catch(operation:Operation, api_request:types.ApiRequest, log_blls:types.LogBlls, auth_handler?:types.AuthHandler){
+//   try{
+//     return await operation(api_request, log_blls, auth_handler);
+//   }catch(ex){
+//     const atom_request = partial_api_request_to_atom_request(api_request);
+//     return await handle_and_store_exception(ex, atom_request, log_blls.err);
+//   }
+// }
 
 export async function route_middleware(api_request:types.ApiRequest, log_blls: types.LogBlls)
 		:Promise<urn_response.General<any, any>>{
-	return _catch(async (api_request: types.ApiRequest, log_blls:types.LogBlls) => {
-		await _log_route_request(api_request, log_blls.req);
-		const auth_reponse = await _authorization(api_request);
-		if(auth_reponse){
-			api_request = auth_reponse;
-		}
-		api_request = _limit(api_request);
-		return await _validate_and_call(api_request);
-	}, api_request, log_blls);
+	await _log_route_request(api_request, log_blls.req);
+	const auth_reponse = await _authorization(api_request);
+	if(auth_reponse){
+		api_request = auth_reponse;
+	}
+	api_request = _limit(api_request);
+	return await _validate_and_call(api_request);
 }
 
 export async function auth_route_middleware(
@@ -59,13 +57,11 @@ export async function auth_route_middleware(
 	log_blls: types.LogBlls,
 	auth_handler: types.AuthHandler
 ):Promise<urn_response.General<any, any>>{
-	return _catch(async (api_request: types.ApiRequest, log_blls:types.LogBlls, auth_handler?:types.AuthHandler) => {
-		await _log_auth_route_request(api_request, log_blls.req);
-		if(typeof auth_handler !== 'function'){
-			throw urn_exc.create(`INVALID_AUTH_HANDLER`, `Missing or invalid auth handler.`);
-		}
-		return await _auth_validate_and_call(api_request, auth_handler);
-	}, api_request, log_blls, auth_handler);
+	await _log_auth_route_request(api_request, log_blls.req);
+	if(typeof auth_handler !== 'function'){
+		throw urn_exc.create(`INVALID_AUTH_HANDLER`, `Missing or invalid auth handler.`);
+	}
+	return await _auth_validate_and_call(api_request, auth_handler);
 }
 
 async function _authorization(api_request:types.ApiRequest) {
@@ -96,7 +92,7 @@ async function _validate_and_call(api_request: types.ApiRequest){
 	
 	urn_log.fn_debug(`Router ${route_def.method} [${api_request.atom_name}] ${api_request.full_path}`);
 	
-	_validate(api_request);
+	_validate_route(api_request);
 	
 	let call_response = await route_def.call(api_request);
 	
@@ -146,7 +142,7 @@ function _auth_validate(api_request:types.ApiRequest)
 	
 }
 
-function _validate(api_request:types.ApiRequest)
+function _validate_route(api_request:types.ApiRequest)
 		:void{
 	
 	const route_def = _get_route_def(api_request);
@@ -243,7 +239,7 @@ async function _log_route_request(
 	bll_reqs: urn_core.bll.BLL<'request'>
 ):Promise<types.AtomShape<'request'>>{
 	
-	const request_shape = _api_request_to_atom_request(api_request);
+	const request_shape = partial_api_request_to_atom_request(api_request);
 	
 	try{
 		return await bll_reqs.insert_new(request_shape);
@@ -261,7 +257,7 @@ async function _log_auth_route_request(
 	bll_reqs: urn_core.bll.BLL<'request'>
 ):Promise<types.AtomShape<'request'>>{
 	
-	const request_shape = _api_request_to_atom_request(auth_request);
+	const request_shape = partial_api_request_to_atom_request(auth_request);
 	
 	const auth_request_clone = {...request_shape};
 	if(auth_request_clone.body){
@@ -281,30 +277,30 @@ async function _log_auth_route_request(
 	}
 }
 
-function _api_request_to_atom_request(api_request: types.ApiRequest)
-		:types.AtomShape<'request'>{
-	const request_shape:types.AtomShape<'request'> = {
-		full_path: api_request.full_path,
-		route_path: api_request.route_path,
-		atom_path: api_request.atom_path,
-		connection_path: api_request.connection_path,
-		method: api_request.method,
-		atom_name: api_request.atom_name,
-		route_name: api_request.route_name,
-		auth_action: api_request.auth_action
-	};
-	if(api_request.ip){
-		api_request.ip;
-	}
-	if(api_request.params && Object.keys(api_request.params).length > 0){
-		request_shape.params = JSON.stringify(api_request.params);
-	}
-	if(api_request.query && Object.keys(api_request.query).length > 0){
-		request_shape.query = JSON.stringify(api_request.query);
-	}
-	if(api_request.body && Object.keys(api_request.body).length > 0){
-		request_shape.body = JSON.stringify(api_request.body);
-	}
-	return request_shape;
-}
+// function partial_api_request_to_atom_request(api_request: types.ApiRequest)
+//     :types.AtomShape<'request'>{
+//   const request_shape:types.AtomShape<'request'> = {
+//     full_path: api_request.full_path,
+//     route_path: api_request.route_path,
+//     atom_path: api_request.atom_path,
+//     connection_path: api_request.connection_path,
+//     method: api_request.method,
+//     atom_name: api_request.atom_name,
+//     route_name: api_request.route_name,
+//     auth_action: api_request.auth_action
+//   };
+//   if(api_request.ip){
+//     api_request.ip;
+//   }
+//   if(api_request.params && Object.keys(api_request.params).length > 0){
+//     request_shape.params = JSON.stringify(api_request.params);
+//   }
+//   if(api_request.query && Object.keys(api_request.query).length > 0){
+//     request_shape.query = JSON.stringify(api_request.query);
+//   }
+//   if(api_request.body && Object.keys(api_request.body).length > 0){
+//     request_shape.body = JSON.stringify(api_request.body);
+//   }
+//   return request_shape;
+// }
 

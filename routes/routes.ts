@@ -23,15 +23,15 @@ export function return_default_routes(atom_name:AtomName)
 			action: book_types.AuthAction.READ,
 			url: '/',
 			query: ['filter', 'options'],
-			call: async (route_request:book_types.ApiRequest) => {
+			call: async (api_request:book_types.ApiRequest) => {
 				urn_log.fn_debug(`Router Call GET [find] / [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
-					route_request.passport
+					api_request.passport
 				) as urn_core.bll.BLL<typeof atom_name>;
 				const bll_res = await urn_bll.find(
-					route_request.query.filter,
-					route_request.query.options
+					api_request.query.filter,
+					api_request.query.options
 				);
 				return bll_res;
 			}
@@ -41,15 +41,15 @@ export function return_default_routes(atom_name:AtomName)
 			action: book_types.AuthAction.READ,
 			url: '/:id',
 			query: ['options'],
-			call: async (route_request:book_types.ApiRequest) => {
+			call: async (api_request:book_types.ApiRequest) => {
 				urn_log.fn_debug(`Router Call GET [find_id] /:id [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
-					route_request.passport
+					api_request.passport
 				) as urn_core.bll.BLL<typeof atom_name>;
 				const bll_res = await urn_bll.find_by_id(
-					route_request.params.id!,
-					route_request.query.options
+					api_request.params.id!,
+					api_request.query.options
 				);
 				return bll_res;
 			}
@@ -59,15 +59,15 @@ export function return_default_routes(atom_name:AtomName)
 			action: book_types.AuthAction.READ,
 			url: '/',
 			query: ['filter', 'options'],
-			call: async (route_request:book_types.ApiRequest) => {
+			call: async (api_request:book_types.ApiRequest) => {
 				urn_log.fn_debug(`Router Call GET [find_one] / [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
-					route_request.passport
+					api_request.passport
 				) as urn_core.bll.BLL<typeof atom_name>;
 				const bll_res = await urn_bll.find_one(
-					route_request.query.filter,
-					route_request.query.options
+					api_request.query.filter,
+					api_request.query.options
 				);
 				return bll_res;
 			}
@@ -76,13 +76,13 @@ export function return_default_routes(atom_name:AtomName)
 			method: book_types.RouteMethod.POST,
 			action: book_types.AuthAction.WRITE,
 			url: '/',
-			call: async (route_request:book_types.ApiRequest) => {
+			call: async (api_request:book_types.ApiRequest) => {
 				urn_log.fn_debug(`Router Call POST [insert] / [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
-					route_request.passport
+					api_request.passport
 				) as urn_core.bll.BLL<typeof atom_name>;
-				const bll_res = await urn_bll.insert_new(route_request.body);
+				const bll_res = await urn_bll.insert_new(api_request.body);
 				return bll_res;
 			}
 		},
@@ -90,15 +90,15 @@ export function return_default_routes(atom_name:AtomName)
 			method: book_types.RouteMethod.POST,
 			action: book_types.AuthAction.WRITE,
 			url: '/:id',
-			call: async (route_request:book_types.ApiRequest) => {
+			call: async (api_request:book_types.ApiRequest) => {
 				urn_log.fn_debug(`Router Call POST [update] / [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
-					route_request.passport
+					api_request.passport
 				) as urn_core.bll.BLL<typeof atom_name>;
 				const bll_res = await urn_bll.update_by_id(
-					route_request.params.id!,
-					route_request.body
+					api_request.params.id!,
+					api_request.body
 				);
 				return bll_res;
 			}
@@ -107,13 +107,13 @@ export function return_default_routes(atom_name:AtomName)
 			method: book_types.RouteMethod.DELETE,
 			action: book_types.AuthAction.WRITE,
 			url: '/:id',
-			call: async (route_request:book_types.ApiRequest) => {
+			call: async (api_request:book_types.ApiRequest) => {
 				urn_log.fn_debug(`Router Call DELETE [delete] / [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
-					route_request.passport
+					api_request.passport
 				) as urn_core.bll.BLL<typeof atom_name>;
-				const bll_res = await urn_bll.remove_by_id(route_request.params.id!);
+				const bll_res = await urn_bll.remove_by_id(api_request.params.id!);
 				return bll_res;
 			}
 		}
@@ -128,10 +128,10 @@ export function return_default_routes(atom_name:AtomName)
 //       method: book_types.RouteMethod.POST,
 //       action: book_types.AuthAction.READ,
 //       url: '',
-//       call: async (route_request:book_types.ApiRequest) => {
+//       call: async (api_request:book_types.ApiRequest) => {
 //         const token = await auth_bll.authenticate(
-//           route_request.body.email,
-//           route_request.body.password
+//           api_request.body.email,
+//           api_request.body.password
 //         );
 //         return token;
 //         // return res.header('x-auth-token', token).status(200).send({});

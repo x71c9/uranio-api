@@ -6,60 +6,83 @@
 
 import express from 'express';
 
-import {urn_response, urn_exception} from 'urn-lib';
-
-const urn_exc = urn_exception.init(`COMMONEXPRESS`, `Common express routes module`);
-
+import {urn_response} from 'urn-lib';
 import {
 	process_request_path,
 	get_atom_name_from_atom_path,
 	get_route_name,
 	is_auth_request,
-	get_auth_action
+	get_auth_action,
 } from '../../../util/request';
 
 import * as types from '../../../types';
 
-export function express_request_to_api_request(req:express.Request)
-		:types.ApiRequest{
+export function express_request_to_partial_api_request(req:express.Request)
+		:Partial<types.ApiRequest>{
+	
+	let api_request:Partial<types.ApiRequest> = {
+		full_path: req.originalUrl,
+		params: req.params,
+		query: req.query
+	};
 	
 	const api_request_paths = process_request_path(req.originalUrl);
 	
+	if(!api_request_paths.atom_path){
+		return api_request;
+	}
+	
+	api_request = {
+		...api_request,
+		...api_request_paths
+	};
+	
 	const atom_name = get_atom_name_from_atom_path(api_request_paths.atom_path);
 	
-	let method = types.RouteMethod.GET;
+	if(!atom_name){
+		return api_request;
+	}
+	
+	api_request.atom_name = atom_name;
+	
 	switch(req.method.toUpperCase()){
 		case 'GET':{
-			method = types.RouteMethod.GET;
+			api_request.method = types.RouteMethod.GET;
 			break;
 		}
 		case 'POST':{
-			method = types.RouteMethod.POST;
+			api_request.method = types.RouteMethod.POST;
 			break;
 		}
 		case 'DELETE':{
-			method = types.RouteMethod.DELETE;
+			api_request.method = types.RouteMethod.DELETE;
 			break;
 		}
 		default:{
-			throw urn_exc.create(`INVALID_HTTP_METHOD`, `Invalid http method [${req.method}]`);
+			return api_request;
 		}
 	}
 	
-	const route_name = get_route_name(atom_name, api_request_paths.route_path, method);
+	const route_name = get_route_name(atom_name, api_request_paths.route_path, api_request.method);
+	
+	if(!route_name){
+		return api_request;
+	}
+	
+	api_request.route_name = route_name;
 	
 	const is_auth = is_auth_request(atom_name, api_request_paths.atom_path);
 	
-	const api_request:types.ApiRequest = {
-		...api_request_paths,
-		route_name: route_name,
-		atom_name: atom_name,
-		is_auth: is_auth,
-		params: req.params,
-		query: req.query,
-		method: method,
-		auth_action: get_auth_action(atom_name, route_name)
-	};
+	api_request.is_auth = is_auth;
+	
+	const auth_action = get_auth_action(atom_name, route_name);
+
+	if(!auth_action){
+		return api_request;
+	}
+	
+	api_request.auth_action = auth_action;
+	
 	if(req.body){
 		api_request.body = req.body;
 	}
@@ -73,6 +96,7 @@ export function express_request_to_api_request(req:express.Request)
 	if(req.ip){
 		api_request.ip = req.ip;
 	}
+	
 	return api_request;
 	
 }
