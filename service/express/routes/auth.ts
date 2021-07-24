@@ -12,11 +12,11 @@ import urn_core from 'uranio-core';
 
 import * as types from '../../../types';
 
-// import {auth_route_middlewares} from '../mdlw';
-
 import {auth_route_middleware} from '../../../mdlw/';
 
-import {express_request_to_api_request, return_uranio_response_to_express} from './common';
+import {validate_request, handle_and_store_exception} from '../../../util/request';
+
+import {express_request_to_partial_api_request, return_uranio_response_to_express} from './common';
 
 export function create_express_auth_route<A extends types.AuthName>(atom_name:A, log_blls:types.LogBlls)
 		:express.Router{
@@ -49,10 +49,15 @@ function _return_express_auth_middleware(
 		_next: express.NextFunction
 	) => {
 		
-		const api_request = express_request_to_api_request(req);
+		const partial_api_request = express_request_to_partial_api_request(req);
+		try{
+			const api_request = validate_request(partial_api_request);
+			const urn_res = await auth_route_middleware(api_request, log_blls, handler);
+			return return_uranio_response_to_express(urn_res, res);
+		}catch(ex){
+			const urn_err = await handle_and_store_exception(ex, partial_api_request, log_blls.err);
+			return return_uranio_response_to_express(urn_err, res);
+		}
 		
-		const urn_res = await auth_route_middleware(api_request, log_blls, handler);
-		
-		return return_uranio_response_to_express(urn_res, res);
 	};
 }

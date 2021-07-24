@@ -6,7 +6,7 @@
 
 import urn_core from 'uranio-core';
 
-const bll_errors = urn_core.bll.log.create('error');
+// const bll_errors = urn_core.bll.log.create('error');
 
 /*
  * Function for handling exception.
@@ -14,7 +14,8 @@ const bll_errors = urn_core.bll.log.create('error');
  *
  * @params ex - The exception
  */
-function handle_exception(service_name:string):(...args:any[]) => any {
+function handle_exception(service_name:string, bll_errors:urn_core.bll.BLL<'error'>)
+		:(...args:any[]) => any {
 	return async (ex:Error):Promise<void> => {
 		console.error(service_name, ex);
 		try {
@@ -39,7 +40,8 @@ function handle_exception(service_name:string):(...args:any[]) => any {
  * @param reason - the reason
  * @param promise - the promise
  */
-function handle_rejected_promise(service_name:string):(...args:any[]) => any {
+function handle_rejected_promise(service_name:string, bll_errors:urn_core.bll.BLL<'error'>)
+		:(...args:any[]) => any {
 	return async (reason:any, promise:Promise<any>):Promise<void> => {
 		console.error(service_name, reason, promise);
 		try {
@@ -61,10 +63,10 @@ function handle_rejected_promise(service_name:string):(...args:any[]) => any {
  * Function that will assign to process uncaughtException handle_exception and
  * to unhandledRejection handleRejectionPromise functions.
  */
-export function register_exception_handler(name:string):void {
+export function register_exception_handler(name:string, bll_errors:urn_core.bll.BLL<'error'>):void {
 	
-	process.on('uncaughtException', handle_exception(name));
-	process.on('unhandledRejection', handle_rejected_promise(name));
+	process.on('uncaughtException', handle_exception(name, bll_errors));
+	process.on('unhandledRejection', handle_rejected_promise(name, bll_errors));
 	
 }
 

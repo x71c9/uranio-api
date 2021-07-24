@@ -4,7 +4,10 @@
  * @packageDocumentation
  */
 
+// import {urn_log, urn_response, urn_exception} from 'urn-lib';
 import {urn_log, urn_response} from 'urn-lib';
+
+// const urn_exc = urn_exception.init('NETLIFYCLASS', 'Netlify class module');
 
 import urn_core from 'uranio-core';
 
@@ -15,6 +18,8 @@ import {
 	is_auth_request,
 	get_params_from_route_path,
 	get_auth_action,
+	handle_and_store_exception,
+	validate_request
 } from '../../util/request';
 
 import {route_middleware, auth_route_middleware} from '../../mdlw/';
@@ -44,12 +49,18 @@ class NetlifyLambda implements Lambda {
 	
 	public async handle(event:LambdaEvent, context:LambdaContext)
 			:Promise<HandlerResponse> {
-		const urn_res = await this.lambda_route(event, context);
-		return _lambda_response(urn_res);
+		const partial_api_request = _lambda_request_to_partial_api_request(event, context);
+		try{
+			const api_request = validate_request(partial_api_request);
+			const urn_res = await this.lambda_route(api_request);
+			return _lambda_response(urn_res);
+		}catch(ex){
+			const urn_err = await handle_and_store_exception(ex, partial_api_request, this.bll_errors);
+			return _lambda_response(urn_err);
+		}
 	}
 	
-	public async lambda_route(event:LambdaEvent, context:LambdaContext){
-		const api_request = _lambda_request_to_api_request(event, context);
+	public async lambda_route(api_request:types.ApiRequest){
 		const log_blls = {
 			req: this.bll_requests,
 			err: this.bll_errors
@@ -76,31 +87,45 @@ class NetlifyLambda implements Lambda {
 	
 }
 
-function _lambda_request_to_api_request(event: LambdaEvent, context: LambdaContext){
-	const api_request_paths = process_request_path(event.path);
+// async function _lambda_handle_exception(
+//   ex: urn_exception.ExceptionInstance,
+//   partial_api_request: Partial<types.ApiRequest>,
+//   bll_errs: urn_core.bll.BLL<'error'>
+// ){
+//   const atom_request = partial_api_request_to_atom_request(partial_api_request);
+//   return await handle_and_store_exception(ex, atom_request, bll_errs);
+// }
 
+function _lambda_request_to_partial_api_request(event: LambdaEvent, context: LambdaContext){
+	
+	const api_request_paths = process_request_path(event.path);
+	
+	const api_request:Partial<types.ApiRequest> = {
+		...api_request_paths,
+		method: event.httpMethod,
+		params: {},
+		query: event.queryStringParameters || {},
+	};
+	
 	const atom_name = get_atom_name_from_atom_path(api_request_paths.atom_path);
+	if(!atom_name){
+		return api_request;
+	}
+	
+	api_request.atom_name = atom_name;
+	
 	const route_name = get_route_name(atom_name, api_request_paths.route_path, event.httpMethod);
+	if(!route_name){
+		return api_request;
+	}
 	
 	const is_auth = is_auth_request(atom_name, api_request_paths.atom_path);
 	const auth_action = get_auth_action(atom_name, route_name);
 	
 	const ip = context.identity?.sourceIp || event.headers['client-ip'] || event.headers['X-Nf-Client-Connection-Ip'];
+	
 	const params = get_params_from_route_path(atom_name, route_name, api_request_paths.route_path);
 	
-	const api_request:types.ApiRequest = {
-		...api_request_paths,
-		// ****
-		// TODO HTTP methods need to be all implemented.
-		// ****
-		method: event.httpMethod,
-		atom_name: atom_name,
-		route_name: route_name,
-		is_auth: is_auth,
-		auth_action: auth_action,
-		params: params,
-		query: event.queryStringParameters || {},
-	};
 	if(event.body){
 		api_request.body = event.body;
 	}
@@ -110,6 +135,13 @@ function _lambda_request_to_api_request(event: LambdaEvent, context: LambdaConte
 	if(ip){
 		api_request.ip = ip;
 	}
+	
+	api_request.route_name = route_name;
+	api_request.is_auth = is_auth;
+	api_request.auth_action = auth_action;
+	api_request.ip = ip;
+	api_request.params = params;
+	
 	return api_request;
 }
 
