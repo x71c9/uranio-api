@@ -5,7 +5,7 @@
  */
 
 // import {urn_log, urn_response, urn_exception} from 'urn-lib';
-import {urn_log, urn_response} from 'urn-lib';
+import {urn_log, urn_response, urn_util} from 'urn-lib';
 
 // const urn_exc = urn_exception.init('NETLIFYCLASS', 'Netlify class module');
 
@@ -153,8 +153,7 @@ function _lambda_response(
 ):HandlerResponse{
 	const handler_response:HandlerResponse = {
 		statusCode: urn_resp.status,
-		// body: JSON.stringify(urn_resp),
-		body: urn_resp
+		body: urn_util.json.safe_stringify(urn_resp),
 	};
 	if(headers){
 		handler_response.headers = headers;
