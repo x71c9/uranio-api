@@ -16,7 +16,7 @@ import {return_default_routes} from '../routes/';
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 
-const urn_exc = urn_exception.init(`UTILREQUEST`, `Util request module`);
+const urn_exc = urn_exception.init(`REQUEST`, `Util request module`);
 
 import * as types from '../types';
 
@@ -223,8 +223,10 @@ export async function store_error(
 	}
 }
 
-export function handle_exception(ex:urn_exception.ExceptionInstance)
-		:urn_response.Fail<any>{
+export function api_handle_exception(
+	ex: urn_exception.ExceptionInstance,
+	partial_api_request: Partial<types.ApiRequest>
+):urn_response.Fail<any>{
 	let status = 500;
 	let msg = 'Internal Server Error';
 	let error_code = '500';
@@ -264,17 +266,18 @@ export function handle_exception(ex:urn_exception.ExceptionInstance)
 		status,
 		msg,
 		error_code,
-		error_msg
+		error_msg,
+		partial_api_request
 	);
 	return urn_res;
 }
 
-export async function handle_and_store_exception(
+export async function api_handle_and_store_exception(
 	ex: urn_exception.ExceptionInstance,
 	partial_api_request: Partial<types.ApiRequest>,
 	bll_errs: urn_core.bll.BLL<'error'>
 ):Promise<urn_response.Fail<any>>{
-	const urn_res = handle_exception(ex);
+	const urn_res = api_handle_exception(ex, partial_api_request);
 	const atom_request = partial_api_request_to_atom_request(partial_api_request);
 	await store_error(urn_res, atom_request, bll_errs, ex);
 	return urn_res;
@@ -310,31 +313,57 @@ export function partial_api_request_to_atom_request(partial_api_request:Partial<
 export function validate_request(api_request:Partial<types.ApiRequest>)
 		:types.ApiRequest{
 	if(typeof api_request.full_path !== 'string' || api_request.full_path === ''){
-		throw urn_exc.create_invalid_request(`INVALID_REQUEST_FULL_PATH`, `Invalid request. Invalid full_path.`);
+		throw urn_exc.create_invalid_request(
+			`INVALID_PATH_FULL_PATH`,
+			`Invalid path. [full_path] [${api_request.full_path}].
+		`);
 	}
 	if(typeof api_request.route_path !== 'string' || api_request.route_path === ''){
-		throw urn_exc.create_invalid_request(`INVALID_REQUEST_ROUTE_PATH`, `Invalid request. Invalid route_path.`);
+		throw urn_exc.create_invalid_request(
+			`INVALID_PATH_ROUTE_PATH`,
+			`Invalid path. [route_path] [${api_request.full_path}].`
+		);
 	}
 	if(typeof api_request.atom_path !== 'string' || api_request.atom_path === ''){
-		throw urn_exc.create_invalid_request(`INVALID_REQUEST_ATOM_PATH`, `Invalid request. Invalid atom_path.`);
+		throw urn_exc.create_invalid_request(
+			`INVALID_PATH_ATOM_PATH`,
+			`Invalid path. [atom_path] [${api_request.full_path}].`);
 	}
-	// if(typeof api_request.connection_path !== 'string'){
-	//   throw urn_exc.create_invalid_request(`INVALID_REQUEST_CONN_PATH`, `Invalid request. Invalid connection_path.`);
-	// }
+	if(typeof api_request.connection_path !== 'string'){
+		throw urn_exc.create_invalid_request(
+			`INVALID_PATH_CONN_PATH`,
+			`Invalid path. [connection_path] [${api_request.full_path}].`
+		);
+	}
 	if(typeof api_request.method !== 'string' || api_request.method as string === ''){
-		throw urn_exc.create_invalid_request(`INVALID_REQUEST_METHOD`, `Invalid request. Invalid method.`);
+		throw urn_exc.create_invalid_request(
+			`INVALID_METHOD`,
+			`Invalid method. [${api_request.method}].`
+		);
 	}
 	if(typeof api_request.atom_name !== 'string' || api_request.atom_name as string === ''){
-		throw urn_exc.create_invalid_request(`INVALID_REQUEST_ATOM_NAME`, `Invalid request. Invalid atom_name.`);
+		throw urn_exc.create_invalid_request(
+			`INVALID_ATOM_NAME`,
+			`Invalid atom name. Full path [${api_request.full_path}].`
+		);
 	}
 	if(typeof api_request.route_name !== 'string' || api_request.route_name === ''){
-		throw urn_exc.create_invalid_request(`INVALID_REQUEST_ROUTE_NAME`, `Invalid request. Invalid route_name.`);
+		throw urn_exc.create_invalid_request(
+			`INVALID_ROUTE_NAME`,
+			`Invalid route name. Full path [${api_request.full_path}].`
+		);
 	}
 	if(typeof api_request.is_auth !== 'boolean'){
-		throw urn_exc.create_invalid_request(`INVALID_REQUEST_IS_AUTH`, `Invalid request. Invalid is_auth.`);
+		throw urn_exc.create_invalid_request(
+			`INVALID_IS_AUTH`,
+			`Invalid is_auth.`
+		);
 	}
 	if(typeof api_request.auth_action !== 'string' || api_request.auth_action as string === ''){
-		throw urn_exc.create_invalid_request(`INVALID_REQUEST_AUTH_ACTION`, `Invalid request. Invalid auth_action.`);
+		throw urn_exc.create_invalid_request(
+			`INVALID_AUTH_ACTION`,
+			`Invalid auth action. [${api_request.auth_action}].`
+		);
 	}
 	return api_request as types.ApiRequest;
 }

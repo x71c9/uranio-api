@@ -14,7 +14,7 @@ import * as types from '../../../types';
 
 import {auth_route_middleware} from '../../../mdlw/';
 
-import {validate_request, handle_and_store_exception} from '../../../util/request';
+import {validate_request, api_handle_and_store_exception} from '../../../util/request';
 
 import {express_request_to_partial_api_request, return_uranio_response_to_express} from './common';
 
@@ -55,7 +55,7 @@ function _return_express_auth_middleware(
 			const urn_res = await auth_route_middleware(api_request, log_blls, handler);
 			return return_uranio_response_to_express(urn_res, res);
 		}catch(ex){
-			const urn_err = await handle_and_store_exception(ex, partial_api_request, log_blls.err);
+			const urn_err = await api_handle_and_store_exception(ex, partial_api_request, log_blls.err);
 			return return_uranio_response_to_express(urn_err, res);
 		}
 		
