@@ -55,7 +55,7 @@ class NetlifyLambda implements Lambda {
 			const urn_res = await this.lambda_route(api_request);
 			return _lambda_response(urn_res);
 		}catch(ex){
-			const urn_err = await api_handle_and_store_exception(ex, partial_api_request, this.bll_errors);
+			const urn_err = api_handle_and_store_exception(ex, partial_api_request, this.bll_errors);
 			return _lambda_response(urn_err);
 		}
 	}

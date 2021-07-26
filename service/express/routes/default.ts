@@ -83,7 +83,7 @@ function _return_express_middleware(log_blls:types.LogBlls){
 			const urn_res = await route_middleware(api_request, log_blls);
 			return return_uranio_response_to_express(urn_res, res);
 		}catch(ex){
-			const urn_err = await api_handle_and_store_exception(ex, partial_api_request, log_blls.err);
+			const urn_err = api_handle_and_store_exception(ex, partial_api_request, log_blls.err);
 			return return_uranio_response_to_express(urn_err, res);
 		}
 		

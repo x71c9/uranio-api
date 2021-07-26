@@ -43,7 +43,7 @@ import * as types from '../types';
 
 export async function route_middleware(api_request:types.ApiRequest, log_blls: types.LogBlls)
 		:Promise<urn_response.General<any, any>>{
-	await _log_route_request(api_request, log_blls.req);
+	_log_route_request(api_request, log_blls.req);
 	const auth_reponse = await _authorization(api_request);
 	if(auth_reponse){
 		api_request = auth_reponse;
@@ -57,7 +57,7 @@ export async function auth_route_middleware(
 	log_blls: types.LogBlls,
 	auth_handler: types.AuthHandler
 ):Promise<urn_response.General<any, any>>{
-	await _log_auth_route_request(api_request, log_blls.req);
+	_log_auth_route_request(api_request, log_blls.req);
 	if(typeof auth_handler !== 'function'){
 		throw urn_exc.create(`INVALID_AUTH_HANDLER`, `Missing or invalid auth handler.`);
 	}
