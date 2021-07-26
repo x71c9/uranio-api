@@ -141,10 +141,5 @@ export type ApiRequestQuery = {
 	[k:string]: any
 }
 
-export type LogBlls = {
-	req: urn_core.bll.BLL<'request'>,
-	err: urn_core.bll.BLL<'error'>
-}
-
 export type AuthHandler = (api_request:ApiRequest) => Promise<string>;
 

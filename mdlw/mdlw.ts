@@ -20,30 +20,17 @@ import {api_config} from '../conf/defaults';
 
 import {return_default_routes} from '../routes/';
 
+import * as insta from '../nst/';
+
 import {partial_api_request_to_atom_request} from '../util/request';
 
 import * as req_validator from './validate';
 
 import * as types from '../types';
 
-// type Operation = (
-//   api_request: types.ApiRequest,
-//   log_blls: types.LogBlls,
-//   auth_handler?: types.AuthHandler
-// ) => Promise<urn_response.General<any,any>>
-
-// async function _catch(operation:Operation, api_request:types.ApiRequest, log_blls:types.LogBlls, auth_handler?:types.AuthHandler){
-//   try{
-//     return await operation(api_request, log_blls, auth_handler);
-//   }catch(ex){
-//     const atom_request = partial_api_request_to_atom_request(api_request);
-//     return await handle_and_store_exception(ex, atom_request, log_blls.err);
-//   }
-// }
-
-export async function route_middleware(api_request:types.ApiRequest, log_blls: types.LogBlls)
+export async function route_middleware(api_request:types.ApiRequest)
 		:Promise<urn_response.General<any, any>>{
-	_log_route_request(api_request, log_blls.req);
+	_log_route_request(api_request);
 	const auth_reponse = await _authorization(api_request);
 	if(auth_reponse){
 		api_request = auth_reponse;
@@ -54,10 +41,9 @@ export async function route_middleware(api_request:types.ApiRequest, log_blls: t
 
 export async function auth_route_middleware(
 	api_request: types.ApiRequest,
-	log_blls: types.LogBlls,
 	auth_handler: types.AuthHandler
 ):Promise<urn_response.General<any, any>>{
-	_log_auth_route_request(api_request, log_blls.req);
+	_log_auth_route_request(api_request);
 	if(typeof auth_handler !== 'function'){
 		throw urn_exc.create(`INVALID_AUTH_HANDLER`, `Missing or invalid auth handler.`);
 	}
@@ -234,14 +220,13 @@ function _get_atom_api(atom_name:types.AtomName)
 	
 }
 
-async function _log_route_request(
-	api_request: types.ApiRequest,
-	bll_reqs: urn_core.bll.BLL<'request'>
-):Promise<types.AtomShape<'request'>>{
+async function _log_route_request(api_request: types.ApiRequest)
+		:Promise<types.AtomShape<'request'>>{
 	
 	const request_shape = partial_api_request_to_atom_request(api_request);
 	
 	try{
+		const bll_reqs = insta.get_bll_request();
 		return await bll_reqs.insert_new(request_shape);
 	}catch(ex){
 		console.error('CANNOT LOG REQUEST', ex);
@@ -252,10 +237,8 @@ async function _log_route_request(
 	}
 }
 
-async function _log_auth_route_request(
-	auth_request: types.ApiRequest,
-	bll_reqs: urn_core.bll.BLL<'request'>
-):Promise<types.AtomShape<'request'>>{
+async function _log_auth_route_request(auth_request: types.ApiRequest)
+		:Promise<types.AtomShape<'request'>>{
 	
 	const request_shape = partial_api_request_to_atom_request(auth_request);
 	
@@ -267,6 +250,7 @@ async function _log_auth_route_request(
 	}
 	
 	try{
+		const bll_reqs = insta.get_bll_request();
 		return await bll_reqs.insert_new(auth_request_clone);
 	}catch(ex){
 		console.error('CANNOT LOG AUTH REQUEST', ex);
