@@ -18,7 +18,7 @@ import {
 	is_auth_request,
 	get_params_from_route_path,
 	get_auth_action,
-	handle_and_store_exception,
+	api_handle_and_store_exception,
 	validate_request
 } from '../../util/request';
 
@@ -55,7 +55,7 @@ class NetlifyLambda implements Lambda {
 			const urn_res = await this.lambda_route(api_request);
 			return _lambda_response(urn_res);
 		}catch(ex){
-			const urn_err = await handle_and_store_exception(ex, partial_api_request, this.bll_errors);
+			const urn_err = await api_handle_and_store_exception(ex, partial_api_request, this.bll_errors);
 			return _lambda_response(urn_err);
 		}
 	}
