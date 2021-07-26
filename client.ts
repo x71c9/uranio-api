@@ -6,7 +6,7 @@
 
 import core from 'uranio-core/client';
 
-import * as types from './export';
+import * as types from './typ/client';
 
 export default {
 	core,
