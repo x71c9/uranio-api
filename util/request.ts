@@ -272,14 +272,14 @@ export function api_handle_exception(
 	return urn_res;
 }
 
-export async function api_handle_and_store_exception(
+export function api_handle_and_store_exception(
 	ex: urn_exception.ExceptionInstance,
 	partial_api_request: Partial<types.ApiRequest>,
 	bll_errs: urn_core.bll.BLL<'error'>
-):Promise<urn_response.Fail<any>>{
+):urn_response.Fail<any>{
 	const urn_res = api_handle_exception(ex, partial_api_request);
 	const atom_request = partial_api_request_to_atom_request(partial_api_request);
-	await store_error(urn_res, atom_request, bll_errs, ex);
+	store_error(urn_res, atom_request, bll_errs, ex);
 	return urn_res;
 }
 
