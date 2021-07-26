@@ -10,6 +10,8 @@ urn_log.defaults.log_level = urn_log.LogLevel.FUNCTION_DEBUG;
 
 import urn_api from './index';
 
+// console.log(urn_api.lib.log.defaults);
+
 // const express_service = urn_api.service.create();
 
 // express_service.listen(3000, () => {

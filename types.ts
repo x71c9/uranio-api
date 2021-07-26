@@ -142,7 +142,7 @@ export type ApiRequestQuery = {
 }
 
 export type LogBlls = {
-	req: urn_core.bll.BLL<'request'>
+	req: urn_core.bll.BLL<'request'>,
 	err: urn_core.bll.BLL<'error'>
 }
 
