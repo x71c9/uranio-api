@@ -39,14 +39,6 @@ import {
 @urn_log.util.decorators.debug_methods
 class NetlifyLambda implements Lambda {
 	
-	public bll_requests:urn_core.bll.BLL<'request'>;
-	public bll_errors:urn_core.bll.BLL<'error'>;
-	
-	constructor(){
-		this.bll_requests = urn_core.bll.log.create('request');
-		this.bll_errors = urn_core.bll.log.create('error');
-	}
-	
 	public async handle(event:LambdaEvent, context:LambdaContext)
 			:Promise<HandlerResponse> {
 		const partial_api_request = _lambda_request_to_partial_api_request(event, context);
@@ -55,16 +47,12 @@ class NetlifyLambda implements Lambda {
 			const urn_res = await this.lambda_route(api_request);
 			return _lambda_response(urn_res);
 		}catch(ex){
-			const urn_err = api_handle_and_store_exception(ex, partial_api_request, this.bll_errors);
+			const urn_err = api_handle_and_store_exception(ex, partial_api_request);
 			return _lambda_response(urn_err);
 		}
 	}
 	
 	public async lambda_route(api_request:types.ApiRequest){
-		const log_blls = {
-			req: this.bll_requests,
-			err: this.bll_errors
-		};
 		if(api_request.is_auth){
 			// ****
 			// TODO CHECK - Maybe this can be a bad idea - to create the BLL on request
@@ -79,22 +67,13 @@ class NetlifyLambda implements Lambda {
 				);
 				return token;
 			};
-			return auth_route_middleware(api_request, log_blls, auth_handler);
+			return auth_route_middleware(api_request, auth_handler);
 		}else{
-			return route_middleware(api_request, log_blls);
+			return route_middleware(api_request);
 		}
 	}
 	
 }
-
-// async function _lambda_handle_exception(
-//   ex: urn_exception.ExceptionInstance,
-//   partial_api_request: Partial<types.ApiRequest>,
-//   bll_errs: urn_core.bll.BLL<'error'>
-// ){
-//   const atom_request = partial_api_request_to_atom_request(partial_api_request);
-//   return await handle_and_store_exception(ex, atom_request, bll_errs);
-// }
 
 function _lambda_request_to_partial_api_request(event: LambdaEvent, context: LambdaContext){
 	

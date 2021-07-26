@@ -6,13 +6,13 @@
 
 import {urn_util, urn_response, urn_return, urn_log, urn_exception} from 'urn-lib';
 
-import urn_core from 'uranio-core';
-
 import {api_book} from 'uranio-books/api';
 
 import {api_config} from '../conf/defaults';
 
 import {return_default_routes} from '../routes/';
+
+import * as insta from '../nst/';
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 
@@ -197,7 +197,6 @@ function _get_atom_api(atom_name:types.AtomName){
 export async function store_error(
 	urn_res: urn_response.Fail,
 	atom_request: Partial<types.Atom<'request'>>,
-	bll_errs: urn_core.bll.BLL<'error'>,
 	ex?: urn_exception.ExceptionInstance,
 ):Promise<types.Atom<'error'> | undefined>{
 	try{
@@ -213,6 +212,7 @@ export async function store_error(
 		if(ex && !ex.type){
 			error_log.stack = ex.stack;
 		}
+		const bll_errs = insta.get_bll_error();
 		return await bll_errs.insert_new(error_log);
 	}catch(ex){
 		// ****
@@ -275,11 +275,10 @@ export function api_handle_exception(
 export function api_handle_and_store_exception(
 	ex: urn_exception.ExceptionInstance,
 	partial_api_request: Partial<types.ApiRequest>,
-	bll_errs: urn_core.bll.BLL<'error'>
 ):urn_response.Fail<any>{
 	const urn_res = api_handle_exception(ex, partial_api_request);
 	const atom_request = partial_api_request_to_atom_request(partial_api_request);
-	store_error(urn_res, atom_request, bll_errs, ex);
+	store_error(urn_res, atom_request, ex);
 	return urn_res;
 }
 
