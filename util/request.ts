@@ -194,33 +194,31 @@ function _get_atom_api(atom_name:types.AtomName){
 	return atom_api;
 }
 
-export async function store_error(
+export function store_error(
 	urn_res: urn_response.Fail,
 	atom_request: Partial<types.Atom<'request'>>,
 	ex?: urn_exception.ExceptionInstance,
-):Promise<types.Atom<'error'> | undefined>{
-	try{
-		const error_log:types.AtomShape<'error'> = {
-			status: urn_res.status,
-			msg: '' + urn_res.message,
-			error_code: urn_res.err_code,
-			error_msg: urn_res.err_msg,
-		};
-		if(atom_request._id !== undefined){
-			error_log.request = atom_request._id;
-		}
-		if(ex && !ex.type){
-			error_log.stack = ex.stack;
-		}
-		const bll_errs = insta.get_bll_error();
-		return await bll_errs.insert_new(error_log);
-	}catch(ex){
+):void{
+	const error_log:types.AtomShape<'error'> = {
+		status: urn_res.status,
+		msg: '' + urn_res.message,
+		error_code: urn_res.err_code,
+		error_msg: urn_res.err_msg,
+	};
+	if(atom_request._id !== undefined){
+		error_log.request = atom_request._id;
+	}
+	if(ex && !ex.type){
+		error_log.stack = ex.stack;
+	}
+	const bll_errs = insta.get_bll_error();
+	bll_errs.insert_new(error_log).catch((ex) => {
 		// ****
 		// TODO Save to file CANNOT LOG
 		// ****
 		console.error('CANNOT STORE ERROR', ex);
 		return undefined;
-	}
+	});
 }
 
 export function api_handle_exception(

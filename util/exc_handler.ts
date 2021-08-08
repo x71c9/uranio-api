@@ -16,19 +16,17 @@ function handle_exception(service_name:string)
 		:(...args:any[]) => any {
 	return async (ex:Error):Promise<void> => {
 		console.error(service_name, ex);
-		try {
-			const bll_err = insta.get_bll_error();
-			bll_err.insert_new({
-				status: 500,
-				msg: `[${service_name}] UnhandledException`,
-				error_code: '500',
-				error_msg: ex.message,
-				stack: ex.stack
-			});
-		}catch(ex){
+		const bll_err = insta.get_bll_error();
+		bll_err.insert_new({
+			status: 500,
+			msg: `[${service_name}] UnhandledException`,
+			error_code: '500',
+			error_msg: ex.message,
+			stack: ex.stack
+		}).catch((_ex) => {
 			// TODO
-		}
-		process.exit(1);
+		});
+		// process.exit(1);
 	};
 }
 
@@ -41,21 +39,19 @@ function handle_exception(service_name:string)
  */
 function handle_rejected_promise(service_name:string)
 		:(...args:any[]) => any {
-	return async (reason:any, promise:Promise<any>):Promise<void> => {
+	return (reason:any, promise:Promise<any>):void => {
 		console.error(service_name, reason, promise);
-		try {
-			const bll_err = insta.get_bll_error();
-			await bll_err.insert_new({
-				status: 510,
-				msg: `[${service_name}] UnhandledRejectedPromise`,
-				error_code: '510',
-				error_msg: JSON.stringify(reason),
-				stack: JSON.stringify(promise)
-			});
-		}catch(ex){
+		const bll_err = insta.get_bll_error();
+		bll_err.insert_new({
+			status: 510,
+			msg: `[${service_name}] UnhandledRejectedPromise`,
+			error_code: '510',
+			error_msg: JSON.stringify(reason),
+			stack: JSON.stringify(promise)
+		}).catch((_ex) => {
 			// TODO
-		}
-		process.exit(1);
+		});
+		// process.exit(1);
 	};
 }
 

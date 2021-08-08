@@ -220,28 +220,22 @@ function _get_atom_api(atom_name:types.AtomName)
 	
 }
 
-async function _log_route_request(api_request: types.ApiRequest)
-		:Promise<types.AtomShape<'request'>>{
-	
+function _log_route_request(api_request: types.ApiRequest)
+		:void{
 	const request_shape = partial_api_request_to_atom_request(api_request);
-	
-	try{
-		const bll_reqs = insta.get_bll_request();
-		return await bll_reqs.insert_new(request_shape);
-	}catch(ex){
+	const bll_reqs = insta.get_bll_request();
+	bll_reqs.insert_new(request_shape).catch((ex) => {
 		console.error('CANNOT LOG REQUEST', ex);
 		// ****
 		// TODO save on file CANNOT LOG
 		// ****
 		return request_shape;
-	}
+	});
 }
 
-async function _log_auth_route_request(auth_request: types.ApiRequest)
-		:Promise<types.AtomShape<'request'>>{
-	
+function _log_auth_route_request(auth_request: types.ApiRequest)
+		:void{
 	const request_shape = partial_api_request_to_atom_request(auth_request);
-	
 	const auth_request_clone = {...request_shape};
 	if(auth_request_clone.body){
 		const body = JSON.parse(auth_request_clone.body);
@@ -249,16 +243,14 @@ async function _log_auth_route_request(auth_request: types.ApiRequest)
 		auth_request_clone.body = JSON.stringify(body);
 	}
 	
-	try{
-		const bll_reqs = insta.get_bll_request();
-		return await bll_reqs.insert_new(auth_request_clone);
-	}catch(ex){
+	const bll_reqs = insta.get_bll_request();
+	bll_reqs.insert_new(auth_request_clone).catch((ex) => {
 		console.error('CANNOT LOG AUTH REQUEST', ex);
 		// ****
 		// TODO save on file CANNOT LOG
 		// ****
 		return request_shape;
-	}
+	});
 }
 
 // function partial_api_request_to_atom_request(api_request: types.ApiRequest)
