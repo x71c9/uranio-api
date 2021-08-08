@@ -45,7 +45,7 @@ function handle_rejected_promise(service_name:string)
 		console.error(service_name, reason, promise);
 		try {
 			const bll_err = insta.get_bll_error();
-			bll_err.insert_new({
+			await bll_err.insert_new({
 				status: 510,
 				msg: `[${service_name}] UnhandledRejectedPromise`,
 				error_code: '510',
