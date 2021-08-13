@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import * as urn_api from './main';
+import * as urn_api from './srv/main';
 
 export default urn_api;
 

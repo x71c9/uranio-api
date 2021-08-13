@@ -1,16 +1,17 @@
 /**
- * Api Main module
+ * Main module for server
  *
  * @packageDocumentation
  */
+
 
 import urn_lib from 'urn-lib';
 
 import core from 'uranio-core';
 
-import * as service from './service/';
+import * as service from '../service/';
 
-import * as lambda from './lambda/';
+import * as lambda from '../lambda/';
 
 import * as types from './types';
 
