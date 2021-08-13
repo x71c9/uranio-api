@@ -1,5 +1,5 @@
 /**
- * Index module for URANIO Web CLIENT
+ * Index module for URANIO Client
  *
  * @packageDocumentation
  */
