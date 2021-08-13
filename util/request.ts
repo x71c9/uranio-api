@@ -21,8 +21,8 @@ const urn_exc = urn_exception.init(`REQUEST`, `Util request module`);
 import * as types from '../types';
 
 export function process_request_path(full_path:string)
-		:types.ApiRequestPaths{
-	let api_request_paths:types.ApiRequestPaths = {
+		:types.Api.Request.Paths{
+	let api_request_paths:types.Api.Request.Paths = {
 		full_path,
 		route_path: '',
 		atom_path: '',
@@ -143,11 +143,11 @@ export function get_params_from_route_path(
 	atom_name: types.AtomName,
 	route_name: keyof types.Book.Definition.Api.Routes,
 	route_path: string
-):types.ApiRequestParams{
+):types.Api.Request.Params{
 	const atom_api = _get_atom_api(atom_name);
 	for(const route_key in atom_api.routes){
 		if(route_key === route_name){
-			const params:types.ApiRequestParams = {};
+			const params:types.Api.Request.Params = {};
 			let atom_route_url = atom_api.routes[route_key].url;
 			if(atom_route_url[atom_route_url.length - 1] !== '/'){
 				atom_route_url += '/';
@@ -223,7 +223,7 @@ export function store_error(
 
 export function api_handle_exception(
 	ex: urn_exception.ExceptionInstance,
-	partial_api_request: Partial<types.ApiRequest>
+	partial_api_request: Partial<types.Api.Request>
 ):urn_response.Fail<any>{
 	let status = 500;
 	let msg = 'Internal Server Error';
@@ -272,7 +272,7 @@ export function api_handle_exception(
 
 export function api_handle_and_store_exception(
 	ex: urn_exception.ExceptionInstance,
-	partial_api_request: Partial<types.ApiRequest>,
+	partial_api_request: Partial<types.Api.Request>,
 ):urn_response.Fail<any>{
 	const urn_res = api_handle_exception(ex, partial_api_request);
 	const atom_request = partial_api_request_to_atom_request(partial_api_request);
@@ -280,7 +280,7 @@ export function api_handle_and_store_exception(
 	return urn_res;
 }
 
-export function partial_api_request_to_atom_request(partial_api_request:Partial<types.ApiRequest>)
+export function partial_api_request_to_atom_request(partial_api_request:Partial<types.Api.Request>)
 		:types.AtomShape<'request'>{
 	const request_shape:types.AtomShape<'request'> = {
 		full_path: partial_api_request.full_path || 'NOFULLPATH',
@@ -307,8 +307,8 @@ export function partial_api_request_to_atom_request(partial_api_request:Partial<
 	return request_shape;
 }
 
-export function validate_request(api_request:Partial<types.ApiRequest>)
-		:types.ApiRequest{
+export function validate_request(api_request:Partial<types.Api.Request>)
+		:types.Api.Request{
 	if(typeof api_request.full_path !== 'string' || api_request.full_path === ''){
 		throw urn_exc.create_invalid_request(
 			`INVALID_PATH_FULL_PATH`,
@@ -362,5 +362,5 @@ export function validate_request(api_request:Partial<types.ApiRequest>)
 			`Invalid auth action. [${api_request.auth_action}].`
 		);
 	}
-	return api_request as types.ApiRequest;
+	return api_request as types.Api.Request;
 }

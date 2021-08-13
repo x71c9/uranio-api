@@ -18,9 +18,9 @@ import {
 import * as types from '../../../types';
 
 export function express_request_to_partial_api_request(req:express.Request)
-		:Partial<types.ApiRequest>{
+		:Partial<types.Api.Request>{
 	
-	let api_request:Partial<types.ApiRequest> = {
+	let api_request:Partial<types.Api.Request> = {
 		full_path: req.originalUrl,
 		params: req.params,
 		query: req.query
@@ -87,7 +87,7 @@ export function express_request_to_partial_api_request(req:express.Request)
 		api_request.body = req.body;
 	}
 	if(req.headers){
-		const headers:types.ApiRequestHeaders = {};
+		const headers:types.Api.Request.Headers = {};
 		for(const [name, value] of Object.entries(req.headers)){
 			headers[name] = (Array.isArray(value)) ? JSON.stringify(value) : value;
 		}

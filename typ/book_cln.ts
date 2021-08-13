@@ -13,7 +13,7 @@
 
 import urn_core_client from 'uranio-core/client';
 
-import {RouteMethod, ApiRequest} from './request';
+import {RouteMethod, Api as ApiRequest} from './request';
 
 export type Book = {
 	[k in urn_core_client.types.AtomName]?: Book.Definition;
@@ -54,7 +54,7 @@ export namespace Book {
 				
 				export namespace Route {
 					
-					export type Call = (route_request: ApiRequest) => any
+					export type Call = (route_request: ApiRequest.Request) => any
 					
 				}
 				

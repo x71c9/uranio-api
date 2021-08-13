@@ -8,7 +8,7 @@ import {urn_log} from 'urn-lib';
 
 import urn_core from 'uranio-core';
 
-import * as book_types from '../types';
+import * as types from '../types';
 
 import {
 	AtomName,
@@ -19,11 +19,11 @@ export function return_default_routes(atom_name:AtomName)
 		:Book.Definition.Api.Routes{
 	return {
 		find: {
-			method: book_types.RouteMethod.GET,
-			action: book_types.AuthAction.READ,
+			method: types.RouteMethod.GET,
+			action: types.AuthAction.READ,
 			url: '/',
 			query: ['filter', 'options'],
-			call: async (api_request:book_types.ApiRequest) => {
+			call: async (api_request:types.Api.Request) => {
 				urn_log.fn_debug(`Router Call GET [find] / [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
@@ -37,11 +37,11 @@ export function return_default_routes(atom_name:AtomName)
 			}
 		},
 		find_id: {
-			method: book_types.RouteMethod.GET,
-			action: book_types.AuthAction.READ,
+			method: types.RouteMethod.GET,
+			action: types.AuthAction.READ,
 			url: '/:id',
 			query: ['options'],
-			call: async (api_request:book_types.ApiRequest) => {
+			call: async (api_request:types.Api.Request) => {
 				urn_log.fn_debug(`Router Call GET [find_id] /:id [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
@@ -55,11 +55,11 @@ export function return_default_routes(atom_name:AtomName)
 			}
 		},
 		find_one: {
-			method: book_types.RouteMethod.GET,
-			action: book_types.AuthAction.READ,
+			method: types.RouteMethod.GET,
+			action: types.AuthAction.READ,
 			url: '/',
 			query: ['filter', 'options'],
-			call: async (api_request:book_types.ApiRequest) => {
+			call: async (api_request:types.Api.Request) => {
 				urn_log.fn_debug(`Router Call GET [find_one] / [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
@@ -73,10 +73,10 @@ export function return_default_routes(atom_name:AtomName)
 			}
 		},
 		insert: {
-			method: book_types.RouteMethod.POST,
-			action: book_types.AuthAction.WRITE,
+			method: types.RouteMethod.POST,
+			action: types.AuthAction.WRITE,
 			url: '/',
-			call: async (api_request:book_types.ApiRequest) => {
+			call: async (api_request:types.Api.Request) => {
 				urn_log.fn_debug(`Router Call POST [insert] / [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
@@ -87,10 +87,10 @@ export function return_default_routes(atom_name:AtomName)
 			}
 		},
 		update: {
-			method: book_types.RouteMethod.POST,
-			action: book_types.AuthAction.WRITE,
+			method: types.RouteMethod.POST,
+			action: types.AuthAction.WRITE,
 			url: '/:id',
-			call: async (api_request:book_types.ApiRequest) => {
+			call: async (api_request:types.Api.Request) => {
 				urn_log.fn_debug(`Router Call POST [update] / [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
@@ -104,10 +104,10 @@ export function return_default_routes(atom_name:AtomName)
 			}
 		},
 		delete: {
-			method: book_types.RouteMethod.DELETE,
-			action: book_types.AuthAction.WRITE,
+			method: types.RouteMethod.DELETE,
+			action: types.AuthAction.WRITE,
 			url: '/:id',
-			call: async (api_request:book_types.ApiRequest) => {
+			call: async (api_request:types.Api.Request) => {
 				urn_log.fn_debug(`Router Call DELETE [delete] / [${atom_name}]`);
 				const urn_bll = urn_core.bll.create(
 					atom_name,
@@ -125,10 +125,10 @@ export function return_default_routes(atom_name:AtomName)
 //   const auth_bll = urn_core.bll.auth.create(atom_name);
 //   return {
 //     auth: {
-//       method: book_types.RouteMethod.POST,
-//       action: book_types.AuthAction.READ,
+//       method: types.RouteMethod.POST,
+//       action: types.AuthAction.READ,
 //       url: '',
-//       call: async (api_request:book_types.ApiRequest) => {
+//       call: async (api_request:types.Api.Request) => {
 //         const token = await auth_bll.authenticate(
 //           api_request.body.email,
 //           api_request.body.password
