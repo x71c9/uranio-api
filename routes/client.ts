@@ -45,11 +45,11 @@ export const default_routes = {
 		action: types.AuthAction.WRITE,
 		url: '/:id',
 	}
-};
+} as const;
 
-export function route_def(atom_name:types.AtomName, route_name:string)
+export function route_def<A extends types.AtomName>(atom_name:A, route_name:types.RouteName<A>)
 		:types.Book.Definition.Api.Routes.Route{
-	return common_route_def(default_routes, atom_name, route_name);
+	return common_route_def(default_routes as any, atom_name, route_name);
 }
 
 export function atom_api_with_defaults(

@@ -10,11 +10,6 @@ import urn_core from 'uranio-core';
 
 import * as types from '../types';
 
-import {
-	AtomName,
-	Book
-} from '../types';
-
 import {default_routes} from './client';
 
 import {
@@ -22,7 +17,7 @@ import {
 	atom_api_with_defaults as common_atom_api_with_defaults
 } from './routes';
 
-export function route_def(atom_name:types.AtomName, route_name:string)
+export function route_def<A extends types.AtomName>(atom_name:A, route_name:types.RouteName<A>)
 		:types.Book.Definition.Api.Routes.Route{
 	const default_routes = return_default_routes(atom_name);
 	return common_route_def(default_routes, atom_name, route_name);
@@ -35,10 +30,10 @@ export function atom_api_with_defaults(
 	return common_atom_api_with_defaults(default_routes, atom_name);
 }
 
-export function return_default_routes(atom_name:AtomName)
-		:Book.Definition.Api.Routes{
+export function return_default_routes(atom_name:types.AtomName)
+		:types.Book.Definition.Api.Routes{
 	
-	(default_routes.find as Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
+	(default_routes.find as unknown as types.Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
 		urn_log.fn_debug(`Router Call GET [find] / [${atom_name}]`);
 		const urn_bll = urn_core.bll.create(
 			atom_name,
@@ -51,7 +46,7 @@ export function return_default_routes(atom_name:AtomName)
 		return bll_res;
 	};
 	
-	(default_routes.find_id as Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
+	(default_routes.find_id as unknown as types.Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
 		urn_log.fn_debug(`Router Call GET [find_id] /:id [${atom_name}]`);
 		const urn_bll = urn_core.bll.create(
 			atom_name,
@@ -64,7 +59,7 @@ export function return_default_routes(atom_name:AtomName)
 		return bll_res;
 	};
 	
-	(default_routes.find_one as Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
+	(default_routes.find_one as unknown as types.Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
 		urn_log.fn_debug(`Router Call GET [find_one] / [${atom_name}]`);
 		const urn_bll = urn_core.bll.create(
 			atom_name,
@@ -77,7 +72,7 @@ export function return_default_routes(atom_name:AtomName)
 		return bll_res;
 	};
 	
-	(default_routes.insert as Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
+	(default_routes.insert as unknown as types.Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
 		urn_log.fn_debug(`Router Call POST [insert] / [${atom_name}]`);
 		const urn_bll = urn_core.bll.create(
 			atom_name,
@@ -87,7 +82,7 @@ export function return_default_routes(atom_name:AtomName)
 		return bll_res;
 	};
 	
-	(default_routes.update as Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
+	(default_routes.update as unknown as types.Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
 		urn_log.fn_debug(`Router Call POST [update] / [${atom_name}]`);
 		const urn_bll = urn_core.bll.create(
 			atom_name,
@@ -100,7 +95,7 @@ export function return_default_routes(atom_name:AtomName)
 		return bll_res;
 	};
 	
-	(default_routes.delete as Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
+	(default_routes.delete as unknown as types.Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
 		urn_log.fn_debug(`Router Call DELETE [delete] / [${atom_name}]`);
 		const urn_bll = urn_core.bll.create(
 			atom_name,
@@ -110,7 +105,7 @@ export function return_default_routes(atom_name:AtomName)
 		return bll_res;
 	};
 	
-	return default_routes as unknown as Book.Definition.Api.Routes;
+	return default_routes as unknown as types.Book.Definition.Api.Routes;
 	
 	// return {
 	//   find: {
@@ -217,7 +212,7 @@ export function return_default_routes(atom_name:AtomName)
 }
 
 // export function return_auth_route(atom_name:AuthName)
-//     :Book.Definition.Api.Routes{
+//     :types.Book.Definition.Api.Routes{
 //   const auth_bll = urn_core.bll.auth.create(atom_name);
 //   return {
 //     auth: {

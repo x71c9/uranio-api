@@ -12,19 +12,19 @@ import {api_book} from 'uranio-books-client/api';
 
 import * as types from '../cln/types';
 
-export function route_def(
+export function route_def<A extends types.AtomName>(
 	default_routes:types.Book.Definition.Api.Routes,
-	atom_name:types.AtomName,
-	route_name:string
+	atom_name:A,
+	route_name:types.RouteName<A>
 ):types.Book.Definition.Api.Routes.Route{
 		
 	const atom_api = atom_api_with_defaults(default_routes, atom_name);
 		
-	if(!atom_api.routes?.[route_name]){
+	if(!atom_api.routes?.[route_name as string]){
 		throw urn_exc.create(`INVALID_ROUTE_NAME`, `Invalid route name.`);
 	}
 	
-	return atom_api.routes[route_name]!;
+	return atom_api.routes[route_name as string]!;
 }
 
 export function atom_api_with_defaults(
@@ -49,7 +49,7 @@ export function atom_api_with_defaults(
 function _get_atom_api(atom_name:types.AtomName)
 		:types.Book.Definition.Api{
 	
-	const atom_api = api_book[atom_name as keyof typeof api_book].api as
+	const atom_api = api_book[atom_name as keyof typeof api_book].api as unknown as
 		types.Book.Definition.Api;
 	
 	if(!atom_api){
