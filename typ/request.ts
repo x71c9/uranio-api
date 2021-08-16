@@ -51,6 +51,7 @@ export namespace Api {
 		}
 		
 	}
+	
 }
 
 export type AuthHandler = (api_request:Api.Request) => Promise<string>;

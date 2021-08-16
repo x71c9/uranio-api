@@ -1,10 +1,15 @@
 /**
- * Public part of routes
+ * Client routes module
  *
  * @packageDocumentation
  */
 
 import * as types from '../cln/types';
+
+import {
+	route_def as common_route_def,
+	atom_api_with_defaults as common_atom_api_with_defaults
+} from './routes';
 
 export const default_routes = {
 	find: {
@@ -41,3 +46,15 @@ export const default_routes = {
 		url: '/:id',
 	}
 };
+
+export function route_def(atom_name:types.AtomName, route_name:string)
+		:types.Book.Definition.Api.Routes.Route{
+	return common_route_def(default_routes, atom_name, route_name);
+}
+
+export function atom_api_with_defaults(
+	default_routes:types.Book.Definition.Api.Routes,
+	atom_name:types.AtomName
+):types.Book.Definition.Api{
+	return common_atom_api_with_defaults(default_routes, atom_name);
+}

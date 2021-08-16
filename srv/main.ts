@@ -13,12 +13,15 @@ import * as service from '../service/';
 
 import * as lambda from '../lambda/';
 
+import * as routes from '../routes/';
+
 import * as types from './types';
 
 export {
 	urn_lib as lib,
 	core,
+	service,
 	lambda,
-	types,
-	service
+	routes,
+	types
 };

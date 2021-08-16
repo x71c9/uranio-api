@@ -6,7 +6,7 @@
 
 import jwt from 'jsonwebtoken';
 
-import {urn_response, urn_return, urn_exception, urn_log} from 'urn-lib';
+import {urn_util, urn_response, urn_return, urn_exception, urn_log} from 'urn-lib';
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 
@@ -79,6 +79,15 @@ async function _validate_and_call(api_request: types.Api.Request){
 	urn_log.fn_debug(`Router ${route_def.method} [${api_request.atom_name}] ${api_request.full_path}`);
 	
 	_validate_route(api_request);
+	
+	if(!urn_util.object.has_key(route_def, 'call') || !route_def.call){
+		return urn_ret.return_error(
+			404,
+			`Route call not implemented.`,
+			`ROUTE_CALL_NOT_IMPLEMENTED`,
+			`Route call not implemented.`
+		);
+	}
 	
 	let call_response = await route_def.call(api_request);
 	

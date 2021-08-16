@@ -6,4 +6,9 @@
 
 import * as types from './types';
 
-export {types};
+import * as routes from '../routes/client';
+
+export {
+	types,
+	routes
+};
