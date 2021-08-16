@@ -14,3 +14,5 @@ export {Book};
 export * from '../typ/book_cln';
 
 export * from '../typ/request';
+
+export * from '../typ/route';

@@ -22,5 +22,8 @@ export {FullConfiguration, Configuration};
 
 export * from '../typ/conf';
 
-
 export * from '../typ/request';
+
+export * from '../typ/route';
+
+
