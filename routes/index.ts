@@ -1,7 +1,7 @@
 /**
- * Routes export  module
+ * Routes index module
  *
  * @packageDocumentation
  */
 
-export * from './routes';
+export * from './server';

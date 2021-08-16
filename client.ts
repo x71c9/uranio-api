@@ -4,11 +4,6 @@
  * @packageDocumentation
  */
 
-import core from 'uranio-core/client';
+import * as urn_api from './cln/main';
 
-import * as types from './cln/types';
-
-export default {
-	core,
-	types
-};
+export default urn_api;

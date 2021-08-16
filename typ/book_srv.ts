@@ -16,6 +16,8 @@ import urn_core from 'uranio-core';
 
 import * as book_cln from './book_cln';
 
+import {Api as ApiRequest} from './request';
+
 export type Book = {
 	[k in urn_core.types.AtomName]?: Book.Definition<k>;
 }
@@ -33,7 +35,27 @@ export namespace Book {
 	export namespace Definition {
 		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		export import Api = book_cln.Book.Definition.Api;
+		// export import Api = book_cln.Book.Definition.Api;
+		
+		export type Api = book_cln.Book.Definition.Api;
+		
+		export namespace Api {
+			
+			export type Routes = book_cln.Book.Definition.Api.Routes;
+			
+			export namespace Routes {
+				
+				export type Route = book_cln.Book.Definition.Api.Routes.Route & {
+					call?: Route.Call
+				}
+				
+				export namespace Route {
+					export type Call = (route_request: ApiRequest.Request) => any
+				}
+				
+			}
+		}
+		
 		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		export import Properties = book_cln.Book.Definition.Properties;
