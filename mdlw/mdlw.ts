@@ -28,7 +28,7 @@ import * as req_validator from './validate';
 
 import * as types from '../types';
 
-export async function route_middleware(api_request:types.Api.Request)
+export async function route_middleware<A extends types.AtomName, R extends types.RouteName<A>>(api_request:types.Api.Request<A,R>)
 		:Promise<urn_response.General<any, any>>{
 	_log_route_request(api_request);
 	const auth_reponse = await _authorization(api_request);
@@ -39,9 +39,9 @@ export async function route_middleware(api_request:types.Api.Request)
 	return await _validate_and_call(api_request);
 }
 
-export async function auth_route_middleware(
-	api_request: types.Api.Request,
-	auth_handler: types.AuthHandler
+export async function auth_route_middleware<A extends types.AtomName, R extends types.RouteName<A>>(
+	api_request: types.Api.Request<A,R>,
+	auth_handler: types.AuthHandler<A,R>
 ):Promise<urn_response.General<any, any>>{
 	_log_auth_route_request(api_request);
 	if(typeof auth_handler !== 'function'){
@@ -50,7 +50,7 @@ export async function auth_route_middleware(
 	return await _auth_validate_and_call(api_request, auth_handler);
 }
 
-async function _authorization(api_request:types.Api.Request) {
+async function _authorization<A extends types.AtomName, R extends types.RouteName<A>>(api_request:types.Api.Request<A,R>) {
 	const route_def = _get_route_def(api_request);
 	if(urn_core.bll.auth.is_public_request(api_request.atom_name, route_def.action)){
 		return false;
@@ -72,7 +72,7 @@ async function _authorization(api_request:types.Api.Request) {
 	}
 }
 
-async function _validate_and_call(api_request: types.Api.Request){
+async function _validate_and_call<A extends types.AtomName, R extends types.RouteName<A>>(api_request: types.Api.Request<A,R>){
 	
 	const route_def = _get_route_def(api_request);
 	
@@ -100,9 +100,9 @@ async function _validate_and_call(api_request: types.Api.Request){
 	
 }
 
-async function _auth_validate_and_call(
-	auth_route_request: types.Api.Request,
-	handler: types.AuthHandler,
+async function _auth_validate_and_call<A extends types.AtomName, R extends types.RouteName<A>>(
+	auth_route_request: types.Api.Request<A,R>,
+	handler: types.AuthHandler<A,R>,
 ){
 	const api_def = api_book[auth_route_request.atom_name as types.AuthName] as types.Book.BasicDefinition;
 	
@@ -127,7 +127,7 @@ async function _auth_validate_and_call(
 	
 }
 
-function _auth_validate(api_request:types.Api.Request)
+function _auth_validate<A extends types.AtomName, R extends types.RouteName<A>>(api_request:types.Api.Request<A,R>)
 		:void{
 	
 	urn_log.fn_debug(`Validate Auth Route [${api_request.atom_name}]`);
@@ -137,7 +137,7 @@ function _auth_validate(api_request:types.Api.Request)
 	
 }
 
-function _validate_route(api_request:types.Api.Request)
+function _validate_route<A extends types.AtomName, R extends types.RouteName<A>>(api_request:types.Api.Request<A,R>)
 		:void{
 	
 	const route_def = _get_route_def(api_request);
@@ -166,9 +166,9 @@ function _validate_route(api_request:types.Api.Request)
 		req_validator.only_valid_query_keys(api_request.query, route_def.query);
 		if(Array.isArray(route_def.query)){
 			for(let i = 0; i < route_def.query.length; i++){
-				api_request.query[route_def.query[i]!] =
+				api_request.query[route_def.query[i]! as types.RouteQuery<A,R>] =
 					req_validator.process_request_query(
-						api_request.query[route_def.query[i]!]
+						api_request.query[route_def.query[i]! as types.RouteQuery<A,R>]
 					);
 			}
 		}
@@ -178,8 +178,8 @@ function _validate_route(api_request:types.Api.Request)
 	
 }
 
-function _limit(api_request:types.Api.Request){
-	let options = api_request.query?.options;
+function _limit(api_request:types.Api.Request<any,any>){
+	let options = (api_request.query as any)?.options;
 	if(!options){
 		options = {};
 	}
@@ -189,8 +189,8 @@ function _limit(api_request:types.Api.Request){
 	return api_request;
 }
 
-function _get_route_def(api_request:types.Api.Request)
-		:types.Book.Definition.Api.Routes.Route{
+function _get_route_def<A extends types.AtomName, R extends types.RouteName<A>>(api_request:types.Api.Request<A,R>)
+		:types.Book.Definition.Api.Routes.Route<A,R>{
 	
 	const atom_api = _get_atom_api(api_request.atom_name);
 	
@@ -229,7 +229,7 @@ function _get_atom_api(atom_name:types.AtomName)
 	
 }
 
-function _log_route_request(api_request: types.Api.Request)
+function _log_route_request<A extends types.AtomName, R extends types.RouteName<A>>(api_request: types.Api.Request<A,R>)
 		:void{
 	const request_shape = partial_api_request_to_atom_request(api_request);
 	const bll_reqs = insta.get_bll_request();
@@ -242,7 +242,7 @@ function _log_route_request(api_request: types.Api.Request)
 	});
 }
 
-function _log_auth_route_request(auth_request: types.Api.Request)
+function _log_auth_route_request<A extends types.AtomName, R extends types.RouteName<A>>(auth_request: types.Api.Request<A,R>)
 		:void{
 	const request_shape = partial_api_request_to_atom_request(auth_request);
 	const auth_request_clone = {...request_shape};

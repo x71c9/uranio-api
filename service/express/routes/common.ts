@@ -17,10 +17,10 @@ import {
 
 import * as types from '../../../types';
 
-export function express_request_to_partial_api_request(req:express.Request)
-		:Partial<types.Api.Request>{
+export function express_request_to_partial_api_request<A extends types.AtomName, R extends types.RouteName<A>>(req:express.Request)
+		:Partial<types.Api.Request<A,R>>{
 	
-	let api_request:Partial<types.Api.Request> = {
+	let api_request:Partial<types.Api.Request<any,any>> = {
 		full_path: req.originalUrl,
 		params: req.params,
 		query: req.query

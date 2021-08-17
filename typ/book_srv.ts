@@ -18,6 +18,8 @@ import * as book_cln from './book_cln';
 
 import {Api as ApiRequest} from './request';
 
+import {RouteName} from './route';
+
 export type Book = {
 	[k in urn_core.types.AtomName]?: Book.Definition<k>;
 }
@@ -45,12 +47,12 @@ export namespace Book {
 			
 			export namespace Routes {
 				
-				export type Route = book_cln.Book.Definition.Api.Routes.Route & {
-					call?: Route.Call
+				export type Route<A extends urn_core.types.AtomName, R extends RouteName<A>> = book_cln.Book.Definition.Api.Routes.Route & {
+					call?: Route.Call<A,R>
 				}
 				
 				export namespace Route {
-					export type Call = (route_request: ApiRequest.Request) => any
+					export type Call<A extends urn_core.types.AtomName, R extends RouteName<A>> = (route_request: ApiRequest.Request<A,R>) => any
 				}
 				
 			}

@@ -17,8 +17,8 @@ import {
 	atom_api_with_defaults as common_atom_api_with_defaults
 } from './routes';
 
-export function route_def<A extends types.AtomName>(atom_name:A, route_name:types.RouteName<A>)
-		:types.Book.Definition.Api.Routes.Route{
+export function route_def<A extends types.AtomName, R extends types.RouteName<A>>(atom_name:A, route_name:R)
+		:types.Book.Definition.Api.Routes.Route<A,R>{
 	const default_routes = return_default_routes(atom_name);
 	return common_route_def(default_routes, atom_name, route_name);
 }
@@ -30,78 +30,67 @@ export function atom_api_with_defaults(
 	return common_atom_api_with_defaults(default_routes, atom_name);
 }
 
-export function return_default_routes(atom_name:types.AtomName)
+export function return_default_routes<A extends types.AtomName>(atom_name:types.AtomName)
 		:types.Book.Definition.Api.Routes{
 	
-	(default_routes.find as unknown as types.Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
+	(default_routes.find as unknown as types.Book.Definition.Api.Routes.Route<A,'find'>).call = async (api_request:types.Api.Request<A,'find'>) => {
 		urn_log.fn_debug(`Router Call GET [find] / [${atom_name}]`);
-		const urn_bll = urn_core.bll.create(
-			atom_name,
-			api_request.passport
-		) as urn_core.bll.BLL<typeof atom_name>;
+		const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
+			urn_core.bll.BLL<typeof atom_name>;
 		const bll_res = await urn_bll.find(
-			api_request.query.filter,
-			api_request.query.options
+			(api_request.query as types.Api.Request.Query<'superuser', 'find'>).filter,
+			(api_request.query as types.Api.Request.Query<'superuser', 'find'>).options
 		);
 		return bll_res;
 	};
 	
-	(default_routes.find_id as unknown as types.Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
+	(default_routes.find_id as unknown as types.Book.Definition.Api.Routes.Route<A, 'find_id'>).call = async (api_request:types.Api.Request<A, 'find_id'>) => {
 		urn_log.fn_debug(`Router Call GET [find_id] /:id [${atom_name}]`);
-		const urn_bll = urn_core.bll.create(
-			atom_name,
-			api_request.passport
-		) as urn_core.bll.BLL<typeof atom_name>;
+		const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
+			urn_core.bll.BLL<typeof atom_name>;
 		const bll_res = await urn_bll.find_by_id(
-			api_request.params.id!,
-			api_request.query.options
+			(api_request.params as types.Api.Request.Params<'superuser', 'find_id'>).id!,
+			(api_request.query as types.Api.Request.Query<'superuser', 'find_id'>).options
 		);
 		return bll_res;
 	};
 	
-	(default_routes.find_one as unknown as types.Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
+	(default_routes.find_one as unknown as types.Book.Definition.Api.Routes.Route<A, 'find_one'>).call = async (api_request:types.Api.Request<A, 'find_one'>) => {
 		urn_log.fn_debug(`Router Call GET [find_one] / [${atom_name}]`);
-		const urn_bll = urn_core.bll.create(
-			atom_name,
-			api_request.passport
-		) as urn_core.bll.BLL<typeof atom_name>;
+		const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
+			urn_core.bll.BLL<typeof atom_name>;
 		const bll_res = await urn_bll.find_one(
-			api_request.query.filter,
-			api_request.query.options
+			(api_request.query as types.Api.Request.Query<'superuser', 'find_one'>).filter,
+			(api_request.query as types.Api.Request.Query<'superuser', 'find_one'>).options
 		);
 		return bll_res;
 	};
 	
-	(default_routes.insert as unknown as types.Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
+	(default_routes.insert as unknown as types.Book.Definition.Api.Routes.Route<A, 'insert'>).call = async (api_request:types.Api.Request<A, 'insert'>) => {
 		urn_log.fn_debug(`Router Call POST [insert] / [${atom_name}]`);
-		const urn_bll = urn_core.bll.create(
-			atom_name,
-			api_request.passport
-		) as urn_core.bll.BLL<typeof atom_name>;
+		const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
+			urn_core.bll.BLL<typeof atom_name>;
 		const bll_res = await urn_bll.insert_new(api_request.body);
 		return bll_res;
 	};
 	
-	(default_routes.update as unknown as types.Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
+	(default_routes.update as unknown as types.Book.Definition.Api.Routes.Route<A, 'update'>).call = async (api_request:types.Api.Request<A, 'update'>) => {
 		urn_log.fn_debug(`Router Call POST [update] / [${atom_name}]`);
-		const urn_bll = urn_core.bll.create(
-			atom_name,
-			api_request.passport
-		) as urn_core.bll.BLL<typeof atom_name>;
+		const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
+			urn_core.bll.BLL<typeof atom_name>;
 		const bll_res = await urn_bll.update_by_id(
-			api_request.params.id!,
+			(api_request.params as types.Api.Request.Params<'superuser', 'find_id'>).id!,
 			api_request.body
 		);
 		return bll_res;
 	};
 	
-	(default_routes.delete as unknown as types.Book.Definition.Api.Routes.Route).call = async (api_request:types.Api.Request) => {
+	(default_routes.delete as unknown as types.Book.Definition.Api.Routes.Route<A, 'delete'>).call = async (api_request:types.Api.Request<A, 'delete'>) => {
 		urn_log.fn_debug(`Router Call DELETE [delete] / [${atom_name}]`);
-		const urn_bll = urn_core.bll.create(
-			atom_name,
-			api_request.passport
-		) as urn_core.bll.BLL<typeof atom_name>;
-		const bll_res = await urn_bll.remove_by_id(api_request.params.id!);
+		const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
+			urn_core.bll.BLL<typeof atom_name>;
+		const id = (api_request.params as types.Api.Request.Params<'superuser', 'find_id'>).id!;
+		const bll_res = await urn_bll.remove_by_id(id);
 		return bll_res;
 	};
 	
