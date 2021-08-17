@@ -53,14 +53,14 @@ export namespace Api {
 		}
 		
 		export type Query<A extends urn_core_client.types.AtomName, R extends RouteName<A>> = {
-			[k in RouteQuery<A,R>]?: RouteQueryValue<A,R,k>
+			[k in RouteQueryParam<A,R>]?: RouteQueryParamValue<A,R,k>
 		}
 		
 	}
 	
 }
 
-export type RouteQueryValue<A extends urn_core_client.types.AtomName, R extends RouteName<A>, K extends RouteQuery<A,R>> =
+export type RouteQueryParamValue<A extends urn_core_client.types.AtomName, R extends RouteName<A>, K extends RouteQueryParam<A,R>> =
 	K extends 'filter' ? urn_core_client.types.Query<A> :
 	K extends 'options' ? urn_core_client.types.Query.Options<A> :
 	any;
@@ -118,7 +118,7 @@ export type RouteParam<A extends urn_core_client.types.AtomName, R extends Route
 type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
-type DefaultRouteQueryArray<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
+type DefaultRouteQueryParamArray<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
 	R extends keyof typeof routes.default_routes ?
 	'query' extends keyof typeof routes.default_routes[R] ?
 	typeof routes.default_routes[R]['query'] :
@@ -126,13 +126,13 @@ type DefaultRouteQueryArray<A extends urn_core_client.types.AtomName, R extends 
 	never;
 
 type DefaultRouteQuery<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
-	DefaultRouteQueryArray<A,R> extends readonly unknown[] ?
-	ArrayElement<DefaultRouteQueryArray<A,R>> :
+	DefaultRouteQueryParamArray<A,R> extends readonly unknown[] ?
+	ArrayElement<DefaultRouteQueryParamArray<A,R>> :
 	never;
 
-// export const b:DefaultRouteQuery<'user', 'find'> = 's';
+// export const b:DefaultRouteQueryParam<'user', 'find'> = 's';
 
-type CustomRouteQueryArray<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
+type CustomRouteQueryParamArray<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
 	'routes' extends keyof typeof api_book[A]['api'] ?
 	R extends keyof typeof api_book[A]['api']['routes'] ?
 	'query' extends keyof typeof api_book[A]['api']['routes'][R] ?
@@ -141,9 +141,9 @@ type CustomRouteQueryArray<A extends urn_core_client.types.AtomName, R extends R
 	never :
 	never;
 
-type CustomRouteQuery<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
-	CustomRouteQueryArray<A,R> extends readonly unknown[] ?
-	ArrayElement<CustomRouteQueryArray<A,R>> :
+type CustomRouteQueryParam<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
+	CustomRouteQueryParamArray<A,R> extends readonly unknown[] ?
+	ArrayElement<CustomRouteQueryParamArray<A,R>> :
 	never;
 
 /**
@@ -151,11 +151,11 @@ type CustomRouteQuery<A extends urn_core_client.types.AtomName, R extends RouteN
  * The `extends string` check is needed so that when the type is wrong tsc error
  * will show which strings are valid.
  */
-export type RouteQuery<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
-	DefaultRouteQuery<A,R> | CustomRouteQuery<A,R> extends string ?
-	DefaultRouteQuery<A,R> | CustomRouteQuery<A,R> :
+export type RouteQueryParam<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
+	DefaultRouteQuery<A,R> | CustomRouteQueryParam<A,R> extends string ?
+	DefaultRouteQuery<A,R> | CustomRouteQueryParam<A,R> :
 	never;
 
-// export const c:RouteQuery<'user', 'find'> = 'option';
+// export const c:RouteQueryParam<'user', 'find'> = 'option';
 
 
