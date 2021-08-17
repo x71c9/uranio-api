@@ -53,12 +53,17 @@ export namespace Api {
 		}
 		
 		export type Query<A extends urn_core_client.types.AtomName, R extends RouteName<A>> = {
-			[k in RouteQuery<A,R>]?: any
+			[k in RouteQuery<A,R>]?: RouteQueryValue<A,R,k>
 		}
 		
 	}
 	
 }
+
+export type RouteQueryValue<A extends urn_core_client.types.AtomName, R extends RouteName<A>, K extends RouteQuery<A,R>> =
+	K extends 'filter' ? urn_core_client.types.Query<A> :
+	K extends 'options' ? urn_core_client.types.Query.Options<A> :
+	any;
 
 
 export type AuthHandler<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
