@@ -164,14 +164,14 @@ function _validate_route<A extends types.AtomName, R extends types.RouteName<A>>
 	
 	if(route_def.query){
 		req_validator.only_valid_query_keys(api_request.query, route_def.query);
-		if(Array.isArray(route_def.query)){
-			for(let i = 0; i < route_def.query.length; i++){
-				api_request.query[route_def.query[i]! as types.RouteQuery<A,R>] =
-					req_validator.process_request_query<A>(
-						api_request.query[route_def.query[i]! as types.RouteQuery<A,R>]
-					) as any;
-			}
-		}
+		// if(Array.isArray(route_def.query)){
+		//   for(let i = 0; i < route_def.query.length; i++){
+		//     api_request.query[route_def.query[i]! as types.RouteQueryParam<A,R>] =
+		//       req_validator.process_request_query<A>(
+		//         api_request.query[route_def.query[i]! as types.RouteQueryParam<A,R>]
+		//       ) as any;
+		//   }
+		// }
 	}else{
 		req_validator.empty(api_request.query, 'query');
 	}

@@ -32,20 +32,32 @@ export function process_request_path(full_path:string)
 		// throw urn_exc.create_invalid_request(`INVALID_PATH_WRONG_PREFIX`, `Invalid path. Invalid prefix.`);
 		return api_request_paths;
 	}
-	const splitted_prefixed = full_path.split(api_config.prefix_api);
+	const splitted_prefixed = full_path.split(api_config.prefix_api); // ['', '/products/3294080234']
 	if(splitted_prefixed.length < 2){
 		// throw urn_exc.create_invalid_request(`INVALID_EMPTY_PATH`, `Invalid path. Path is empty.`);
 		return api_request_paths;
 	}
-	const no_prefix_path = splitted_prefixed[1];
-	let splitted_no_prefix = no_prefix_path.split('/').slice(1);
+	const no_prefix_path = splitted_prefixed[1]; // ['/products/0843092840']
+	let splitted_no_prefix = no_prefix_path.split('/').slice(1); // ['products', '33247829374']
 	let connection_path = '';
 	if('/' + splitted_no_prefix[0] === api_config.prefix_log){
-		connection_path = '/' + splitted_no_prefix[0];
-		splitted_no_prefix = splitted_no_prefix.slice(1);
+		connection_path = '/' + splitted_no_prefix[0]; // log
+		splitted_no_prefix = splitted_no_prefix.slice(1); // ['requests', '3924809234']
 	}
-	const atom_path = '/' + splitted_no_prefix[0];
-	let route_path = '/' + splitted_no_prefix.slice(1).join('/');
+	const atom_path = '/' + splitted_no_prefix[0]; // /products
+	const route_sliced_path = splitted_no_prefix.slice(1); // ['2972982729']
+	let route_last = route_sliced_path[route_sliced_path.length - 1]; // ['2389478932?filter=abc']
+	if(route_last.includes('?')){
+		const splitted_last = route_last.split('?');
+		route_last = splitted_last[0]; // ['33298729483']
+	}
+	let route_path = '';
+	if(route_sliced_path.length === 1){
+		route_path = `/${route_last}`;
+	}else if(route_sliced_path.length > 1){
+		route_sliced_path.splice(-1);
+		route_path = `/${route_sliced_path.join('/')}/${route_last}`;
+	}
 	if(route_path !== '/'){
 		route_path += '/';
 	}
