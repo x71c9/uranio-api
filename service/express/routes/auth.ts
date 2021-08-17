@@ -27,7 +27,7 @@ export function create_express_auth_route<A extends types.AuthName>(atom_name:A)
 	
 	const auth_bll = urn_core.bll.auth.create(atom_name);
 	
-	const handler = async (route_request:types.Api.Request) => {
+	const handler = async (route_request:types.Api.Request<A,any>) => {
 		const token = await auth_bll.authenticate(
 			route_request.body.email,
 			route_request.body.password
@@ -39,17 +39,17 @@ export function create_express_auth_route<A extends types.AuthName>(atom_name:A)
 	
 }
 
-function _return_express_auth_middleware(handler: types.AuthHandler){
+function _return_express_auth_middleware<A extends types.AtomName, R extends types.RouteName<A>>(handler: types.AuthHandler<A,R>){
 	return async (
 		req: express.Request,
 		res: express.Response,
 		_next: express.NextFunction
 	) => {
 		
-		const partial_api_request = express_request_to_partial_api_request(req);
+		const partial_api_request = express_request_to_partial_api_request<A,R>(req);
 		try{
-			const api_request = validate_request(partial_api_request);
-			const urn_res = await auth_route_middleware(api_request, handler);
+			const api_request = validate_request<A,R>(partial_api_request);
+			const urn_res = await auth_route_middleware<A,R>(api_request, handler);
 			return return_uranio_response_to_express(urn_res, res);
 		}catch(ex){
 			const urn_err = api_handle_and_store_exception(ex, partial_api_request);

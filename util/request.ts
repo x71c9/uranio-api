@@ -84,8 +84,11 @@ export function get_atom_name_from_atom_path(atom_path:string)
 	// throw urn_exc.create(`INVALID_API_URL`, `Invalid api url.`);
 }
 
-export function get_route_name<A extends types.AtomName>(atom_name:A, route_path:string, http_method:types.RouteMethod)
-		:string | undefined{
+export function get_route_name<A extends types.AtomName, R extends types.RouteName<A>>(
+	atom_name:A,
+	route_path:string,
+	http_method:types.RouteMethod
+):R | undefined{
 	const atom_api = _get_atom_api(atom_name);
 	if(!atom_api.routes){
 		// throw urn_exc.create(`INVALID_API_DEF`, `Invalid api_def. Missing "routes" property.`);
@@ -95,7 +98,7 @@ export function get_route_name<A extends types.AtomName>(atom_name:A, route_path
 		const route_def = atom_api.routes[route_name];
 		if(route_def.method === http_method){
 			if(route_def.url === route_path){
-				return route_name;
+				return route_name as R;
 			}else if(route_def.url.includes(':')){
 				// if(route_path[route_path.length - 1] !== '/'){
 				//   route_path += '/';
@@ -119,7 +122,7 @@ export function get_route_name<A extends types.AtomName>(atom_name:A, route_path
 					// );
 					return undefined;
 				}
-				return route_name;
+				return route_name as R;
 			}
 		}
 	}
@@ -139,15 +142,15 @@ export function is_auth_request(atom_name: types.AtomName, atom_path: string)
 	return false;
 }
 
-export function get_params_from_route_path(
-	atom_name: types.AtomName,
-	route_name: keyof types.Book.Definition.Api.Routes,
+export function get_params_from_route_path<A extends types.AtomName, R extends types.RouteName<A>>(
+	atom_name: A,
+	route_name: R,
 	route_path: string
-):types.Api.Request.Params{
+):types.Api.Request.Params<A,R>{
 	const atom_api = _get_atom_api(atom_name);
 	for(const route_key in atom_api.routes){
 		if(route_key === route_name){
-			const params:types.Api.Request.Params = {};
+			const params = {} as types.Api.Request.Params<A,R>;
 			let atom_route_url = atom_api.routes[route_key].url;
 			if(atom_route_url[atom_route_url.length - 1] !== '/'){
 				atom_route_url += '/';
@@ -159,14 +162,14 @@ export function get_params_from_route_path(
 				//   `INVALID_PATH_WRONG_FORMAT`,
 				//   `Invalid path. Format wrong for atom [${atom_name}] route [${route_name}]`
 				// );
-				return {};
+				return {} as types.Api.Request.Params<A,R>;
 			}
 			for(let i = 0; i < atom_route_splitted.length; i++){
 				const split = atom_route_splitted[i];
 				if(split[0] === ':'){
 					const param_name = split.substr(1,split.length);
 					const param_value = splitted_route_path[i];
-					params[param_name] = param_value;
+					params[param_name as types.RouteParam<A,R>] = param_value;
 				}
 			}
 			return params;
@@ -176,7 +179,7 @@ export function get_params_from_route_path(
 	//   `INVALID_ROUTE_ATOM_NAME`,
 	//   `Invalid route or atom name.`
 	// );
-	return {};
+	return {} as types.Api.Request.Params<A,R>;
 }
 
 function _get_atom_api(atom_name:types.AtomName){
@@ -221,9 +224,9 @@ export function store_error(
 	});
 }
 
-export function api_handle_exception(
+export function api_handle_exception<A extends types.AtomName, R extends types.RouteName<A>>(
 	ex: urn_exception.ExceptionInstance,
-	partial_api_request: Partial<types.Api.Request>
+	partial_api_request: Partial<types.Api.Request<A,R>>
 ):urn_response.Fail<any>{
 	let status = 500;
 	let msg = 'Internal Server Error';
@@ -270,9 +273,9 @@ export function api_handle_exception(
 	return urn_res;
 }
 
-export function api_handle_and_store_exception(
+export function api_handle_and_store_exception<A extends types.AtomName, R extends types.RouteName<A>>(
 	ex: urn_exception.ExceptionInstance,
-	partial_api_request: Partial<types.Api.Request>,
+	partial_api_request: Partial<types.Api.Request<A,R>>,
 ):urn_response.Fail<any>{
 	const urn_res = api_handle_exception(ex, partial_api_request);
 	const atom_request = partial_api_request_to_atom_request(partial_api_request);
@@ -280,8 +283,9 @@ export function api_handle_and_store_exception(
 	return urn_res;
 }
 
-export function partial_api_request_to_atom_request(partial_api_request:Partial<types.Api.Request>)
-		:types.AtomShape<'request'>{
+export function partial_api_request_to_atom_request<A extends types.AtomName, R extends types.RouteName<A>>(
+	partial_api_request:Partial<types.Api.Request<A,R>>
+):types.AtomShape<'request'>{
 	const request_shape:types.AtomShape<'request'> = {
 		full_path: partial_api_request.full_path || 'NOFULLPATH',
 		route_path: partial_api_request.route_path,
@@ -307,8 +311,9 @@ export function partial_api_request_to_atom_request(partial_api_request:Partial<
 	return request_shape;
 }
 
-export function validate_request(api_request:Partial<types.Api.Request>)
-		:types.Api.Request{
+export function validate_request<A extends types.AtomName, R extends types.RouteName<A>>(
+	api_request:Partial<types.Api.Request<A,R>>
+):types.Api.Request<A,R>{
 	if(typeof api_request.full_path !== 'string' || api_request.full_path === ''){
 		throw urn_exc.create_invalid_request(
 			`INVALID_PATH_FULL_PATH`,
@@ -362,5 +367,5 @@ export function validate_request(api_request:Partial<types.Api.Request>)
 			`Invalid auth action. [${api_request.auth_action}].`
 		);
 	}
-	return api_request as types.Api.Request;
+	return api_request as types.Api.Request<A,R>;
 }
