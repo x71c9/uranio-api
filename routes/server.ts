@@ -37,10 +37,9 @@ export function return_default_routes<A extends types.AtomName>(atom_name:types.
 		urn_log.fn_debug(`Router Call GET [find] / [${atom_name}]`);
 		const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 			urn_core.bll.BLL<typeof atom_name>;
-		const bll_res = await urn_bll.find(
-			(api_request.query as types.Api.Request.Query<'superuser', 'find'>).filter,
-			(api_request.query as types.Api.Request.Query<'superuser', 'find'>).options
-		);
+		const filter = (api_request.query as types.Api.Request.Query<'superuser', 'find'>).filter || {};
+		const options = (api_request.query as types.Api.Request.Query<'superuser', 'find'>).options;
+		const bll_res = await urn_bll.find(filter, options);
 		return bll_res;
 	};
 	
@@ -59,10 +58,9 @@ export function return_default_routes<A extends types.AtomName>(atom_name:types.
 		urn_log.fn_debug(`Router Call GET [find_one] / [${atom_name}]`);
 		const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 			urn_core.bll.BLL<typeof atom_name>;
-		const bll_res = await urn_bll.find_one(
-			(api_request.query as types.Api.Request.Query<'superuser', 'find_one'>).filter,
-			(api_request.query as types.Api.Request.Query<'superuser', 'find_one'>).options
-		);
+		const filter = (api_request.query as types.Api.Request.Query<'superuser', 'find'>).filter || {};
+		const options = (api_request.query as types.Api.Request.Query<'superuser', 'find'>).options;
+		const bll_res = await urn_bll.find_one(filter, options);
 		return bll_res;
 	};
 	

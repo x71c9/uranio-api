@@ -167,9 +167,9 @@ function _validate_route<A extends types.AtomName, R extends types.RouteName<A>>
 		if(Array.isArray(route_def.query)){
 			for(let i = 0; i < route_def.query.length; i++){
 				api_request.query[route_def.query[i]! as types.RouteQuery<A,R>] =
-					req_validator.process_request_query(
+					req_validator.process_request_query<A>(
 						api_request.query[route_def.query[i]! as types.RouteQuery<A,R>]
-					);
+					) as any;
 			}
 		}
 	}else{
