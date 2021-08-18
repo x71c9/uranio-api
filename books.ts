@@ -1,5 +1,5 @@
 /**
- * Required api books
+ * Required API books
  *
  * @packageDocumentation
  */
