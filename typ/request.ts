@@ -4,9 +4,9 @@
  * @packageDocumentation
  */
 
-import urn_core_client from 'uranio-core/client';
-
 import {dock_book} from 'uranio-books-client/dock';
+
+import * as types from '../cln/types';
 
 import * as routes from '../routes/client';
 
@@ -20,19 +20,19 @@ export const enum RouteMethod {
 
 export namespace Api {
 	
-	export type Request<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
+	export type Request<A extends types.AtomName, R extends RouteName<A>> =
 		Request.Paths & {
-		method: RouteMethod,
-		atom_name: urn_core_client.types.AtomName
+		method: RouteMethod
+		atom_name: A
 		route_name: string
 		is_auth: boolean
-		auth_action: urn_core_client.types.AuthAction
+		auth_action: types.AuthAction
 		params: Request.Params<A,R>
 		query: Request.Query<A,R>
 		body?: any
 		headers?: Request.Headers
 		ip?: string,
-		passport?: urn_core_client.types.Passport
+		passport?: types.Passport
 	}
 	
 	export namespace Request {
@@ -48,11 +48,11 @@ export namespace Api {
 			[k:string]: string | undefined
 		}
 		
-		export type Params<A extends urn_core_client.types.AtomName, R extends RouteName<A>> = {
+		export type Params<A extends types.AtomName, R extends RouteName<A>> = {
 			[k in RouteParam<A,R>]: string |  undefined
 		}
 		
-		export type Query<A extends urn_core_client.types.AtomName, R extends RouteName<A>> = {
+		export type Query<A extends types.AtomName, R extends RouteName<A>> = {
 			[k in RouteQueryParam<A,R>]?: RouteQueryParamValue<A,R,k>
 		}
 		
@@ -60,24 +60,24 @@ export namespace Api {
 	
 }
 
-export type RouteQueryParamValue<A extends urn_core_client.types.AtomName, R extends RouteName<A>, K extends RouteQueryParam<A,R>> =
-	K extends 'filter' ? urn_core_client.types.Query<A> :
-	K extends 'options' ? urn_core_client.types.Query.Options<A> :
+export type RouteQueryParamValue<A extends types.AtomName, R extends RouteName<A>, K extends RouteQueryParam<A,R>> =
+	K extends 'filter' ? types.Query<A> :
+	K extends 'options' ? types.Query.Options<A> :
 	any;
 
 
-export type AuthHandler<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
+export type AuthHandler<A extends types.AtomName, R extends RouteName<A>> =
 	(api_request:Api.Request<A,R>) => Promise<string>;
 
 
-type DefaultRouteURL<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
+type DefaultRouteURL<A extends types.AtomName, R extends RouteName<A>> =
 	R extends keyof typeof routes.default_routes ?
 	'url' extends keyof typeof routes.default_routes[R] ?
 	typeof routes.default_routes[R]['url'] :
 	never :
 	never;
 
-type CustomRouteURL<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
+type CustomRouteURL<A extends types.AtomName, R extends RouteName<A>> =
 	'routes' extends keyof typeof dock_book[A]['dock'] ?
 	R extends keyof typeof dock_book[A]['dock']['routes'] ?
 	'url' extends keyof typeof dock_book[A]['dock']['routes'][R] ?
@@ -86,7 +86,7 @@ type CustomRouteURL<A extends urn_core_client.types.AtomName, R extends RouteNam
 	never :
 	never;
 
-type RouteURL<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
+type RouteURL<A extends types.AtomName, R extends RouteName<A>> =
 	DefaultRouteURL<A,R> | CustomRouteURL<A,R>;
 
 type ExtractParamFrom<URI extends string> =
@@ -108,7 +108,7 @@ type ExtractParamFrom<URI extends string> =
 	Param :
 	never;
 
-export type RouteParam<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
+export type RouteParam<A extends types.AtomName, R extends RouteName<A>> =
 	RouteURL<A,R> extends string ?
 	ExtractParamFrom<RouteURL<A,R>> :
 	never;
@@ -118,21 +118,21 @@ export type RouteParam<A extends urn_core_client.types.AtomName, R extends Route
 type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
-type DefaultRouteQueryParamArray<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
+type DefaultRouteQueryParamArray<A extends types.AtomName, R extends RouteName<A>> =
 	R extends keyof typeof routes.default_routes ?
 	'query' extends keyof typeof routes.default_routes[R] ?
 	typeof routes.default_routes[R]['query'] :
 	never :
 	never;
 
-type DefaultRouteQuery<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
+type DefaultRouteQuery<A extends types.AtomName, R extends RouteName<A>> =
 	DefaultRouteQueryParamArray<A,R> extends readonly unknown[] ?
 	ArrayElement<DefaultRouteQueryParamArray<A,R>> :
 	never;
 
 // export const b:DefaultRouteQueryParam<'user', 'find'> = 's';
 
-type CustomRouteQueryParamArray<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
+type CustomRouteQueryParamArray<A extends types.AtomName, R extends RouteName<A>> =
 	'routes' extends keyof typeof dock_book[A]['dock'] ?
 	R extends keyof typeof dock_book[A]['dock']['routes'] ?
 	'query' extends keyof typeof dock_book[A]['dock']['routes'][R] ?
@@ -141,7 +141,7 @@ type CustomRouteQueryParamArray<A extends urn_core_client.types.AtomName, R exte
 	never :
 	never;
 
-type CustomRouteQueryParam<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
+type CustomRouteQueryParam<A extends types.AtomName, R extends RouteName<A>> =
 	CustomRouteQueryParamArray<A,R> extends readonly unknown[] ?
 	ArrayElement<CustomRouteQueryParamArray<A,R>> :
 	never;
@@ -151,7 +151,7 @@ type CustomRouteQueryParam<A extends urn_core_client.types.AtomName, R extends R
  * The `extends string` check is needed so that when the type is wrong tsc error
  * will show which strings are valid.
  */
-export type RouteQueryParam<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
+export type RouteQueryParam<A extends types.AtomName, R extends RouteName<A>> =
 	DefaultRouteQuery<A,R> | CustomRouteQueryParam<A,R> extends string ?
 	DefaultRouteQuery<A,R> | CustomRouteQueryParam<A,R> :
 	never;
