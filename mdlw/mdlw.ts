@@ -178,7 +178,9 @@ function _validate_route<A extends types.AtomName, R extends types.RouteName<A>>
 	
 }
 
-function _limit(api_request:types.Api.Request<any,any>){
+function _limit<A extends types.AtomName, R extends types.RouteName<A>>(
+	api_request:types.Api.Request<A,R>
+){
 	let options = (api_request.query as any)?.options;
 	if(!options){
 		options = {};
@@ -192,7 +194,7 @@ function _limit(api_request:types.Api.Request<any,any>){
 function _get_route_def<A extends types.AtomName, R extends types.RouteName<A>>(api_request:types.Api.Request<A,R>)
 		:types.Book.Definition.Dock.Routes.Route<A,R>{
 	
-	const atom_dock = _get_atom_dock(api_request.atom_name);
+	const atom_dock = _get_atom_dock<A>(api_request.atom_name);
 	
 	const default_routes = return_default_routes(api_request.atom_name);
 	
@@ -212,7 +214,7 @@ function _get_route_def<A extends types.AtomName, R extends types.RouteName<A>>(
 	return atom_dock.routes[api_request.route_name]!;
 }
 
-function _get_atom_dock(atom_name:types.AtomName)
+function _get_atom_dock<A extends types.AtomName>(atom_name:A)
 		:types.Book.Definition.Dock{
 	
 	const atom_dock = dock_book[atom_name as keyof typeof dock_book].dock as
