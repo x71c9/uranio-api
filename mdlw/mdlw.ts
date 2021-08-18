@@ -12,7 +12,7 @@ const urn_ret = urn_return.create(urn_log.util.return_injector);
 
 const urn_exc = urn_exception.init('EXPRESS_MDLW', 'Express middlewares');
 
-import {api_book} from 'uranio-books/api';
+import {dock_book} from 'uranio-books/dock';
 
 import urn_core from 'uranio-core';
 
@@ -104,13 +104,13 @@ async function _auth_validate_and_call<A extends types.AtomName, R extends types
 	auth_route_request: types.Api.Request<A,R>,
 	handler: types.AuthHandler<A,R>,
 ){
-	const api_def = api_book[auth_route_request.atom_name as types.AuthName] as types.Book.BasicDefinition;
+	const dock_def = dock_book[auth_route_request.atom_name as types.AuthName] as types.Book.BasicDefinition;
 	
-	if(!api_def.api){
-		throw urn_exc.create('NOAPIDEF', `Invalid api definition`);
+	if(!dock_def.dock){
+		throw urn_exc.create('NOAPIDEF', `Invalid dock definition`);
 	}
 	
-	urn_log.fn_debug(`Router Auth ${api_def.api.url} [${auth_route_request.atom_name}]`);
+	urn_log.fn_debug(`Router Auth ${dock_def.dock.url} [${auth_route_request.atom_name}]`);
 	
 	_auth_validate(auth_route_request);
 	
@@ -190,42 +190,42 @@ function _limit(api_request:types.Api.Request<any,any>){
 }
 
 function _get_route_def<A extends types.AtomName, R extends types.RouteName<A>>(api_request:types.Api.Request<A,R>)
-		:types.Book.Definition.Api.Routes.Route<A,R>{
+		:types.Book.Definition.Dock.Routes.Route<A,R>{
 	
-	const atom_api = _get_atom_api(api_request.atom_name);
+	const atom_dock = _get_atom_dock(api_request.atom_name);
 	
 	const default_routes = return_default_routes(api_request.atom_name);
 	
-	if(!atom_api.routes){
-		atom_api.routes = default_routes;
+	if(!atom_dock.routes){
+		atom_dock.routes = default_routes;
 	}else{
-		atom_api.routes = {
+		atom_dock.routes = {
 			...default_routes,
-			...atom_api.routes
+			...atom_dock.routes
 		};
 	}
 	
-	if(!atom_api.routes[api_request.route_name]){
+	if(!atom_dock.routes[api_request.route_name]){
 		throw urn_exc.create(`INVALID_ROUTE_NAME`, `Invalid route name.`);
 	}
 	
-	return atom_api.routes[api_request.route_name]!;
+	return atom_dock.routes[api_request.route_name]!;
 }
 
-function _get_atom_api(atom_name:types.AtomName)
-		:types.Book.Definition.Api{
+function _get_atom_dock(atom_name:types.AtomName)
+		:types.Book.Definition.Dock{
 	
-	const atom_api = api_book[atom_name as keyof typeof api_book].api as
-		types.Book.Definition.Api;
+	const atom_dock = dock_book[atom_name as keyof typeof dock_book].dock as
+		types.Book.Definition.Dock;
 	
-	if(!atom_api){
+	if(!atom_dock){
 		throw urn_exc.create(
 			`INVLID_API_DEF`,
 			'Invalid api definition in api_book.'
 		);
 	}
 	
-	return atom_api;
+	return atom_dock;
 	
 }
 
