@@ -28,7 +28,7 @@ export namespace Book {
 	
 	export type BasicDefinition =
 		urn_core.types.Book.BasicDefinition &
-		{ api?: Definition.Api }
+		{ dock?: Definition.Dock }
 	
 	export type Definition<A extends urn_core.types.AtomName> =
 		Book.BasicDefinition &
@@ -37,17 +37,17 @@ export namespace Book {
 	export namespace Definition {
 		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		// export import Api = book_cln.Book.Definition.Api;
+		// export import Dock = book_cln.Book.Definition.Dock;
 		
-		export type Api = book_cln.Book.Definition.Api;
+		export type Dock = book_cln.Book.Definition.Dock;
 		
-		export namespace Api {
+		export namespace Dock {
 			
-			export type Routes = book_cln.Book.Definition.Api.Routes;
+			export type Routes = book_cln.Book.Definition.Dock.Routes;
 			
 			export namespace Routes {
 				
-				export type Route<A extends urn_core.types.AtomName, R extends RouteName<A>> = book_cln.Book.Definition.Api.Routes.Route & {
+				export type Route<A extends urn_core.types.AtomName, R extends RouteName<A>> = book_cln.Book.Definition.Dock.Routes.Route & {
 					call?: Route.Call<A,R>
 				}
 				

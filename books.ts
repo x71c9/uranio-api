@@ -137,14 +137,14 @@ export const bll = {
 	request: {}
 } as const;
 
-export const api = {
+export const dock = {
 	error: {
-		api:{
+		dock:{
 			url: '/errors'
 		}
 	},
 	request: {
-		api:{
+		dock:{
 			url: '/requests'
 		}
 	}

@@ -23,20 +23,20 @@ export namespace Book {
 	
 	export type BasicDefinition =
 		urn_core_client.types.Book.BasicDefinition &
-		{ api?: Definition.Api }
+		{ dock?: Definition.Dock }
 	
 	export type Definition =
 		Book.BasicDefinition
 	
 	export namespace Definition {
 		
-		export type Api = {
+		export type Dock = {
 			url: string,
 			auth?: string,
-			routes?: Api.Routes
+			routes?: Dock.Routes
 		}
 		
-		export namespace Api {
+		export namespace Dock {
 			
 			export type Routes = {
 				[k:string]: Routes.Route

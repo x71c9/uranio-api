@@ -6,7 +6,7 @@
 
 import urn_core_client from 'uranio-core/client';
 
-import {api_book} from 'uranio-books-client/api';
+import {dock_book} from 'uranio-books-client/dock';
 
 import * as routes from '../routes/client';
 
@@ -78,10 +78,10 @@ type DefaultRouteURL<A extends urn_core_client.types.AtomName, R extends RouteNa
 	never;
 
 type CustomRouteURL<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
-	'routes' extends keyof typeof api_book[A]['api'] ?
-	R extends keyof typeof api_book[A]['api']['routes'] ?
-	'url' extends keyof typeof api_book[A]['api']['routes'][R] ?
-	typeof api_book[A]['api']['routes'][R]['url'] :
+	'routes' extends keyof typeof dock_book[A]['dock'] ?
+	R extends keyof typeof dock_book[A]['dock']['routes'] ?
+	'url' extends keyof typeof dock_book[A]['dock']['routes'][R] ?
+	typeof dock_book[A]['dock']['routes'][R]['url'] :
 	never :
 	never :
 	never;
@@ -133,10 +133,10 @@ type DefaultRouteQuery<A extends urn_core_client.types.AtomName, R extends Route
 // export const b:DefaultRouteQueryParam<'user', 'find'> = 's';
 
 type CustomRouteQueryParamArray<A extends urn_core_client.types.AtomName, R extends RouteName<A>> =
-	'routes' extends keyof typeof api_book[A]['api'] ?
-	R extends keyof typeof api_book[A]['api']['routes'] ?
-	'query' extends keyof typeof api_book[A]['api']['routes'][R] ?
-	typeof api_book[A]['api']['routes'][R]['query'] :
+	'routes' extends keyof typeof dock_book[A]['dock'] ?
+	R extends keyof typeof dock_book[A]['dock']['routes'] ?
+	'query' extends keyof typeof dock_book[A]['dock']['routes'][R] ?
+	typeof dock_book[A]['dock']['routes'][R]['query'] :
 	never :
 	never :
 	never;

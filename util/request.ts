@@ -6,7 +6,7 @@
 
 import {urn_util, urn_response, urn_return, urn_log, urn_exception} from 'urn-lib';
 
-import {api_book} from 'uranio-books/api';
+import {dock_book} from 'uranio-books/dock';
 
 import {api_config} from '../conf/defaults';
 
@@ -70,13 +70,13 @@ export function process_request_path(full_path:string)
 	return api_request_paths;
 }
 
-export function get_auth_action(atom_name:types.AtomName, route_name:keyof types.Book.Definition.Api.Routes)
+export function get_auth_action(atom_name:types.AtomName, route_name:keyof types.Book.Definition.Dock.Routes)
 		:types.AuthAction{
-	const atom_api = _get_atom_api(atom_name);
-	if(!atom_api.routes || !atom_api.routes[route_name]){
+	const atom_dock = _get_atom_dock(atom_name);
+	if(!atom_dock.routes || !atom_dock.routes[route_name]){
 		throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name [${route_name}] from atom [${atom_name}].`);
 	}
-	const auth_action = atom_api.routes[route_name].action;
+	const auth_action = atom_dock.routes[route_name].action;
 	if(!(auth_action in types.AuthAction)){
 		throw urn_exc.create(`INVALID_AUTH_ACTION`, `Invalid auth action [${auth_action}] for [${auth_action}][${route_name}].`);
 	}
@@ -85,10 +85,10 @@ export function get_auth_action(atom_name:types.AtomName, route_name:keyof types
 
 export function get_atom_name_from_atom_path(atom_path:string)
 		:types.AtomName | undefined{
-	let atom_name:keyof typeof api_book;
-	for(atom_name in api_book){
-		const api_def = api_book[atom_name] as types.Book.Definition<typeof atom_name>;
-		if(api_def.api && api_def.api.url && api_def.api.url === atom_path){
+	let atom_name:keyof typeof dock_book;
+	for(atom_name in dock_book){
+		const dock_def = dock_book[atom_name] as types.Book.Definition<typeof atom_name>;
+		if(dock_def.dock && dock_def.dock.url && dock_def.dock.url === atom_path){
 			return atom_name;
 		}
 	}
@@ -101,13 +101,13 @@ export function get_route_name<A extends types.AtomName, R extends types.RouteNa
 	route_path:string,
 	http_method:types.RouteMethod
 ):R | undefined{
-	const atom_api = _get_atom_api(atom_name);
-	if(!atom_api.routes){
+	const atom_dock = _get_atom_dock(atom_name);
+	if(!atom_dock.routes){
 		// throw urn_exc.create(`INVALID_API_DEF`, `Invalid api_def. Missing "routes" property.`);
 		return undefined;
 	}
-	for(const route_name in atom_api.routes){
-		const route_def = atom_api.routes[route_name];
+	for(const route_name in atom_dock.routes){
+		const route_def = atom_dock.routes[route_name];
 		if(route_def.method === http_method){
 			if(route_def.url === route_path){
 				return route_name as R;
@@ -147,8 +147,8 @@ export function get_route_name<A extends types.AtomName, R extends types.RouteNa
 
 export function is_auth_request(atom_name: types.AtomName, atom_path: string)
 		:boolean{
-	const atom_api = api_book[atom_name]['api'] as types.Book.Definition.Api;
-	if(atom_api.auth && atom_api.auth === atom_path){
+	const atom_dock = dock_book[atom_name]['dock'] as types.Book.Definition.Dock;
+	if(atom_dock.auth && atom_dock.auth === atom_path){
 		return true;
 	}
 	return false;
@@ -159,11 +159,11 @@ export function get_params_from_route_path<A extends types.AtomName, R extends t
 	route_name: R,
 	route_path: string
 ):types.Api.Request.Params<A,R>{
-	const atom_api = _get_atom_api(atom_name);
-	for(const route_key in atom_api.routes){
+	const atom_dock = _get_atom_dock(atom_name);
+	for(const route_key in atom_dock.routes){
 		if(route_key === route_name){
 			const params = {} as types.Api.Request.Params<A,R>;
-			let atom_route_url = atom_api.routes[route_key].url;
+			let atom_route_url = atom_dock.routes[route_key].url;
 			if(atom_route_url[atom_route_url.length - 1] !== '/'){
 				atom_route_url += '/';
 			}
@@ -194,19 +194,19 @@ export function get_params_from_route_path<A extends types.AtomName, R extends t
 	return {} as types.Api.Request.Params<A,R>;
 }
 
-function _get_atom_api(atom_name:types.AtomName){
-	const atom_api = api_book[atom_name as keyof typeof api_book].api as
-		types.Book.Definition.Api;
+function _get_atom_dock(atom_name:types.AtomName){
+	const atom_dock = dock_book[atom_name as keyof typeof dock_book].dock as
+		types.Book.Definition.Dock;
 	const default_routes = return_default_routes(atom_name);
-	if(!atom_api.routes){
-		atom_api.routes = default_routes;
+	if(!atom_dock.routes){
+		atom_dock.routes = default_routes;
 	}else{
-		atom_api.routes = {
+		atom_dock.routes = {
 			...default_routes,
-			...atom_api.routes
+			...atom_dock.routes
 		};
 	}
-	return atom_api;
+	return atom_dock;
 }
 
 export function store_error(

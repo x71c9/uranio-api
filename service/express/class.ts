@@ -16,7 +16,7 @@ const urn_ret = urn_return.create(urn_log.util.return_injector);
 
 import {atom_book} from 'uranio-books/atom';
 
-import {api_book} from 'uranio-books/api';
+import {dock_book} from 'uranio-books/dock';
 
 import {register_exception_handler} from '../../util/exc_handler';
 
@@ -54,21 +54,21 @@ class ExpressWebService implements Service {
 		});
 		
 		
-		let atom_name:keyof typeof api_book;
-		for(atom_name in api_book){
-			const api_def = api_book[atom_name] as Book.BasicDefinition;
+		let atom_name:keyof typeof dock_book;
+		for(atom_name in dock_book){
+			const dock_def = dock_book[atom_name] as Book.BasicDefinition;
 			const atom_def = atom_book[atom_name] as Book.BasicDefinition;
 			const router = create_express_route(atom_name);
-			if(api_def.api){
+			if(dock_def.dock){
 				if(atom_def.connection && atom_def.connection === 'log'){
-					this.express_app.use(`${api_config.prefix_api}${api_config.prefix_log}${api_def.api.url}`, router);
+					this.express_app.use(`${api_config.prefix_api}${api_config.prefix_log}${dock_def.dock.url}`, router);
 				}else{
-					this.express_app.use(`${api_config.prefix_api}${api_def.api.url}`, router);
+					this.express_app.use(`${api_config.prefix_api}${dock_def.dock.url}`, router);
 				}
 			}
-			if(api_def.api && api_def.api.auth && typeof api_def.api.auth === 'string'){
+			if(dock_def.dock && dock_def.dock.auth && typeof dock_def.dock.auth === 'string'){
 				const auth_route = create_express_auth_route(atom_name as AuthName);
-				this.express_app.use(`${api_config.prefix_api}${api_def.api.auth}`, auth_route);
+				this.express_app.use(`${api_config.prefix_api}${dock_def.dock.auth}`, auth_route);
 			}
 		}
 	}

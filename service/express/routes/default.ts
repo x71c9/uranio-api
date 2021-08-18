@@ -8,7 +8,7 @@ import express from 'express';
 
 import {urn_log} from 'urn-lib';
 
-import {api_book} from 'uranio-books/api';
+import {dock_book} from 'uranio-books/dock';
 
 import * as types from '../../../types';
 
@@ -27,28 +27,28 @@ export function create_express_route<A extends types.AtomName>(atom_name:A)
 	
 	const router = express.Router();
 	
-	if(!api_book[atom_name]){
+	if(!dock_book[atom_name]){
 		return router;
 	}
 	
-	const atom_api = api_book[atom_name].api as types.Book.Definition.Api;
+	const atom_dock = dock_book[atom_name].dock as types.Book.Definition.Dock;
 	
-	if(!atom_api){
+	if(!atom_dock){
 		return router;
 	}
 	
 	const default_routes = return_default_routes(atom_name);
 	
-	if(!atom_api.routes){
-		atom_api.routes = default_routes;
+	if(!atom_dock.routes){
+		atom_dock.routes = default_routes;
 	}else{
-		atom_api.routes = {
+		atom_dock.routes = {
 			...default_routes,
-			...atom_api.routes
+			...atom_dock.routes
 		};
 	}
 	
-	for(const [_route_name, route_def] of Object.entries(atom_api.routes)){
+	for(const [_route_name, route_def] of Object.entries(atom_dock.routes)){
 		switch(route_def.method){
 			case types.RouteMethod.GET: {
 				router.get(route_def.url, _return_express_middleware());
