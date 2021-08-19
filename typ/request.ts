@@ -22,9 +22,9 @@ export namespace Api {
 	
 	export type Request<A extends types.AtomName, R extends RouteName<A>> =
 		Request.Paths & {
-		method: R
+		method: RouteMethod
 		atom_name: A
-		route_name: string
+		route_name: R
 		is_auth: boolean
 		auth_action: types.AuthAction
 		params: Request.Params<A,R>

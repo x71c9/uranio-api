@@ -305,7 +305,7 @@ export function partial_api_request_to_atom_request<A extends types.AtomName, R 
 		connection_path: partial_api_request.connection_path,
 		method: partial_api_request.method,
 		atom_name: partial_api_request.atom_name,
-		route_name: partial_api_request.route_name,
+		route_name: partial_api_request.route_name as string,
 		auth_action: partial_api_request.auth_action
 	};
 	if(partial_api_request.ip){

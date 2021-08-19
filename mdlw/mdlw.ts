@@ -207,11 +207,11 @@ function _get_route_def<A extends types.AtomName, R extends types.RouteName<A>>(
 		};
 	}
 	
-	if(!atom_dock.routes[api_request.route_name]){
+	if(!atom_dock.routes[api_request.route_name as string]){
 		throw urn_exc.create(`INVALID_ROUTE_NAME`, `Invalid route name.`);
 	}
 	
-	return atom_dock.routes[api_request.route_name]!;
+	return atom_dock.routes[api_request.route_name as string]!;
 }
 
 function _get_atom_dock<A extends types.AtomName>(atom_name:A)
