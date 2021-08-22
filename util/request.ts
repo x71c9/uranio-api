@@ -45,6 +45,9 @@ export function process_request_path(full_path:string)
 		splitted_no_prefix = splitted_no_prefix.slice(1); // ['requests', '3924809234']
 	}
 	const atom_path = '/' + splitted_no_prefix[0]; // /products
+	if(splitted_no_prefix.length < 2){
+		splitted_no_prefix.push('');
+	}
 	const route_sliced_path = splitted_no_prefix.slice(1); // ['2972982729']
 	let route_last = route_sliced_path[route_sliced_path.length - 1]; // ['2389478932?filter=abc']
 	if(route_last.includes('?')){
