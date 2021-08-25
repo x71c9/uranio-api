@@ -47,12 +47,14 @@ export namespace Book {
 			
 			export namespace Routes {
 				
-				export type Route<A extends urn_core.types.AtomName, R extends RouteName<A>> = book_cln.Book.Definition.Dock.Routes.Route & {
-					call?: Route.Call<A,R>
-				}
+				export type Route<A extends urn_core.types.AtomName, R extends RouteName<A>> =
+					book_cln.Book.Definition.Dock.Routes.Route & {
+						call?: Route.Call<A,R>
+					}
 				
 				export namespace Route {
-					export type Call<A extends urn_core.types.AtomName, R extends RouteName<A>> = (route_request: ApiRequest.Request<A,R>) => any
+					export type Call<A extends urn_core.types.AtomName, R extends RouteName<A>> =
+						(route_request: ApiRequest.Request<A,R>) => any
 				}
 				
 			}
@@ -60,10 +62,10 @@ export namespace Book {
 		
 		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		export import Properties = book_cln.Book.Definition.Properties;
+		export import Properties = urn_core.types.Book.Definition.Properties;
 		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		export import Property = book_cln.Book.Definition.Property;
+		export import Property = urn_core.types.Book.Definition.Property;
 		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		export import Security = urn_core.types.Book.Definition.Security;

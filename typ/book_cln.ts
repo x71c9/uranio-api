@@ -56,10 +56,14 @@ export namespace Book {
 		}
 		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		export import Properties = urn_core_client.types.Book.Definition.Properties;
+		// export import Properties = urn_core_client.types.Book.Definition.Properties;
 		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		export import Property = urn_core_client.types.Book.Definition.Property;
+		// export import Property = urn_core_client.types.Book.Definition.Property;
+		
+		export type Property = urn_core_client.types.Book.Definition.Property;
+		
+		export type Properties = urn_core_client.types.Book.Definition.Properties;
 		
 	}
 	
