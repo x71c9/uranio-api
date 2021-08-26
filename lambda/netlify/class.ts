@@ -4,10 +4,9 @@
  * @packageDocumentation
  */
 
-// import {urn_log, urn_response, urn_exception} from 'urn-lib';
-import {urn_log, urn_response, urn_util} from 'urn-lib';
+import {urn_log, urn_response, urn_exception, urn_util} from 'urn-lib';
 
-// const urn_exc = urn_exception.init('NETLIFYCLASS', 'Netlify class module');
+const urn_exc = urn_exception.init('NETLIFYCLASS', 'Netlify class module');
 
 import urn_core from 'uranio-core';
 
@@ -106,7 +105,16 @@ function _lambda_request_to_partial_api_request(event: LambdaEvent, context: Lam
 	const params = get_params_from_route_path(atom_name, route_name, api_request_paths.route_path);
 	
 	if(event.body){
-		api_request.body = event.body;
+		try{
+			api_request.body = (typeof event.body === 'string') ?
+				JSON.parse(event.body) : event.body;
+		}catch(err){
+			throw urn_exc.create_invalid_request(
+				`INVALID_BODY_REQUEST`,
+				`Invalid body format. Body must be in JSON format.`,
+				err
+			);
+		}
 	}
 	if(event.headers){
 		api_request.headers = event.headers;
