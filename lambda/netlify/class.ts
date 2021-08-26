@@ -44,6 +44,9 @@ class NetlifyLambda implements Lambda {
 		try{
 			const api_request = validate_request(partial_api_request);
 			const urn_res = await this.lambda_route(api_request);
+			// urn_core.disconnect().then(() => {
+			//   urn_log.debug(`Database disconnected.`);
+			// });
 			return _lambda_response(urn_res);
 		}catch(ex){
 			const urn_err = api_handle_and_store_exception(ex, partial_api_request);
