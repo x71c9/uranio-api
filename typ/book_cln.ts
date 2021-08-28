@@ -65,6 +65,38 @@ export namespace Book {
 		
 		export type Properties = urn_core_client.types.Book.Definition.Properties;
 		
+		export namespace Property {
+			export type ID = urn_core_client.types.Book.Definition.Property.ID;
+			export type Text = urn_core_client.types.Book.Definition.Property.Text;
+			export type LongText = urn_core_client.types.Book.Definition.Property.LongText;
+			export type String = urn_core_client.types.Book.Definition.Property.String;
+			export type Number = urn_core_client.types.Book.Definition.Property.Number;
+			export type Enum = urn_core_client.types.Book.Definition.Property.Enum;
+			export type Set = urn_core_client.types.Book.Definition.Property.Set;
+			export type Email = urn_core_client.types.Book.Definition.Property.Email;
+			export type Integer = urn_core_client.types.Book.Definition.Property.Integer;
+			export type Float = urn_core_client.types.Book.Definition.Property.Float;
+			export type Binary = urn_core_client.types.Book.Definition.Property.Binary;
+			export type Encrypted = urn_core_client.types.Book.Definition.Property.Encrypted;
+			export type Time = urn_core_client.types.Book.Definition.Property.Time;
+			export type EnumString = urn_core_client.types.Book.Definition.Property.EnumString;
+			export type EnumNumber = urn_core_client.types.Book.Definition.Property.EnumNumber;
+			export type SetString = urn_core_client.types.Book.Definition.Property.SetNumber;
+			export type SetNumber = urn_core_client.types.Book.Definition.Property.SetString;
+			export type Atom = urn_core_client.types.Book.Definition.Property.Atom;
+			export type AtomArray = urn_core_client.types.Book.Definition.Property.AtomArray;
+			export namespace Format {
+				export type Float = urn_core_client.types.Book.Definition.Property.Format.Float;
+				export namespace Validation {
+					export type String = urn_core_client.types.Book.Definition.Property.Validation.String;
+					export type Number = urn_core_client.types.Book.Definition.Property.Validation.Number;
+					export type Time = urn_core_client.types.Book.Definition.Property.Validation.Time;
+					export type SetString = urn_core_client.types.Book.Definition.Property.Validation.SetString;
+					export type SetNumber = urn_core_client.types.Book.Definition.Property.Validation.SetNumber;
+					export type Atom = urn_core_client.types.Book.Definition.Property.Validation.Atom;
+				}
+			}
+		}
 	}
 	
 }
