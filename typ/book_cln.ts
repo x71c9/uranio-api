@@ -73,11 +73,13 @@ export namespace Book {
 			export type Number = urn_core_client.types.Book.Definition.Property.Number;
 			export type Enum = urn_core_client.types.Book.Definition.Property.Enum;
 			export type Set = urn_core_client.types.Book.Definition.Property.Set;
+			export type DayTime = urn_core_client.types.Book.Definition.Property.DayTime;
 			export type Email = urn_core_client.types.Book.Definition.Property.Email;
 			export type Integer = urn_core_client.types.Book.Definition.Property.Integer;
 			export type Float = urn_core_client.types.Book.Definition.Property.Float;
 			export type Binary = urn_core_client.types.Book.Definition.Property.Binary;
 			export type Encrypted = urn_core_client.types.Book.Definition.Property.Encrypted;
+			export type Day = urn_core_client.types.Book.Definition.Property.Day;
 			export type Time = urn_core_client.types.Book.Definition.Property.Time;
 			export type EnumString = urn_core_client.types.Book.Definition.Property.EnumString;
 			export type EnumNumber = urn_core_client.types.Book.Definition.Property.EnumNumber;
@@ -90,7 +92,8 @@ export namespace Book {
 				export namespace Validation {
 					export type String = urn_core_client.types.Book.Definition.Property.Validation.String;
 					export type Number = urn_core_client.types.Book.Definition.Property.Validation.Number;
-					export type Time = urn_core_client.types.Book.Definition.Property.Validation.Time;
+					export type Day = urn_core_client.types.Book.Definition.Property.Validation.DayTime;
+					export type Time = urn_core_client.types.Book.Definition.Property.Validation.DayTime;
 					export type SetString = urn_core_client.types.Book.Definition.Property.Validation.SetString;
 					export type SetNumber = urn_core_client.types.Book.Definition.Property.Validation.SetNumber;
 					export type Atom = urn_core_client.types.Book.Definition.Property.Validation.Atom;
