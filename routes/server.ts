@@ -30,11 +30,11 @@ export function atom_dock_with_defaults(
 	return common_atom_dock_with_defaults(default_routes, atom_name);
 }
 
-export function return_default_routes<A extends types.AtomName>(atom_name:types.AtomName)
+export function return_default_routes(atom_name:types.AtomName)
 		:types.Book.Definition.Dock.Routes{
 	
-	(default_routes.find as unknown as types.Book.Definition.Dock.Routes.Route<A,'find'>).call =
-		async (api_request:types.Api.Request<A,'find'>) => {
+	(default_routes.find as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name,'find'>).call =
+		async (api_request:types.Api.Request<typeof atom_name,'find'>) => {
 			urn_log.fn_debug(`Router Call GET [find] / [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 				urn_core.bll.BLL<typeof atom_name>;
@@ -44,8 +44,8 @@ export function return_default_routes<A extends types.AtomName>(atom_name:types.
 			return bll_res;
 		};
 	
-	(default_routes.find_id as unknown as types.Book.Definition.Dock.Routes.Route<A, 'find_id'>).call =
-		async (api_request:types.Api.Request<A, 'find_id'>) => {
+	(default_routes.find_id as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find_id'>).call =
+		async (api_request:types.Api.Request<typeof atom_name, 'find_id'>) => {
 			urn_log.fn_debug(`Router Call GET [find_id] /:id [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 				urn_core.bll.BLL<typeof atom_name>;
@@ -56,8 +56,8 @@ export function return_default_routes<A extends types.AtomName>(atom_name:types.
 			return bll_res;
 		};
 	
-	(default_routes.find_one as unknown as types.Book.Definition.Dock.Routes.Route<A, 'find_one'>).call =
-		async (api_request:types.Api.Request<A, 'find_one'>) => {
+	(default_routes.find_one as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find_one'>).call =
+		async (api_request:types.Api.Request<typeof atom_name, 'find_one'>) => {
 			urn_log.fn_debug(`Router Call GET [find_one] / [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 				urn_core.bll.BLL<typeof atom_name>;
@@ -67,8 +67,8 @@ export function return_default_routes<A extends types.AtomName>(atom_name:types.
 			return bll_res;
 		};
 	
-	(default_routes.insert as unknown as types.Book.Definition.Dock.Routes.Route<A, 'insert'>).call =
-		async (api_request:types.Api.Request<A, 'insert'>) => {
+	(default_routes.insert as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'insert'>).call =
+		async (api_request:types.Api.Request<typeof atom_name, 'insert'>) => {
 			urn_log.fn_debug(`Router Call POST [insert] / [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 				urn_core.bll.BLL<typeof atom_name>;
@@ -76,8 +76,8 @@ export function return_default_routes<A extends types.AtomName>(atom_name:types.
 			return bll_res;
 		};
 	
-	(default_routes.update as unknown as types.Book.Definition.Dock.Routes.Route<A, 'update'>).call =
-		async (api_request:types.Api.Request<A, 'update'>) => {
+	(default_routes.update as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'update'>).call =
+		async (api_request:types.Api.Request<typeof atom_name, 'update'>) => {
 			urn_log.fn_debug(`Router Call POST [update] / [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 				urn_core.bll.BLL<typeof atom_name>;
@@ -88,8 +88,8 @@ export function return_default_routes<A extends types.AtomName>(atom_name:types.
 			return bll_res;
 		};
 	
-	(default_routes.delete as unknown as types.Book.Definition.Dock.Routes.Route<A, 'delete'>).call =
-		async (api_request:types.Api.Request<A, 'delete'>) => {
+	(default_routes.delete as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'delete'>).call =
+		async (api_request:types.Api.Request<typeof atom_name, 'delete'>) => {
 			urn_log.fn_debug(`Router Call DELETE [delete] / [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 				urn_core.bll.BLL<typeof atom_name>;
