@@ -107,6 +107,17 @@ function _lambda_request_to_partial_api_request(event: LambdaEvent, context: Lam
 	
 	const params = get_params_from_route_path(atom_name, route_name, api_request_paths.route_path);
 	
+	// ----
+	// For some reason when TRX call a `delete` hook, the lambda Netlify function
+	// receives a string type `body` equal to `[object Object]`.
+	// I tried to debug. It seems Axios is not responsible. It should not send any
+	// body with DELETE method.
+	// I tried to remove the netlify redirect but with no success.
+	// It might be something in the Netlify Lambda function.
+	// ----
+	if(event.body === '[object Object]'){
+		event.body = null;
+	}
 	if(event.body){
 		try{
 			api_request.body = (typeof event.body === 'string') ?

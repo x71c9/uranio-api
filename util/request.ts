@@ -77,11 +77,11 @@ export function get_auth_action(atom_name:types.AtomName, route_name:keyof types
 		:types.AuthAction{
 	const atom_dock = _get_atom_dock(atom_name);
 	if(!atom_dock.routes || !atom_dock.routes[route_name]){
-		throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name [${route_name}] from atom [${atom_name}].`);
+		throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name \`${route_name}\` from atom \`${atom_name}\`.`);
 	}
 	const auth_action = atom_dock.routes[route_name].action;
 	if(!(auth_action in types.AuthAction)){
-		throw urn_exc.create(`INVALID_AUTH_ACTION`, `Invalid auth action [${auth_action}] for [${auth_action}][${route_name}].`);
+		throw urn_exc.create(`INVALID_AUTH_ACTION`, `Invalid auth action \`${auth_action}\` for \`${auth_action}\`\`${route_name}\`.`);
 	}
 	return auth_action;
 }
@@ -175,7 +175,7 @@ export function get_params_from_route_path<A extends types.AtomName, R extends t
 			if(atom_route_splitted.length !== splitted_route_path.length){
 				// throw urn_exc.create_invalid_request(
 				//   `INVALID_PATH_WRONG_FORMAT`,
-				//   `Invalid path. Format wrong for atom [${atom_name}] route [${route_name}]`
+				//   `Invalid path. Format wrong for atom \`${atom_name}\` route \`${route_name}\``
 				// );
 				return {} as types.Api.Request.Params<A,R>;
 			}
@@ -332,42 +332,42 @@ export function validate_request<A extends types.AtomName, R extends types.Route
 	if(typeof api_request.full_path !== 'string' || api_request.full_path === ''){
 		throw urn_exc.create_invalid_request(
 			`INVALID_PATH_FULL_PATH`,
-			`Invalid path. [full_path] [${api_request.full_path}].
+			`Invalid path. \`full_path\` \`${api_request.full_path}\`.
 		`);
 	}
 	if(typeof api_request.route_path !== 'string' || api_request.route_path === ''){
 		throw urn_exc.create_invalid_request(
 			`INVALID_PATH_ROUTE_PATH`,
-			`Invalid path. [route_path] [${api_request.full_path}].`
+			`Invalid path. \`route_path\` \`${api_request.full_path}\`.`
 		);
 	}
 	if(typeof api_request.atom_path !== 'string' || api_request.atom_path === ''){
 		throw urn_exc.create_invalid_request(
 			`INVALID_PATH_ATOM_PATH`,
-			`Invalid path. [atom_path] [${api_request.full_path}].`);
+			`Invalid path. \`atom_path\` \`${api_request.full_path}\`.`);
 	}
 	if(typeof api_request.connection_path !== 'string'){
 		throw urn_exc.create_invalid_request(
 			`INVALID_PATH_CONN_PATH`,
-			`Invalid path. [connection_path] [${api_request.full_path}].`
+			`Invalid path. \`connection_path\` \`${api_request.full_path}\`.`
 		);
 	}
 	if(typeof api_request.method !== 'string' || api_request.method as string === ''){
 		throw urn_exc.create_invalid_request(
 			`INVALID_METHOD`,
-			`Invalid method. [${api_request.method}].`
+			`Invalid method. \`${api_request.method}\`.`
 		);
 	}
 	if(typeof api_request.atom_name !== 'string' || api_request.atom_name as string === ''){
 		throw urn_exc.create_invalid_request(
 			`INVALID_ATOM_NAME`,
-			`Invalid atom name. Full path [${api_request.full_path}].`
+			`Invalid atom name. Full path \`${api_request.full_path}\`.`
 		);
 	}
 	if(typeof api_request.route_name !== 'string' || api_request.route_name === ''){
 		throw urn_exc.create_invalid_request(
 			`INVALID_ROUTE_NAME`,
-			`Invalid route name. Full path [${api_request.full_path}].`
+			`Invalid route name. Full path \`${api_request.full_path}\`.`
 		);
 	}
 	if(typeof api_request.is_auth !== 'boolean'){
@@ -379,7 +379,7 @@ export function validate_request<A extends types.AtomName, R extends types.Route
 	if(typeof api_request.auth_action !== 'string' || api_request.auth_action as string === ''){
 		throw urn_exc.create_invalid_request(
 			`INVALID_AUTH_ACTION`,
-			`Invalid auth action. [${api_request.auth_action}].`
+			`Invalid auth action. \`${api_request.auth_action}\`.`
 		);
 	}
 	return api_request as types.Api.Request<A,R>;

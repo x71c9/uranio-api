@@ -68,7 +68,7 @@ export function only_valid_query_keys(query:unknown, valid_query_keys:string[])
 	if(query && typeof query === 'object'){
 		for(const [k] of Object.entries(query)){
 			if(!valid_query_keys.includes(k)){
-				const err_msg = `Invalid request query parameters [${k}]`;
+				const err_msg = `Invalid request query parameters \`${k}\``;
 				throw urn_exc.create_invalid_request(`INVALID_QUERY`, err_msg);
 			}
 		}
@@ -80,7 +80,7 @@ export function only_valid_param_keys(params:unknown, valid_params_keys:string[]
 	if(params && typeof params === 'object'){
 		for(const [k] of Object.entries(params)){
 			if(!valid_params_keys.includes(k)){
-				const err_msg = `Invalid parameters [${k}]`;
+				const err_msg = `Invalid parameters \`${k}\``;
 				throw urn_exc.create_invalid_request(`INVALID_PARAMETERS`, err_msg);
 			}
 		}
@@ -96,7 +96,7 @@ export function empty(p:unknown, param_name:string)
 		return true;
 	}
 	let err_msg = `Invalid request.`;
-	err_msg += ` [${param_name}]`;
+	err_msg += ` \`${param_name}\``;
 	err_msg += ` should be empty.`;
 	throw urn_exc.create_invalid_request(`INVALID_PARAM`, err_msg);
 }
