@@ -283,7 +283,7 @@ export function api_handle_exception<A extends types.AtomName, R extends types.R
 		msg,
 		error_code,
 		error_msg,
-		partial_api_request
+		{request: partial_api_request}
 	);
 	return urn_res;
 }
