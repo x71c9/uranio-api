@@ -12,6 +12,18 @@ import {
 } from './routes';
 
 export const default_routes = {
+	count: {
+		method: types.RouteMethod.GET,
+		action: types.AuthAction.READ,
+		url: '/count',
+		query: ['filter'],
+	},
+	find_one: {
+		method: types.RouteMethod.GET,
+		action: types.AuthAction.READ,
+		url: '/first',
+		query: ['filter', 'options'],
+	},
 	find: {
 		method: types.RouteMethod.GET,
 		action: types.AuthAction.READ,
@@ -23,12 +35,6 @@ export const default_routes = {
 		action: types.AuthAction.READ,
 		url: '/:id',
 		query: ['options'],
-	},
-	find_one: {
-		method: types.RouteMethod.GET,
-		action: types.AuthAction.READ,
-		url: '/',
-		query: ['filter', 'options'],
 	},
 	insert: {
 		method: types.RouteMethod.POST,

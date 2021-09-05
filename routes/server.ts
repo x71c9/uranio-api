@@ -33,6 +33,27 @@ export function atom_dock_with_defaults(
 export function return_default_routes(atom_name:types.AtomName)
 		:types.Book.Definition.Dock.Routes{
 	
+	(default_routes.count as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name,'count'>).call =
+		async (api_request:types.Api.Request<typeof atom_name,'count'>) => {
+			urn_log.fn_debug(`Router Call GET [count] / [${atom_name}]`);
+			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
+				urn_core.bll.BLL<typeof atom_name>;
+			const filter = (api_request.query as types.Api.Request.Query<'superuser', 'count'>).filter || {};
+			const bll_res = await urn_bll.count(filter);
+			return bll_res;
+		};
+	
+	(default_routes.find_one as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find_one'>).call =
+		async (api_request:types.Api.Request<typeof atom_name, 'find_one'>) => {
+			urn_log.fn_debug(`Router Call GET [find_one] / [${atom_name}]`);
+			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
+				urn_core.bll.BLL<typeof atom_name>;
+			const filter = (api_request.query as types.Api.Request.Query<'superuser', 'find'>).filter || {};
+			const options = (api_request.query as types.Api.Request.Query<'superuser', 'find'>).options;
+			const bll_res = await urn_bll.find_one(filter, options);
+			return bll_res;
+		};
+	
 	(default_routes.find as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name,'find'>).call =
 		async (api_request:types.Api.Request<typeof atom_name,'find'>) => {
 			urn_log.fn_debug(`Router Call GET [find] / [${atom_name}]`);
@@ -53,17 +74,6 @@ export function return_default_routes(atom_name:types.AtomName)
 				(api_request.params as types.Api.Request.Params<'superuser', 'find_id'>).id!,
 				(api_request.query as types.Api.Request.Query<'superuser', 'find_id'>).options
 			);
-			return bll_res;
-		};
-	
-	(default_routes.find_one as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find_one'>).call =
-		async (api_request:types.Api.Request<typeof atom_name, 'find_one'>) => {
-			urn_log.fn_debug(`Router Call GET [find_one] / [${atom_name}]`);
-			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
-				urn_core.bll.BLL<typeof atom_name>;
-			const filter = (api_request.query as types.Api.Request.Query<'superuser', 'find'>).filter || {};
-			const options = (api_request.query as types.Api.Request.Query<'superuser', 'find'>).options;
-			const bll_res = await urn_bll.find_one(filter, options);
 			return bll_res;
 		};
 	
