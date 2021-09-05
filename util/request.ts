@@ -112,7 +112,7 @@ export function get_route_name<A extends types.AtomName, R extends types.RouteNa
 	for(const route_name in atom_dock.routes){
 		const route_def = atom_dock.routes[route_name];
 		if(route_def.method === http_method){
-			if(route_def.url === route_path){
+			if(route_def.url === route_path || route_def.url + '/' === route_path){
 				return route_name as R;
 			}else if(route_def.url.includes(':')){
 				// if(route_path[route_path.length - 1] !== '/'){
