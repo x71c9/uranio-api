@@ -34,6 +34,8 @@ import {
 	LambdaMultiValueHeaders
 } from '../types';
 
+import {map_lambda_query_params} from '../util';
+
 @urn_log.util.decorators.debug_constructor
 @urn_log.util.decorators.debug_methods
 class NetlifyLambda implements Lambda {
@@ -85,7 +87,7 @@ function _lambda_request_to_partial_api_request(event: LambdaEvent, context: Lam
 		...api_request_paths,
 		method: event.httpMethod,
 		params: {},
-		query: event.queryStringParameters || {},
+		query: map_lambda_query_params(event.queryStringParameters || {}),
 	};
 	
 	const atom_name = get_atom_name_from_atom_path(api_request_paths.atom_path);
