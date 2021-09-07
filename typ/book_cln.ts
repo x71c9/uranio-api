@@ -49,6 +49,7 @@ export namespace Book {
 					action: urn_core_client.types.AuthAction,
 					url: string,
 					query?: string[],
+					return?: any
 				}
 				
 			}
