@@ -8,7 +8,7 @@ import {urn_exception} from 'urn-lib';
 
 const urn_exc = urn_exception.init('ROUTESMODULE', 'Client routes module.');
 
-import {dock_book} from 'uranio-books-client/dock';
+import {dock_book} from 'uranio-books/dock';
 
 import * as types from '../cln/types';
 

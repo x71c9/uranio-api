@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import {dock_book} from 'uranio-books-client/dock';
+import {dock_book} from 'uranio-books/dock';
 
 import * as types from '../cln/types';
 
