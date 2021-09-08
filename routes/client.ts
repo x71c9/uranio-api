@@ -11,6 +11,15 @@ import {
 	atom_dock_with_defaults as common_atom_dock_with_defaults
 } from './routes';
 
+/**
+ *
+ * NOTE:
+ *
+ * If the default routes are changed. They must be change also in:
+ * - routes/server.ts
+ * - uranio/urn-cli/cmd/hook.ts
+ *
+ */
 export const default_routes = {
 	count: {
 		method: types.RouteMethod.GET,

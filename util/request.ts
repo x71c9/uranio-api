@@ -205,8 +205,8 @@ function _get_atom_dock(atom_name:types.AtomName){
 		atom_dock.routes = default_routes;
 	}else{
 		atom_dock.routes = {
-			...default_routes,
-			...atom_dock.routes
+			...atom_dock.routes,
+			...default_routes
 		};
 	}
 	return atom_dock;

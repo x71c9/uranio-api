@@ -38,8 +38,8 @@ export function atom_dock_with_defaults(
 		atom_dock.routes = default_routes;
 	}else{
 		atom_dock.routes = {
-			...default_routes,
-			...atom_dock.routes
+			...atom_dock.routes,
+			...default_routes
 		};
 	}
 	
