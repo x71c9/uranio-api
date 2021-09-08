@@ -6,7 +6,7 @@
 
 import {AtomName} from '../cln/types';
 
-import {dock_book} from 'uranio-books-client/dock';
+import {dock_book} from 'uranio-books/dock';
 
 import {default_routes} from '../routes/client';
 
