@@ -6,7 +6,7 @@
 
 import express from 'express';
 
-import {urn_log} from 'urn-lib';
+import {urn_log, urn_util} from 'urn-lib';
 
 import {dock_book} from 'uranio-books/dock';
 
@@ -31,7 +31,13 @@ export function create_express_route<A extends types.AtomName>(atom_name:A)
 		return router;
 	}
 	
-	const atom_dock = dock_book[atom_name].dock as types.Book.Definition.Dock;
+	const dock_def = dock_book[atom_name] as types.Book.BasicDefinition;
+	
+	if(!urn_util.object.has_key(dock_def, 'dock')){
+		return router;
+	}
+	
+	const atom_dock = dock_def.dock as types.Book.Definition.Dock;
 	
 	if(!atom_dock){
 		return router;

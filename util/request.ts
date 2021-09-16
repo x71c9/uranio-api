@@ -150,7 +150,11 @@ export function get_route_name<A extends types.AtomName, R extends types.RouteNa
 
 export function is_auth_request(atom_name: types.AtomName, atom_path: string)
 		:boolean{
-	const atom_dock = dock_book[atom_name]['dock'] as types.Book.Definition.Dock;
+	const dock_def = dock_book[atom_name] as types.Book.BasicDefinition;
+	if(!urn_util.object.has_key(dock_def, 'dock')){
+		return false;
+	}
+	const atom_dock = dock_def['dock'] as types.Book.Definition.Dock;
 	if(atom_dock.auth && atom_dock.auth === atom_path){
 		return true;
 	}
@@ -198,9 +202,16 @@ export function get_params_from_route_path<A extends types.AtomName, R extends t
 }
 
 function _get_atom_dock(atom_name:types.AtomName){
-	const atom_dock = dock_book[atom_name as keyof typeof dock_book].dock as
-		types.Book.Definition.Dock;
 	const default_routes = return_default_routes(atom_name);
+	const dock_def = dock_book[atom_name] as types.Book.BasicDefinition;
+	if(!urn_util.object.has_key(dock_def, 'dock')){
+		return {
+			routes: {
+				...default_routes
+			}
+		};
+	}
+	const atom_dock = dock_def.dock as types.Book.Definition.Dock;
 	if(!atom_dock.routes){
 		atom_dock.routes = default_routes;
 	}else{
