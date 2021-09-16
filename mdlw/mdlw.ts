@@ -217,17 +217,16 @@ function _get_route_def<A extends types.AtomName, R extends types.RouteName<A>>(
 function _get_atom_dock<A extends types.AtomName>(atom_name:A)
 		:types.Book.Definition.Dock{
 	
-	const atom_dock = dock_book[atom_name as keyof typeof dock_book].dock as
-		types.Book.Definition.Dock;
-	
-	if(!atom_dock){
+	const dock_def = dock_book[atom_name] as types.Book.BasicDefinition;
+	if(urn_util.object.has_key(dock_def, 'dock')){
+		const atom_dock = dock_def.dock as types.Book.Definition.Dock;
+		return atom_dock;
+	}else{
 		throw urn_exc.create(
 			`INVLID_API_DEF`,
 			'Invalid api definition in api_book.'
 		);
 	}
-	
-	return atom_dock;
 	
 }
 

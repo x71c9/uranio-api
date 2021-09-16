@@ -27,8 +27,10 @@ export type RouteDefaultName =
 // export const a:RouteName<'user'> = '';
 
 export type RouteCustomName<A extends AtomName> =
+	'dock' extends keyof typeof routes_book[A] ?
 	'routes' extends keyof typeof routes_book[A]['dock'] ?
 	keyof typeof routes_book[A]['dock']['routes'] :
+	never :
 	never;
 
 export type RouteName<A extends AtomName> =
