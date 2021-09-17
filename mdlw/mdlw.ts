@@ -217,7 +217,7 @@ function _get_route_def<A extends types.AtomName, R extends types.RouteName<A>>(
 function _get_atom_dock<A extends types.AtomName>(atom_name:A)
 		:types.Book.Definition.Dock{
 	
-	const dock_def = dock_book[atom_name] as types.Book.BasicDefinition;
+	const dock_def = dock_book[atom_name];
 	if(urn_util.object.has_key(dock_def, 'dock')){
 		const atom_dock = dock_def.dock as types.Book.Definition.Dock;
 		return atom_dock;
