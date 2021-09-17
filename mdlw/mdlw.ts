@@ -104,7 +104,7 @@ async function _auth_validate_and_call<A extends types.AtomName, R extends types
 	auth_route_request: types.Api.Request<A,R>,
 	handler: types.AuthHandler<A,R>,
 ){
-	const dock_def = dock_book[auth_route_request.atom_name as types.AuthName] as types.Book.BasicDefinition;
+	const dock_def = dock_book[auth_route_request.atom_name as types.AtomName];
 	
 	if(!dock_def.dock){
 		throw urn_exc.create('NOAPIDEF', `Invalid dock definition`);

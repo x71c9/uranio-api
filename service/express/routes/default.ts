@@ -31,7 +31,7 @@ export function create_express_route<A extends types.AtomName>(atom_name:A)
 		return router;
 	}
 	
-	const dock_def = dock_book[atom_name] as types.Book.BasicDefinition;
+	const dock_def = dock_book[atom_name];
 	
 	if(!urn_util.object.has_key(dock_def, 'dock')){
 		return router;
