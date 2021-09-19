@@ -109,15 +109,24 @@ export function get_route_name<A extends types.AtomName, R extends types.RouteNa
 		// throw urn_exc.create(`INVALID_API_DEF`, `Invalid api_def. Missing "routes" property.`);
 		return undefined;
 	}
+	/**
+	 * Never rely on Object properties order.
+	 * This caused issue while checking route_name.
+	 * So in order to be sure is the correct route_name, first check for
+	 * all exact matches, then for route with parameters.
+	 */
 	for(const route_name in atom_dock.routes){
 		const route_def = atom_dock.routes[route_name];
 		if(route_def.method === http_method){
 			if(route_def.url === route_path || route_def.url + '/' === route_path){
 				return route_name as R;
-			}else if(route_def.url.includes(':')){
-				// if(route_path[route_path.length - 1] !== '/'){
-				//   route_path += '/';
-				// }
+			}
+		}
+	}
+	for(const route_name in atom_dock.routes){
+		const route_def = atom_dock.routes[route_name];
+		if(route_def.method === http_method){
+			if(route_def.url.includes(':')){
 				if(route_def.url[route_def.url.length - 1] !== '/'){
 					route_def.url += '/';
 				}
@@ -131,20 +140,12 @@ export function get_route_name<A extends types.AtomName, R extends types.RouteNa
 					if(url_part[0] === ':' || url_part === splitted_route_url[i]){
 						continue;
 					}
-					// throw urn_exc.create_invalid_request(
-					//   `IVALID_ROUTE_PATH`,
-					//   `Invalid route path.`
-					// );
 					return undefined;
 				}
 				return route_name as R;
 			}
 		}
 	}
-	// throw urn_exc.create_invalid_request(
-	//   `INVALID_PATH_ROUTE_NOT_FOUND`,
-	//   `Invalid path. Route not found or invalid.`
-	// );
 	return undefined;
 }
 
