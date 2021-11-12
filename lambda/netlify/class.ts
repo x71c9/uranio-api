@@ -44,6 +44,12 @@ class NetlifyLambda implements Lambda {
 			:Promise<HandlerResponse> {
 		const partial_api_request = _lambda_request_to_partial_api_request(event, context);
 		try{
+			// This will throw an error if it cannot JSON parse the body.
+			// That is why it is outside `_lambda_request_to_partial_api_request`
+			const body = _filter_lambda_body_request(event);
+			if(body){
+				partial_api_request.body = body;
+			}
 			const api_request = validate_request(partial_api_request);
 			const urn_res = await this.lambda_route(api_request);
 			// urn_core.disconnect().then(() => {
@@ -79,6 +85,34 @@ class NetlifyLambda implements Lambda {
 	
 }
 
+function _filter_lambda_body_request(event:LambdaEvent){
+	let body = null;
+	// ----
+	// For some reason when TRX call a `delete` hook, the lambda Netlify function
+	// receives a string type `body` equal to `[object Object]`.
+	// I tried to debug. It seems Axios is not responsible. It should not send any
+	// body with DELETE method.
+	// I tried to remove the netlify redirect but with no success.
+	// It might be something in the Netlify Lambda function.
+	// ----
+	if (event.body === "[object Object]") {
+		event.body = null;
+	}
+	if (event.body) {
+		try {
+			body =
+				typeof event.body === "string" ? JSON.parse(event.body) : event.body;
+		} catch (err) {
+			throw urn_exc.create_invalid_request(
+				`INVALID_BODY_REQUEST`,
+				`Invalid body format. Body must be in JSON format.`,
+				err
+			);
+		}
+	}
+	return body;
+}
+
 function _lambda_request_to_partial_api_request(event: LambdaEvent, context: LambdaContext){
 	
 	const api_request_paths = process_request_path(event.path);
@@ -109,29 +143,6 @@ function _lambda_request_to_partial_api_request(event: LambdaEvent, context: Lam
 	
 	const params = get_params_from_route_path(atom_name, route_name, api_request_paths.route_path);
 	
-	// ----
-	// For some reason when TRX call a `delete` hook, the lambda Netlify function
-	// receives a string type `body` equal to `[object Object]`.
-	// I tried to debug. It seems Axios is not responsible. It should not send any
-	// body with DELETE method.
-	// I tried to remove the netlify redirect but with no success.
-	// It might be something in the Netlify Lambda function.
-	// ----
-	if(event.body === '[object Object]'){
-		event.body = null;
-	}
-	if(event.body){
-		try{
-			api_request.body = (typeof event.body === 'string') ?
-				JSON.parse(event.body) : event.body;
-		}catch(err){
-			throw urn_exc.create_invalid_request(
-				`INVALID_BODY_REQUEST`,
-				`Invalid body format. Body must be in JSON format.`,
-				err
-			);
-		}
-	}
 	if(event.headers){
 		api_request.headers = event.headers;
 	}
