@@ -40,6 +40,12 @@ import {map_lambda_query_params} from '../util';
 @urn_log.util.decorators.debug_methods
 class NetlifyLambda implements Lambda {
 	
+	constructor(connect=false){
+		if(connect === true){
+			urn_core.connect();
+		}
+	}
+	
 	public async handle(event:LambdaEvent, context:LambdaContext)
 			:Promise<HandlerResponse> {
 		const partial_api_request = _lambda_request_to_partial_api_request(event, context);
@@ -186,3 +192,7 @@ export function create():NetlifyLambda{
 	return new NetlifyLambda();
 }
 
+export function connect_and_create():NetlifyLambda{
+	urn_log.fn_debug(`Create NetlifyLambda`);
+	return new NetlifyLambda(true);
+}
