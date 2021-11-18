@@ -21,3 +21,13 @@ export function create(lambda_name?:LambdaName)
 		}
 	}
 }
+
+export function connect_and_create(lambda_name?:LambdaName)
+		:Lambda{
+	const lambda = lambda_name || api_config.lambda;
+	switch(lambda){
+		case 'netlify':{
+			return netlify.connect_and_create();
+		}
+	}
+}
