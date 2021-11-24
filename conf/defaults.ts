@@ -12,7 +12,7 @@ export const api_config:FullConfiguration = {
 	
 	...core_config,
 	
-	request_auto_limit: 24,
+	request_auto_limit: 128,
 	
 	service: 'express',
 	
