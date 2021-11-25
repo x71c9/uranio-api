@@ -7,7 +7,7 @@
  * In order to copy and reexport namespaces and types we use the syntax
  * `export import`.
  *
- * `type Book` must be redifined.
+ * `type Book` must be re-defined.
  *
  * @packageDocumentation
  */
@@ -35,9 +35,6 @@ export namespace Book {
 		{ bll?: (passport?:urn_core.types.Passport) => urn_core.bll.BLL<A> }
 	
 	export namespace Definition {
-		
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		// export import Dock = book_cln.Book.Definition.Dock;
 		
 		export type Dock = book_cln.Book.Definition.Dock;
 		
