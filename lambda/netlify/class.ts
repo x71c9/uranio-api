@@ -48,7 +48,10 @@ class NetlifyLambda implements Lambda {
 	
 	public async handle(event:LambdaEvent, context:LambdaContext)
 			:Promise<HandlerResponse> {
-		const partial_api_request = _lambda_request_to_partial_api_request(event, context);
+		const partial_api_request = _lambda_request_to_partial_api_request(
+			event,
+			context
+		);
 		try{
 			// This will throw an error if it cannot JSON parse the body.
 			// That is why it is outside `_lambda_request_to_partial_api_request`
@@ -68,14 +71,18 @@ class NetlifyLambda implements Lambda {
 		}
 	}
 	
-	public async lambda_route<A extends types.AtomName, R extends types.RouteName<A>>(api_request:types.Api.Request<A,R>){
+	public async lambda_route<A extends types.AtomName, R extends types.RouteName<A>>(
+		api_request:types.Api.Request<A,R>
+	){
 		if(api_request.is_auth){
 			// ****
 			// TODO CHECK - Maybe this can be a bad idea - to create the BLL on request
 			// instead of passing only one reference. But it must be for each auth atom.
 			// We do it anyway a bll for each call depending on the `path`.
 			// ****
-			const auth_bll = urn_core.bll.auth.create(api_request.atom_name as types.AuthName);
+			const auth_bll = urn_core.bll.auth.create(
+				api_request.atom_name as types.AuthName
+			);
 			const auth_handler = async (api_request:types.Api.Request<A,R>) => {
 				const token = await auth_bll.authenticate(
 					api_request.body.email,

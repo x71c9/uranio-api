@@ -28,8 +28,9 @@ import * as req_validator from './validate';
 
 import * as types from '../types';
 
-export async function route_middleware<A extends types.AtomName, R extends types.RouteName<A>>(api_request:types.Api.Request<A,R>)
-		:Promise<urn_response.General<any, any>>{
+export async function route_middleware<A extends types.AtomName, R extends types.RouteName<A>>(
+	api_request:types.Api.Request<A,R>
+):Promise<urn_response.General<any, any>>{
 	_log_route_request(api_request);
 	const auth_reponse = await _authorization(api_request);
 	if(auth_reponse){
@@ -50,7 +51,9 @@ export async function auth_route_middleware<A extends types.AtomName, R extends 
 	return await _auth_validate_and_call(api_request, auth_handler);
 }
 
-async function _authorization<A extends types.AtomName, R extends types.RouteName<A>>(api_request:types.Api.Request<A,R>) {
+async function _authorization<A extends types.AtomName, R extends types.RouteName<A>>(
+	api_request:types.Api.Request<A,R>
+): Promise<false | types.Api.Request<A,R>> {
 	const route_def = _get_route_def(api_request);
 	if(urn_core.bll.auth.is_public_request(api_request.atom_name, route_def.action)){
 		return false;
@@ -72,7 +75,9 @@ async function _authorization<A extends types.AtomName, R extends types.RouteNam
 	}
 }
 
-async function _validate_and_call<A extends types.AtomName, R extends types.RouteName<A>>(api_request: types.Api.Request<A,R>){
+async function _validate_and_call<A extends types.AtomName, R extends types.RouteName<A>>(
+	api_request: types.Api.Request<A,R>
+){
 	
 	const route_def = _get_route_def(api_request);
 	
@@ -127,8 +132,9 @@ async function _auth_validate_and_call<A extends types.AtomName, R extends types
 	
 }
 
-function _auth_validate<A extends types.AtomName, R extends types.RouteName<A>>(api_request:types.Api.Request<A,R>)
-		:void{
+function _auth_validate<A extends types.AtomName, R extends types.RouteName<A>>(
+	api_request:types.Api.Request<A,R>
+):void{
 	
 	urn_log.fn_debug(`Validate Auth Route [${api_request.atom_name}]`);
 	
@@ -137,8 +143,9 @@ function _auth_validate<A extends types.AtomName, R extends types.RouteName<A>>(
 	
 }
 
-function _validate_route<A extends types.AtomName, R extends types.RouteName<A>>(api_request:types.Api.Request<A,R>)
-		:void{
+function _validate_route<A extends types.AtomName, R extends types.RouteName<A>>(
+	api_request:types.Api.Request<A,R>
+):void{
 	
 	const route_def = _get_route_def(api_request);
 		
@@ -191,8 +198,9 @@ function _limit<A extends types.AtomName, R extends types.RouteName<A>>(
 	return api_request;
 }
 
-function _get_route_def<A extends types.AtomName, R extends types.RouteName<A>>(api_request:types.Api.Request<A,R>)
-		:types.Book.Definition.Dock.Routes.Route<A,R>{
+function _get_route_def<A extends types.AtomName, R extends types.RouteName<A>>(
+	api_request:types.Api.Request<A,R>
+):types.Book.Definition.Dock.Routes.Route<A,R>{
 	
 	const atom_dock = _get_atom_dock<A>(api_request.atom_name);
 	
@@ -230,8 +238,9 @@ function _get_atom_dock<A extends types.AtomName>(atom_name:A)
 	
 }
 
-function _log_route_request<A extends types.AtomName, R extends types.RouteName<A>>(api_request: types.Api.Request<A,R>)
-		:void{
+function _log_route_request<A extends types.AtomName, R extends types.RouteName<A>>(
+	api_request: types.Api.Request<A,R>
+):void{
 	const request_shape = partial_api_request_to_atom_request(api_request);
 	const bll_reqs = insta.get_bll_request();
 	bll_reqs.insert_new(request_shape).catch((ex) => {
@@ -243,8 +252,9 @@ function _log_route_request<A extends types.AtomName, R extends types.RouteName<
 	});
 }
 
-function _log_auth_route_request<A extends types.AtomName, R extends types.RouteName<A>>(auth_request: types.Api.Request<A,R>)
-		:void{
+function _log_auth_route_request<A extends types.AtomName, R extends types.RouteName<A>>(
+	auth_request: types.Api.Request<A,R>
+):void{
 	const request_shape = partial_api_request_to_atom_request(auth_request);
 	const auth_request_clone = {...request_shape};
 	if(auth_request_clone.body){
