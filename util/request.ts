@@ -276,6 +276,7 @@ export function api_handle_exception<A extends types.AtomName, R extends types.R
 			error_msg = 'Record not found.';
 			break;
 		}
+		case urn_exception.ExceptionType.INVALID_ATOM:
 		case urn_exception.ExceptionType.INVALID_REQUEST:{
 			status = 400;
 			msg = 'Invalid Request';
