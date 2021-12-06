@@ -14,15 +14,19 @@ const urn_exc = urn_exception.init(`EXPRESSCLASS`, `Express class module`);
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 
-import {atom_book} from 'uranio-books/atom';
+// import {atom_book} from 'uranio-books/atom';
 
-import {dock_book} from 'uranio-books/dock';
+// import urn_core from 'uranio-core';
+
+// import {dock_book} from 'uranio-books/dock';
+
+import * as book from '../../book/';
 
 import {register_exception_handler} from '../../util/exc_handler';
 
 import {api_config} from '../../cnf/defaults';
 
-import {Book, AuthName} from '../../types';
+import {AuthName} from '../../types';
 
 import {Service} from '../types';
 
@@ -54,21 +58,23 @@ class ExpressWebService implements Service {
 		});
 		
 		
-		let atom_name:keyof typeof dock_book;
-		for(atom_name in dock_book){
-			const dock_def = dock_book[atom_name] as Book.BasicDefinition;
-			const atom_def = atom_book[atom_name] as Book.BasicDefinition;
+		// let atom_name:keyof typeof dock_book;
+		for(const atom_name of book.atom.get_names()){
+			// const dock_def = dock_book[atom_name] as Book.BasicDefinition;
+			const dock_def = book.dock.get_definition(atom_name);
+			// const atom_def = atom_book[atom_name] as Book.BasicDefinition;
+			const atom_def = book.atom.get_definition(atom_name);
 			const router = create_express_route(atom_name);
-			if(dock_def.dock){
+			if(dock_def){
 				if(atom_def.connection && atom_def.connection === 'log'){
-					this.express_app.use(`${api_config.prefix_api}${api_config.prefix_log}${dock_def.dock.url}`, router);
+					this.express_app.use(`${api_config.prefix_api}${api_config.prefix_log}${dock_def.url}`, router);
 				}else{
-					this.express_app.use(`${api_config.prefix_api}${dock_def.dock.url}`, router);
+					this.express_app.use(`${api_config.prefix_api}${dock_def.url}`, router);
 				}
 			}
-			if(dock_def.dock && dock_def.dock.auth && typeof dock_def.dock.auth === 'string'){
+			if(dock_def && dock_def.auth && typeof dock_def.auth === 'string'){
 				const auth_route = create_express_auth_route(atom_name as AuthName);
-				this.express_app.use(`${api_config.prefix_api}${dock_def.dock.auth}`, auth_route);
+				this.express_app.use(`${api_config.prefix_api}${dock_def.auth}`, auth_route);
 			}
 		}
 	}

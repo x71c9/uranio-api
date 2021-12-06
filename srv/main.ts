@@ -15,6 +15,8 @@ import * as lambda from '../lambda/';
 
 import * as routes from '../routes/';
 
+import * as book from '../book/';
+
 import * as types from './types';
 
 export {
@@ -23,5 +25,6 @@ export {
 	service,
 	lambda,
 	routes,
+	book,
 	types
 };
