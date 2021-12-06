@@ -6,7 +6,7 @@
 
 import {FullConfiguration} from '../types';
 
-import {core_config} from 'uranio-core/conf/defaults';
+import {core_config} from 'uranio-core/cnf/defaults';
 
 export const api_config:FullConfiguration = {
 	

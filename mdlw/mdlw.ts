@@ -16,7 +16,7 @@ import {dock_book} from 'uranio-books/dock';
 
 import urn_core from 'uranio-core';
 
-import {api_config} from '../conf/defaults';
+import {api_config} from '../cnf/defaults';
 
 import {return_default_routes} from '../routes/';
 

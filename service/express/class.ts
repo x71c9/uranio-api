@@ -20,7 +20,7 @@ import {dock_book} from 'uranio-books/dock';
 
 import {register_exception_handler} from '../../util/exc_handler';
 
-import {api_config} from '../../conf/defaults';
+import {api_config} from '../../cnf/defaults';
 
 import {Book, AuthName} from '../../types';
 

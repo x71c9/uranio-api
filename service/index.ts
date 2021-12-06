@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import {api_config} from '../conf/defaults';
+import {api_config} from '../cnf/defaults';
 
 import * as express from './express/';
 
