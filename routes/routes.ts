@@ -4,11 +4,14 @@
  * @packageDocumentation
  */
 
-import {urn_exception, urn_util} from 'urn-lib';
+// import {urn_exception, urn_util} from 'urn-lib';
+import {urn_exception} from 'urn-lib';
 
 const urn_exc = urn_exception.init('ROUTESMODULE', 'Client routes module.');
 
-import {dock_book} from 'uranio-books/dock';
+// import {dock_book} from 'uranio-books/dock';
+
+import * as book from '../book/client';
 
 import * as types from '../cln/types';
 
@@ -48,14 +51,16 @@ export function atom_dock_with_defaults(
 
 function _get_atom_dock(atom_name:types.AtomName)
 		:types.Book.Definition.Dock{
-	const dock_def = dock_book[atom_name] as types.Book.BasicDefinition;
-	if(urn_util.object.has_key(dock_def, 'dock')){
-		const atom_dock = dock_def.dock as types.Book.Definition.Dock;
-		return atom_dock;
-	}else{
-		throw urn_exc.create(
-			`INVLID_API_DEF`,
-			'Invalid api definition in api_book.'
-		);
-	}
+	// const dock_def = dock_book[atom_name] as types.Book.BasicDefinition;
+	// if(urn_util.object.has_key(dock_def, 'dock')){
+	//   const atom_dock = dock_def.dock as types.Book.Definition.Dock;
+	//   return atom_dock;
+	// }else{
+	//   throw urn_exc.create(
+	//     `INVLID_API_DEF`,
+	//     'Invalid api definition in api_book.'
+	//   );
+	// }
+	const dock_def = book.dock.get_definition(atom_name);
+	return dock_def;
 }

@@ -8,7 +8,7 @@ import * as book_dock from 'uranio-core/book/dock/client';
 
 export * from 'uranio-core/book/dock/client';
 
-import {AtomName} from '../../types';
+import {AtomName} from '../../cln/types';
 
 import {Book} from '../../typ/book_cln';
 
