@@ -12,7 +12,7 @@ const urn_ret = urn_return.create(urn_log.util.return_injector);
 
 const urn_exc = urn_exception.init('EXPRESS_MDLW', 'Express middlewares');
 
-import {dock_book} from 'uranio-books/dock';
+// import {dock_book} from 'uranio-books/dock';
 
 import urn_core from 'uranio-core';
 
@@ -25,6 +25,8 @@ import * as insta from '../nst/';
 import {partial_api_request_to_atom_request} from '../util/request';
 
 import * as req_validator from './validate';
+
+import * as book from '../book/';
 
 import * as types from '../types';
 
@@ -109,13 +111,16 @@ async function _auth_validate_and_call<A extends types.AtomName, R extends types
 	auth_route_request: types.Api.Request<A,R>,
 	handler: types.AuthHandler<A,R>,
 ){
-	const dock_def = dock_book[auth_route_request.atom_name as types.AtomName];
+	// const dock_def = dock_book[auth_route_request.atom_name as types.AtomName];
 	
-	if(!dock_def.dock){
-		throw urn_exc.create('NOAPIDEF', `Invalid dock definition`);
-	}
+	// if(!dock_def.dock){
+	//   throw urn_exc.create('NOAPIDEF', `Invalid dock definition`);
+	// }
 	
-	urn_log.fn_debug(`Router Auth ${dock_def.dock.url} [${auth_route_request.atom_name}]`);
+	const dock_def = book.dock.get_definition(auth_route_request.atom_name);
+	
+	// urn_log.fn_debug(`Router Auth ${dock_def.dock.url} [${auth_route_request.atom_name}]`);
+	urn_log.fn_debug(`Router Auth ${dock_def.url} [${auth_route_request.atom_name}]`);
 	
 	_auth_validate(auth_route_request);
 	
@@ -225,16 +230,18 @@ function _get_route_def<A extends types.AtomName, R extends types.RouteName<A>>(
 function _get_atom_dock<A extends types.AtomName>(atom_name:A)
 		:types.Book.Definition.Dock{
 	
-	const dock_def = dock_book[atom_name];
-	if(urn_util.object.has_key(dock_def, 'dock')){
-		const atom_dock = dock_def.dock as types.Book.Definition.Dock;
-		return atom_dock;
-	}else{
-		throw urn_exc.create(
-			`INVLID_API_DEF`,
-			'Invalid api definition in api_book.'
-		);
-	}
+	// const dock_def = dock_book[atom_name];
+	const dock_def = book.dock.get_definition(atom_name);
+	// if(urn_util.object.has_key(dock_def, 'dock')){
+	//   const atom_dock = dock_def.dock as types.Book.Definition.Dock;
+	//   return atom_dock;
+	// }else{
+	//   throw urn_exc.create(
+	//     `INVLID_API_DEF`,
+	//     'Invalid api definition in api_book.'
+	//   );
+	// }
+	return dock_def;
 	
 }
 

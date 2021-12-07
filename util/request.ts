@@ -6,13 +6,15 @@
 
 import {urn_util, urn_response, urn_return, urn_log, urn_exception} from 'urn-lib';
 
-import {dock_book} from 'uranio-books/dock';
+// import {dock_book} from 'uranio-books/dock';
 
 import {api_config} from '../cnf/defaults';
 
 import {return_default_routes} from '../routes/';
 
 import * as insta from '../nst/';
+
+import * as book from '../book/client';
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 
@@ -88,15 +90,23 @@ export function get_auth_action(atom_name:types.AtomName, route_name:keyof types
 
 export function get_atom_name_from_atom_path(atom_path:string)
 		:types.AtomName | undefined{
-	let atom_name:keyof typeof dock_book;
-	for(atom_name in dock_book){
-		const dock_def = dock_book[atom_name] as types.Book.Definition<typeof atom_name>;
-		if(dock_def.dock && dock_def.dock.url && dock_def.dock.url === atom_path){
+	// let atom_name:keyof typeof dock_book;
+	// for(atom_name in dock_book){
+	//   const dock_def = dock_book[atom_name] as types.Book.Definition<typeof atom_name>;
+	//   if(dock_def.dock && dock_def.dock.url && dock_def.dock.url === atom_path){
+	//     return atom_name;
+	//   }
+	// }
+	// return undefined;
+	// throw urn_exc.create(`INVALID_API_URL`, `Invalid api url.`);
+	
+	for(const atom_name of book.atom.get_names()){
+		const dock_def = book.dock.get_definition(atom_name);
+		if(dock_def.url && dock_def.url === atom_path){
 			return atom_name;
 		}
 	}
 	return undefined;
-	// throw urn_exc.create(`INVALID_API_URL`, `Invalid api url.`);
 }
 
 export function get_route_name<A extends types.AtomName, R extends types.RouteName<A>>(
@@ -151,12 +161,16 @@ export function get_route_name<A extends types.AtomName, R extends types.RouteNa
 
 export function is_auth_request(atom_name: types.AtomName, atom_path: string)
 		:boolean{
-	const dock_def = dock_book[atom_name] as types.Book.BasicDefinition;
-	if(!urn_util.object.has_key(dock_def, 'dock')){
-		return false;
-	}
-	const atom_dock = dock_def['dock'] as types.Book.Definition.Dock;
-	if(atom_dock.auth && atom_dock.auth === atom_path){
+	// const dock_def = dock_book[atom_name] as types.Book.BasicDefinition;
+	const dock_def = book.dock.get_definition(atom_name);
+	// if(!urn_util.object.has_key(dock_def, 'dock')){
+	//   return false;
+	// }
+	// const atom_dock = dock_def['dock'] as types.Book.Definition.Dock;
+	// if(atom_dock.auth && atom_dock.auth === atom_path){
+	//   return true;
+	// }
+	if(dock_def.auth && dock_def.auth === atom_path){
 		return true;
 	}
 	return false;
@@ -204,24 +218,33 @@ export function get_params_from_route_path<A extends types.AtomName, R extends t
 
 function _get_atom_dock(atom_name:types.AtomName){
 	const default_routes = return_default_routes(atom_name);
-	const dock_def = dock_book[atom_name] as types.Book.BasicDefinition;
-	if(!urn_util.object.has_key(dock_def, 'dock')){
-		return {
-			routes: {
-				...default_routes
-			}
-		};
-	}
-	const atom_dock = dock_def.dock as types.Book.Definition.Dock;
-	if(!atom_dock.routes){
-		atom_dock.routes = default_routes;
+	// const dock_def = dock_book[atom_name] as types.Book.BasicDefinition;
+	const dock_def = book.dock.get_definition(atom_name);
+	// if(!urn_util.object.has_key(dock_def, 'dock')){
+	//   return {
+	//     routes: {
+	//       ...default_routes
+	//     }
+	//   };
+	// }
+	// const atom_dock = dock_def.dock as types.Book.Definition.Dock;
+	// if(!atom_dock.routes){
+	//   atom_dock.routes = default_routes;
+	// }else{
+	//   atom_dock.routes = {
+	//     ...atom_dock.routes,
+	//     ...default_routes
+	//   };
+	// }
+	if(!dock_def.routes){
+		dock_def.routes = default_routes;
 	}else{
-		atom_dock.routes = {
-			...atom_dock.routes,
+		dock_def.routes = {
+			...dock_def.routes,
 			...default_routes
 		};
 	}
-	return atom_dock;
+	return dock_def;
 }
 
 export function store_error(
