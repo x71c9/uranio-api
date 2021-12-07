@@ -32,9 +32,11 @@ export namespace Book {
 	
 	export type Definition<A extends urn_core.types.AtomName> =
 		Book.BasicDefinition &
-		{ bll?: (passport?:urn_core.types.Passport) => urn_core.bll.BLL<A> }
+		{ bll?: Definition.Bll<A> }
 	
 	export namespace Definition {
+		
+		export type Bll<A extends urn_core.types.AtomName> = urn_core.types.Book.Definition.Bll<A>;
 		
 		export type Dock = book_cln.Book.Definition.Dock;
 		
