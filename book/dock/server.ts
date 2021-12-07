@@ -4,14 +4,15 @@
  * @packageDocumentation
  */
 
-import urn_core from 'uranio-core';
+import * as book_dock from 'uranio-core/book/dock/';
+
+export * from 'uranio-core/book/dock/';
+
+import {AtomName} from '../../types';
 
 import {Book} from '../../typ/book_srv';
 
-import * as common from './common';
-
-export function get_definition<A extends urn_core.types.AtomName>(atom_name:A)
+export function get_definition<A extends AtomName>(atom_name:A)
 		:Book.Definition.Dock{
-	return common.get_definition(atom_name);
+	return book_dock.get_definition(atom_name) as Book.Definition.Dock;
 }
-
