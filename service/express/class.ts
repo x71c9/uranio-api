@@ -14,12 +14,6 @@ const urn_exc = urn_exception.init(`EXPRESSCLASS`, `Express class module`);
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 
-// import {atom_book} from 'uranio-books/atom';
-
-// import urn_core from 'uranio-core';
-
-// import {dock_book} from 'uranio-books/dock';
-
 import * as book from '../../book/';
 
 import {register_exception_handler} from '../../util/exc_handler';
@@ -57,12 +51,8 @@ class ExpressWebService implements Service {
 			}
 		});
 		
-		
-		// let atom_name:keyof typeof dock_book;
 		for(const atom_name of book.atom.get_names()){
-			// const dock_def = dock_book[atom_name] as Book.BasicDefinition;
 			const dock_def = book.dock.get_definition(atom_name);
-			// const atom_def = atom_book[atom_name] as Book.BasicDefinition;
 			const atom_def = book.atom.get_definition(atom_name);
 			const router = create_express_route(atom_name);
 			if(dock_def){
