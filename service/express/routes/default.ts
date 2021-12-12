@@ -69,7 +69,6 @@ function _return_express_middleware(){
 		_next: express.NextFunction
 	) => {
 		
-		console.log(req);
 		const partial_api_request = express_request_to_partial_api_request(req);
 		try{
 			const api_request = validate_request(partial_api_request);
