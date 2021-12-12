@@ -51,7 +51,8 @@ function _return_express_auth_middleware<A extends types.AtomName, R extends typ
 			const api_request = validate_request<A,R>(partial_api_request);
 			const urn_res = await auth_route_middleware<A,R>(api_request, handler);
 			return return_uranio_response_to_express(urn_res, res);
-		}catch(ex){
+		}catch(e){
+			const ex = e as any;
 			const urn_err = api_handle_and_store_exception(ex, partial_api_request);
 			return return_uranio_response_to_express(urn_err, res);
 		}
