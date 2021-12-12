@@ -65,7 +65,8 @@ class NetlifyLambda implements Lambda {
 			//   urn_log.debug(`Database disconnected.`);
 			// });
 			return _lambda_response(urn_res);
-		}catch(ex){
+		}catch(e){
+			const ex = e as any;
 			const urn_err = api_handle_and_store_exception(ex, partial_api_request);
 			return _lambda_response(urn_err);
 		}
@@ -115,7 +116,8 @@ function _filter_lambda_body_request(event:LambdaEvent){
 		try {
 			body =
 				typeof event.body === "string" ? JSON.parse(event.body) : event.body;
-		} catch (err) {
+		} catch (e) {
+			const err = e as any;
 			throw urn_exc.create_invalid_request(
 				`INVALID_BODY_REQUEST`,
 				`Invalid body format. Body must be in JSON format.`,

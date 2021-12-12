@@ -72,7 +72,8 @@ async function _authorization<A extends types.AtomName, R extends types.RouteNam
 		const decoded = jwt.verify(auth_token, api_config.jwt_private_key) as types.Passport;
 		api_request.passport = decoded;
 		return api_request;
-	}catch(ex){
+	}catch(e){
+		const ex = e as any;
 		throw urn_exc.create_unauthorized(`INVALID_TOKEN`, `Invalid token.`, ex);
 	}
 }
