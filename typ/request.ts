@@ -20,7 +20,7 @@ export const enum RouteMethod {
 
 export namespace Api {
 	
-	export type Request<A extends types.AtomName, R extends RouteName<A>> =
+	export type Request<A extends types.AtomName, R extends RouteName<A>, D extends types.Depth> =
 		Request.Paths & {
 		method: RouteMethod
 		atom_name: A
@@ -28,7 +28,7 @@ export namespace Api {
 		is_auth: boolean
 		auth_action: types.AuthAction
 		params: Request.Params<A,R>
-		query: Request.Query<A,R>
+		query: Request.Query<A,R,D>
 		body?: any
 		headers?: Request.Headers
 		ip?: string,
@@ -52,22 +52,22 @@ export namespace Api {
 			[k in RouteParam<A,R>]: string |  undefined
 		}
 		
-		export type Query<A extends types.AtomName, R extends RouteName<A>> = {
-			[k in RouteQueryParam<A,R>]?: RouteQueryParamValue<A,R,k>
+		export type Query<A extends types.AtomName, R extends RouteName<A>, D extends types.Depth> = {
+			[k in RouteQueryParam<A,R>]?: RouteQueryParamValue<A,R,D,k>
 		}
 		
 	}
 	
 }
 
-export type RouteQueryParamValue<A extends types.AtomName, R extends RouteName<A>, K extends RouteQueryParam<A,R>> =
+export type RouteQueryParamValue<A extends types.AtomName, R extends RouteName<A>, D extends types.Depth, K extends RouteQueryParam<A,R>> =
 	K extends 'filter' ? types.Query<A> :
-	K extends 'options' ? types.Query.Options<A> :
+	K extends 'options' ? types.Query.Options<A,D> :
 	any;
 
 
-export type AuthHandler<A extends types.AtomName, R extends RouteName<A>> =
-	(api_request:Api.Request<A,R>) => Promise<string>;
+export type AuthHandler<A extends types.AtomName, R extends RouteName<A>, D extends types.Depth> =
+	(api_request:Api.Request<A,R,D>) => Promise<string>;
 
 
 type DefaultRouteURL<A extends types.AtomName, R extends RouteName<A>> =
