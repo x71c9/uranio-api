@@ -46,14 +46,14 @@ export namespace Book {
 			
 			export namespace Routes {
 				
-				export type Route<A extends urn_core.types.AtomName, R extends RouteName<A>> =
+				export type Route<A extends urn_core.types.AtomName, R extends RouteName<A>, D extends urn_core.types.Depth> =
 					book_cln.Book.Definition.Dock.Routes.Route & {
-						call?: Route.Call<A,R>
+						call?: Route.Call<A,R,D>
 					}
 				
 				export namespace Route {
-					export type Call<A extends urn_core.types.AtomName, R extends RouteName<A>> =
-						(route_request: ApiRequest.Request<A,R>) => any
+					export type Call<A extends urn_core.types.AtomName, R extends RouteName<A>, D extends urn_core.types.Depth> =
+						(route_request: ApiRequest.Request<A,R,D>) => any
 				}
 				
 			}

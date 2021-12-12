@@ -274,9 +274,9 @@ export function store_error(
 	});
 }
 
-export function api_handle_exception<A extends types.AtomName, R extends types.RouteName<A>>(
+export function api_handle_exception<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth>(
 	ex: urn_exception.ExceptionInstance,
-	partial_api_request: Partial<types.Api.Request<A,R>>
+	partial_api_request: Partial<types.Api.Request<A,R,D>>
 ):urn_response.Fail<any>{
 	let status = 500;
 	let msg = 'Internal Server Error';
@@ -324,9 +324,9 @@ export function api_handle_exception<A extends types.AtomName, R extends types.R
 	return urn_res;
 }
 
-export function api_handle_and_store_exception<A extends types.AtomName, R extends types.RouteName<A>>(
+export function api_handle_and_store_exception<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth>(
 	ex: urn_exception.ExceptionInstance,
-	partial_api_request: Partial<types.Api.Request<A,R>>,
+	partial_api_request: Partial<types.Api.Request<A,R,D>>,
 ):urn_response.Fail<any>{
 	const urn_res = api_handle_exception(ex, partial_api_request);
 	const atom_request = partial_api_request_to_atom_request(partial_api_request);
@@ -334,8 +334,8 @@ export function api_handle_and_store_exception<A extends types.AtomName, R exten
 	return urn_res;
 }
 
-export function partial_api_request_to_atom_request<A extends types.AtomName, R extends types.RouteName<A>>(
-	partial_api_request:Partial<types.Api.Request<A,R>>
+export function partial_api_request_to_atom_request<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth>(
+	partial_api_request:Partial<types.Api.Request<A,R,D>>
 ):types.AtomShape<'request'>{
 	const request_shape:types.AtomShape<'request'> = {
 		full_path: partial_api_request.full_path || 'NOFULLPATH',
@@ -362,9 +362,9 @@ export function partial_api_request_to_atom_request<A extends types.AtomName, R 
 	return request_shape;
 }
 
-export function validate_request<A extends types.AtomName, R extends types.RouteName<A>>(
-	api_request:Partial<types.Api.Request<A,R>>
-):types.Api.Request<A,R>{
+export function validate_request<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth>(
+	api_request:Partial<types.Api.Request<A,R,D>>
+):types.Api.Request<A,R,D>{
 	if(typeof api_request.full_path !== 'string' || api_request.full_path === ''){
 		throw urn_exc.create_invalid_request(
 			`INVALID_PATH_FULL_PATH`,
@@ -418,5 +418,5 @@ export function validate_request<A extends types.AtomName, R extends types.Route
 			`Invalid auth action. \`${api_request.auth_action}\`.`
 		);
 	}
-	return api_request as types.Api.Request<A,R>;
+	return api_request as types.Api.Request<A,R,D>;
 }

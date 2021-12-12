@@ -72,8 +72,8 @@ class NetlifyLambda implements Lambda {
 		}
 	}
 	
-	public async lambda_route<A extends types.AtomName, R extends types.RouteName<A>>(
-		api_request:types.Api.Request<A,R>
+	public async lambda_route<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth>(
+		api_request:types.Api.Request<A,R,D>
 	){
 		if(api_request.is_auth){
 			// ****
@@ -84,7 +84,7 @@ class NetlifyLambda implements Lambda {
 			const auth_bll = urn_core.bll.auth.create(
 				api_request.atom_name as types.AuthName
 			);
-			const auth_handler = async (api_request:types.Api.Request<A,R>) => {
+			const auth_handler = async (api_request:types.Api.Request<A,R,D>) => {
 				const token = await auth_bll.authenticate(
 					api_request.body.email,
 					api_request.body.password
@@ -132,7 +132,7 @@ function _lambda_request_to_partial_api_request(event: LambdaEvent, context: Lam
 	
 	const api_request_paths = process_request_path(event.path);
 	
-	const api_request:Partial<types.Api.Request<any,any>> = {
+	const api_request:Partial<types.Api.Request<any,any,any>> = {
 		...api_request_paths,
 		method: event.httpMethod,
 		params: {},
