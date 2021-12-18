@@ -15,7 +15,7 @@ export * from './types';
 
 export function create(service_name?:ServiceName)
 		:Service{
-	const service = service_name || api_config.service;
+	const service = service_name || conf.get(`service`);
 	switch(service){
 		case 'express':{
 			return express.create();

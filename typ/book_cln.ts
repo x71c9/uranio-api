@@ -19,6 +19,10 @@ export type Book = {
 	[k in urn_core_client.types.AtomName]?: Book.Definition;
 }
 
+export type DockBook = {
+	[k in urn_core_client.types.AtomName]: Book.Definition.Dock
+}
+
 export namespace Book {
 	
 	export type BasicDefinition =

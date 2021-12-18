@@ -4,22 +4,26 @@
  * @packageDocumentation
  */
 
-// import * as book_dock from 'uranio-core/book/dock/';
-
-// export * from 'uranio-core/book/dock/';
-
 import {dock_book} from 'uranio-books/dock';
 
 import {AtomName} from '../../types';
 
-import {Book} from '../../typ/book_srv';
-
-// export function get_definition<A extends AtomName>(atom_name:A)
-//     :Book.Definition.Dock{
-//   return book_dock.get_definition(atom_name) as Book.Definition.Dock;
-// }
+import {Book, DockBook} from '../../typ/book_srv';
 
 export function get_definition<A extends AtomName>(atom_name:A)
 		:Book.Definition.Dock{
 	return dock_book[atom_name].dock as Book.Definition.Dock;
+}
+
+export function get_all_definitions()
+		:DockBook{
+	const dock_book_def = {} as DockBook;
+	let atom_name:AtomName;
+	for(atom_name in dock_book){
+		const def = get_definition(atom_name);
+		if(def){
+			(dock_book_def as any)[atom_name] = def;
+		}
+	}
+	return dock_book_def;
 }

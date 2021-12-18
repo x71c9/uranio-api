@@ -18,8 +18,7 @@ import * as book from '../../book/';
 
 import {register_exception_handler} from '../../util/exc_handler';
 
-// import {api_config} from '../../cnf/defaults';
-import * as conf from '../conf/';
+import * as conf from '../../conf/';
 
 import {AuthName} from '../../types';
 
@@ -58,14 +57,14 @@ class ExpressWebService implements Service {
 			const router = create_express_route(atom_name);
 			if(dock_def){
 				if(atom_def.connection && atom_def.connection === 'log'){
-					this.express_app.use(`${api_config.prefix_api}${api_config.prefix_log}${dock_def.url}`, router);
+					this.express_app.use(`${conf.get(`prefix_api`)}${conf.get(`prefix_log`)}${dock_def.url}`, router);
 				}else{
-					this.express_app.use(`${api_config.prefix_api}${dock_def.url}`, router);
+					this.express_app.use(`${conf.get(`prefix_api`)}${dock_def.url}`, router);
 				}
 			}
 			if(dock_def && dock_def.auth && typeof dock_def.auth === 'string'){
 				const auth_route = create_express_auth_route(atom_name as AuthName);
-				this.express_app.use(`${api_config.prefix_api}${dock_def.auth}`, auth_route);
+				this.express_app.use(`${conf.get(`prefix_api`)}${dock_def.auth}`, auth_route);
 			}
 		}
 	}
@@ -75,7 +74,7 @@ class ExpressWebService implements Service {
 	listen(portcall: number | Callback, callback?:() => void): void {
 		switch(typeof portcall){
 			case 'function':{
-				this.express_app.listen(api_config.service_port, callback);
+				this.express_app.listen(conf.get(`service_port`), callback);
 				break;
 			}
 			case 'number':{

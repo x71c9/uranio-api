@@ -24,6 +24,8 @@ export type Book = {
 	[k in urn_core.types.AtomName]?: Book.Definition<k>;
 }
 
+export type DockBook = book_cln.DockBook;
+
 export namespace Book {
 	
 	export type BasicDefinition =

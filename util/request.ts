@@ -6,9 +6,6 @@
 
 import {urn_util, urn_response, urn_return, urn_log, urn_exception} from 'urn-lib';
 
-// import {dock_book} from 'uranio-books/dock';
-
-// import {api_config} from '../cnf/defaults';
 import * as conf from '../conf/';
 
 import {return_default_routes} from '../routes/';
@@ -31,11 +28,11 @@ export function process_request_path(full_path:string)
 		atom_path: '',
 		connection_path: ''
 	};
-	if(full_path.indexOf(api_config.prefix_api) !== 0){
+	if(full_path.indexOf(conf.get(`prefix_api`)) !== 0){
 		// throw urn_exc.create_invalid_request(`INVALID_PATH_WRONG_PREFIX`, `Invalid path. Invalid prefix.`);
 		return api_request_paths;
 	}
-	const splitted_prefixed = full_path.split(api_config.prefix_api); // ['', '/products/3294080234']
+	const splitted_prefixed = full_path.split(conf.get(`prefix_api`)); // ['', '/products/3294080234']
 	if(splitted_prefixed.length < 2){
 		// throw urn_exc.create_invalid_request(`INVALID_EMPTY_PATH`, `Invalid path. Path is empty.`);
 		return api_request_paths;
@@ -43,7 +40,7 @@ export function process_request_path(full_path:string)
 	const no_prefix_path = splitted_prefixed[1]; // ['/products/0843092840']
 	let splitted_no_prefix = no_prefix_path.split('/').slice(1); // ['products', '33247829374']
 	let connection_path = '';
-	if('/' + splitted_no_prefix[0] === api_config.prefix_log){
+	if('/' + splitted_no_prefix[0] === conf.get(`prefix_log`)){
 		connection_path = '/' + splitted_no_prefix[0]; // log
 		splitted_no_prefix = splitted_no_prefix.slice(1); // ['requests', '3924809234']
 	}

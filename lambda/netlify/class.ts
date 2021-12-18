@@ -42,7 +42,7 @@ class NetlifyLambda implements Lambda {
 	
 	constructor(connect=false){
 		if(connect === true){
-			urn_core.connect();
+			urn_core.db.connect();
 		}
 	}
 	
