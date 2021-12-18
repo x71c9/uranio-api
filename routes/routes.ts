@@ -4,12 +4,9 @@
  * @packageDocumentation
  */
 
-// import {urn_exception, urn_util} from 'urn-lib';
 import {urn_exception} from 'urn-lib';
 
 const urn_exc = urn_exception.init('ROUTESMODULE', 'Client routes module.');
-
-// import {dock_book} from 'uranio-books/dock';
 
 import * as book from '../book/client';
 

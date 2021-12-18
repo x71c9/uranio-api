@@ -12,8 +12,6 @@ const urn_ret = urn_return.create(urn_log.util.return_injector);
 
 const urn_exc = urn_exception.init('EXPRESS_MDLW', 'Express middlewares');
 
-// import {dock_book} from 'uranio-books/dock';
-
 import urn_core from 'uranio-core';
 
 import * as conf from '../conf/';
@@ -69,7 +67,7 @@ async function _authorization<A extends types.AtomName, R extends types.RouteNam
 		return false;
 	}
 	try{
-		const decoded = jwt.verify(auth_token, api_config.jwt_private_key) as types.Passport;
+		const decoded = jwt.verify(auth_token, conf.get(`jwt_private_key`)) as types.Passport;
 		api_request.passport = decoded;
 		return api_request;
 	}catch(e){
@@ -198,8 +196,8 @@ function _limit<A extends types.AtomName, R extends types.RouteName<A>, D extend
 	if(!options){
 		options = {};
 	}
-	if(!options.limit || options.limit > api_config.request_auto_limit){
-		options.limit = api_config.request_auto_limit;
+	if(!options.limit || options.limit > conf.get(`request_auto_limit`)){
+		options.limit = conf.get(`request_auto_limit`);
 	}
 	return api_request;
 }
