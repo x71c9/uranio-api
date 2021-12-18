@@ -8,7 +8,8 @@ import {urn_util, urn_response, urn_return, urn_log, urn_exception} from 'urn-li
 
 // import {dock_book} from 'uranio-books/dock';
 
-import {api_config} from '../cnf/defaults';
+// import {api_config} from '../cnf/defaults';
+import * as conf from '../conf/';
 
 import {return_default_routes} from '../routes/';
 

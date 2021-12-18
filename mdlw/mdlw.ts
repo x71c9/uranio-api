@@ -16,7 +16,7 @@ const urn_exc = urn_exception.init('EXPRESS_MDLW', 'Express middlewares');
 
 import urn_core from 'uranio-core';
 
-import {api_config} from '../cnf/defaults';
+import * as conf from '../conf/';
 
 import {return_default_routes} from '../routes/';
 
