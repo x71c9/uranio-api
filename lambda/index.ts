@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import {api_config} from '../cnf/defaults';
+import * as conf from '../conf/';
 
 import * as netlify from './netlify/';
 
