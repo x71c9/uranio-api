@@ -31,6 +31,16 @@ export function set_initialize(is_initialized:boolean):void{
 	_is_api_initialized = is_initialized;
 }
 
+export function set_from_env(repo_config:types.FullConfiguration)
+		:void{
+	return urn_core.conf.set_from_env(repo_config);
+}
+
+export function set(repo_config:types.FullConfiguration, config:types.Configuration)
+		:void{
+	return urn_core.conf.set(repo_config, config);
+}
+
 function _check_if_param_exists(param_name:string){
 	return urn_util.object.has_key(api_config, param_name);
 }
