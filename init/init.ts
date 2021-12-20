@@ -22,6 +22,9 @@ import * as book from '../book/';
 
 export function init(config?:types.Configuration)
 		:void{
+	
+	urn_core.init(config);
+	
 	if(typeof config === 'undefined'){
 		urn_core.conf.set_from_env(api_config);
 	}else{
