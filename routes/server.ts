@@ -10,6 +10,8 @@ import urn_core from 'uranio-core';
 
 import * as types from '../types';
 
+import {Book as ClientBook} from '../typ/book_cln';
+
 import {default_routes} from './client';
 
 import {
@@ -17,67 +19,72 @@ import {
 	atom_dock_with_defaults as common_atom_dock_with_defaults
 } from './routes';
 
-export function route_def<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth>(atom_name:A, route_name:R)
-		:types.Book.Definition.Dock.Routes.Route<A,R,D>{
-	const default_routes = return_default_routes(atom_name);
+export function route_def<A extends types.AtomName, R extends types.RouteName<A>>(atom_name:A, route_name:R)
+		:types.Book.Definition.Dock.Routes.Route<A,R>{
+	const default_routes = return_default_routes(atom_name) as ClientBook.Definition.Dock.Routes;
 	return common_route_def(default_routes, atom_name, route_name);
 }
 
-export function atom_dock_with_defaults(
-	default_routes:types.Book.Definition.Dock.Routes,
-	atom_name:types.AtomName
-):types.Book.Definition.Dock{
-	return common_atom_dock_with_defaults(default_routes, atom_name);
+export function atom_dock_with_defaults<A extends urn_core.types.AtomName>(
+	default_routes:ClientBook.Definition.Dock.Routes,
+	atom_name:A
+):types.Book.Definition.Dock<A>{
+	return common_atom_dock_with_defaults(default_routes, atom_name) as types.Book.Definition.Dock<A>;
 }
 
-export function return_default_routes(atom_name:types.AtomName)
-		:types.Book.Definition.Dock.Routes{
+export function return_default_routes<A extends urn_core.types.AtomName>(atom_name:A)
+		:types.Book.Definition.Dock.Routes<A>{
 	
-	(default_routes.count as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name,'count', any>).call =
+	// (default_routes.count as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name,'count', any>).call =
+	(default_routes.count as any).call =
 		async <D extends types.Depth>(api_request:types.Api.Request<typeof atom_name, 'count', D>) => {
 			urn_log.fn_debug(`Router Call GET [count] / [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 				urn_core.bll.BLL<typeof atom_name>;
 			const filter = (api_request.query as types.Api.Request.Query<'superuser', 'count', D>).filter || {};
-			const bll_res = await urn_bll.count(filter);
+			const bll_res = await urn_bll.count(filter as any);
 			return bll_res;
 		};
 	
-	(default_routes.find_one as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find_one', any>).call =
+	// (default_routes.find_one as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find_one', any>).call =
+	(default_routes.find_one as any).call =
 		async <D extends types.Depth>(api_request:types.Api.Request<typeof atom_name, 'find_one', D>) => {
 			urn_log.fn_debug(`Router Call GET [find_one] / [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 				urn_core.bll.BLL<typeof atom_name>;
 			const filter = (api_request.query as types.Api.Request.Query<'superuser', 'find', D>).filter || {};
 			const options = (api_request.query as types.Api.Request.Query<'superuser', 'find', D>).options;
-			const bll_res = await urn_bll.find_one(filter, options);
+			const bll_res = await urn_bll.find_one(filter as any, options as any);
 			return bll_res;
 		};
 	
-	(default_routes.find as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find', any>).call =
+	// (default_routes.find as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find', any>).call =
+	(default_routes.find as any).call =
 		async <D extends types.Depth>(api_request:types.Api.Request<typeof atom_name,'find', D>) => {
 			urn_log.fn_debug(`Router Call GET [find] / [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 				urn_core.bll.BLL<typeof atom_name>;
 			const filter = (api_request.query as types.Api.Request.Query<'superuser', 'find', D>).filter || {};
 			const options = (api_request.query as types.Api.Request.Query<'superuser', 'find', D>).options;
-			const bll_res = await urn_bll.find(filter, options);
+			const bll_res = await urn_bll.find(filter as any, options as any);
 			return bll_res;
 		};
 	
-	(default_routes.find_id as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find_id', any>).call =
+	// (default_routes.find_id as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find_id', any>).call =
+	(default_routes.find_id as any).call =
 		async <D extends types.Depth>(api_request:types.Api.Request<typeof atom_name, 'find_id', D>) => {
 			urn_log.fn_debug(`Router Call GET [find_id] /:id [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 				urn_core.bll.BLL<typeof atom_name>;
 			const bll_res = await urn_bll.find_by_id(
 				(api_request.params as types.Api.Request.Params<'superuser', 'find_id'>).id!,
-				(api_request.query as types.Api.Request.Query<'superuser', 'find_id', D>).options
+				(api_request.query as types.Api.Request.Query<'superuser', 'find_id', D> as any).options
 			);
 			return bll_res;
 		};
 	
-	(default_routes.insert as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'insert', any>).call =
+	// (default_routes.insert as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'insert', any>).call =
+	(default_routes.insert as any).call =
 		async <D extends types.Depth>(api_request:types.Api.Request<typeof atom_name, 'insert', D>) => {
 			urn_log.fn_debug(`Router Call POST [insert] / [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
@@ -86,7 +93,8 @@ export function return_default_routes(atom_name:types.AtomName)
 			return bll_res;
 		};
 	
-	(default_routes.update as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'update', any>).call =
+	// (default_routes.update as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'update', any>).call =
+	(default_routes.update as any).call =
 		async <D extends types.Depth>(api_request:types.Api.Request<typeof atom_name, 'update', D>) => {
 			urn_log.fn_debug(`Router Call POST [update] / [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
@@ -98,7 +106,8 @@ export function return_default_routes(atom_name:types.AtomName)
 			return bll_res;
 		};
 	
-	(default_routes.delete as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'delete', any>).call =
+	// (default_routes.delete as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'delete', any>).call =
+	(default_routes.delete as any).call =
 		async <D extends types.Depth>(api_request:types.Api.Request<typeof atom_name, 'delete', D>) => {
 			urn_log.fn_debug(`Router Call DELETE [delete] / [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
@@ -108,7 +117,7 @@ export function return_default_routes(atom_name:types.AtomName)
 			return bll_res;
 		};
 	
-	return default_routes as unknown as types.Book.Definition.Dock.Routes;
+	return default_routes as unknown as types.Book.Definition.Dock.Routes<A>;
 	
 	// return {
 	//   find: {

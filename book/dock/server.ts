@@ -11,8 +11,8 @@ import {AtomName} from '../../types';
 import {Book, DockBook} from '../../typ/book_srv';
 
 export function get_definition<A extends AtomName>(atom_name:A)
-		:Book.Definition.Dock{
-	return dock_book[atom_name].dock as Book.Definition.Dock;
+		:Book.Definition.Dock<A>{
+	return dock_book[atom_name].dock as Book.Definition.Dock<A>;
 }
 
 export function get_all_definitions()
