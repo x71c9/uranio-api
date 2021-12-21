@@ -76,12 +76,16 @@ export function express_request_to_partial_api_request<A extends types.AtomName,
 	api_request.is_auth = is_auth;
 	
 	const auth_action = get_auth_action(atom_name, route_name);
-
+	
 	if(!auth_action){
 		return api_request;
 	}
-	
 	api_request.auth_action = auth_action;
+	
+	if(is_auth){
+		api_request.auth_action = types.AuthAction.READ;
+		api_request.route_name = 'auth';
+	}
 	
 	if(req.body){
 		api_request.body = req.body;

@@ -22,6 +22,6 @@ export const api_config:FullConfiguration = {
 	
 	prefix_api: '/uranio/api',
 	
-	prefix_log: '/logs'
+	prefix_log: '/logs',
 	
 };

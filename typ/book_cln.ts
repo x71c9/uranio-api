@@ -36,7 +36,7 @@ export namespace Book {
 		
 		export type Dock = {
 			url: string,
-			auth?: string,
+			auth_url?: string,
 			routes?: Dock.Routes
 		}
 		

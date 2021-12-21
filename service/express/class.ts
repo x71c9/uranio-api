@@ -62,9 +62,9 @@ class ExpressWebService implements Service {
 					this.express_app.use(`${conf.get(`prefix_api`)}${dock_def.url}`, router);
 				}
 			}
-			if(dock_def && dock_def.auth && typeof dock_def.auth === 'string'){
+			if(dock_def && dock_def.auth_url && typeof dock_def.auth_url === 'string'){
 				const auth_route = create_express_auth_route(atom_name as AuthName);
-				this.express_app.use(`${conf.get(`prefix_api`)}${dock_def.auth}`, auth_route);
+				this.express_app.use(`${conf.get(`prefix_api`)}${dock_def.auth_url}`, auth_route);
 			}
 		}
 	}
