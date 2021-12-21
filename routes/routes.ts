@@ -27,37 +27,23 @@ export function route_def<A extends types.AtomName>(
 	return atom_dock.routes[route_name as string]!;
 }
 
-export function atom_dock_with_defaults(
+export function atom_dock_with_defaults<A extends types.AtomName>(
 	default_routes:types.Book.Definition.Dock.Routes,
-	atom_name:types.AtomName
+	atom_name:A
 ):types.Book.Definition.Dock{
 	
-	const atom_dock = _get_atom_dock(atom_name);
+	const cloned_atom_dock = {
+		...book.dock.get_definition(atom_name)
+	};
 	
-	if(!atom_dock.routes){
-		atom_dock.routes = default_routes;
+	if(!cloned_atom_dock.routes){
+		cloned_atom_dock.routes = default_routes;
 	}else{
-		atom_dock.routes = {
-			...atom_dock.routes,
+		cloned_atom_dock.routes = {
+			...cloned_atom_dock.routes,
 			...default_routes
 		};
 	}
 	
-	return atom_dock;
-}
-
-function _get_atom_dock(atom_name:types.AtomName)
-		:types.Book.Definition.Dock{
-	// const dock_def = dock_book[atom_name] as types.Book.BasicDefinition;
-	// if(urn_util.object.has_key(dock_def, 'dock')){
-	//   const atom_dock = dock_def.dock as types.Book.Definition.Dock;
-	//   return atom_dock;
-	// }else{
-	//   throw urn_exc.create(
-	//     `INVLID_API_DEF`,
-	//     'Invalid api definition in api_book.'
-	//   );
-	// }
-	const dock_def = book.dock.get_definition(atom_name);
-	return dock_def;
+	return cloned_atom_dock;
 }

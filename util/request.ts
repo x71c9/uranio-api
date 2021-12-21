@@ -73,13 +73,15 @@ export function process_request_path(full_path:string)
 	return api_request_paths;
 }
 
-export function get_auth_action(atom_name:types.AtomName, route_name:keyof types.Book.Definition.Dock.Routes)
-		:types.AuthAction{
+export function get_auth_action<A extends types.AtomName>(
+	atom_name:A,
+	route_name:keyof types.Book.Definition.Dock.Routes<A>
+):types.AuthAction{
 	const atom_dock = _get_atom_dock(atom_name);
-	if(!atom_dock.routes || !atom_dock.routes[route_name]){
+	if(!atom_dock.routes || !atom_dock.routes[route_name as any]){
 		throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name \`${route_name}\` from atom \`${atom_name}\`.`);
 	}
-	const auth_action = atom_dock.routes[route_name].action;
+	const auth_action = atom_dock.routes[route_name as any].action;
 	if(!(auth_action in types.AuthAction)){
 		throw urn_exc.create(`INVALID_AUTH_ACTION`, `Invalid auth action \`${auth_action}\` for \`${auth_action}\`\`${route_name}\`.`);
 	}
@@ -88,16 +90,6 @@ export function get_auth_action(atom_name:types.AtomName, route_name:keyof types
 
 export function get_atom_name_from_atom_path(atom_path:string)
 		:types.AtomName | undefined{
-	// let atom_name:keyof typeof dock_book;
-	// for(atom_name in dock_book){
-	//   const dock_def = dock_book[atom_name] as types.Book.Definition<typeof atom_name>;
-	//   if(dock_def.dock && dock_def.dock.url && dock_def.dock.url === atom_path){
-	//     return atom_name;
-	//   }
-	// }
-	// return undefined;
-	// throw urn_exc.create(`INVALID_API_URL`, `Invalid api url.`);
-	
 	for(const atom_name of book.atom.get_names()){
 		const dock_def = book.dock.get_definition(atom_name);
 		if(dock_def.url && dock_def.url === atom_path){
@@ -114,7 +106,6 @@ export function get_route_name<A extends types.AtomName, R extends types.RouteNa
 ):R | undefined{
 	const atom_dock = _get_atom_dock(atom_name);
 	if(!atom_dock.routes){
-		// throw urn_exc.create(`INVALID_API_DEF`, `Invalid api_def. Missing "routes" property.`);
 		return undefined;
 	}
 	/**
@@ -159,15 +150,7 @@ export function get_route_name<A extends types.AtomName, R extends types.RouteNa
 
 export function is_auth_request(atom_name: types.AtomName, atom_path: string)
 		:boolean{
-	// const dock_def = dock_book[atom_name] as types.Book.BasicDefinition;
 	const dock_def = book.dock.get_definition(atom_name);
-	// if(!urn_util.object.has_key(dock_def, 'dock')){
-	//   return false;
-	// }
-	// const atom_dock = dock_def['dock'] as types.Book.Definition.Dock;
-	// if(atom_dock.auth && atom_dock.auth === atom_path){
-	//   return true;
-	// }
 	if(dock_def.auth && dock_def.auth === atom_path){
 		return true;
 	}
@@ -216,33 +199,18 @@ export function get_params_from_route_path<A extends types.AtomName, R extends t
 
 function _get_atom_dock(atom_name:types.AtomName){
 	const default_routes = return_default_routes(atom_name);
-	// const dock_def = dock_book[atom_name] as types.Book.BasicDefinition;
-	const dock_def = book.dock.get_definition(atom_name);
-	// if(!urn_util.object.has_key(dock_def, 'dock')){
-	//   return {
-	//     routes: {
-	//       ...default_routes
-	//     }
-	//   };
-	// }
-	// const atom_dock = dock_def.dock as types.Book.Definition.Dock;
-	// if(!atom_dock.routes){
-	//   atom_dock.routes = default_routes;
-	// }else{
-	//   atom_dock.routes = {
-	//     ...atom_dock.routes,
-	//     ...default_routes
-	//   };
-	// }
-	if(!dock_def.routes){
-		dock_def.routes = default_routes;
+	const cloned_atom_dock = {
+		...book.dock.get_definition(atom_name)
+	};
+	if(!cloned_atom_dock.routes){
+		cloned_atom_dock.routes = default_routes;
 	}else{
-		dock_def.routes = {
-			...dock_def.routes,
+		cloned_atom_dock.routes = {
+			...cloned_atom_dock.routes,
 			...default_routes
 		};
 	}
-	return dock_def;
+	return cloned_atom_dock;
 }
 
 export function store_error(
