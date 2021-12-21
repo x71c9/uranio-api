@@ -95,6 +95,9 @@ export function get_atom_name_from_atom_path(atom_path:string)
 		if(dock_def.url && dock_def.url === atom_path){
 			return atom_name;
 		}
+		if(dock_def.auth_url === atom_path){
+			return atom_name;
+		}
 	}
 	return undefined;
 }
@@ -151,7 +154,7 @@ export function get_route_name<A extends types.AtomName, R extends types.RouteNa
 export function is_auth_request(atom_name: types.AtomName, atom_path: string)
 		:boolean{
 	const dock_def = book.dock.get_definition(atom_name);
-	if(dock_def.auth && dock_def.auth === atom_path){
+	if(dock_def.auth_url && dock_def.auth_url === atom_path){
 		return true;
 	}
 	return false;
@@ -311,10 +314,13 @@ export function partial_api_request_to_atom_request<A extends types.AtomName, R 
 		method: partial_api_request.method,
 		atom_name: partial_api_request.atom_name,
 		route_name: partial_api_request.route_name as string,
-		auth_action: partial_api_request.auth_action
+		auth_action: partial_api_request.auth_action,
 	};
+	if(partial_api_request.is_auth === true){
+		request_shape.is_auth = partial_api_request.is_auth;
+	}
 	if(partial_api_request.ip){
-		partial_api_request.ip;
+		request_shape.ip = partial_api_request.ip;
 	}
 	if(partial_api_request.params && Object.keys(partial_api_request.params).length > 0){
 		request_shape.params = urn_util.json.safe_stringify(partial_api_request.params);

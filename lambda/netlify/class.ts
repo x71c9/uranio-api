@@ -171,6 +171,11 @@ function _lambda_request_to_partial_api_request(event: LambdaEvent, context: Lam
 	api_request.ip = ip;
 	api_request.params = params;
 	
+	if(is_auth){
+		api_request.auth_action = types.AuthAction.READ;
+		api_request.route_name = 'auth';
+	}
+	
 	return api_request;
 }
 
