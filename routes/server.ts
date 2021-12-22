@@ -4,7 +4,9 @@
  * @packageDocumentation
  */
 
-import {urn_log} from 'urn-lib';
+import {urn_log, urn_exception} from 'urn-lib';
+
+const urn_exc = urn_exception.init(`API_ROUTE_SERVER`, `Api route server module`);
 
 import urn_core from 'uranio-core';
 
@@ -12,17 +14,17 @@ import * as types from '../types';
 
 import {Book as ClientBook} from '../typ/book_cln';
 
-import {default_routes} from './client';
+import {add_media_routes} from './client';
 
 import {
 	route_def as common_route_def,
 	atom_dock_with_defaults as common_atom_dock_with_defaults
-} from './routes';
+} from './common';
 
 export function route_def<A extends types.AtomName, R extends types.RouteName<A>>(atom_name:A, route_name:R)
 		:types.Book.Definition.Dock.Routes.Route<A,R>{
-	const default_routes = return_default_routes(atom_name) as ClientBook.Definition.Dock.Routes;
-	return common_route_def(default_routes, atom_name, route_name);
+	const server_default_routes = return_default_routes(atom_name) as ClientBook.Definition.Dock.Routes;
+	return common_route_def(server_default_routes, atom_name, route_name);
 }
 
 export function atom_dock_with_defaults<A extends urn_core.types.AtomName>(
@@ -34,6 +36,30 @@ export function atom_dock_with_defaults<A extends urn_core.types.AtomName>(
 
 export function return_default_routes<A extends urn_core.types.AtomName>(atom_name:A)
 		:types.Book.Definition.Dock.Routes<A>{
+	
+	const default_routes = add_media_routes();
+	
+	if(atom_name === 'media'){
+		
+		((default_routes as any).upload as any).call =
+			async <D extends types.Depth>(api_request:types.Api.Request<typeof atom_name, 'count', D>) => {
+				urn_log.fn_debug(`Router Call GET [count] / [${atom_name}]`);
+				if(!api_request.file){
+					throw urn_exc.create_invalid_request(
+						`INVALID_REQUEST_MISSING_FILE_PARAM`,
+						`Missing file param in api_request on upload media route.`
+					);
+				}
+				const urn_media_bll = urn_core.bll.media.create(api_request.passport);
+				const params = {
+					override: false,
+					content_type: api_request.file.mime_type,
+					content_length: api_request.file.size
+				};
+				const atom_media = await urn_media_bll.insert_file(api_request.file.name, api_request.file.data, params);
+				return atom_media;
+			};
+	}
 	
 	// (default_routes.count as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name,'count', any>).call =
 	(default_routes.count as any).call =

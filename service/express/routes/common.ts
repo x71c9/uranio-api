@@ -6,6 +6,8 @@
 
 import express from 'express';
 
+import {UploadedFile} from 'express-fileupload';
+
 import {urn_response} from 'urn-lib';
 import {
 	process_request_path,
@@ -90,6 +92,17 @@ export function express_request_to_partial_api_request<A extends types.AtomName,
 	if(req.body){
 		api_request.body = req.body;
 	}
+	
+	if(req.files && typeof req.files.file === 'object'){
+		const req_file = req.files.file as UploadedFile;
+		api_request.file = {
+			name: req_file.name,
+			data: req_file.data,
+			size: req_file.size,
+			mime_type: req_file.mimetype
+		};
+	}
+	
 	if(req.headers){
 		const headers:types.Api.Request.Headers = {};
 		for(const [name, value] of Object.entries(req.headers)){
@@ -97,6 +110,7 @@ export function express_request_to_partial_api_request<A extends types.AtomName,
 		}
 		api_request.headers = headers;
 	}
+	
 	if(req.ip){
 		api_request.ip = req.ip;
 	}

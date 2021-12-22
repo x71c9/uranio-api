@@ -148,8 +148,9 @@ function _validate_route<A extends types.AtomName, R extends types.RouteName<A>,
 		
 	urn_log.fn_debug(`Validate Route ${route_def.url} [${api_request.atom_name}]`);
 	
-	if(route_def.method === types.RouteMethod.GET){
+	if(route_def.method !== types.RouteMethod.POST){
 		req_validator.empty(api_request.body, 'body');
+		req_validator.empty(api_request.file, 'file');
 	}
 	
 	if(route_def.url.indexOf(':') !== -1){
