@@ -110,15 +110,8 @@ async function _auth_validate_and_call<A extends types.AtomName, R extends types
 	auth_route_request: types.Api.Request<A,R,D>,
 	handler: types.AuthHandler<A,R,D>,
 ){
-	// const dock_def = dock_book[auth_route_request.atom_name as types.AtomName];
-	
-	// if(!dock_def.dock){
-	//   throw urn_exc.create('NOAPIDEF', `Invalid dock definition`);
-	// }
-	
 	const dock_def = book.dock.get_definition(auth_route_request.atom_name);
 	
-	// urn_log.fn_debug(`Router Auth ${dock_def.dock.url} [${auth_route_request.atom_name}]`);
 	urn_log.fn_debug(`Router Auth ${dock_def.url} [${auth_route_request.atom_name}]`);
 	
 	_auth_validate(auth_route_request);
@@ -130,7 +123,7 @@ async function _auth_validate_and_call<A extends types.AtomName, R extends types
 		headers: {
 			'x-auth-token': auth_token
 		}
-	});
+	} as types.Api.AuthResponse);
 	
 	return urn_response;
 	

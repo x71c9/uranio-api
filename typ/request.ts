@@ -20,6 +20,13 @@ export const enum RouteMethod {
 
 export namespace Api {
 	
+	export type AuthResponse = {
+		token: string,
+		headers: {
+			[k:string]: string
+		}
+	}
+	
 	export type Request<A extends types.AtomName, R extends RouteName<A>, D extends types.Depth = 0> =
 		Request.Paths & {
 		method: RouteMethod
