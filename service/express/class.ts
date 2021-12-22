@@ -6,6 +6,8 @@
 
 import express from 'express';
 
+import fileupload from 'express-fileupload';
+
 import cors from 'cors';
 
 import {urn_log, urn_return, urn_exception} from 'urn-lib';
@@ -42,6 +44,7 @@ class ExpressWebService implements Service {
 		this.express_app.use(cors());
 		this.express_app.use(express.json());
 		this.express_app.use(express.urlencoded({extended: true}));
+		this.express_app.use(fileupload());
 		this.express_app.use(function(err:any, _req:express.Request, res:express.Response, next:express.NextFunction){
 			if(err.status === 400 && "body" in err) {
 				const respo = urn_ret.return_error(400, 'JSON parse error', 'INVALID_JSON_REQUEST', err.message);

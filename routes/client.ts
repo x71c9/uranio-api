@@ -9,13 +9,13 @@ import * as types from '../cln/types';
 import {
 	route_def as common_route_def,
 	atom_dock_with_defaults as common_atom_dock_with_defaults
-} from './routes';
+} from './common';
 
 /**
  *
  * NOTE:
  *
- * If the default routes are changed. They must be change also in:
+ * If the default routes change, they must change also in:
  * - routes/server.ts
  * - uranio/urn-cli/cmd/hook.ts
  *
@@ -62,9 +62,24 @@ export const default_routes = {
 	}
 } as const;
 
+export function add_media_routes():typeof default_routes{
+	const cloned_default_routes = {
+		upload:{
+			method: types.RouteMethod.POST,
+			action: types.AuthAction.WRITE,
+			url: '/upload',
+		},
+		...default_routes
+	};
+	return cloned_default_routes as typeof default_routes;
+}
+
 export function route_def<A extends types.AtomName>(atom_name:A, route_name:types.RouteName<A>)
 		:types.Book.Definition.Dock.Routes.Route{
-	return common_route_def(default_routes as any, atom_name, route_name);
+	
+	const cloned_default_routes = add_media_routes();
+	
+	return common_route_def(cloned_default_routes as any, atom_name, route_name);
 }
 
 export function atom_dock_with_defaults(

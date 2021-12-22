@@ -37,12 +37,20 @@ export namespace Api {
 		params: Request.Params<A,R>
 		query: Request.Query<A,R,D>
 		body?: any
+		file?: Request.File
 		headers?: Request.Headers
 		ip?: string,
 		passport?: types.Passport
 	}
 	
 	export namespace Request {
+		
+		export type File = {
+			name: string
+			data: Buffer | ArrayBuffer | Blob
+			size: number
+			mime_type: string
+		}
 		
 		export type Paths = {
 			full_path: string

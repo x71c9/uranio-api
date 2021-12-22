@@ -283,6 +283,9 @@ export function api_handle_exception<A extends types.AtomName, R extends types.R
 			break;
 		}
 	}
+	if(partial_api_request.file){
+		delete (partial_api_request.file as any).data;
+	}
 	const urn_res = urn_ret.return_error(
 		status,
 		msg,
@@ -321,6 +324,9 @@ export function partial_api_request_to_atom_request<A extends types.AtomName, R 
 	}
 	if(partial_api_request.ip){
 		request_shape.ip = partial_api_request.ip;
+	}
+	if(partial_api_request.file){
+		request_shape.file = partial_api_request.file.name + ` [${partial_api_request.file.mime_type}] [${partial_api_request.file.size}]`;
 	}
 	if(partial_api_request.params && Object.keys(partial_api_request.params).length > 0){
 		request_shape.params = urn_util.json.safe_stringify(partial_api_request.params);

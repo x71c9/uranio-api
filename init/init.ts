@@ -83,6 +83,7 @@ function _get_default_route_name(){
 	for(const route_name in default_routes){
 		route_names.push(route_name);
 	}
+	route_names.push('upload');
 	return route_names;
 }
 
