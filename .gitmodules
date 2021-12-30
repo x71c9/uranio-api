@@ -1,0 +1,5 @@
+[submodule "core"]
+	path = core
+	url = git+ssh://git@github.com/nbl7/uranio-core.git
+	branch = master
+	update = rebase
