@@ -6,7 +6,8 @@
 
 import {AtomName} from '../cln/types';
 
-import {routes_book} from 'uranio-books/routes';
+// import {routes_book} from 'uranio-books/routes';
+import {dock_book} from 'uranio-books/dock';
 
 import {default_routes} from '../routes/client';
 
@@ -27,9 +28,9 @@ export type RouteDefaultName =
 // export const a:RouteName<'user'> = '';
 
 export type RouteCustomName<A extends AtomName> =
-	'dock' extends keyof typeof routes_book[A] ?
-	'routes' extends keyof typeof routes_book[A]['dock'] ?
-	keyof typeof routes_book[A]['dock']['routes'] :
+	'dock' extends keyof typeof dock_book[A] ?
+	'routes' extends keyof typeof dock_book[A]['dock'] ?
+	keyof typeof dock_book[A]['dock']['routes'] :
 	never :
 	never;
 

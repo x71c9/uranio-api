@@ -4,10 +4,6 @@
  * @packageDocumentation
  */
 
-// import * as book_dock from 'uranio-core/book/dock/client';
-
-// export * from 'uranio-core/book/dock/client';
-
 import {dock_book} from 'uranio-books/dock';
 
 import {AtomName} from '../../cln/types';
