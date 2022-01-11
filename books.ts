@@ -9,6 +9,7 @@ import uranio from 'uranio';
 export const atom = {
 	error: {
 		plural: 'errors',
+		read_only: true,
 		connection: 'log',
 		security: {
 			type: uranio.types.BookSecurityType.UNIFORM,
@@ -47,6 +48,7 @@ export const atom = {
 	},
 	request: {
 		plural: 'requests',
+		read_only: true,
 		connection: 'log',
 		security: {
 			type: uranio.types.BookSecurityType.UNIFORM,
