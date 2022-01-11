@@ -4,7 +4,8 @@
  * @packageDocumentation
  */
 
-import {routes_book} from 'uranio-books/routes';
+// import {routes_book} from 'uranio-books/routes';
+import {dock_book} from 'uranio-books/dock';
 
 import * as types from '../cln/types';
 
@@ -93,11 +94,11 @@ type DefaultRouteURL<A extends types.AtomName, R extends RouteName<A>> =
 	never;
 
 type CustomRouteURL<A extends types.AtomName, R extends RouteName<A>> =
-	'dock' extends keyof typeof routes_book[A] ?
-	'routes' extends keyof typeof routes_book[A]['dock'] ?
-	R extends keyof typeof routes_book[A]['dock']['routes'] ?
-	'url' extends keyof typeof routes_book[A]['dock']['routes'][R] ?
-	typeof routes_book[A]['dock']['routes'][R]['url'] :
+	'dock' extends keyof typeof dock_book[A] ?
+	'routes' extends keyof typeof dock_book[A]['dock'] ?
+	R extends keyof typeof dock_book[A]['dock']['routes'] ?
+	'url' extends keyof typeof dock_book[A]['dock']['routes'][R] ?
+	typeof dock_book[A]['dock']['routes'][R]['url'] :
 	never :
 	never :
 	never :
@@ -150,11 +151,11 @@ type DefaultRouteQuery<A extends types.AtomName, R extends RouteName<A>> =
 // export const b:DefaultRouteQueryParam<'user', 'find'> = 's';
 
 type CustomRouteQueryParamArray<A extends types.AtomName, R extends RouteName<A>> =
-	'dock' extends keyof typeof routes_book[A] ?
-	'routes' extends keyof typeof routes_book[A]['dock'] ?
-	R extends keyof typeof routes_book[A]['dock']['routes'] ?
-	'query' extends keyof typeof routes_book[A]['dock']['routes'][R] ?
-	typeof routes_book[A]['dock']['routes'][R]['query'] :
+	'dock' extends keyof typeof dock_book[A] ?
+	'routes' extends keyof typeof dock_book[A]['dock'] ?
+	R extends keyof typeof dock_book[A]['dock']['routes'] ?
+	'query' extends keyof typeof dock_book[A]['dock']['routes'][R] ?
+	typeof dock_book[A]['dock']['routes'][R]['query'] :
 	never :
 	never :
 	never :
