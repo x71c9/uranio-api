@@ -14,7 +14,7 @@ import * as types from '../types';
 
 import {Book as ClientBook} from '../typ/book_cln';
 
-import {add_media_routes} from './client';
+import {add_media_routes, default_routes as cln_default_routes} from './client';
 
 import {
 	route_def as common_route_def,
@@ -37,9 +37,11 @@ export function atom_dock_with_defaults<A extends urn_core.types.AtomName>(
 export function return_default_routes<A extends urn_core.types.AtomName>(atom_name:A)
 		:types.Book.Definition.Dock.Routes<A>{
 	
-	const default_routes = add_media_routes();
+	let default_routes = cln_default_routes;
 	
 	if(atom_name === 'media'){
+		
+		default_routes = add_media_routes();
 		
 		((default_routes as any).upload as any).call =
 			async <D extends types.Depth>(api_request:types.Api.Request<typeof atom_name, 'count', D>) => {
