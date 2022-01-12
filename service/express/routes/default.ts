@@ -34,9 +34,10 @@ export function create_express_route<A extends types.AtomName>(atom_name:A)
 	if(!dock_def.routes){
 		dock_def.routes = default_routes;
 	}else{
+		// custom route go before.
 		dock_def.routes = {
-			...default_routes,
-			...dock_def.routes
+			...dock_def.routes,
+			...default_routes
 		};
 	}
 	
