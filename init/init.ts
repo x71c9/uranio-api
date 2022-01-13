@@ -42,6 +42,7 @@ export function init(config?:types.Configuration)
  */
 function _validate_api_book(){
 	_validate_dock_url_uniqueness();
+	_validate_dock_route_url_uniqueness();
 	_validate_route_name();
 }
 
@@ -49,14 +50,37 @@ function _validate_dock_url_uniqueness(){
 	const dock_defs = book.dock.get_all_definitions();
 	const urls:string[] = [];
 	for(const [atom_name, dock_def] of Object.entries(dock_defs)){
-		if(urls.includes(dock_def.url)){
-			throw urn_exc.create_not_initialized(
-				`INVALID_BOOK_DOCK_URL`,
-				`Ivalid dock url value [${dock_def.url}]. Url already in use.` +
-				` atom_name [${atom_name}]`
-			);
+		if(typeof dock_def.url === 'string'){
+			if(urls.includes(dock_def.url)){
+				throw urn_exc.create_not_initialized(
+					`INVALID_BOOK_DOCK_URL`,
+					`Ivalid dock url value [${dock_def.url}]. Url already in use.` +
+					` atom_name [${atom_name}]`
+				);
+			}
+			urls.push(dock_def.url);
 		}
-		urls.push(dock_def.url);
+	}
+}
+
+function _validate_dock_route_url_uniqueness(){
+	const dock_defs = book.dock.get_all_definitions();
+	for(const [atom_name, dock_def] of Object.entries(dock_defs)){
+		if(dock_def.routes){
+			const route_urls:string[] = [];
+			for(const [_route_name, route_def] of Object.entries(dock_def.routes)){
+				if(typeof route_def.url === 'string'){
+					if(route_urls.includes(route_def.url)){
+						throw urn_exc.create_not_initialized(
+							`INVALID_BOOK_DOCK_URL`,
+							`Ivalid dock route url value [${route_def.url}]. Url already in use.` +
+							` atom_name [${atom_name}]`
+						);
+					}
+					route_urls.push(route_def.url);
+				}
+			}
+		}
 	}
 }
 
