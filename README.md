@@ -9,7 +9,7 @@ Programming Interface with CRUD operations.
 import uranio from 'uranio';
 uranio.init();
 
-const service = uranio.serive.create();
+const service = uranio.service.create();
 service.listen(() => {
 	console.log(`Listening on port ${uranio.conf.get('service_port')}...`);
 })
@@ -17,7 +17,7 @@ service.listen(() => {
 
 The web service runs on [Express.js](https://expressjs.com/).
 
-> More services tpe will be available in the future
+> More services type will be available in the future
 
 Urano API provides also a method that runs on Lambda Functions. Useful for
 deplying on [AWS Lambda](https://aws.amazon.com/it/lambda/) or
