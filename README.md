@@ -1,4 +1,4 @@
-## URANIO-API
+## URANIO API
 
 Uranio API extends [Uranio CORE](https://github.com/nbl7/uranio-core).
 
