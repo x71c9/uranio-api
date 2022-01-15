@@ -58,9 +58,6 @@ async function _authorization<A extends types.AtomName, R extends types.RouteNam
 	if(urn_core.bll.auth.is_public_request(api_request.atom_name, route_def.action)){
 		return false;
 	}
-	if(api_request.headers === undefined){
-		return false;
-	}
 	const auth_token = _get_auth_token(api_request);
 	if(!auth_token){
 		return false;
@@ -95,7 +92,10 @@ async function _validate_and_call<A extends types.AtomName, R extends types.Rout
 	}
 	
 	let call_response = await route_def.call(api_request);
-	
+	// call_response.headers = {
+	//   'Access-Control-Allow-Origin': 'http://localhost:4444',
+	//   // 'Access-Control-Allow-Credentials': true
+	// };
 	call_response = urn_core.atm.util
 		.hide_hidden_properties(api_request.atom_name, call_response);
 	
@@ -120,11 +120,16 @@ async function _auth_validate_and_call<A extends types.AtomName, R extends types
 	const urn_response = urn_ret.return_success('Success', {
 		token: auth_token,
 		headers: {
-			'urn-auth-token': auth_token
+			'urn-auth-token': auth_token,
+			// 'Access-Control-Allow-Origin': 'http://localhost:4444',
+			// 'Access-Control-Allow-Credentials': true
 		},
 		multi_value_headers: {
 			// "Set-Cookie": [`urn-auth-token=${auth_token}; SameSite=Strict; HttpOnly; Secure`]
-			"Set-Cookie": [`urn-auth-token=${auth_token}; SameSite=Strict; HttpOnly`]
+			// "Set-Cookie": [`urn-auth-token=${auth_token}; SameSite=Strict; HttpOnly`]
+			// "Set-Cookie": [`urn-auth-token=${auth_token}; Domain=localhost; HttpOnly`]
+			"Set-Cookie": [`urn-auth-token=${auth_token}; HttpOnly`]
+			// "Set-Cookie": [`urn-auth-token=${auth_token}; Domain=192.168.1.69; HttpOnly`]
 		}
 	} as types.Api.AuthResponse);
 	
@@ -264,15 +269,17 @@ function _get_auth_token<A extends types.AtomName, R extends types.RouteName<A>,
 	api_request:types.Api.Request<A,R,D>
 ):string | false{
 	const headers = api_request.headers;
-	if(!headers || !headers.cookie){
+	if(!headers){
 		return false;
 	}
-	const cookies = headers.cookie.split(';');
-	for(const cookie of cookies){
-		const trimmed = cookie.trim();
-		const splitted = trimmed.split('=');
-		if(splitted[0] === 'urn-auth-token'){
-			return splitted[1];
+	if(typeof headers.cookie === 'string'){
+		const cookies = headers.cookie.split(';');
+		for(const cookie of cookies){
+			const trimmed = cookie.trim();
+			const splitted = trimmed.split('=');
+			if(splitted[0] === 'urn-auth-token'){
+				return splitted[1];
+			}
 		}
 	}
 	const auth_header = headers['urn-auth-token'];
