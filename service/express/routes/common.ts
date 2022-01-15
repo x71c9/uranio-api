@@ -128,6 +128,13 @@ function _set_and_remove_headers(urn_res:urn_response.General<any,any>, res:expr
 		}
 		delete urn_res.payload.headers;
 	}
+	if(urn_res.payload && urn_res.payload.multi_value_headers){
+		const multi_value_headers = urn_res.payload.multi_value_headers;
+		for(const [name, value] of Object.entries(multi_value_headers)){
+			res.setHeader(name, value as any);
+		}
+		delete urn_res.payload.multi_value_headers;
+	}
 	return res;
 }
 

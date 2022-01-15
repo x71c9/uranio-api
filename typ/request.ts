@@ -22,9 +22,12 @@ export const enum RouteMethod {
 export namespace Api {
 	
 	export type AuthResponse = {
-		token: string,
-		headers: {
-			[k:string]: string
+		token?: string,
+		headers?: {
+			[k:string]: string | boolean
+		},
+		multi_value_headers?: {
+			"Set-Cookie": string[]
 		}
 	}
 	
