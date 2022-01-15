@@ -61,8 +61,7 @@ async function _authorization<A extends types.AtomName, R extends types.RouteNam
 	if(api_request.headers === undefined){
 		return false;
 	}
-	const auth_header = api_request.headers['x-auth-token'];
-	const auth_token = (Array.isArray(auth_header)) ? auth_header[0] : auth_header;
+	const auth_token = _get_auth_token(api_request);
 	if(!auth_token){
 		return false;
 	}
@@ -121,7 +120,11 @@ async function _auth_validate_and_call<A extends types.AtomName, R extends types
 	const urn_response = urn_ret.return_success('Success', {
 		token: auth_token,
 		headers: {
-			'x-auth-token': auth_token
+			'urn-auth-token': auth_token
+		},
+		multi_value_headers: {
+			// "Set-Cookie": [`urn-auth-token=${auth_token}; SameSite=Strict; HttpOnly; Secure`]
+			"Set-Cookie": [`urn-auth-token=${auth_token}; SameSite=Strict; HttpOnly`]
 		}
 	} as types.Api.AuthResponse);
 	
@@ -257,30 +260,27 @@ function _log_auth_route_request<A extends types.AtomName, R extends types.Route
 	});
 }
 
-// function partial_api_request_to_atom_request(api_request: types.Api.Request)
-//     :types.AtomShape<'request'>{
-//   const request_shape:types.AtomShape<'request'> = {
-//     full_path: api_request.full_path,
-//     route_path: api_request.route_path,
-//     atom_path: api_request.atom_path,
-//     connection_path: api_request.connection_path,
-//     method: api_request.method,
-//     atom_name: api_request.atom_name,
-//     route_name: api_request.route_name,
-//     auth_action: api_request.auth_action
-//   };
-//   if(api_request.ip){
-//     api_request.ip;
-//   }
-//   if(api_request.params && Object.keys(api_request.params).length > 0){
-//     request_shape.params = JSON.stringify(api_request.params);
-//   }
-//   if(api_request.query && Object.keys(api_request.query).length > 0){
-//     request_shape.query = JSON.stringify(api_request.query);
-//   }
-//   if(api_request.body && Object.keys(api_request.body).length > 0){
-//     request_shape.body = JSON.stringify(api_request.body);
-//   }
-//   return request_shape;
-// }
+function _get_auth_token<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth = 0>(
+	api_request:types.Api.Request<A,R,D>
+):string | false{
+	const headers = api_request.headers;
+	if(!headers || !headers.cookie){
+		return false;
+	}
+	const cookies = headers.cookie.split(';');
+	for(const cookie of cookies){
+		const trimmed = cookie.trim();
+		const splitted = trimmed.split('=');
+		if(splitted[0] === 'urn-auth-token'){
+			return splitted[1];
+		}
+	}
+	const auth_header = headers['urn-auth-token'];
+	const header_auth_token = (Array.isArray(auth_header)) ? auth_header[0] : auth_header;
+	if(typeof header_auth_token === 'string'){
+		return header_auth_token;
+	}
+	return false;
+}
+
 

@@ -180,17 +180,24 @@ function _lambda_request_to_partial_api_request(event: LambdaEvent, context: Lam
 }
 
 function _lambda_response(
-	urn_resp:urn_response.General,
+	urn_resp:urn_response.General<any>,
 	headers?:LambdaHeaders,
 	multi_value_headers?:LambdaMultiValueHeaders,
 	is_base64?: boolean
 ):HandlerResponse{
 	const handler_response:HandlerResponse = {
 		statusCode: urn_resp.status,
-		body: urn_util.json.safe_stringify(urn_resp),
 	};
+	if(urn_resp.payload?.headers){
+		handler_response.headers = urn_resp.payload.headers;
+		delete urn_resp.payload.headers;
+	}
 	if(headers){
 		handler_response.headers = headers;
+	}
+	if(urn_resp.payload?.multi_value_headers){
+		handler_response.multiValueHeaders = urn_resp.payload.multi_value_headers;
+		delete urn_resp.payload.multi_value_headers;
 	}
 	if(multi_value_headers){
 		handler_response.multiValueHeaders = multi_value_headers;
@@ -198,6 +205,7 @@ function _lambda_response(
 	if(typeof is_base64 === 'boolean'){
 		handler_response.isBase64Encoded = is_base64;
 	}
+	handler_response.body = urn_util.json.safe_stringify(urn_resp);
 	return handler_response;
 }
 
