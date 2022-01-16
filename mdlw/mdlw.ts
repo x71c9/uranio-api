@@ -121,7 +121,7 @@ async function _auth_validate_and_call<A extends types.AtomName, R extends types
 		token: auth_token,
 		headers: {
 			'urn-auth-token': auth_token,
-			// 'Access-Control-Allow-Origin': 'http://localhost:4444',
+			// 'Access-Control-Allow-Origin': 'http://192.168.1.69',
 			// 'Access-Control-Allow-Credentials': true
 		},
 		multi_value_headers: {

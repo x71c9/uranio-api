@@ -53,21 +53,22 @@ class ExpressWebService implements Service {
 				next();
 			}
 		});
-		
+		const prefix_api = conf.get('prefix_api');
+		const prefix_log = conf.get('prefix_log');
 		for(const atom_name of book.atom.get_names()){
 			const dock_def = book.dock.get_definition(atom_name);
 			const atom_def = book.atom.get_definition(atom_name);
 			const router = create_express_route(atom_name);
 			if(dock_def){
 				if(atom_def.connection && atom_def.connection === 'log'){
-					this.express_app.use(`${conf.get(`prefix_api`)}${conf.get(`prefix_log`)}${dock_def.url}`, router);
+					this.express_app.use(`${prefix_api}${prefix_log}${dock_def.url}`, router);
 				}else{
-					this.express_app.use(`${conf.get(`prefix_api`)}${dock_def.url}`, router);
+					this.express_app.use(`${prefix_api}${dock_def.url}`, router);
 				}
 			}
 			if(dock_def && dock_def.auth_url && typeof dock_def.auth_url === 'string'){
 				const auth_route = create_express_auth_route(atom_name as AuthName);
-				this.express_app.use(`${conf.get(`prefix_api`)}${dock_def.auth_url}`, auth_route);
+				this.express_app.use(`${prefix_api}${dock_def.auth_url}`, auth_route);
 			}
 		}
 	}

@@ -139,6 +139,68 @@ Find id returns
 | ACTION | `WRITE` |
 
 
+### Authentication
+
+Uranio API provides an authentication route for each **AuthAtom**.
+
+> See what is an [AuthAtom](https://github.com/nbl7/uranio-core#authatoms)
+
+The route path must be defined in Book with the attribute `auth_url` inside `dock`:
+
+```typescript
+// src/book.ts
+export default atom_book:uranio.types.Book = {
+	customer: {
+		authenticate: true,
+		properties: {
+			...
+		},
+		dock:{
+			url: '/customers',
+			auth_url: '/auth-customer',
+			...
+		}
+	}
+}
+```
+Then the route `https://myservice.com/[prefix-api]/auth-customer` will
+accept a POST request with a JSON body:
+```json
+{
+	email: 'email@email.com',
+	password: 'fjs8a9fysa98fhafaj'
+}
+```
+If the authentication succeed, the server respond with a `payload` containing a
+JWT `token`.
+
+The JWT `token` can be then sent back to the server through the header
+`urn-auth-token`.
+
+```
+GET /uranio/api/products HTTP/1.1
+Host: myhost.com
+Accept: application/json
+urn-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3...
+```
+If the client and the server are on the same domain there is no need to send back
+the `token`.
+
+#### Authenticate with `HttpOnly` cookie
+
+If the authentication succeed the server will also send back a `Set-Cookie` Header
+with the JWT `token`.
+
+The cookie is `HttpOnly; SameSite=Strict; Secure;`. Therefore the browser
+will send back the `token` for each request without JS needed.
+
+But it will do only if the server is the same.
+
+> See [HttpOnly](https://owasp.org/www-community/HttpOnly) flag
+>
+> See [SameSite](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite) flag
+
+
 ### Adding routes
 
 As all Uranio repos, the only file that need to be develop is `src/book.ts`.
