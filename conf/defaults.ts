@@ -16,6 +16,10 @@ export const api_config:FullConfiguration = {
 	
 	service: 'express',
 	
+	service_protocol: 'http',
+	
+	service_domain: 'localhost',
+	
 	service_port: 3000,
 	
 	lambda: 'netlify',
