@@ -4,6 +4,8 @@
  * @packageDocumentation
  */
 
+// import parse_multipart from 'parse-multipart';
+
 import {urn_log, urn_response, urn_exception, urn_util} from 'urn-lib';
 
 const urn_exc = urn_exception.init('NETLIFYCLASS', 'Netlify class module');
@@ -34,7 +36,7 @@ import {
 	LambdaMultiValueHeaders
 } from '../types';
 
-import {map_lambda_query_params} from '../util';
+import {map_lambda_query_params, parse_multipart} from '../util';
 
 @urn_log.util.decorators.debug_constructor
 @urn_log.util.decorators.debug_methods
@@ -55,7 +57,7 @@ class NetlifyLambda implements Lambda {
 		try{
 			// This will throw an error if it cannot JSON parse the body.
 			// That is why it is outside `_lambda_request_to_partial_api_request`
-			const body = _filter_lambda_body_request(event);
+			const body = _filter_lambda_body_request(event, partial_api_request);
 			if(body){
 				partial_api_request.body = body;
 			}
@@ -99,7 +101,7 @@ class NetlifyLambda implements Lambda {
 	
 }
 
-function _filter_lambda_body_request(event:LambdaEvent){
+function _filter_lambda_body_request(event:LambdaEvent, api_request:Partial<types.Api.Request<any,any,any>>){
 	let body = null;
 	// ----
 	// For some reason when TRX call a `delete` hook, the lambda Netlify function
@@ -112,6 +114,38 @@ function _filter_lambda_body_request(event:LambdaEvent){
 	if (event.body === "[object Object]") {
 		event.body = null;
 	}
+	
+	if(event.isBase64Encoded === true && typeof event.body === 'string'){
+		api_request.file = {
+			name: '[NONAME]',
+			data: Buffer.from(''),
+			size: 0,
+			mime_type: ''
+		};
+		
+		if(event.headers['content-type']?.indexOf('multipart/form-data') === 0){
+			const content_type = event.headers['content-type'];
+			const boundary = content_type.split(';')[1]?.trim().split('=')[1].trim();
+			if(boundary){
+				const buffer = Buffer.from(event.body, 'base64');
+				const parts = parse_multipart(buffer, boundary);
+				for(const part of parts.reverse()){
+					if(typeof part.filename === 'string' && Buffer.isBuffer(part.data)){
+						api_request.file.name = part.filename;
+						api_request.file.data = part.data;
+						api_request.file.mime_type = part.type || '';
+						api_request.file.size = part.data.length;
+						break;
+					}
+				}
+				return null;
+			}
+		}
+		
+		return '[Base64Body]';
+		
+	}
+	
 	if (event.body) {
 		try {
 			body =
