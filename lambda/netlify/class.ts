@@ -125,7 +125,7 @@ function _filter_lambda_body_request(event:LambdaEvent, api_request:Partial<type
 		
 		if(event.headers['content-type']?.indexOf('multipart/form-data') === 0){
 			const content_type = event.headers['content-type'];
-			const boundary = content_type.split(';')[1]?.trim().split('=')[1].trim();
+			const boundary = content_type.split(';')[1]?.trim().split('=')[1]?.trim();
 			if(boundary){
 				const buffer = Buffer.from(event.body, 'base64');
 				const parts = parse_multipart(buffer, boundary);
