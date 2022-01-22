@@ -50,6 +50,7 @@ Uranio API generates for each Releation the following routes:
 For the relation `media` it generates also the route:
 
 - `upload`
+- `presigned`
 
 #### Count
 
@@ -129,7 +130,7 @@ Find id returns
 
 #### Upload (only on `media`)
 
-`upload` upload a file and return the `medida` record created.
+`upload` upload a file and return the `media` record created.
 
 | key | value |
 | --- | --- |
@@ -137,6 +138,17 @@ Find id returns
 | METHOD | `POST` |
 | BODY | `{file: Buffer \| BufferArray \| Blob}` |
 | ACTION | `WRITE` |
+
+
+#### Presigned (only on `media`)
+
+`presigned` generate a presigned URL for uploading on AWS or Google Cloud Storage.
+
+| key | value |
+| --- | --- |
+| URL | `/presigned`|
+| METHOD | `GET` |
+| ACTION | `READ` |
 
 
 ### Authentication

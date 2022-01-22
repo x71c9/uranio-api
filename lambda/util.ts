@@ -4,6 +4,12 @@
  * @packageDocumentation
  */
 
+import lmpp from 'lambda-multipart-parser';
+
+import {
+	LambdaEvent,
+} from './types';
+
 type QueryParamsObject = {
 	[k:string]: any
 }
@@ -63,120 +69,126 @@ function parse_param(json:QueryParamsObject) {
 	return recursively_check_if_array(json);
 }
 
-type FormattedPart = {
-	filename?: string
-	type?: string
-	data?: Buffer
+export async function lambra_multipart_parse(event:LambdaEvent)
+		:Promise<lmpp.MultipartRequest>{
+	const parse_resp = await lmpp.parse(event);
+	return parse_resp;
 }
 
-type Part = {
-	header: string
-	info: string
-	part: string
-}
+// type FormattedPart = {
+//   filename?: string
+//   type?: string
+//   data?: Buffer
+// }
+
+// type Part = {
+//   header: string
+//   info: string
+//   part: string
+// }
 
 /**
  * Multipart parser
- * 
+ *
  * Must be reviewed and imporved.
  */
-export function parse_multipart(multipart_buffer:Buffer, boundary:string)
-		:FormattedPart[]{
-	const process_part = function(part:Part)
-			:FormattedPart{
-		/*
-		 * It will transform this object:
-		 * {
-		 *   header: 'Content-Disposition: form-data; name="uploads[]"; filename="A.txt"',
-		 *   info: 'Content-Type: text/plain',
-		 *   part: 'AAAABBBB'
-		 *  }
-		 * into this one:
-		 * {
-		 *  filename: 'A.txt',
-		 *  type: 'text/plain',
-		 *  data: <Buffer 41 41 41 41 42 42 42 42>
-		 * }
-		 **/
-		const obj = function(str:string){
-			const k = str.split('=');
-			const a = k[0]?.trim() || '';
-			const b = JSON.parse(k[1]?.trim() || '{}');
-			const o = {};
-			Object.defineProperty(o, a, {value: b, writable: true, enumerable: true, configurable: true });
-			return o;
-		};
-		const header = part.header.split(';');
-		const file = obj(header[2]) as FormattedPart;
-		const contentType = part.info.split(':')[1]?.trim() || '';
-		Object.defineProperty(file, 'type', { value: contentType, writable: true, enumerable: true, configurable: true });
-		Object.defineProperty(file, 'data', { value: Buffer.from(part.part), writable: true, enumerable: true, configurable: true });
-		return file;
-	};
-	let lastline = '';
-	let header = '';
-	let state = 0;
-	let info = '';
-	let buffer = [];
-	const allParts = [];
-	for(let i = 0; i < multipart_buffer.length; i++){
-		const oneByte = multipart_buffer[i];
-		const prevByte = i > 0 ? multipart_buffer[i-1] : null;
-		const newLineDetected = ((oneByte == 0x0a) && (prevByte == 0x0d)) ? true : false;
-		const newLineChar = ((oneByte == 0x0a) || (oneByte == 0x0d)) ? true : false;
-		if(!newLineChar)
-			lastline += String.fromCharCode(oneByte);
-		if((0 == state) && newLineDetected){
-			if(("--"+boundary) == lastline){
-				state = 1;
-			}
-			lastline = '';
-		}else
-		if((1 == state) && newLineDetected){
-			header = lastline + ';;';
-			state = 2;
-			lastline='';
-		}else
-		if((2 == state) && newLineDetected){
-			info = lastline;
-			state = 3;
-			lastline='';
-		}else
-		if((3 == state) && newLineDetected){
-			state = 4;
-			buffer = [];
-			lastline='';
-		}else
-		if(4 == state){
-			if(lastline.length > (boundary.length+4)) lastline=''; // mem save
-			if(((("--"+boundary) == lastline))){
-				const j = buffer.length - lastline.length;
-				const part = buffer.slice(0,j-1);
-				const p = {
-					header: header,
-					info: info,
-					part: part as unknown as string
-				};
-				allParts.push(process_part(p));
-				buffer = [];
-				lastline = '';
-				state = 5;
-				header = ';;';
-				info = '';
-			}else{
-				buffer.push(oneByte);
-			}
-			if(newLineDetected){
-				lastline='';
-			}
-		}else
-		if(5 == state){
-			if(newLineDetected)
-				state = 1;
-		}
-	}
-	return allParts;
-}
+// export function parse_multipart(multipart_buffer:Buffer, boundary:string)
+//     :FormattedPart[]{
+//   const process_part = function(part:Part)
+//       :FormattedPart{
+//     /*
+//      * It will transform this object:
+//      * {
+//      *   header: 'Content-Disposition: form-data; name="uploads[]"; filename="A.txt"',
+//      *   info: 'Content-Type: text/plain',
+//      *   part: 'AAAABBBB'
+//      *  }
+//      * into this one:
+//      * {
+//      *  filename: 'A.txt',
+//      *  type: 'text/plain',
+//      *  data: <Buffer 41 41 41 41 42 42 42 42>
+//      * }
+//      **/
+//     const obj = function(str:string){
+//       const k = str.split('=');
+//       const a = k[0]?.trim() || '';
+//       const b = JSON.parse(k[1]?.trim() || '{}');
+//       const o = {};
+//       Object.defineProperty(o, a, {value: b, writable: true, enumerable: true, configurable: true });
+//       return o;
+//     };
+//     const header = part.header.split(';');
+//     const file = obj(header[2]) as FormattedPart;
+//     const contentType = part.info.split(':')[1]?.trim() || '';
+//     Object.defineProperty(file, 'type', { value: contentType, writable: true, enumerable: true, configurable: true });
+//     Object.defineProperty(file, 'data', { value: Buffer.from(part.part), writable: true, enumerable: true, configurable: true });
+//     return file;
+//   };
+//   let lastline = '';
+//   let header = '';
+//   let state = 0;
+//   let info = '';
+//   let buffer = [];
+//   const allParts = [];
+//   for(let i = 0; i < multipart_buffer.length; i++){
+//     const oneByte = multipart_buffer[i];
+//     const prevByte = i > 0 ? multipart_buffer[i-1] : null;
+//     const newLineDetected = ((oneByte == 0x0a) && (prevByte == 0x0d)) ? true : false;
+//     const newLineChar = ((oneByte == 0x0a) || (oneByte == 0x0d)) ? true : false;
+//     if(!newLineChar)
+//       lastline += String.fromCharCode(oneByte);
+//     if((0 == state) && newLineDetected){
+//       if(("--"+boundary) == lastline){
+//         state = 1;
+//       }
+//       lastline = '';
+//     }else
+//     if((1 == state) && newLineDetected){
+//       header = lastline + ';;';
+//       state = 2;
+//       lastline='';
+//     }else
+//     if((2 == state) && newLineDetected){
+//       info = lastline;
+//       state = 3;
+//       lastline='';
+//     }else
+//     if((3 == state) && newLineDetected){
+//       state = 4;
+//       buffer = [];
+//       lastline='';
+//     }else
+//     if(4 == state){
+//       if(lastline.length > (boundary.length+4)) lastline=''; // mem save
+//       if(((("--"+boundary) == lastline))){
+//         const j = buffer.length - lastline.length;
+//         const part = buffer.slice(0,j-1);
+//         const p = {
+//           header: header,
+//           info: info,
+//           part: part as unknown as string
+//         };
+//         allParts.push(process_part(p));
+//         buffer = [];
+//         lastline = '';
+//         state = 5;
+//         header = ';;';
+//         info = '';
+//       }else{
+//         buffer.push(oneByte);
+//       }
+//       if(newLineDetected){
+//         lastline='';
+//       }
+//     }else
+//     if(5 == state){
+//       if(newLineDetected)
+//         state = 1;
+//     }
+//   }
+//   return allParts;
+// }
 
 //  read the boundary from the content-type header sent by the http client
 //  this value may be similar to:

@@ -22,12 +22,12 @@ export function create(lambda_name?:LambdaName)
 	}
 }
 
-export function connect_and_create(lambda_name?:LambdaName)
-		:Lambda{
-	const lambda = lambda_name || conf.get(`lambda`);
-	switch(lambda){
-		case 'netlify':{
-			return netlify.connect_and_create();
-		}
-	}
-}
+// export function connect_and_create(lambda_name?:LambdaName)
+//     :Lambda{
+//   const lambda = lambda_name || conf.get(`lambda`);
+//   switch(lambda){
+//     case 'netlify':{
+//       return netlify.connect_and_create();
+//     }
+//   }
+// }
