@@ -36,17 +36,18 @@ import {
 	LambdaMultiValueHeaders
 } from '../types';
 
-import {map_lambda_query_params, parse_multipart} from '../util';
+// import {map_lambda_query_params, parse_multipart} from '../util';
+import {map_lambda_query_params, lambra_multipart_parse} from '../util';
 
 @urn_log.util.decorators.debug_constructor
 @urn_log.util.decorators.debug_methods
 class NetlifyLambda implements Lambda {
 	
-	constructor(connect=false){
-		if(connect === true){
-			urn_core.db.connect();
-		}
-	}
+	// constructor(connect=false){
+	//   if(connect === true){
+	//     urn_core.db.connect();
+	//   }
+	// }
 	
 	public async handle(event:LambdaEvent, context:LambdaContext)
 			:Promise<HandlerResponse> {
@@ -57,7 +58,7 @@ class NetlifyLambda implements Lambda {
 		try{
 			// This will throw an error if it cannot JSON parse the body.
 			// That is why it is outside `_lambda_request_to_partial_api_request`
-			const body = _filter_lambda_body_request(event, partial_api_request);
+			const body = await _filter_lambda_body_request(event, partial_api_request);
 			if(body){
 				partial_api_request.body = body;
 			}
@@ -101,7 +102,8 @@ class NetlifyLambda implements Lambda {
 	
 }
 
-function _filter_lambda_body_request(event:LambdaEvent, api_request:Partial<types.Api.Request<any,any,any>>){
+async function _filter_lambda_body_request(event:LambdaEvent, api_request:Partial<types.Api.Request<any,any,any>>){
+	
 	let body = null;
 	// ----
 	// For some reason when TRX call a `delete` hook, the lambda Netlify function
@@ -124,22 +126,28 @@ function _filter_lambda_body_request(event:LambdaEvent, api_request:Partial<type
 		};
 		
 		if(event.headers['content-type']?.indexOf('multipart/form-data') === 0){
-			const content_type = event.headers['content-type'];
-			const boundary = content_type.split(';')[1]?.trim().split('=')[1]?.trim();
-			if(boundary){
-				const buffer = Buffer.from(event.body, 'base64');
-				const parts = parse_multipart(buffer, boundary);
-				for(const part of parts.reverse()){
-					if(typeof part.filename === 'string' && Buffer.isBuffer(part.data)){
-						api_request.file.name = part.filename;
-						api_request.file.data = part.data;
-						api_request.file.mime_type = part.type || '';
-						api_request.file.size = part.data.length;
-						break;
-					}
-				}
-				return null;
-			}
+			const multipart = await lambra_multipart_parse(event);
+			api_request.file.name = multipart.files[0].filename;
+			api_request.file.data = multipart.files[0].content;
+			api_request.file.mime_type = multipart.files[0].contentType;
+			api_request.file.size = multipart.files[0].content.length;
+			
+			// const content_type = event.headers['content-type'];
+			// const boundary = content_type.split(';')[1]?.trim().split('=')[1]?.trim();
+			// if(boundary){
+			//   const buffer = Buffer.from(event.body, 'base64');
+			//   const parts = parse_multipart(buffer, boundary);
+			//   for(const part of parts.reverse()){
+			//     if(typeof part.filename === 'string' && Buffer.isBuffer(part.data)){
+			//       api_request.file.name = part.filename;
+			//       api_request.file.data = part.data;
+			//       api_request.file.mime_type = part.type || '';
+			//       api_request.file.size = part.data.length;
+			//       break;
+			//     }
+			//   }
+			//   return null;
+			// }
 		}
 		
 		return '[Base64Body]';
@@ -248,7 +256,7 @@ export function create():NetlifyLambda{
 	return new NetlifyLambda();
 }
 
-export function connect_and_create():NetlifyLambda{
-	urn_log.fn_debug(`Create NetlifyLambda`);
-	return new NetlifyLambda(true);
-}
+// export function connect_and_create():NetlifyLambda{
+//   urn_log.fn_debug(`Create NetlifyLambda`);
+//   return new NetlifyLambda(true);
+// }

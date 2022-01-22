@@ -69,6 +69,12 @@ export function add_media_routes():typeof default_routes{
 			action: types.AuthAction.WRITE,
 			url: '/upload',
 		},
+		presigned:{
+			method: types.RouteMethod.GET,
+			action: types.AuthAction.WRITE,
+			query: ['filename', 'size', 'type'],
+			url: '/presigned',
+		},
 		...default_routes
 	};
 	return cloned_default_routes as typeof default_routes;

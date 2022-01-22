@@ -303,7 +303,7 @@ export function api_handle_and_store_exception<A extends types.AtomName, R exten
 	const urn_res = api_handle_exception(ex, partial_api_request);
 	const atom_request = partial_api_request_to_atom_request(partial_api_request);
 	store_error(urn_res, atom_request, ex);
-	return urn_res;
+	return _clean_response(urn_res);
 }
 
 export function partial_api_request_to_atom_request<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth>(
@@ -398,3 +398,23 @@ export function validate_request<A extends types.AtomName, R extends types.Route
 	}
 	return api_request as types.Api.Request<A,R,D>;
 }
+
+function _clean_response(urn_res:urn_response.Fail<any>)
+		:urn_response.Fail<any>{
+	const cookies = urn_res.payload?.request?.headers?.cookie;
+	if(cookies){
+		const new_cookies:string[] = [];
+		const splitted_cookies = cookies.split(';');
+		for(let cookie of splitted_cookies){
+			const splitted_cookie = cookie.split('=');
+			if(splitted_cookie[0] === 'urn-auth-token'){
+				cookie = `urn-auth-token=${splitted_cookie[1].substring(0, 32)}...`;
+			}
+			new_cookies.push(cookie);
+		}
+		urn_res.payload.request.headers.cookie = new_cookies.join('; ');
+	}
+	return urn_res;
+}
+
+

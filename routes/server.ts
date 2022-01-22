@@ -45,7 +45,7 @@ export function return_default_routes<A extends urn_core.types.AtomName>(atom_na
 		
 		((default_routes as any).upload as any).call =
 			async <D extends types.Depth>(api_request:types.Api.Request<typeof atom_name, 'count', D>) => {
-				urn_log.fn_debug(`Router Call GET [count] / [${atom_name}]`);
+				urn_log.fn_debug(`Router Call POST [upload] / [${atom_name}]`);
 				if(!api_request.file){
 					throw urn_exc.create_invalid_request(
 						`INVALID_REQUEST_MISSING_FILE_PARAM`,
@@ -59,6 +59,24 @@ export function return_default_routes<A extends urn_core.types.AtomName>(atom_na
 					content_length: api_request.file.size
 				};
 				const atom_media = await urn_media_bll.insert_file(api_request.file.name, api_request.file.data, params);
+				return atom_media;
+			};
+			
+		((default_routes as any).presigned as any).call =
+			async <D extends types.Depth>(api_request:types.Api.Request<typeof atom_name, 'count', D>) => {
+				urn_log.fn_debug(`Router Call GET [presigned] / [${atom_name}]`);
+				if(!api_request.query){
+					throw urn_exc.create_invalid_request(
+						`INVALID_REQUEST_MISSING_QUERY`,
+						`Missing query in api_request on presigned media route.`
+					);
+				}
+				const urn_media_bll = urn_core.bll.media.create(api_request.passport);
+				const params = {
+					content_type: (api_request.query as any).type,
+					content_length: Number((api_request.query as any).size)
+				};
+				const atom_media = await urn_media_bll.presigned((api_request.query as any).filename, params);
 				return atom_media;
 			};
 	}

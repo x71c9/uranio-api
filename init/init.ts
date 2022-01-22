@@ -108,6 +108,7 @@ function _get_default_route_name(){
 		route_names.push(route_name);
 	}
 	route_names.push('upload');
+	route_names.push('presigned');
 	return route_names;
 }
 
