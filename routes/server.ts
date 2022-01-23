@@ -135,6 +135,12 @@ export function return_default_routes<A extends urn_core.types.AtomName>(atom_na
 			urn_log.fn_debug(`Router Call POST [insert] / [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 				urn_core.bll.BLL<typeof atom_name>;
+			if(!api_request.body){
+				throw urn_exc.create_invalid_request(
+					`INVALID_REQUEST_BODY`,
+					`Invalid request body.`
+				);
+			}
 			const bll_res = await urn_bll.insert_new(api_request.body);
 			return bll_res;
 		};
@@ -145,6 +151,12 @@ export function return_default_routes<A extends urn_core.types.AtomName>(atom_na
 			urn_log.fn_debug(`Router Call POST [update] / [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 				urn_core.bll.BLL<typeof atom_name>;
+			if(!api_request.body){
+				throw urn_exc.create_invalid_request(
+					`INVALID_REQUEST_BODY`,
+					`Invalid request body.`
+				);
+			}
 			const bll_res = await urn_bll.update_by_id(
 				(api_request.params as types.Api.Request.Params<'superuser', 'find_id'>).id!,
 				api_request.body
