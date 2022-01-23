@@ -40,7 +40,7 @@ export namespace Api {
 		auth_action: types.AuthAction
 		params: Request.Params<A,R>
 		query: Request.Query<A,R,D>
-		body?: any
+		body?: Request.Body<A,R>
 		file?: Request.File
 		headers?: Request.Headers
 		ip?: string,
@@ -74,6 +74,11 @@ export namespace Api {
 		export type Query<A extends types.AtomName, R extends RouteName<A>, D extends types.Depth = 0> = {
 			[k in RouteQueryParam<A,R>]?: RouteQueryParamValue<A,R,k,D>
 		}
+		
+		export type Body<A extends types.AtomName, R extends RouteName<A>> =
+			R extends 'insert' ? types.AtomShape<A> :
+			R extends 'update' ? types.AtomShape<A> :
+			any
 		
 	}
 	

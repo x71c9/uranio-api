@@ -89,8 +89,8 @@ class NetlifyLambda implements Lambda {
 			);
 			const auth_handler = async (api_request:types.Api.Request<A,R,D>) => {
 				const token = await auth_bll.authenticate(
-					api_request.body.email,
-					api_request.body.password
+					api_request.body?.email,
+					api_request.body?.password
 				);
 				return token;
 			};
