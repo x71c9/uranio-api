@@ -141,24 +141,37 @@ export function return_default_routes<A extends urn_core.types.AtomName>(atom_na
 					`Invalid request body.`
 				);
 			}
+			if(Array.isArray(api_request.body)){
+				return await urn_bll.insert_multiple(api_request.body);
+			}
 			const bll_res = await urn_bll.insert_new(api_request.body);
 			return bll_res;
 		};
 	
 	// (default_routes.update as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'update', any>).call =
 	(default_routes.update as any).call =
-		async <D extends types.Depth>(api_request:types.Api.Request<typeof atom_name, 'update', D>) => {
+		async <D extends types.Depth>(api_request:types.Api.Request<'superuser', 'update', D>) => {
 			urn_log.fn_debug(`Router Call POST [update] / [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 				urn_core.bll.BLL<typeof atom_name>;
 			if(!api_request.body){
 				throw urn_exc.create_invalid_request(
-					`INVALID_REQUEST_BODY`,
+					`INVALID_REQUEST_UPDATE_BODY`,
 					`Invalid request body.`
 				);
 			}
+			if(!api_request.params?.id){
+				throw urn_exc.create_invalid_request(
+					`INVALID_REQUEST_PARAM_ID`,
+					`Invalid request parameter \`id\`.`
+				);
+			}
+			const ids = api_request.params?.id?.split(',') || [];
+			if(ids.length > 1){
+				return await urn_bll.update_multiple(ids, api_request.body);
+			}
 			const bll_res = await urn_bll.update_by_id(
-				(api_request.params as types.Api.Request.Params<'superuser', 'find_id'>).id!,
+				api_request.params?.id,
 				api_request.body
 			);
 			return bll_res;
@@ -166,12 +179,21 @@ export function return_default_routes<A extends urn_core.types.AtomName>(atom_na
 	
 	// (default_routes.delete as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'delete', any>).call =
 	(default_routes.delete as any).call =
-		async <D extends types.Depth>(api_request:types.Api.Request<typeof atom_name, 'delete', D>) => {
+		async <D extends types.Depth>(api_request:types.Api.Request<'superuser', 'delete', D>) => {
 			urn_log.fn_debug(`Router Call DELETE [delete] / [${atom_name}]`);
 			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
 				urn_core.bll.BLL<typeof atom_name>;
-			const id = (api_request.params as types.Api.Request.Params<'superuser', 'find_id'>).id!;
-			const bll_res = await urn_bll.remove_by_id(id);
+			if(!api_request.params?.id){
+				throw urn_exc.create_invalid_request(
+					`INVALID_REQUEST_DELETE_PARAM_ID`,
+					`Invalid request parameter \`id\`.`
+				);
+			}
+			const ids = api_request.params.id?.split(',') || [];
+			if(ids.length > 1){
+				return await urn_bll.remove_multiple(ids);
+			}
+			const bll_res = await urn_bll.remove_by_id(api_request.params.id);
 			return bll_res;
 		};
 	
