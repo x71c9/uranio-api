@@ -78,7 +78,7 @@ class ExpressWebService implements Service {
 	listen(portcall: number | Callback, callback?:() => void): void {
 		switch(typeof portcall){
 			case 'function':{
-				this.express_app.listen(conf.get(`service_port`), callback);
+				this.express_app.listen(conf.get(`service_port`), portcall);
 				break;
 			}
 			case 'number':{

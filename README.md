@@ -46,6 +46,9 @@ Uranio API generates for each Releation the following routes:
 - `insert`
 - `update`
 - `delete`
+- `insert_multiple`
+- `update_multiple`
+- `delete_multiple`
 
 For the relation `media` it generates also the route:
 
@@ -125,6 +128,38 @@ Find id returns
 | key | value |
 | --- | --- |
 | URL | `/:id`|
+| METHOD | `DELETE` |
+| ACTION | `WRITE` |
+
+#### Insert multiple
+
+`insert_multiple` add new records to the relation and returns the records created.
+
+| key | value |
+| --- | --- |
+| URL | `/multiple`|
+| METHOD | `POST` |
+| BODY | A array of records in JSON format. |
+| ACTION | `WRITE` |
+
+#### Update multiple
+
+`update_multiple` update records and returns the records updated.
+
+| key | value |
+| --- | --- |
+| URL | `/multiple/:ids`|
+| METHOD | `POST` |
+| BODY | A partial record with the fields to update in JSON format. |
+| ACTION | `WRITE` |
+
+#### Delete multiple
+
+`delete` deletes records and returns the deleted records.
+
+| key | value |
+| --- | --- |
+| URL | `/multiple/:ids`|
 | METHOD | `DELETE` |
 | ACTION | `WRITE` |
 

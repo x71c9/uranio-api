@@ -141,9 +141,9 @@ export function return_default_routes<A extends urn_core.types.AtomName>(atom_na
 					`Invalid request body.`
 				);
 			}
-			if(Array.isArray(api_request.body)){
-				return await urn_bll.insert_multiple(api_request.body);
-			}
+			// if(Array.isArray(api_request.body)){
+			//   return await urn_bll.insert_multiple(api_request.body);
+			// }
 			const bll_res = await urn_bll.insert_new(api_request.body);
 			return bll_res;
 		};
@@ -166,10 +166,10 @@ export function return_default_routes<A extends urn_core.types.AtomName>(atom_na
 					`Invalid request parameter \`id\`.`
 				);
 			}
-			const ids = api_request.params?.id?.split(',') || [];
-			if(ids.length > 1){
-				return await urn_bll.update_multiple(ids, api_request.body);
-			}
+			// const ids = api_request.params?.id?.split(',') || [];
+			// if(ids.length > 1){
+			//   return await urn_bll.update_multiple(ids, api_request.body);
+			// }
 			const bll_res = await urn_bll.update_by_id(
 				api_request.params?.id,
 				api_request.body
@@ -189,12 +189,65 @@ export function return_default_routes<A extends urn_core.types.AtomName>(atom_na
 					`Invalid request parameter \`id\`.`
 				);
 			}
-			const ids = api_request.params.id?.split(',') || [];
-			if(ids.length > 1){
-				return await urn_bll.remove_multiple(ids);
-			}
+			// const ids = api_request.params.id?.split(',') || [];
+			// if(ids.length > 1){
+			//   return await urn_bll.remove_multiple(ids);
+			// }
 			const bll_res = await urn_bll.remove_by_id(api_request.params.id);
 			return bll_res;
+		};
+	
+	// (default_routes.insert as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'insert', any>).call =
+	(default_routes.insert_multiple as any).call =
+		async <D extends types.Depth>(api_request:types.Api.Request<typeof atom_name, 'insert_multiple', D>) => {
+			urn_log.fn_debug(`Router Call POST [insert_multiple] / [${atom_name}]`);
+			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
+				urn_core.bll.BLL<typeof atom_name>;
+			if(!api_request.body || !Array.isArray(api_request.body)){
+				throw urn_exc.create_invalid_request(
+					`INVALID_REQUEST_INSERT_MULTIPLE_BODY`,
+					`Invalid request body.`
+				);
+			}
+			return await urn_bll.insert_multiple(api_request.body);
+		};
+	
+	// (default_routes.update as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'update', any>).call =
+	(default_routes.update_multiple as any).call =
+		async <D extends types.Depth>(api_request:types.Api.Request<'superuser', 'update_multiple', D>) => {
+			urn_log.fn_debug(`Router Call POST [update_multiple] / [${atom_name}]`);
+			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
+				urn_core.bll.BLL<typeof atom_name>;
+			if(!api_request.body){
+				throw urn_exc.create_invalid_request(
+					`INVALID_REQUEST_UPDATE_MULTIPLE_BODY`,
+					`Invalid request body.`
+				);
+			}
+			if(!api_request.params?.ids){
+				throw urn_exc.create_invalid_request(
+					`INVALID_REQUEST_UPDATE_MULTIPLE_PARAM_IDS`,
+					`Invalid request parameter \`ids\`.`
+				);
+			}
+			const ids = api_request.params?.ids?.split(',') || [];
+			return await urn_bll.update_multiple(ids, api_request.body);
+		};
+	
+	// (default_routes.delete as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'delete', any>).call =
+	(default_routes.delete_multiple as any).call =
+		async <D extends types.Depth>(api_request:types.Api.Request<'superuser', 'delete_multiple', D>) => {
+			urn_log.fn_debug(`Router Call DELETE [delete_multiple] / [${atom_name}]`);
+			const urn_bll = urn_core.bll.create(atom_name, api_request.passport) as
+				urn_core.bll.BLL<typeof atom_name>;
+			if(!api_request.params?.ids){
+				throw urn_exc.create_invalid_request(
+					`INVALID_REQUEST_DELETE_MULTIPLE_PARAM_IDS`,
+					`Invalid request parameter \`ids\`.`
+				);
+			}
+			const ids = api_request.params.ids?.split(',') || [];
+			return await urn_bll.remove_multiple(ids);
 		};
 	
 	return default_routes as unknown as types.Book.Definition.Dock.Routes<A>;

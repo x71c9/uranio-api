@@ -78,6 +78,8 @@ export namespace Api {
 		export type Body<A extends types.AtomName, R extends RouteName<A>> =
 			R extends 'insert' ? types.AtomShape<A> :
 			R extends 'update' ? types.AtomShape<A> :
+			R extends 'insert_multiple' ? types.AtomShape<A>[] :
+			R extends 'update_multiple' ? types.AtomShape<A> :
 			any
 		
 	}

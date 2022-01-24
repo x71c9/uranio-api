@@ -49,11 +49,18 @@ export namespace Book {
 			export namespace Routes {
 				
 				export type Route = {
-					method: RouteMethod,
-					action: urn_core_client.types.AuthAction,
-					url: string,
-					query?: string[],
+					method: RouteMethod
+					action: urn_core_client.types.AuthAction
+					url: string
+					query?: string[]
+					params?: Params
 					return?: any
+				}
+				
+				export type Params = {
+					[k:string]:{
+						array?: boolean
+					}
 				}
 				
 			}

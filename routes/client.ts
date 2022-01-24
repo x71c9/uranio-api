@@ -45,6 +45,31 @@ export const default_routes = {
 		url: '/:id',
 		query: ['options'],
 	},
+	insert_multiple: {
+		method: types.RouteMethod.POST,
+		action: types.AuthAction.WRITE,
+		url: '/multiple',
+	},
+	update_multiple: {
+		method: types.RouteMethod.POST,
+		action: types.AuthAction.WRITE,
+		params: {
+			ids: {
+				array: true
+			}
+		},
+		url: '/multiple/:ids',
+	},
+	delete_multiple: {
+		method: types.RouteMethod.DELETE,
+		action: types.AuthAction.WRITE,
+		params: {
+			ids: {
+				array: true
+			}
+		},
+		url: '/multiple/:ids',
+	},
 	insert: {
 		method: types.RouteMethod.POST,
 		action: types.AuthAction.WRITE,
@@ -59,7 +84,7 @@ export const default_routes = {
 		method: types.RouteMethod.DELETE,
 		action: types.AuthAction.WRITE,
 		url: '/:id',
-	}
+	},
 } as const;
 
 export function add_media_routes():typeof default_routes{
