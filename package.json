@@ -7,7 +7,8 @@
 	"author": "Andrea Reni <mail@nbl7.net>",
 	"scripts": {
 		"dev": "npx tsc-watch --onSuccess \"node -r source-map-support/register -r dotenv/config ./dist/run.js\"",
-		"schema": "yarn upgrade uranio-schema && npx npm-dts generate -L debug -r node_modules/uranio-schema/ -o ../../schema/index.d.ts"
+		"schema": "yarn upgrade uranio-schema && npx npm-dts generate -L debug -r node_modules/uranio-schema/ -o ../../schema/index.d.ts",
+		"generate": "yarn schema && ts-node src/generate.ts"
 	},
 	"devDependencies": {
 		"@types/cors": "^2.8.9",
@@ -17,7 +18,6 @@
 	"dependencies": {
 		"cors": "^2.8.5",
 		"express": "^4.17.1",
-		"lambda-multipart-parser": "^1.0.1",
-		"uranio-core": "git+ssh://git@github.com/nbl7/uranio-core.git"
+		"lambda-multipart-parser": "^1.0.1"
 	}
 }
