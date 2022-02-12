@@ -4,46 +4,49 @@
  * @packageDocumentation
  */
 
-import uranio from 'uranio';
+import {BookSecurity, BookProperty, BookPermission} from './typ/book_srv';
 
-export const atom = {
+export const atom_book = {
 	error: {
 		plural: 'errors',
 		read_only: true,
 		connection: 'log',
 		security: {
-			type: uranio.types.BookSecurityType.UNIFORM,
-			_r: uranio.types.BookPermissionType.NOBODY
+			type: BookSecurity.UNIFORM,
+			_r: BookPermission.NOBODY
 		},
 		properties: {
 			status: {
-				type: uranio.types.BookPropertyType.INTEGER,
+				type: BookProperty.INTEGER,
 				label: 'Status'
 			},
 			msg: {
-				type: uranio.types.BookPropertyType.TEXT,
+				type: BookProperty.TEXT,
 				label: 'Message'
 			},
 			error_code: {
-				type: uranio.types.BookPropertyType.TEXT,
+				type: BookProperty.TEXT,
 				label: 'Error Code'
 			},
 			error_msg: {
-				type: uranio.types.BookPropertyType.TEXT,
+				type: BookProperty.TEXT,
 				label: 'Error Message'
 			},
 			request: {
-				type: uranio.types.BookPropertyType.ATOM,
+				type: BookProperty.ATOM,
 				label: 'Request',
 				atom: 'request',
 				delete_cascade: true,
 				optional: true
 			},
 			stack: {
-				type: uranio.types.BookPropertyType.LONG_TEXT,
+				type: BookProperty.LONG_TEXT,
 				label: 'Stack',
 				optional: true
 			}
+		},
+		dock:{
+			url: '/errors'
 		}
 	},
 	request: {
@@ -51,37 +54,37 @@ export const atom = {
 		read_only: true,
 		connection: 'log',
 		security: {
-			type: uranio.types.BookSecurityType.UNIFORM,
-			_r: uranio.types.BookPermissionType.NOBODY
+			type: BookSecurity.UNIFORM,
+			_r: BookPermission.NOBODY
 		},
 		properties: {
 			full_path: {
-				type: uranio.types.BookPropertyType.TEXT,
+				type: BookProperty.TEXT,
 				label: "Full path",
 			},
 			route_path: {
-				type: uranio.types.BookPropertyType.TEXT,
+				type: BookProperty.TEXT,
 				label: "Route path",
 				optional: true
 			},
 			atom_path: {
-				type: uranio.types.BookPropertyType.TEXT,
+				type: BookProperty.TEXT,
 				label: "Atom path",
 				optional: true
 			},
 			connection_path: {
-				type: uranio.types.BookPropertyType.TEXT,
+				type: BookProperty.TEXT,
 				label: "Connection path",
 				optional: true
 			},
 			method: {
-				type: uranio.types.BookPropertyType.ENUM_STRING,
+				type: BookProperty.ENUM_STRING,
 				label: "Method",
 				values: ['GET', 'POST', 'DELETE'],
 				optional: true,
 			},
 			atom_name: {
-				type: uranio.types.BookPropertyType.TEXT,
+				type: BookProperty.TEXT,
 				label: "Atom name",
 				optional: true,
 				on_error: () => {
@@ -89,47 +92,47 @@ export const atom = {
 				},
 			},
 			route_name: {
-				type: uranio.types.BookPropertyType.TEXT,
+				type: BookProperty.TEXT,
 				label: "Route name",
 				optional: true,
 			},
 			params: {
-				type: uranio.types.BookPropertyType.TEXT,
+				type: BookProperty.TEXT,
 				label: "Params",
 				optional: true,
 			},
 			query: {
-				type: uranio.types.BookPropertyType.TEXT,
+				type: BookProperty.TEXT,
 				label: "Query",
 				optional: true,
 			},
 			headers: {
-				type: uranio.types.BookPropertyType.LONG_TEXT,
+				type: BookProperty.LONG_TEXT,
 				label: "Headers",
 				optional: true,
 			},
 			body: {
-				type: uranio.types.BookPropertyType.LONG_TEXT,
+				type: BookProperty.LONG_TEXT,
 				label: "Body",
 				optional: true,
 			},
 			file: {
-				type: uranio.types.BookPropertyType.TEXT,
+				type: BookProperty.TEXT,
 				label: "File",
 				optional: true,
 			},
 			ip: {
-				type: uranio.types.BookPropertyType.TEXT,
+				type: BookProperty.TEXT,
 				label: "IP",
 				optional: true
 			},
 			is_auth: {
-				type: uranio.types.BookPropertyType.BINARY,
+				type: BookProperty.BINARY,
 				label: "Is auth",
 				optional: true
 			},
 			auth_action: {
-				type: uranio.types.BookPropertyType.ENUM_STRING,
+				type: BookProperty.ENUM_STRING,
 				label: "Auth action",
 				values: ["READ", "WRITE", "AUTH"],
 				on_error: () => {
@@ -137,25 +140,10 @@ export const atom = {
 				},
 				optional: true,
 			},
-		}
-	},
-} as const;
-
-export const bll = {
-	error: {},
-	request: {}
-} as const;
-
-export const dock = {
-	error: {
-		dock:{
-			url: '/errors'
-		}
-	},
-	request: {
+		},
 		dock:{
 			url: '/requests'
 		}
-	}
+	},
 } as const;
 
