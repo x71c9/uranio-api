@@ -7,7 +7,7 @@
 	"author": "Andrea Reni <mail@nbl7.net>",
 	"scripts": {
 		"watch": "npx tsc-watch --onSuccess \"node -r source-map-support/register -r dotenv/config ./dist/run.js\"",
-		"schema:reset": "yarn upgrade uranio-schema && npx npm-dts generate -L debug -r node_modules/uranio-schema/ -o ../../schema/index.d.ts",
+		"schema:reset": "yarn upgrade uranio-schema && npx npm-dts generate -L debug -r node_modules/uranio-core/node_modules/uranio-schema/ -o ../../../../schema/index.d.ts",
 		"types": "yarn schema:reset && uranio types:uranio"
 	},
 	"devDependencies": {
@@ -18,6 +18,8 @@
 	"dependencies": {
 		"cors": "^2.8.5",
 		"express": "^4.17.1",
-		"lambda-multipart-parser": "^1.0.1"
+		"lambda-multipart-parser": "^1.0.1",
+		"uranio-schema": "ssh://git@github.com/nbl7/uranio-schema.git",
+		"urn-lib": "ssh://git@github.com/nbl7/uranio-lib.git"
 	}
 }
