@@ -81,9 +81,9 @@ function _generate_route_custom_name(atom_book:types.Book){
 	let text = '';
 	text += `\texport type RouteCustomName<A extends AtomName> =\n`;
 	for(const [atom_name, atom_def] of Object.entries(atom_book)){
-		text += `\t\tA extends '${atom_name}' ? ${_route_custom_name<any>(atom_def)} :`;
+		text += `\t\tA extends '${atom_name}' ? ${_route_custom_name<any>(atom_def)} :\n`;
 	}
-	text += `\tnever\n`;
+	text += `\tnever\n\n`;
 	return text;
 }
 
@@ -98,10 +98,10 @@ function _generate_route_custom_url(atom_book:types.Book){
 			for(const [route_name, route_def] of Object.entries(atom_def.dock.routes)){
 				text += `\t\t\tR extends '${route_name}' ? '${route_def.url}' :\n`;
 			}
-			text += `\t\tnever :\n`;
+			text += `\t\t\tnever :\n`;
 		}
 	}
-	text += `\tnever\n`;
+	text += `\tnever\n\n`;
 	return text;
 }
 
@@ -117,13 +117,14 @@ function _generate_route_custom_query_param_array(atom_book:types.Book){
 				if(!route_def.query || !Array.isArray(route_def.query)){
 					text += `\t\t\tR extends '${route_name}' ? never :\n`;
 				}else{
-					text += `\t\t\tR extends '${route_name}' ? ${route_def.query} :\n`;
+					const joined_value = route_def.query.map((v:string) => `'${v}'`).join(',');
+					text += `\t\t\tR extends '${route_name}' ? [${joined_value}] :\n`;
 				}
 			}
-			text += `\t\tnever :\n`;
+			text += `\t\t\tnever :\n`;
 		}
 	}
-	text += `\tnever\n`;
+	text += `\tnever\n\n`;
 	return text;
 }
 
@@ -141,12 +142,12 @@ function _replace_text(base_schema_path:string, output_path:string, txt:string){
 	}
 	const data = fs.readFileSync(base_schema_path, {encoding: 'utf8'});
 	
-	const split_text = 'export {};/** --uranio-generate-end */';
+	const split_text = '\texport {};/** --uranio-generate-end */';
 	const data_splitted = data.split(split_text);
 	
 	let new_data = '';
 	new_data += data_splitted[0];
-	new_data += txt; + '\n\n';
+	new_data += txt; + '\n\n\t';
 	new_data += split_text;
 	new_data += data_splitted[1];
 	

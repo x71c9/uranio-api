@@ -4,6 +4,8 @@
  * @packageDocumentation
  */
 
-import uranio from './index';
+export * from './register';
 
-uranio.core.util.generate();
+import * as util from './util/index';
+
+util.generate();

@@ -17,7 +17,7 @@ import {schema} from '../sch/index';
 
 import {RouteName} from './route';
 
-export const enum RouteMethod {
+export enum RouteMethod {
 	GET = 'GET',
 	POST = 'POST',
 	DELETE = 'DELETE'
@@ -119,7 +119,9 @@ type DefaultRouteURL<A extends schema.AtomName, R extends RouteName<A>> =
 //   never;
 
 type RouteURL<A extends schema.AtomName, R extends RouteName<A>> =
-	DefaultRouteURL<A,R> | schema.CustomRouteURL<A,R>;
+	R extends schema.RouteCustomName<A> ? schema.CustomRouteURL<A,R> :
+	R extends RouteName<A> ? DefaultRouteURL<A,R> :
+	never
 
 type ExtractParamFrom<URI extends string> =
 	URI extends
@@ -175,7 +177,7 @@ type DefaultRouteQuery<A extends schema.AtomName, R extends RouteName<A>> =
 //   never :
 //   never;
 
-type CustomRouteQueryParam<A extends schema.AtomName, R extends RouteName<A>> =
+type CustomRouteQueryParam<A extends schema.AtomName, R extends schema.RouteCustomName<A>> =
 	schema.CustomRouteQueryParamArray<A,R> extends readonly unknown[] ?
 	ArrayElement<schema.CustomRouteQueryParamArray<A,R>> :
 	never;
@@ -186,10 +188,12 @@ type CustomRouteQueryParam<A extends schema.AtomName, R extends RouteName<A>> =
  * will show which strings are valid.
  */
 export type RouteQueryParam<A extends schema.AtomName, R extends RouteName<A>> =
-	DefaultRouteQuery<A,R> | CustomRouteQueryParam<A,R> extends string ?
-	DefaultRouteQuery<A,R> | CustomRouteQueryParam<A,R> :
-	never;
+	R extends schema.RouteCustomName<A> ?
+	CustomRouteQueryParam<A,R> extends string ?
+	CustomRouteQueryParam<A,R> :
+	never :
+	DefaultRouteQuery<A, R>
 
-// export const c:RouteQueryParam<'user', 'find'> = 'option';
+// export const c:RouteQueryParam<'user', 'find'> = 'options';
 
 
