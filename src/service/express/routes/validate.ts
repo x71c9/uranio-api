@@ -10,11 +10,12 @@ const urn_exc = urn_exception.init(`VALIDATE_REQUEST`, `Validate request module`
 
 // import urn_core from 'uranio-core';
 
-// import {AtomName, Query, TokenObject} from '../../../types';
-import {AtomName, Query} from '../../../types';
+// import {schema.AtomName, schema.Query, TokenObject} from '../../../types';
+// import {schema.AtomName, schema.Query} from '../../../types';
 
 import {ExpressQueryParam} from '../types';
 
+import {schema} from '../../../sch/index';
 
 // export function process_request_token(locals:unknown)
 //     :TokenObject{
@@ -30,8 +31,8 @@ import {ExpressQueryParam} from '../types';
 //   return token_object;
 // }
 
-export function process_request_query<A extends AtomName>(query:ExpressQueryParam)
-		:Query<A>{
+export function process_request_query<A extends schema.AtomName>(query:ExpressQueryParam)
+		:schema.Query<A>{
 	if(typeof query === 'undefined'){
 		return {};
 	}
@@ -41,8 +42,8 @@ export function process_request_query<A extends AtomName>(query:ExpressQueryPara
 	throw urn_exc.create_invalid_request(`INVALID_QUERY_PARAM`, `Invalid query`);
 }
 
-// export function process_request_filter<A extends AtomName>(filter:ExpressQueryParam)
-//     :Query<A>{
+// export function process_request_filter<A extends schema.AtomName>(filter:ExpressQueryParam)
+//     :schema.Query<A>{
 //   if(typeof filter === 'undefined'){
 //     return {};
 //   }
@@ -52,8 +53,8 @@ export function process_request_query<A extends AtomName>(query:ExpressQueryPara
 //   throw urn_exc.create_invalid_request(`INVALID_FILTER`, `Invalid filter`);
 // }
 
-// export function process_request_options<A extends AtomName>(options:ExpressQueryParam)
-//     :Query.Options<A>{
+// export function process_request_options<A extends schema.AtomName>(options:ExpressQueryParam)
+//     :schema.Query.Options<A>{
 //   if(typeof options === 'undefined'){
 //     return {};
 //   }

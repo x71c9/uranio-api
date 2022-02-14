@@ -4,13 +4,16 @@
  * @packageDocumentation
  */
 
-import {FullConfiguration} from '../types';
+// import {FullConfiguration} from '../types';
+import {Configuration} from '../types';
 
-import {core_config} from 'uranio-core/conf/defaults';
+// import {core_config} from 'uranio-core/conf/defaults';
 
-export const api_config:FullConfiguration = {
+import core from 'uranio-core';
+
+export const api_config:Required<Configuration> = {
 	
-	...core_config,
+	...core.conf.defaults,
 	
 	request_auto_limit: 128,
 	

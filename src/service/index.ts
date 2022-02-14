@@ -5,9 +5,9 @@
  */
 
 // import {api_config} from '../cnf/defaults';
-import * as conf from '../conf/';
+import * as conf from '../conf/index';
 
-import * as express from './express/';
+import * as express from './express/index';
 
 import {Service, ServiceName} from './types';
 

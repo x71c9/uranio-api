@@ -4,10 +4,12 @@
  * @packageDocumentation
  */
 
-import {AtomName} from '../cln/types';
+// import {AtomName} from '../cln/types';
 
 // import {routes_book} from 'uranio-books/routes';
-import {dock_book} from 'uranio-books/dock';
+// import {dock_book} from 'uranio-books/dock';
+
+import {schema} from '../sch/index';
 
 import {default_routes} from '../routes/client';
 
@@ -27,15 +29,15 @@ export type RouteDefaultName =
 
 // export const a:RouteName<'user'> = '';
 
-export type RouteCustomName<A extends AtomName> =
-	'dock' extends keyof typeof dock_book[A] ?
-	'routes' extends keyof typeof dock_book[A]['dock'] ?
-	keyof typeof dock_book[A]['dock']['routes'] :
-	never :
-	never;
+// export type RouteCustomName<A extends schema.AtomName> =
+//   'dock' extends keyof typeof dock_book[A] ?
+//   'routes' extends keyof typeof dock_book[A]['dock'] ?
+//   keyof typeof dock_book[A]['dock']['routes'] :
+//   never :
+//   never;
 
-export type RouteName<A extends AtomName> =
-	RouteCustomName<A> | RouteDefaultName;
+export type RouteName<A extends schema.AtomName> =
+	schema.RouteCustomName<A> | RouteDefaultName;
 
 // export type RouteName<A extends AtomName> =
 //   RouteCustomName<A> | RouteDefaultName;

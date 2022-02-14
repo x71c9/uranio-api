@@ -4,9 +4,9 @@
  * @packageDocumentation
  */
 
-import * as conf from '../conf/';
+import * as conf from '../conf/index';
 
-import * as netlify from './netlify/';
+import * as netlify from './netlify/index';
 
 import {Lambda, LambdaName} from './types';
 

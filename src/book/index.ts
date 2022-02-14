@@ -4,10 +4,12 @@
  * @packageDocumentation
  */
 
-import * as atom from './atom/';
+// import * as atom from './atom/index';
 
-export {atom};
+// export {atom};
 
-import * as dock from './dock/';
+// import * as dock from './dock/index';
 
-export {dock};
+// export {dock};
+
+export * from './server';

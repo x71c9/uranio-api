@@ -10,7 +10,7 @@ import {urn_log, urn_response, urn_exception, urn_util} from 'urn-lib';
 
 const urn_exc = urn_exception.init('NETLIFYCLASS', 'Netlify class module');
 
-import urn_core from 'uranio-core';
+import core from 'uranio-core';
 
 import {
 	process_request_path,
@@ -23,9 +23,11 @@ import {
 	validate_request
 } from '../../util/request';
 
-import {route_middleware, auth_route_middleware} from '../../mdlw/';
+import {route_middleware, auth_route_middleware} from '../../mdlw/index';
 
 import * as types from '../../types';
+
+import {schema} from '../../sch/index';
 
 import {
 	Lambda,
@@ -45,7 +47,7 @@ class NetlifyLambda implements Lambda {
 	
 	// constructor(connect=false){
 	//   if(connect === true){
-	//     urn_core.db.connect();
+	//     core.db.connect();
 	//   }
 	// }
 	
@@ -64,7 +66,7 @@ class NetlifyLambda implements Lambda {
 			}
 			const api_request = validate_request(partial_api_request);
 			const urn_res = await this.lambda_route(api_request);
-			// urn_core.disconnect().then(() => {
+			// core.disconnect().then(() => {
 			//   urn_log.debug(`Database disconnected.`);
 			// });
 			return _lambda_response(urn_res);
@@ -75,7 +77,7 @@ class NetlifyLambda implements Lambda {
 		}
 	}
 	
-	public async lambda_route<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth>(
+	public async lambda_route<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth>(
 		api_request:types.Api.Request<A,R,D>
 	){
 		if(api_request.is_auth){
@@ -84,8 +86,8 @@ class NetlifyLambda implements Lambda {
 			// instead of passing only one reference. But it must be for each auth atom.
 			// We do it anyway a bll for each call depending on the `path`.
 			// ****
-			const auth_bll = urn_core.bll.auth.create(
-				api_request.atom_name as types.AuthName
+			const auth_bll = core.bll.auth.create(
+				api_request.atom_name as schema.AuthName
 			);
 			const auth_handler = async (api_request:types.Api.Request<A,R,D>) => {
 				const token = await auth_bll.authenticate(
@@ -214,7 +216,7 @@ function _lambda_request_to_partial_api_request(event: LambdaEvent, context: Lam
 	api_request.params = params;
 	
 	if(is_auth){
-		api_request.auth_action = types.AuthAction.READ;
+		api_request.auth_action = core.types.AuthAction.READ;
 		api_request.route_name = 'auth';
 	}
 	

@@ -4,4 +4,4 @@
  * @packageDocumentation
  */
 
-export * from 'uranio-core/book/atom/';
+export * from 'uranio-core/book/atom/index';

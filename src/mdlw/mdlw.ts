@@ -12,23 +12,25 @@ const urn_ret = urn_return.create(urn_log.util.return_injector);
 
 const urn_exc = urn_exception.init('EXPRESS_MDLW', 'Express middlewares');
 
-import urn_core from 'uranio-core';
+import core from 'uranio-core';
 
-import * as conf from '../conf/';
+import * as conf from '../conf/index';
 
-import * as insta from '../nst/';
+import * as insta from '../nst/index';
 
-import * as book from '../book/';
+import * as book from '../book/index';
 
 import * as types from '../types';
 
-import {return_default_routes} from '../routes/';
+import {schema} from '../sch/index';
+
+import {return_default_routes} from '../routes/index';
 
 import {partial_api_request_to_atom_request} from '../util/request';
 
 import * as req_validator from './validate';
 
-export async function route_middleware<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth = 0>(
+export async function route_middleware<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth = 0>(
 	api_request:types.Api.Request<A,R,D>
 ):Promise<urn_response.General<any, any>>{
 	_log_route_request(api_request);
@@ -40,7 +42,7 @@ export async function route_middleware<A extends types.AtomName, R extends types
 	return await _validate_and_call(api_request);
 }
 
-export async function auth_route_middleware<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth = 0>(
+export async function auth_route_middleware<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth = 0>(
 	api_request: types.Api.Request<A,R,D>,
 	auth_handler: types.AuthHandler<A,R,D>
 ):Promise<urn_response.General<any, any>>{
@@ -51,11 +53,11 @@ export async function auth_route_middleware<A extends types.AtomName, R extends 
 	return await _auth_validate_and_call(api_request, auth_handler);
 }
 
-async function _authorization<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth = 0>(
+async function _authorization<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth = 0>(
 	api_request:types.Api.Request<A,R,D>
 ):Promise<false | types.Api.Request<A,R,D>> {
 	const route_def = _get_route_def(api_request);
-	if(urn_core.bll.auth.is_public_request(api_request.atom_name, route_def.action)){
+	if(core.bll.auth.is_public_request(api_request.atom_name, route_def.action)){
 		return false;
 	}
 	const auth_token = _get_auth_token(api_request);
@@ -63,7 +65,7 @@ async function _authorization<A extends types.AtomName, R extends types.RouteNam
 		return false;
 	}
 	try{
-		const decoded = jwt.verify(auth_token, conf.get(`jwt_private_key`)) as types.Passport;
+		const decoded = jwt.verify(auth_token, conf.get(`jwt_private_key`)) as core.types.Passport;
 		api_request.passport = decoded;
 		return api_request;
 	}catch(e){
@@ -72,7 +74,7 @@ async function _authorization<A extends types.AtomName, R extends types.RouteNam
 	}
 }
 
-async function _validate_and_call<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth = 0>(
+async function _validate_and_call<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth = 0>(
 	api_request: types.Api.Request<A,R,D>
 ){
 	
@@ -96,7 +98,7 @@ async function _validate_and_call<A extends types.AtomName, R extends types.Rout
 	//   'Access-Control-Allow-Origin': 'http://localhost:4444',
 	//   // 'Access-Control-Allow-Credentials': true
 	// };
-	call_response = urn_core.atm.util
+	call_response = core.atom.util
 		.hide_hidden_properties(api_request.atom_name, call_response);
 	
 	const urn_response = urn_ret.return_success('Success', call_response);
@@ -105,11 +107,18 @@ async function _validate_and_call<A extends types.AtomName, R extends types.Rout
 	
 }
 
-async function _auth_validate_and_call<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth = 0>(
+async function _auth_validate_and_call<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth = 0>(
 	auth_route_request: types.Api.Request<A,R,D>,
 	handler: types.AuthHandler<A,R,D>,
 ){
-	const dock_def = book.dock.get_definition(auth_route_request.atom_name);
+	const dock_def = book.get_definition(auth_route_request.atom_name).dock;
+	
+	if(!dock_def){
+		throw urn_exc.create_invalid_book(
+			`INVALID_DOCK_DEF`,
+			`Cannot auth validate and call. Invalid dock def.`
+		);
+	}
 	
 	urn_log.fn_debug(`Router Auth ${dock_def.url} [${auth_route_request.atom_name}]`);
 	
@@ -137,7 +146,7 @@ async function _auth_validate_and_call<A extends types.AtomName, R extends types
 	
 }
 
-function _auth_validate<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth = 0>(
+function _auth_validate<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth = 0>(
 	api_request:types.Api.Request<A,R,D>
 ):void{
 	
@@ -148,7 +157,7 @@ function _auth_validate<A extends types.AtomName, R extends types.RouteName<A>, 
 	
 }
 
-function _validate_route<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth = 0>(
+function _validate_route<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth = 0>(
 	api_request:types.Api.Request<A,R,D>
 ):void{
 	
@@ -191,7 +200,7 @@ function _validate_route<A extends types.AtomName, R extends types.RouteName<A>,
 	
 }
 
-function _limit<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth = 0>(
+function _limit<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth = 0>(
 	api_request:types.Api.Request<A,R,D>
 ){
 	let options = (api_request.query as any)?.options;
@@ -204,12 +213,12 @@ function _limit<A extends types.AtomName, R extends types.RouteName<A>, D extend
 	return api_request;
 }
 
-function _get_route_def<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth = 0>(
+function _get_route_def<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth = 0>(
 	api_request:types.Api.Request<A,R,D>
 ):types.Book.Definition.Dock.Routes.Route<A,R,D>{
 	
 	const cloned_atom_dock = {
-		...book.dock.get_definition(api_request.atom_name)
+		...book.get_definition(api_request.atom_name).dock
 	};
 	
 	const default_routes = return_default_routes(api_request.atom_name);
@@ -230,7 +239,7 @@ function _get_route_def<A extends types.AtomName, R extends types.RouteName<A>, 
 	return (cloned_atom_dock.routes as any)[api_request.route_name as string]! as types.Book.Definition.Dock.Routes.Route<A,R,D>;
 }
 
-function _log_route_request<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth = 0>(
+function _log_route_request<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth = 0>(
 	api_request: types.Api.Request<A,R,D>
 ):void{
 	const request_shape = partial_api_request_to_atom_request(api_request);
@@ -244,7 +253,7 @@ function _log_route_request<A extends types.AtomName, R extends types.RouteName<
 	});
 }
 
-function _log_auth_route_request<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth = 0>(
+function _log_auth_route_request<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth = 0>(
 	auth_request: types.Api.Request<A,R,D>
 ):void{
 	const request_shape = partial_api_request_to_atom_request(auth_request);
@@ -265,7 +274,7 @@ function _log_auth_route_request<A extends types.AtomName, R extends types.Route
 	});
 }
 
-function _get_auth_token<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth = 0>(
+function _get_auth_token<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth = 0>(
 	api_request:types.Api.Request<A,R,D>
 ):string | false{
 	const headers = api_request.headers;

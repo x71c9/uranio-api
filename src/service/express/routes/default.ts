@@ -6,31 +6,41 @@
 
 import express from 'express';
 
-import {urn_log} from 'urn-lib';
+import {urn_log, urn_exception} from 'urn-lib';
 
-import * as book from '../../../book/';
+const urn_exc = urn_exception.init(`EXPRESS_ROUTES_DEFAULT`,`Express routes default module`);
+
+import * as book from '../../../book/index';
 
 import * as types from '../../../types';
 
-import {return_default_routes} from '../../../routes/';
+import {schema} from '../../../sch/index';
 
-import {route_middleware} from '../../../mdlw/';
+import {return_default_routes} from '../../../routes/index';
+
+import {route_middleware} from '../../../mdlw/index';
 
 import {validate_request, api_handle_and_store_exception} from '../../../util/request';
 
 import {express_request_to_partial_api_request, return_uranio_response_to_express} from './common';
 
-export function create_express_route<A extends types.AtomName>(atom_name:A)
+export function create_express_route<A extends schema.AtomName>(atom_name:A)
 		:express.Router{
 	
 	urn_log.fn_debug(`Create Express Default Atom Router [${atom_name}]`);
 	
 	const router = express.Router();
 	
-	const dock_def = book.dock.get_definition(atom_name);
+	const dock_def = book.get_definition(atom_name).dock;
 	
 	const default_routes = return_default_routes(atom_name);
 	
+	if(!dock_def){
+		throw urn_exc.create_invalid_book(
+			`INVALID_DOCK_DEF`,
+			`Cannot create express route. Invalid dock definition.`
+		);
+	}
 	if(!dock_def.routes){
 		dock_def.routes = default_routes;
 	}else{

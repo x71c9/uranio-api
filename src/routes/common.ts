@@ -12,7 +12,9 @@ import * as book from '../book/client';
 
 import * as types from '../cln/types';
 
-export function route_def<A extends types.AtomName>(
+import {schema} from '../sch/index';
+
+export function route_def<A extends schema.AtomName>(
 	default_routes:types.Book.Definition.Dock.Routes,
 	atom_name:A,
 	route_name:types.RouteName<A>
@@ -27,13 +29,13 @@ export function route_def<A extends types.AtomName>(
 	return atom_dock.routes[route_name as string]!;
 }
 
-export function atom_dock_with_defaults<A extends types.AtomName>(
+export function atom_dock_with_defaults<A extends schema.AtomName>(
 	default_routes:types.Book.Definition.Dock.Routes,
 	atom_name:A
 ):types.Book.Definition.Dock{
 	
 	const cloned_atom_dock = {
-		...book.dock.get_definition(atom_name)
+		...book.get_definition(atom_name).dock
 	};
 	
 	if(!cloned_atom_dock.routes){
@@ -45,5 +47,5 @@ export function atom_dock_with_defaults<A extends types.AtomName>(
 		};
 	}
 	
-	return cloned_atom_dock;
+	return cloned_atom_dock as types.Book.Definition.Dock;
 }

@@ -6,15 +6,19 @@
 
 import core from 'uranio-core';
 
-import * as service from '../service/';
+export * from '../sch/index';
 
-import * as lambda from '../lambda/';
+import * as service from '../service/index';
 
-import * as routes from '../routes/';
+import * as lambda from '../lambda/index';
 
-import * as book from '../book/';
+import * as routes from '../routes/index';
 
-import * as conf from '../conf/';
+import * as book from '../book/index';
+
+import * as conf from '../conf/index';
+
+import * as util from '../util/index';
 
 import * as types from './types';
 
@@ -24,7 +28,7 @@ import * as types from './types';
  * Go to urn-cli/src/cmd/transpose.ts and
  * add the new method names.
  */
-export * from '../init/';
+export * from '../init/index';
 
 export {
 	core,
@@ -33,5 +37,6 @@ export {
 	routes,
 	book,
 	conf,
+	util,
 	types
 };

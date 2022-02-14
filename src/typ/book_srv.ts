@@ -12,7 +12,7 @@
  * @packageDocumentation
  */
 
-import urn_core from 'uranio-core';
+import core from 'uranio-core';
 
 // import {route_book} from 'uranio-book/routes';
 
@@ -22,48 +22,72 @@ import {Api as ApiRequest} from './request';
 
 import {RouteName} from './route';
 
+import {schema} from '../sch/index';
+
 export type Book = {
-	[k in urn_core.types.AtomName]?: Book.Definition<k>;
+	[k in schema.AtomName]?: Book.Definition<k>;
 }
 
-export type DockBook = {
-	[k in urn_core.types.AtomName]: Book.Definition.Dock<k>
-}
+// export type DockBook = {
+//   [k in schema.AtomName]: Book.Definition.Dock<k>
+// }
 
 export namespace Book {
 	
-	export type BasicDefinition<A extends urn_core.types.AtomName> =
-		urn_core.types.Book.BasicDefinition &
-		{ dock?: Definition.Dock<A> }
+	// export type BasicDefinition<A extends schema.AtomName> =
+	//   core.types.Book.BasicDefinition &
+	//   { dock?: Definition.Dock<A> }
 	
-	export type Definition<A extends urn_core.types.AtomName> =
-		Book.BasicDefinition<A> &
-		{ bll?: Definition.Bll<A> }
+	// export type Definition<A extends schema.AtomName> =
+	//   Book.BasicDefinition<A> &
+	//   { bll?: Definition.Bll<A> }
+	
+	// export type Definition =
+	//   core.types.Book.Definition & {
+	//     bll?: Definition.Bll,
+	//     dock?: Definition.Dock
+	//   }
+	
+	export type Definition<A extends schema.AtomName> =
+		core.types.Book.Definition<A> & {
+			bll?: Definition.Bll<A>,
+			dock?: Definition.Dock<A>
+		}
 	
 	export namespace Definition {
 		
-		export type Bll<A extends urn_core.types.AtomName> = urn_core.types.Book.Definition.Bll<A>;
+		export type Bll<A extends schema.AtomName> = core.types.Book.Definition.Bll<A>;
+		// export type Bll = core.types.Book.Definition.Bll;
 		
-		export type Dock<A extends urn_core.types.AtomName> =
+		export type Dock<A extends schema.AtomName> =
 			Omit<book_cln.Book.Definition.Dock, 'routes'> & {
 				routes?: Dock.Routes<A>
 			};
 		
+		// export type Dock =
+		//   Omit<book_cln.Book.Definition.Dock, 'routes'> & {
+		//     routes?: Dock.Routes
+		//   };
+		
 		export namespace Dock {
 			
-			export type Routes<A extends urn_core.types.AtomName> = {
+			export type Routes<A extends schema.AtomName> = {
 				[k in RouteName<A>]?: Routes.Route<A,k>
 			}
 			
+			// export type Routes = {
+			//   [k in RouteName]?: Routes.Route<k>
+			// }
+			
 			export namespace Routes {
 				
-				export type Route<A extends urn_core.types.AtomName, R extends RouteName<A>, D extends urn_core.types.Depth = 0> =
+				export type Route<A extends schema.AtomName, R extends RouteName<A>, D extends schema.Depth = 0> =
 					book_cln.Book.Definition.Dock.Routes.Route & {
 						call?: Route.Call<A, R, D>,
 					}
 				
 				export namespace Route {
-					export type Call<A extends urn_core.types.AtomName, R extends RouteName<A>, D extends urn_core.types.Depth = 0> =
+					export type Call<A extends schema.AtomName, R extends RouteName<A>, D extends schema.Depth = 0> =
 						(route_request: ApiRequest.Request<A,R,D>) => any
 				}
 				
@@ -72,13 +96,13 @@ export namespace Book {
 		
 		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		// export import Properties = urn_core.types.Book.Definition.Properties;
+		// export import Properties = core.types.Book.Definition.Properties;
 		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		// export import Property = urn_core.types.Book.Definition.Property;
+		// export import Property = core.types.Book.Definition.Property;
 		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		// export import Security = urn_core.types.Book.Definition.Security;
+		// export import Security = core.types.Book.Definition.Security;
 		
 		export type Property = book_cln.Book.Definition.Property;
 		
@@ -119,13 +143,13 @@ export namespace Book {
 			}
 		}
 		
-		export type Security = urn_core.types.Book.Definition.Security;
+		export type Security = core.types.Book.Definition.Security;
 		
 	}
 	
 }
 
-// type RouteOfRoute<A extends urn_core.types.AtomName, k extends RouteName<A>> =
+// type RouteOfRoute<A extends schema.AtomName, k extends RouteName<A>> =
 //   book_cln.Book.Definition.Dock.Routes.Route & {
 //     call?: Book.Definition.Dock.Routes.Route.Call<A, k>
 //   }
