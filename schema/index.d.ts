@@ -118,28 +118,28 @@ declare module 'uranio-schema/typ/atom' {
   };
   type RequestShape = AtomCommonProperties & {
     full_path: string
-    route_path: string
-    atom_path: string
-    connection_path: string
-    method: string
-    atom_name: string
-    route_name: string
-    params: string
-    query: string
-    headers: string
-    body: string
-    file: string
-    ip: string
-    is_auth: boolean
-    auth_action: string
+    route_path?: string
+    atom_path?: string
+    connection_path?: string
+    method?: string
+    atom_name?: string
+    route_name?: string
+    params?: string
+    query?: string
+    headers?: string
+    body?: string
+    file?: string
+    ip?: string
+    is_auth?: boolean
+    auth_action?: string
   };
   type ErrorShape = AtomCommonProperties & {
     status: number
     msg: string
     error_code: string
     error_msg: string
-    request: string
-    stack: string
+    request?: string
+    stack?: string
   };
   type BondProperties<A extends AtomName> =
     A extends 'superuser' ? 'groups' | 'favicon' :
@@ -201,6 +201,34 @@ declare module 'uranio-schema/typ/atom' {
   type Error = AtomHardProperties & ErrorShape;
   export type AtomShape<A extends AtomName> = A extends 'superuser' ? SuperuserShape : A extends 'user' ? UserShape : A extends 'group' ? GroupShape : A extends 'media' ? MediaShape : A extends 'request' ? RequestShape : A extends 'error' ? ErrorShape : never;
   export type Atom<A extends AtomName> = A extends 'superuser' ? Superuser : A extends 'user' ? User : A extends 'group' ? Group : A extends 'media' ? Media : A extends 'request' ? Request : A extends 'error' ? Error : never;
+  
+  export type RouteCustomName<A extends AtomName> =
+    A extends 'superuser' ? never :
+    A extends 'user' ? never :
+    A extends 'group' ? never :
+    A extends 'media' ? never :
+    A extends 'request' ? never :
+    A extends 'error' ? never :
+    never;
+
+  export type CustomRouteURL<A extends AtomName, R extends RouteCustomName> =
+    A extends 'superuser' ? never :
+    A extends 'user' ? never :
+    A extends 'group' ? never :
+    A extends 'media' ? never :
+    A extends 'request' ? never :
+    A extends 'error' ? never :
+    never;
+  
+  export type CustomRouteQueryParamArray<A extends AtomName, R extends RouteCustomName> =
+    A extends 'superuser' ? never :
+    A extends 'user' ? never :
+    A extends 'group' ? never :
+    A extends 'media' ? never :
+    A extends 'request' ? never :
+    A extends 'error' ? never :
+    never;
+  
   export {};
   /** --uranio-generate-end */
 

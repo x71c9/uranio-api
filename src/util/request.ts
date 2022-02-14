@@ -6,17 +6,21 @@
 
 import {urn_util, urn_response, urn_return, urn_log, urn_exception} from 'urn-lib';
 
-import * as conf from '../conf/';
-
-import {return_default_routes} from '../routes/';
-
-import * as insta from '../nst/';
-
-import * as book from '../book/client';
-
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 
 const urn_exc = urn_exception.init(`REQUEST`, `Util request module`);
+
+import core from 'uranio-core';
+
+import * as conf from '../conf/index';
+
+// import {return_default_routes} from '../routes/index';
+
+import * as insta from '../nst/index';
+
+import * as book from '../book/client';
+
+import {schema} from '../sch/index';
 
 import * as types from '../types';
 
@@ -73,25 +77,31 @@ export function process_request_path(full_path:string)
 	return api_request_paths;
 }
 
-export function get_auth_action<A extends types.AtomName>(
+export function get_auth_action<A extends schema.AtomName>(
 	atom_name:A,
 	route_name:keyof types.Book.Definition.Dock.Routes<A>
-):types.AuthAction{
-	const atom_dock = _get_atom_dock(atom_name);
-	if(!atom_dock.routes || !atom_dock.routes[route_name as any]){
-		throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name \`${route_name}\` from atom \`${atom_name}\`.`);
+):core.types.AuthAction{
+	// const atom_dock = _get_atom_dock(atom_name);
+	const atom_def = book.get_definition(atom_name);
+	const atom_dock = atom_def.dock;
+	if(!atom_dock || !atom_dock.routes || !atom_dock.routes[route_name as any]){
+		throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name \`${String(route_name)}\` from atom \`${atom_name}\`.`);
 	}
 	const auth_action = atom_dock.routes[route_name as any].action;
-	if(!(auth_action in types.AuthAction)){
-		throw urn_exc.create(`INVALID_AUTH_ACTION`, `Invalid auth action \`${auth_action}\` for \`${auth_action}\`\`${route_name}\`.`);
+	if(!(auth_action in core.types.AuthAction)){
+		throw urn_exc.create(`INVALID_AUTH_ACTION`, `Invalid auth action \`${auth_action}\` for \`${auth_action}\`\`${String(route_name)}\`.`);
 	}
 	return auth_action;
 }
 
 export function get_atom_name_from_atom_path(atom_path:string)
-		:types.AtomName | undefined{
-	for(const atom_name of book.atom.get_names()){
-		const dock_def = book.dock.get_definition(atom_name);
+		:schema.AtomName | undefined{
+	for(const atom_name of book.get_names()){
+		const atom_def = book.get_definition(atom_name);
+		const dock_def = atom_def.dock;
+		if(!dock_def || !dock_def.url){
+			throw urn_exc.create(`INVALID_DOCK_DEF`, `Invalid dock definition for \`${atom_name}\``);
+		}
 		if(dock_def.url && dock_def.url === atom_path){
 			return atom_name;
 		}
@@ -102,13 +112,15 @@ export function get_atom_name_from_atom_path(atom_path:string)
 	return undefined;
 }
 
-export function get_route_name<A extends types.AtomName, R extends types.RouteName<A>>(
+export function get_route_name<A extends schema.AtomName, R extends types.RouteName<A>>(
 	atom_name:A,
 	route_path:string,
 	http_method:types.RouteMethod
 ):R | undefined{
-	const atom_dock = _get_atom_dock(atom_name);
-	if(!atom_dock.routes){
+	// const atom_dock = _get_atom_dock(atom_name);
+	const atom_def = book.get_definition(atom_name);
+	const dock_def = atom_def.dock;
+	if(!dock_def || !dock_def.routes){
 		return undefined;
 	}
 	/**
@@ -117,16 +129,16 @@ export function get_route_name<A extends types.AtomName, R extends types.RouteNa
 	 * So in order to be sure is the correct route_name, first check for
 	 * all exact matches, then for route with parameters.
 	 */
-	for(const route_name in atom_dock.routes){
-		const route_def = atom_dock.routes[route_name];
+	for(const route_name in dock_def.routes){
+		const route_def = dock_def.routes[route_name];
 		if(route_def.method === http_method){
 			if(route_def.url === route_path || route_def.url + '/' === route_path){
 				return route_name as R;
 			}
 		}
 	}
-	for(const route_name in atom_dock.routes){
-		const route_def = atom_dock.routes[route_name];
+	for(const route_name in dock_def.routes){
+		const route_def = dock_def.routes[route_name];
 		if(route_def.method === http_method){
 			if(route_def.url.includes(':')){
 				if(route_def.url[route_def.url.length - 1] !== '/'){
@@ -151,25 +163,30 @@ export function get_route_name<A extends types.AtomName, R extends types.RouteNa
 	return undefined;
 }
 
-export function is_auth_request(atom_name: types.AtomName, atom_path: string)
+export function is_auth_request(atom_name: schema.AtomName, atom_path: string)
 		:boolean{
-	const dock_def = book.dock.get_definition(atom_name);
-	if(dock_def.auth_url && dock_def.auth_url === atom_path){
+	// const dock_def = book.dock.get_definition(atom_name);
+	const dock_def = book.get_definition(atom_name).dock;
+	if(dock_def && dock_def.auth_url && dock_def.auth_url === atom_path){
 		return true;
 	}
 	return false;
 }
 
-export function get_params_from_route_path<A extends types.AtomName, R extends types.RouteName<A>>(
+export function get_params_from_route_path<A extends schema.AtomName, R extends types.RouteName<A>>(
 	atom_name: A,
 	route_name: R,
 	route_path: string
 ):types.Api.Request.Params<A,R>{
-	const atom_dock = _get_atom_dock(atom_name);
-	for(const route_key in atom_dock.routes){
+	// const atom_dock = _get_atom_dock(atom_name);
+	const dock_def = book.get_definition(atom_name).dock;
+	if(!dock_def || !dock_def.routes){
+		return {} as types.Api.Request.Params<A,R>;
+	}
+	for(const route_key in dock_def.routes){
 		if(route_key === route_name){
 			const params = {} as types.Api.Request.Params<A,R>;
-			let atom_route_url = atom_dock.routes[route_key].url;
+			let atom_route_url = dock_def.routes[route_key].url;
 			if(atom_route_url[atom_route_url.length - 1] !== '/'){
 				atom_route_url += '/';
 			}
@@ -200,28 +217,28 @@ export function get_params_from_route_path<A extends types.AtomName, R extends t
 	return {} as types.Api.Request.Params<A,R>;
 }
 
-function _get_atom_dock(atom_name:types.AtomName){
-	const default_routes = return_default_routes(atom_name);
-	const cloned_atom_dock = {
-		...book.dock.get_definition(atom_name)
-	};
-	if(!cloned_atom_dock.routes){
-		cloned_atom_dock.routes = default_routes;
-	}else{
-		cloned_atom_dock.routes = {
-			...cloned_atom_dock.routes,
-			...default_routes
-		};
-	}
-	return cloned_atom_dock;
-}
+// function _get_atom_dock(atom_name:schema.AtomName){
+//   const default_routes = return_default_routes(atom_name);
+//   const cloned_atom_dock = {
+//     ...book.dock.get_definition(atom_name)
+//   };
+//   if(!cloned_atom_dock.routes){
+//     cloned_atom_dock.routes = default_routes;
+//   }else{
+//     cloned_atom_dock.routes = {
+//       ...cloned_atom_dock.routes,
+//       ...default_routes
+//     };
+//   }
+//   return cloned_atom_dock;
+// }
 
 export function store_error(
 	urn_res: urn_response.Fail,
-	atom_request: Partial<types.Atom<'request'>>,
+	atom_request: Partial<schema.Atom<'request'>>,
 	ex?: urn_exception.ExceptionInstance,
 ):void{
-	const error_log:types.AtomShape<'error'> = {
+	const error_log:schema.AtomShape<'error'> = {
 		status: urn_res.status,
 		msg: '' + urn_res.message,
 		error_code: urn_res.err_code,
@@ -243,7 +260,7 @@ export function store_error(
 	});
 }
 
-export function api_handle_exception<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth>(
+export function api_handle_exception<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth>(
 	ex: urn_exception.ExceptionInstance,
 	partial_api_request: Partial<types.Api.Request<A,R,D>>
 ):urn_response.Fail<any>{
@@ -296,7 +313,7 @@ export function api_handle_exception<A extends types.AtomName, R extends types.R
 	return urn_res;
 }
 
-export function api_handle_and_store_exception<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth>(
+export function api_handle_and_store_exception<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth>(
 	ex: urn_exception.ExceptionInstance,
 	partial_api_request: Partial<types.Api.Request<A,R,D>>,
 ):urn_response.Fail<any>{
@@ -306,10 +323,10 @@ export function api_handle_and_store_exception<A extends types.AtomName, R exten
 	return _clean_response(urn_res);
 }
 
-export function partial_api_request_to_atom_request<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth>(
+export function partial_api_request_to_atom_request<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth>(
 	partial_api_request:Partial<types.Api.Request<A,R,D>>
-):types.AtomShape<'request'>{
-	const request_shape:types.AtomShape<'request'> = {
+):schema.AtomShape<'request'>{
+	const request_shape:schema.AtomShape<'request'> = {
 		full_path: partial_api_request.full_path || 'NOFULLPATH',
 		route_path: partial_api_request.route_path,
 		atom_path: partial_api_request.atom_path,
@@ -340,7 +357,7 @@ export function partial_api_request_to_atom_request<A extends types.AtomName, R 
 	return request_shape;
 }
 
-export function validate_request<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth>(
+export function validate_request<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth>(
 	api_request:Partial<types.Api.Request<A,R,D>>
 ):types.Api.Request<A,R,D>{
 	if(typeof api_request.full_path !== 'string' || api_request.full_path === ''){

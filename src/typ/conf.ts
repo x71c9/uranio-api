@@ -4,11 +4,13 @@
  * @packageDocumentation
  */
 
-import {FullConfiguration as CoreFullConfiguration} from 'uranio-core/types';
+// import {FullConfiguration as CoreFullConfiguration} from 'uranio-core/types';
 
-import {ServiceName} from '../service/';
+import core from 'uranio-core';
 
-import {LambdaName} from '../lambda/';
+import {ServiceName} from '../service/index';
+
+import {LambdaName} from '../lambda/index';
 
 type RequiredConfigParams = {
 }
@@ -25,11 +27,11 @@ type OptionalConfigParam = {
 }
 
 export type Configuration =
-	CoreFullConfiguration &
+	core.types.Configuration &
 	RequiredConfigParams &
 	Partial<OptionalConfigParam>;
 
-export type FullConfiguration =
-	CoreFullConfiguration &
-	RequiredConfigParams &
-	OptionalConfigParam;
+// export type FullConfiguration =
+//   core.types.FullConfiguration &
+//   RequiredConfigParams &
+//   OptionalConfigParam;

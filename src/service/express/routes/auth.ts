@@ -8,24 +8,26 @@ import express from 'express';
 
 import {urn_log} from 'urn-lib';
 
-import urn_core from 'uranio-core';
+import core from 'uranio-core';
 
 import * as types from '../../../types';
 
-import {auth_route_middleware} from '../../../mdlw/';
+import {schema} from '../../../sch/index';
+
+import {auth_route_middleware} from '../../../mdlw/index';
 
 import {validate_request, api_handle_and_store_exception} from '../../../util/request';
 
 import {express_request_to_partial_api_request, return_uranio_response_to_express} from './common';
 
-export function create_express_auth_route<A extends types.AuthName>(atom_name:A)
+export function create_express_auth_route<A extends schema.AuthName>(atom_name:A)
 		:express.Router{
 	
 	urn_log.fn_debug(`Create Express Auth Atom Router [${atom_name}]`);
 	
 	const router = express.Router();
 	
-	const auth_bll = urn_core.bll.auth.create(atom_name);
+	const auth_bll = core.bll.auth.create(atom_name);
 	
 	const handler = async (route_request:types.Api.Request<A,any,any>) => {
 		const token = await auth_bll.authenticate(
@@ -39,7 +41,7 @@ export function create_express_auth_route<A extends types.AuthName>(atom_name:A)
 	
 }
 
-function _return_express_auth_middleware<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth>(handler: types.AuthHandler<A,R,D>){
+function _return_express_auth_middleware<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth>(handler: types.AuthHandler<A,R,D>){
 	return async (
 		req: express.Request,
 		res: express.Response,

@@ -16,9 +16,9 @@ import {default_routes} from '../routes/client';
 
 import * as types from '../types';
 
-import * as conf from '../conf/';
+import * as conf from '../conf/index';
 
-import * as book from '../book/';
+import * as book from '../book/index';
 
 export function init(config?:types.Configuration)
 		:void{
@@ -47,10 +47,11 @@ function _validate_api_book(){
 }
 
 function _validate_dock_url_uniqueness(){
-	const dock_defs = book.dock.get_all_definitions();
+	const atom_book = book.get_all_definitions();
 	const urls:string[] = [];
-	for(const [atom_name, dock_def] of Object.entries(dock_defs)){
-		if(typeof dock_def.url === 'string'){
+	for(const [atom_name, atom_def] of Object.entries(atom_book)){
+		const dock_def = atom_def.dock;
+		if(dock_def && typeof dock_def.url === 'string'){
 			if(urls.includes(dock_def.url)){
 				throw urn_exc.create_not_initialized(
 					`INVALID_BOOK_DOCK_URL`,
@@ -64,9 +65,10 @@ function _validate_dock_url_uniqueness(){
 }
 
 function _validate_dock_route_url_uniqueness(){
-	const dock_defs = book.dock.get_all_definitions();
-	for(const [atom_name, dock_def] of Object.entries(dock_defs)){
-		if(dock_def.routes){
+	const atom_book = book.get_all_definitions();
+	for(const [atom_name, atom_def] of Object.entries(atom_book)){
+		const dock_def = atom_def.dock;
+		if(dock_def && dock_def.routes){
 			const route_urls:string[] = [];
 			for(const [_route_name, route_def] of Object.entries(dock_def.routes)){
 				if(typeof route_def.url === 'string'){
@@ -85,10 +87,11 @@ function _validate_dock_route_url_uniqueness(){
 }
 
 function _validate_route_name(){
-	const dock_defs = book.dock.get_all_definitions();
+	const atom_book = book.get_all_definitions();
 	const invalid_route_names:string[] = _get_default_route_name();
-	for(const [_atom_name, dock_def] of Object.entries(dock_defs)){
-		if(typeof dock_def.routes === 'object'){
+	for(const [_atom_name, atom_def] of Object.entries(atom_book)){
+		const dock_def = atom_def.dock;
+		if(dock_def && typeof dock_def.routes === 'object'){
 			for(const [route_name, _route_def] of Object.entries(dock_def.routes)){
 				if(invalid_route_names.includes(route_name)){
 					throw urn_exc.create_not_initialized(

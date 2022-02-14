@@ -4,7 +4,11 @@
  * @packageDocumentation
  */
 
+import core from 'uranio-core';
+
 import * as types from '../cln/types';
+
+import {schema} from '../sch/index';
 
 import {
 	route_def as common_route_def,
@@ -23,36 +27,36 @@ import {
 export const default_routes = {
 	count: {
 		method: types.RouteMethod.GET,
-		action: types.AuthAction.READ,
+		action: core.types.AuthAction.READ,
 		url: '/count',
 		query: ['filter'],
 	},
 	find_one: {
 		method: types.RouteMethod.GET,
-		action: types.AuthAction.READ,
+		action: core.types.AuthAction.READ,
 		url: '/first',
 		query: ['filter', 'options'],
 	},
 	find: {
 		method: types.RouteMethod.GET,
-		action: types.AuthAction.READ,
+		action: core.types.AuthAction.READ,
 		url: '/',
 		query: ['filter', 'options'],
 	},
 	find_id: {
 		method: types.RouteMethod.GET,
-		action: types.AuthAction.READ,
+		action: core.types.AuthAction.READ,
 		url: '/:id',
 		query: ['options'],
 	},
 	insert_multiple: {
 		method: types.RouteMethod.POST,
-		action: types.AuthAction.WRITE,
+		action: core.types.AuthAction.WRITE,
 		url: '/multiple',
 	},
 	update_multiple: {
 		method: types.RouteMethod.POST,
-		action: types.AuthAction.WRITE,
+		action: core.types.AuthAction.WRITE,
 		params: {
 			ids: {
 				array: true
@@ -62,7 +66,7 @@ export const default_routes = {
 	},
 	delete_multiple: {
 		method: types.RouteMethod.DELETE,
-		action: types.AuthAction.WRITE,
+		action: core.types.AuthAction.WRITE,
 		params: {
 			ids: {
 				array: true
@@ -72,17 +76,17 @@ export const default_routes = {
 	},
 	insert: {
 		method: types.RouteMethod.POST,
-		action: types.AuthAction.WRITE,
+		action: core.types.AuthAction.WRITE,
 		url: '/',
 	},
 	update: {
 		method: types.RouteMethod.POST,
-		action: types.AuthAction.WRITE,
+		action: core.types.AuthAction.WRITE,
 		url: '/:id',
 	},
 	delete: {
 		method: types.RouteMethod.DELETE,
-		action: types.AuthAction.WRITE,
+		action: core.types.AuthAction.WRITE,
 		url: '/:id',
 	},
 } as const;
@@ -91,12 +95,12 @@ export function add_media_routes():typeof default_routes{
 	const cloned_default_routes = {
 		upload:{
 			method: types.RouteMethod.POST,
-			action: types.AuthAction.WRITE,
+			action: core.types.AuthAction.WRITE,
 			url: '/upload',
 		},
 		presigned:{
 			method: types.RouteMethod.GET,
-			action: types.AuthAction.WRITE,
+			action: core.types.AuthAction.WRITE,
 			query: ['filename', 'size', 'type'],
 			url: '/presigned',
 		},
@@ -105,7 +109,7 @@ export function add_media_routes():typeof default_routes{
 	return cloned_default_routes as typeof default_routes;
 }
 
-export function route_def<A extends types.AtomName>(atom_name:A, route_name:types.RouteName<A>)
+export function route_def<A extends schema.AtomName>(atom_name:A, route_name:types.RouteName<A>)
 		:types.Book.Definition.Dock.Routes.Route{
 	
 	const cloned_default_routes = add_media_routes();
@@ -115,7 +119,7 @@ export function route_def<A extends types.AtomName>(atom_name:A, route_name:type
 
 export function atom_dock_with_defaults(
 	default_routes:types.Book.Definition.Dock.Routes,
-	atom_name:types.AtomName
+	atom_name:schema.AtomName
 ):types.Book.Definition.Dock{
 	return common_atom_dock_with_defaults(default_routes, atom_name);
 }

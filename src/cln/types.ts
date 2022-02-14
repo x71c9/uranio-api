@@ -4,12 +4,12 @@
  * @packageDocumentation
  */
 
-export * from '../core/cln/types';
+// export * from '../core/cln/types';
 
 // Override Book from '../core/cln/types' by '../typ/book_cln'
-import {Book} from '../typ/book_cln';
+// import {Book} from '../typ/book_cln';
 
-export {Book};
+// export {Book};
 
 export * from '../typ/book_cln';
 

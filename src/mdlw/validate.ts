@@ -8,10 +8,12 @@ import {urn_exception} from 'urn-lib';
 
 const urn_exc = urn_exception.init(`VALIDATE_REQUEST`, `Validate request module`);
 
-import {AtomName, Query} from '../types';
+// import {schema.AtomName, schema.Query} from '../types';
 
-export function process_request_query<A extends AtomName>(query:Query<A>|undefined)
-		:Query<A>{
+import {schema} from '../sch/index';
+
+export function process_request_query<A extends schema.AtomName>(query:schema.Query<A>|undefined)
+		:schema.Query<A>{
 	if(typeof query === 'undefined'){
 		return {};
 	}

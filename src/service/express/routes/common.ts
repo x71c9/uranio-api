@@ -9,6 +9,9 @@ import express from 'express';
 import {UploadedFile} from 'express-fileupload';
 
 import {urn_response} from 'urn-lib';
+
+import core from 'uranio-core';
+
 import {
 	process_request_path,
 	get_atom_name_from_atom_path,
@@ -19,8 +22,13 @@ import {
 
 import * as types from '../../../types';
 
-export function express_request_to_partial_api_request<A extends types.AtomName, R extends types.RouteName<A>, D extends types.Depth>(req:express.Request)
-		:Partial<types.Api.Request<A,R,D>>{
+import {schema} from '../../../sch/index';
+
+export function express_request_to_partial_api_request<
+	A extends schema.AtomName,
+	R extends types.RouteName<A>,
+	D extends schema.Depth
+	>(req:express.Request):Partial<types.Api.Request<A,R,D>>{
 	
 	let api_request:Partial<types.Api.Request<any,any,any>> = {
 		full_path: req.originalUrl,
@@ -65,7 +73,11 @@ export function express_request_to_partial_api_request<A extends types.AtomName,
 		}
 	}
 	
-	const route_name = get_route_name(atom_name, api_request_paths.route_path, api_request.method);
+	const route_name = get_route_name(
+		atom_name,
+		api_request_paths.route_path,
+		api_request.method
+	);
 	
 	if(!route_name){
 		return api_request;
@@ -85,7 +97,7 @@ export function express_request_to_partial_api_request<A extends types.AtomName,
 	api_request.auth_action = auth_action;
 	
 	if(is_auth){
-		api_request.auth_action = types.AuthAction.READ;
+		api_request.auth_action = core.types.AuthAction.READ;
 		api_request.route_name = 'auth';
 	}
 	

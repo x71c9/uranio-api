@@ -16,17 +16,19 @@ const urn_exc = urn_exception.init(`EXPRESSCLASS`, `Express class module`);
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 
-import * as book from '../../book/';
+import * as book from '../../book/index';
 
 import {register_exception_handler} from '../../util/exc_handler';
 
-import * as conf from '../../conf/';
+import * as conf from '../../conf/index';
 
-import {AuthName} from '../../types';
+import {schema} from '../../sch/index';
+
+// import {AuthName} from '../../types';
 
 import {Service} from '../types';
 
-import {create_express_route, create_express_auth_route} from './routes/';
+import {create_express_route, create_express_auth_route} from './routes/index';
 
 type Callback = () => void;
 
@@ -55,9 +57,9 @@ class ExpressWebService implements Service {
 		});
 		const prefix_api = conf.get('prefix_api');
 		const prefix_log = conf.get('prefix_log');
-		for(const atom_name of book.atom.get_names()){
-			const dock_def = book.dock.get_definition(atom_name);
-			const atom_def = book.atom.get_definition(atom_name);
+		for(const atom_name of book.get_names()){
+			const dock_def = book.get_definition(atom_name).dock;
+			const atom_def = book.get_definition(atom_name);
 			const router = create_express_route(atom_name);
 			if(dock_def){
 				if(atom_def.connection && atom_def.connection === 'log'){
@@ -67,7 +69,7 @@ class ExpressWebService implements Service {
 				}
 			}
 			if(dock_def && dock_def.auth_url && typeof dock_def.auth_url === 'string'){
-				const auth_route = create_express_auth_route(atom_name as AuthName);
+				const auth_route = create_express_auth_route(atom_name as schema.AuthName);
 				this.express_app.use(`${prefix_api}${dock_def.auth_url}`, auth_route);
 			}
 		}

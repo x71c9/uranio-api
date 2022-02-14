@@ -4,21 +4,23 @@
  * @packageDocumentation
  */
 
-export * from '../core/srv/types';
+// export * from '../core/srv/types';
+
+// export * from '../typ/core_srv';
 
 
 // Override Book from '../core/srv/types' by '../typ/book_cln'
-import {Book} from '../typ/book_srv';
+// import {Book} from '../typ/book_srv';
 
-export {Book};
+// export {Book};
 
 export * from '../typ/book_srv';
 
 
 // Override FullConfiguration, Configuration from '../core/srv/types' by '../typ/conf'
-import {FullConfiguration, Configuration} from '../typ/conf';
+// import {Configuration} from '../typ/conf';
 
-export {FullConfiguration, Configuration};
+// export {Configuration};
 
 export * from '../typ/conf';
 
