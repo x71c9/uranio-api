@@ -8,7 +8,7 @@
 	"scripts": {
 		"dev": "npx tsc-watch --onSuccess \"node -r source-map-support/register -r dotenv/config ./dist/run.js\"",
 		"schema": "yarn upgrade uranio-schema && npx npm-dts generate -L debug -r node_modules/uranio-schema/ -o ../../schema/index.d.ts",
-		"generate": "yarn schema && ts-node src/generate.ts"
+		"generate": "ts-node src/generate.ts"
 	},
 	"devDependencies": {
 		"@types/cors": "^2.8.9",
