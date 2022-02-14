@@ -6,9 +6,9 @@
 	"repository": "git@github.com:nbl7/uranio-api.git",
 	"author": "Andrea Reni <mail@nbl7.net>",
 	"scripts": {
-		"dev": "npx tsc-watch --onSuccess \"node -r source-map-support/register -r dotenv/config ./dist/run.js\"",
-		"schema": "yarn upgrade uranio-schema && npx npm-dts generate -L debug -r node_modules/uranio-schema/ -o ../../schema/index.d.ts",
-		"generate": "ts-node src/generate.ts"
+		"watch": "npx tsc-watch --onSuccess \"node -r source-map-support/register -r dotenv/config ./dist/run.js\"",
+		"schema:reset": "yarn upgrade uranio-schema && npx npm-dts generate -L debug -r node_modules/uranio-schema/ -o ../../schema/index.d.ts",
+		"types": "yarn schema:reset && uranio types:uranio"
 	},
 	"devDependencies": {
 		"@types/cors": "^2.8.9",
