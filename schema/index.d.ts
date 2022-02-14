@@ -93,144 +93,173 @@ declare module 'uranio-schema/typ/atom' {
   export type AuthAtom<A extends AuthName> = Atom<A>;
   export type AuthAtomShape<A extends AuthName> = AtomShape<A>;
   /** --uranio-generate-start */
-  export type AtomName = 'superuser' | 'user' | 'group' | 'media' | 'request' | 'error';
-  export type AuthName = 'superuser' | 'user';
-  export type LogName = never;
-  type SuperuserShape = AtomCommonProperties & {
-      email: string;
-      password: string;
-      groups: string[];
-      favicon?: string;
-  };
-  type UserShape = AtomCommonProperties & {
-      email: string;
-      password: string;
-      groups: string[];
-  };
-  type GroupShape = AtomCommonProperties & {
-      name: string;
-  };
-  type MediaShape = AtomCommonProperties & {
-      src: string;
-      filename: string;
-      type: string;
-      size: number;
-  };
-  type RequestShape = AtomCommonProperties & {
-    full_path: string
-    route_path?: string
-    atom_path?: string
-    connection_path?: string
-    method?: string
-    atom_name?: string
-    route_name?: string
-    params?: string
-    query?: string
-    headers?: string
-    body?: string
-    file?: string
-    ip?: string
-    is_auth?: boolean
-    auth_action?: string
-  };
-  type ErrorShape = AtomCommonProperties & {
-    status: number
-    msg: string
-    error_code: string
-    error_msg: string
-    request?: string
-    stack?: string
-  };
-  type BondProperties<A extends AtomName> =
-    A extends 'superuser' ? 'groups' | 'favicon' :
-    A extends 'user' ? 'groups' :
-    A extends 'group' ? never :
-    A extends 'media' ? never :
-    A extends 'request' ? never :
-    A extends 'error' ? 'request' :
-    never;
-  type BondShapeDepth1<A extends AtomName> = A extends 'superuser' ? {
-      groups: Atom<'group'>[];
-      favicon?: Atom<'media'>;
-  } : A extends 'user' ? {
-      groups: Atom<'group'>[];
-  } : A extends 'group' ? never : A extends 'media' ? never :
-    A extends 'request' ? never :
-    A extends 'error' ? {
-    request: Atom<'request'>
-  } :
-    never;
-  type BondShapeDepth2<A extends AtomName> = A extends 'superuser' ? {
-      groups: Molecule<'group', 1>[];
-      favicon?: Molecule<'media', 1>;
-  } : A extends 'user' ? {
-      groups: Molecule<'group', 1>[];
-  } : A extends 'group' ? never : A extends 'media' ? never :
-    A extends 'request' ? never :
-    A extends 'error' ? {
-    request: Molecule<'request',1>
-  } :
-    never;
-  type BondShapeDepth3<A extends AtomName> = A extends 'superuser' ? {
-      groups: Molecule<'group', 2>[];
-      favicon?: Molecule<'media', 2>;
-  } : A extends 'user' ? {
-      groups: Molecule<'group', 2>[];
-  } : A extends 'group' ? never : A extends 'media' ? never :
-    A extends 'request' ? never :
-    A extends 'error' ? {
-    request: Molecule<'request',2>
-  } :
-    never;
-  type BondShapeDepth4<A extends AtomName> = A extends 'superuser' ? {
-      groups: Molecule<'group', 3>[];
-      favicon?: Molecule<'media', 3>;
-  } : A extends 'user' ? {
-      groups: Molecule<'group', 3>[];
-  } : A extends 'group' ? never : A extends 'media' ? never :
-    A extends 'request' ? never :
-    A extends 'error' ? {
-    request: Molecule<'request', 3>
-  } :
-    never;
-  type Superuser = AtomHardProperties & SuperuserShape;
-  type User = AtomHardProperties & UserShape;
-  type Group = AtomHardProperties & GroupShape;
-  type Media = AtomHardProperties & MediaShape;
-  type Request = AtomHardProperties & RequestShape;
-  type Error = AtomHardProperties & ErrorShape;
-  export type AtomShape<A extends AtomName> = A extends 'superuser' ? SuperuserShape : A extends 'user' ? UserShape : A extends 'group' ? GroupShape : A extends 'media' ? MediaShape : A extends 'request' ? RequestShape : A extends 'error' ? ErrorShape : never;
-  export type Atom<A extends AtomName> = A extends 'superuser' ? Superuser : A extends 'user' ? User : A extends 'group' ? Group : A extends 'media' ? Media : A extends 'request' ? Request : A extends 'error' ? Error : never;
-  
-  export type RouteCustomName<A extends AtomName> =
-    A extends 'superuser' ? never :
-    A extends 'user' ? never :
-    A extends 'group' ? never :
-    A extends 'media' ? never :
-    A extends 'request' ? never :
-    A extends 'error' ? never :
-    never;
 
-  export type CustomRouteURL<A extends AtomName, R extends RouteCustomName> =
-    A extends 'superuser' ? never :
-    A extends 'user' ? never :
-    A extends 'group' ? never :
-    A extends 'media' ? never :
-    A extends 'request' ? never :
-    A extends 'error' ? never :
-    never;
-  
-  export type CustomRouteQueryParamArray<A extends AtomName, R extends RouteCustomName> =
-    A extends 'superuser' ? never :
-    A extends 'user' ? never :
-    A extends 'group' ? never :
-    A extends 'media' ? never :
-    A extends 'request' ? never :
-    A extends 'error' ? never :
-    never;
-  
-  export {};
-  /** --uranio-generate-end */
+	export type AtomName = 'superuser' | 'user' | 'group' | 'media' | 'error' | 'request'
+
+	export type AuthName = 'superuser' | 'user'
+
+	export type LogName = 'error' | 'request'
+
+	type SuperuserShape = AtomCommonProperties & {
+		email: string
+		password: string
+		groups?: string[]
+	}
+
+	type UserShape = AtomCommonProperties & {
+		email: string
+		password: string
+		groups?: string[]
+	}
+
+	type GroupShape = AtomCommonProperties & {
+		name: string
+	}
+
+	type MediaShape = AtomCommonProperties & {
+		src: string
+		filename: string
+		type: string
+		size: number
+		width?: number
+		height?: number
+	}
+
+	type ErrorShape = AtomCommonProperties & {
+		status: number
+		msg: string
+		error_code: string
+		error_msg: string
+		request?: string
+		stack?: string
+	}
+
+	type RequestShape = AtomCommonProperties & {
+		full_path: string
+		route_path?: string
+		atom_path?: string
+		connection_path?: string
+		method?: string
+		atom_name?: string
+		route_name?: string
+		params?: string
+		query?: string
+		headers?: string
+		body?: string
+		file?: string
+		ip?: string
+		is_auth?: boolean
+		auth_action?: string
+	}
+
+	type BondProperties<A extends AtomName> =
+		A extends 'superuser' ? 'groups' :
+		A extends 'user' ? 'groups' :
+		A extends 'group' ? never :
+		A extends 'media' ? never :
+		A extends 'error' ? 'request' :
+		A extends 'request' ? never :
+		never
+
+	type BondShapeDepth1<A extends AtomName> =
+		A extends 'superuser' ? {groups?: Atom<'group'>[]} :
+		A extends 'user' ? {groups?: Atom<'group'>[]} :
+		A extends 'group' ? never :
+		A extends 'media' ? never :
+		A extends 'error' ? {request?: Atom<'request'>} :
+		A extends 'request' ? never :
+		never
+
+	type BondShapeDepth2<A extends AtomName> =
+		A extends 'superuser' ? {groups?: Molecule<'group', 1>[]} :
+		A extends 'user' ? {groups?: Molecule<'group', 1>[]} :
+		A extends 'group' ? never :
+		A extends 'media' ? never :
+		A extends 'error' ? {request?: Molecule<'request', 1>} :
+		A extends 'request' ? never :
+		never
+
+	type BondShapeDepth3<A extends AtomName> =
+		A extends 'superuser' ? {groups?: Molecule<'group', 2>[]} :
+		A extends 'user' ? {groups?: Molecule<'group', 2>[]} :
+		A extends 'group' ? never :
+		A extends 'media' ? never :
+		A extends 'error' ? {request?: Molecule<'request', 2>} :
+		A extends 'request' ? never :
+		never
+
+	type BondShapeDepth4<A extends AtomName> =
+		A extends 'superuser' ? {groups?: Molecule<'group', 3>[]} :
+		A extends 'user' ? {groups?: Molecule<'group', 3>[]} :
+		A extends 'group' ? never :
+		A extends 'media' ? never :
+		A extends 'error' ? {request?: Molecule<'request', 3>} :
+		A extends 'request' ? never :
+		never
+
+	type Superuser = AtomHardProperties & SuperuserShape
+
+	type User = AtomHardProperties & UserShape
+
+	type Group = AtomHardProperties & GroupShape
+
+	type Media = AtomHardProperties & MediaShape
+
+	type Error = AtomHardProperties & ErrorShape
+
+	type Request = AtomHardProperties & RequestShape
+
+	export type AtomShape<A extends AtomName> =
+		A extends 'superuser' ? SuperuserShape :
+		A extends 'user' ? UserShape :
+		A extends 'group' ? GroupShape :
+		A extends 'media' ? MediaShape :
+		A extends 'error' ? ErrorShape :
+		A extends 'request' ? RequestShape :
+		never
+
+	export type Atom<A extends AtomName> =
+		A extends 'superuser' ? Superuser :
+		A extends 'user' ? User :
+		A extends 'group' ? Group :
+		A extends 'media' ? Media :
+		A extends 'error' ? Error :
+		A extends 'request' ? Request :
+		never
+
+
+	export type RouteCustomName<A extends AtomName> =
+		A extends 'superuser' ? never :
+		A extends 'user' ? never :
+		A extends 'group' ? never :
+		A extends 'media' ? never :
+		A extends 'error' ? 'errroute' :
+		A extends 'request' ? never :
+	never
+
+	export type CustomRouteURL<A extends AtomName, R extends RouteCustomName<A>> =
+		A extends 'superuser' ? never :
+		A extends 'user' ? never :
+		A extends 'group' ? never :
+		A extends 'media' ? never :
+		A extends 'error' ?
+			R extends 'errroute' ? '/errrr' :
+			never :
+		A extends 'request' ? never :
+	never
+
+	export type CustomRouteQueryParamArray<A extends AtomName, R extends RouteCustomName<A>> =
+		A extends 'superuser' ? never :
+		A extends 'user' ? never :
+		A extends 'group' ? never :
+		A extends 'media' ? never :
+		A extends 'error' ?
+			R extends 'errroute' ? ['title','length'] :
+			never :
+		A extends 'request' ? never :
+	never
+
+	export {};/** --uranio-generate-end */
 
 }
 declare module 'uranio-schema/typ/common' {
