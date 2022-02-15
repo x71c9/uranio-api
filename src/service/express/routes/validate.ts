@@ -8,7 +8,7 @@ import {urn_exception} from 'urn-lib';
 
 const urn_exc = urn_exception.init(`VALIDATE_REQUEST`, `Validate request module`);
 
-// import urn_core from 'uranio-core';
+// import core from 'uranio-core';
 
 // import {schema.AtomName, schema.Query, TokenObject} from '../../../types';
 // import {schema.AtomName, schema.Query} from '../../../types';
@@ -24,7 +24,7 @@ import {schema} from '../../../sch/index';
 //   }
 //   const urn_locals = (locals as any).urn;
 	
-//   urn_core.bll.auth.is_valid_token_object(urn_locals.token_object);
+//   core.bll.auth.is_valid_token_object(urn_locals.token_object);
 	
 //   const token_object:TokenObject = urn_locals.token_object;
 	

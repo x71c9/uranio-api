@@ -5,10 +5,10 @@
  * @packageDocumentation
  */
 
-// import urn_core from 'uranio-core';
+// import core from 'uranio-core';
 
-// export type Database = urn_core.types.Database;
+// export type Database = core.types.Database;
 
-// export type Storage = urn_core.types.Storage;
+// export type Storage = core.types.Storage;
 
 

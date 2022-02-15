@@ -8,7 +8,7 @@ import {urn_util, urn_exception} from 'urn-lib';
 
 const urn_exc = urn_exception.init('CONF_API_MODULE', `Api configuration module`);
 
-import urn_core from 'uranio-core';
+import core from 'uranio-core';
 
 import {api_config} from './defaults';
 
@@ -24,7 +24,7 @@ export function get<k extends keyof types.Configuration>(param_name:k)
 }
 
 export function is_initialized():boolean{
-	return urn_core.conf.is_initialized() && _is_api_initialized;
+	return core.conf.is_initialized() && _is_api_initialized;
 }
 
 export function set_initialize(is_initialized:boolean):void{
@@ -33,12 +33,12 @@ export function set_initialize(is_initialized:boolean):void{
 
 export function set_from_env(repo_config:Required<types.Configuration>)
 		:void{
-	return urn_core.conf.set_from_env(repo_config);
+	return core.conf.set_from_env(repo_config);
 }
 
 export function set(repo_config:Required<types.Configuration>, config:types.Configuration)
 		:void{
-	return urn_core.conf.set(repo_config, config);
+	return core.conf.set(repo_config, config);
 }
 
 function _check_if_param_exists(param_name:string){

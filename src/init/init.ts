@@ -8,7 +8,7 @@ import {urn_exception} from 'urn-lib';
 
 const urn_exc = urn_exception.init('INIT_API_MODULE', `Api init module`);
 
-import urn_core from 'uranio-core';
+import core from 'uranio-core';
 
 import {api_config} from '../conf/defaults';
 
@@ -23,12 +23,12 @@ import * as book from '../book/index';
 export function init(config?:types.Configuration)
 		:void{
 	
-	urn_core.init(config);
+	core.init(config);
 	
 	if(typeof config === 'undefined'){
-		urn_core.conf.set_from_env(api_config);
+		core.conf.set_from_env(api_config);
 	}else{
-		urn_core.conf.set(api_config, config);
+		core.conf.set(api_config, config);
 	}
 	_validate_api_variables();
 	_validate_api_book();
