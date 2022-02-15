@@ -4,6 +4,8 @@
  * @packageDocumentation
  */
 
+import {urn_log} from 'urn-lib';
+
 // import {api_config} from '../cnf/defaults';
 import * as conf from '../conf/index';
 
@@ -15,6 +17,7 @@ export * from './types';
 
 export function create(service_name?:ServiceName)
 		:Service{
+	urn_log.fn_debug(`Create Service.`);
 	const service = service_name || conf.get(`service`);
 	switch(service){
 		case 'express':{

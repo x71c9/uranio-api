@@ -4,13 +4,24 @@
  * @packageDocumentation
  */
 
-import uranio_core from 'uranio-core';
+export * from './register';
 
-console.log(uranio_core);
+import uranio from './index';
+uranio.init();
 
-import uranio_core_client from 'uranio-core/client';
+const service = uranio.service.create();
 
-console.log(uranio_core_client);
+service.listen(() => {
+	console.log(`Listening on port ${uranio.conf.get(`service_port`)}...`);
+});
+
+// import uranio_core from 'uranio-core';
+
+// console.log(uranio_core);
+
+// import uranio_core_client from 'uranio-core/client';
+
+// console.log(uranio_core_client);
 
 // import api from './index';
 

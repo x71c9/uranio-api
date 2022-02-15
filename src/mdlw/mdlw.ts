@@ -24,7 +24,7 @@ import * as types from '../types';
 
 import {schema} from '../sch/index';
 
-import {return_default_routes} from '../routes/server';
+// import {return_default_routes} from '../routes/server';
 
 import {partial_api_request_to_atom_request} from '../util/request';
 
@@ -56,7 +56,8 @@ export async function auth_route_middleware<A extends schema.AtomName, R extends
 async function _authorization<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0>(
 	api_request:types.Api.Request<A,R,D>
 ):Promise<false | types.Api.Request<A,R,D>> {
-	const route_def = _get_route_def(api_request);
+	// const route_def = _get_route_def(api_request);
+	const route_def = book.get_route_def(api_request.atom_name, api_request.route_name);
 	if(core.bll.auth.is_public_request(api_request.atom_name, route_def.action)){
 		return false;
 	}
@@ -78,7 +79,8 @@ async function _validate_and_call<A extends schema.AtomName, R extends schema.Ro
 	api_request: types.Api.Request<A,R,D>
 ){
 	
-	const route_def = _get_route_def(api_request);
+	// const route_def = _get_route_def(api_request);
+	const route_def = book.get_route_def(api_request.atom_name, api_request.route_name);
 	
 	urn_log.fn_debug(`Router ${route_def.method} [${api_request.atom_name}] ${api_request.full_path}`);
 	
@@ -111,14 +113,14 @@ async function _auth_validate_and_call<A extends schema.AtomName, R extends sche
 	auth_route_request: types.Api.Request<A,R,D>,
 	handler: types.AuthHandler<A,R,D>,
 ){
-	const dock_def = book.get_definition(auth_route_request.atom_name).dock;
+	const dock_def = book.get_dock_definition(auth_route_request.atom_name);
 	
-	if(!dock_def){
-		throw urn_exc.create_invalid_book(
-			`INVALID_DOCK_DEF`,
-			`Cannot auth validate and call. Invalid dock def.`
-		);
-	}
+	// if(!dock_def){
+	//   throw urn_exc.create_invalid_book(
+	//     `INVALID_DOCK_DEF`,
+	//     `Cannot auth validate and call. Invalid dock def.`
+	//   );
+	// }
 	
 	urn_log.fn_debug(`Router Auth ${dock_def.url} [${auth_route_request.atom_name}]`);
 	
@@ -161,7 +163,8 @@ function _validate_route<A extends schema.AtomName, R extends schema.RouteName<A
 	api_request:types.Api.Request<A,R,D>
 ):void{
 	
-	const route_def = _get_route_def(api_request);
+	// const route_def = _get_route_def(api_request);
+	const route_def = book.get_route_def(api_request.atom_name, api_request.route_name);
 		
 	urn_log.fn_debug(`Validate Route ${route_def.url} [${api_request.atom_name}]`);
 	
@@ -210,34 +213,30 @@ function _limit<A extends schema.AtomName, R extends schema.RouteName<A>, D exte
 	if(!options.limit || options.limit > conf.get(`request_auto_limit`)){
 		options.limit = conf.get(`request_auto_limit`);
 	}
+	(api_request.query as any).options = options;
 	return api_request;
 }
 
-function _get_route_def<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0>(
-	api_request:types.Api.Request<A,R,D>
-):types.Book.Definition.Dock.Routes.Route<A,R,D>{
-	
-	const cloned_atom_dock = {
-		...book.get_definition(api_request.atom_name).dock
-	};
-	
-	const default_routes = return_default_routes(api_request.atom_name);
-	
-	if(!cloned_atom_dock.routes){
-		cloned_atom_dock.routes = default_routes;
-	}else{
-		cloned_atom_dock.routes = {
-			...default_routes,
-			...cloned_atom_dock.routes
-		};
-	}
-	
-	if(!(cloned_atom_dock.routes as any)[api_request.route_name as string]){
-		throw urn_exc.create(`INVALID_ROUTE_NAME`, `Invalid route name.`);
-	}
-	
-	return (cloned_atom_dock.routes as any)[api_request.route_name as string]! as types.Book.Definition.Dock.Routes.Route<A,R,D>;
-}
+// function _get_route_def<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0>(
+//   api_request:types.Api.Request<A,R,D>
+// ):types.Book.Definition.Dock.Routes.Route<A,R,D>{
+//   const cloned_atom_dock = {
+//     ...book.get_definition(api_request.atom_name).dock
+//   };
+//   const default_routes = return_default_routes(api_request.atom_name);
+//   if(!cloned_atom_dock.routes){
+//     cloned_atom_dock.routes = default_routes;
+//   }else{
+//     cloned_atom_dock.routes = {
+//       ...default_routes,
+//       ...cloned_atom_dock.routes
+//     };
+//   }
+//   if(!(cloned_atom_dock.routes as any)[api_request.route_name as string]){
+//     throw urn_exc.create(`INVALID_ROUTE_NAME`, `Invalid route name.`);
+//   }
+//   return (cloned_atom_dock.routes as any)[api_request.route_name as string]! as types.Book.Definition.Dock.Routes.Route<A,R,D>;
+// }
 
 function _log_route_request<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0>(
 	api_request: types.Api.Request<A,R,D>

@@ -12,6 +12,8 @@ import core from 'uranio-core';
 
 import {api_config} from './defaults';
 
+export {api_config as defaults};
+
 import * as types from '../types';
 
 let _is_api_initialized = false;

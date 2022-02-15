@@ -12,7 +12,7 @@ import * as service from '../service/index';
 
 import * as lambda from '../lambda/index';
 
-// import * as routes from '../routes/index';
+import * as routes from '../routes/index';
 
 import * as book from '../book/index';
 
@@ -30,11 +30,13 @@ import * as types from './types';
  */
 export * from '../init/index';
 
+export * from '../reg/index';
+
 export {
 	core,
 	service,
 	lambda,
-	// routes,
+	routes,
 	book,
 	conf,
 	util,

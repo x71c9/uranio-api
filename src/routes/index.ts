@@ -5,3 +5,6 @@
  */
 
 // export * from './server';
+
+export {default_routes} from './client';
+

@@ -6,7 +6,7 @@
 
 // import {core.types.BookSecurity, core.types.BookProperty, core.types.BookPermission} from './typ/book_srv';
 
-import * as types from './types';
+// import * as types from './types';
 
 import core from 'uranio-core';
 
@@ -51,16 +51,16 @@ export const atom_book = {
 		},
 		dock:{
 			url: '/errors',
-			routes: {
-				errroute: {
-					method: types.RouteMethod.GET,
-					action: core.types.AuthAction.READ,
-					url: '/errrr',
-					query: ['title','length'],
-					params: {},
-					return: String
-				}
-			}
+			// routes: {
+			//   errroute: {
+			//     method: types.RouteMethod.GET,
+			//     action: core.types.AuthAction.READ,
+			//     url: '/errrr',
+			//     query: ['title','length'],
+			//     params: {},
+			//     return: 'string'
+			//   }
+			// }
 		}
 	},
 	request: {

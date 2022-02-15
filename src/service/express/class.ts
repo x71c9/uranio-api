@@ -47,29 +47,44 @@ class ExpressWebService implements Service {
 		this.express_app.use(express.json());
 		this.express_app.use(express.urlencoded({extended: true}));
 		this.express_app.use(fileupload());
-		this.express_app.use(function(err:any, _req:express.Request, res:express.Response, next:express.NextFunction){
-			if(err.status === 400 && "body" in err) {
-				const respo = urn_ret.return_error(400, 'JSON parse error', 'INVALID_JSON_REQUEST', err.message);
-				res.status(respo.status).json(respo);
-			}else{
-				next();
+		this.express_app.use(
+			function(
+				err:any,
+				_req:express.Request,
+				res:express.Response,
+				next:express.NextFunction
+			){
+				if(err.status === 400 && "body" in err) {
+					const respo = urn_ret.return_error(
+						400,
+						'JSON parse error',
+						'INVALID_JSON_REQUEST',
+						err.message
+					);
+					res.status(respo.status).json(respo);
+				}else{
+					next();
+				}
 			}
-		});
+		);
 		const prefix_api = conf.get('prefix_api');
 		const prefix_log = conf.get('prefix_log');
 		for(const atom_name of book.get_names()){
-			const dock_def = book.get_definition(atom_name).dock;
+			const dock_def = book.get_dock_definition(atom_name);
 			const atom_def = book.get_definition(atom_name);
 			const router = create_express_route(atom_name);
-			if(dock_def){
+			if(dock_def && typeof dock_def.url === 'string' && dock_def.url !== ''){
 				if(atom_def.connection && atom_def.connection === 'log'){
+					// console.log(`${prefix_api}${prefix_log}${dock_def.url}`);
 					this.express_app.use(`${prefix_api}${prefix_log}${dock_def.url}`, router);
 				}else{
+					// console.log(`${prefix_api}${dock_def.url}`);
 					this.express_app.use(`${prefix_api}${dock_def.url}`, router);
 				}
 			}
 			if(dock_def && dock_def.auth_url && typeof dock_def.auth_url === 'string'){
 				const auth_route = create_express_auth_route(atom_name as schema.AuthName);
+				// console.log(`${prefix_api}${dock_def.auth_url}`);
 				this.express_app.use(`${prefix_api}${dock_def.auth_url}`, auth_route);
 			}
 		}

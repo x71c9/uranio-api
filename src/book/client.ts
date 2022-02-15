@@ -4,6 +4,10 @@
  * @packageDocumentation
  */
 
+import {urn_exception} from 'urn-lib';
+
+const urn_exc = urn_exception.init('BOOK_CLIENT', 'Book client methods module');
+
 // import * as atom from './atom/client';
 
 // export {atom};
@@ -18,10 +22,58 @@ import {Book} from '../typ/book_cln';
 
 import {schema} from '../sch/index';
 
-// export function get_dock_definition<A extends schema.AtomName>(atom_name:A)
-//     :Book.Definition.Dock<A>{
-	
-// }
+import {default_routes} from '../routes/client';
+
+export function get_route_def<A extends schema.AtomName, R extends schema.RouteName<A>>(
+	atom_name: A,
+	route_name: R
+):Book.Definition.Dock.Routes.Route{
+	const routes_def = get_routes_definition_with_defaults(atom_name);
+	if(!routes_def || !routes_def[route_name]){
+		throw urn_exc.create_invalid_book(
+			`INVALID_ROUTE_NAME`,
+			`Cannot find route name \`${route_name}\`.`
+		);
+	}
+	return routes_def[route_name];
+}
+
+export function get_routes_definition<A extends schema.AtomName>(atom_name:A)
+		:Book.Definition.Dock.Routes{
+	const dock_def = get_dock_definition(atom_name);
+	if(!dock_def.routes){
+		dock_def.routes = {};
+	}
+	return dock_def.routes;
+}
+
+export function get_routes_definition_with_defaults(atom_name:schema.AtomName)
+		:Book.Definition.Dock.Routes{
+	const dock_def = get_dock_definition(atom_name);
+	if(!dock_def.routes){
+		dock_def.routes = {};
+	}
+	for(const [route_name, route_def] of Object.entries(default_routes)){
+		dock_def.routes[route_name] = route_def as Book.Definition.Dock.Routes.Route;
+	}
+	return dock_def.routes;
+}
+
+export function get_dock_definition<A extends schema.AtomName>(atom_name:A)
+		:Book.Definition.Dock{
+	const atom_def = get_definition(atom_name);
+	const dock_def = atom_def.dock;
+	if(!dock_def || !dock_def.url){
+		return {
+			url: `/${get_plural(atom_name)}`
+		} as Book.Definition.Dock;
+	}
+	return dock_def;
+}
+
+export function get_plural(atom_name:schema.AtomName):string{
+	return core_client.book.get_plural(atom_name);
+}
 
 export function validate_name(atom_name:string):atom_name is schema.AtomName{
 	return core_client.book.validate_name(atom_name);
@@ -53,10 +105,10 @@ export function get_custom_property_definitions<A extends schema.AtomName>(
 	return core_client.book.get_custom_property_definitions(atom_name);
 }
 
-export function get_all_property_definitions<A extends schema.AtomName>(
+export function get_full_properties_definition<A extends schema.AtomName>(
 	atom_name:A
 ):Book.Definition.Properties{
-	return core_client.book.get_all_property_definitions(atom_name);
+	return core_client.book.get_full_properties_definition(atom_name);
 }
 
 export function has_property<A extends schema.AtomName>(atom_name:A, key:string)
