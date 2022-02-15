@@ -60,7 +60,7 @@ export namespace Book {
 					url: string
 					query?: string[]
 					params?: Params
-					return?: any
+					return?: string // String format of return type
 				}
 				
 				export type Params = {

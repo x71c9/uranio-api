@@ -82,12 +82,11 @@ export function get_auth_action<A extends schema.AtomName>(
 	route_name:keyof types.Book.Definition.Dock.Routes<A>
 ):core.types.AuthAction{
 	// const atom_dock = _get_atom_dock(atom_name);
-	const atom_def = book.get_definition(atom_name);
-	const atom_dock = atom_def.dock;
-	if(!atom_dock || !atom_dock.routes || !atom_dock.routes[route_name as any]){
+	const dock_def = book.get_dock_definition(atom_name);
+	if(!dock_def || !dock_def.routes || !dock_def.routes[route_name as any]){
 		throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name \`${String(route_name)}\` from atom \`${atom_name}\`.`);
 	}
-	const auth_action = atom_dock.routes[route_name as any].action;
+	const auth_action = dock_def.routes[route_name as any].action;
 	if(!(auth_action in core.types.AuthAction)){
 		throw urn_exc.create(`INVALID_AUTH_ACTION`, `Invalid auth action \`${auth_action}\` for \`${auth_action}\`\`${String(route_name)}\`.`);
 	}
@@ -97,8 +96,7 @@ export function get_auth_action<A extends schema.AtomName>(
 export function get_atom_name_from_atom_path(atom_path:string)
 		:schema.AtomName | undefined{
 	for(const atom_name of book.get_names()){
-		const atom_def = book.get_definition(atom_name);
-		const dock_def = atom_def.dock;
+		const dock_def = book.get_dock_definition(atom_name);
 		if(!dock_def || !dock_def.url){
 			throw urn_exc.create(`INVALID_DOCK_DEF`, `Invalid dock definition for \`${atom_name}\``);
 		}
@@ -118,8 +116,7 @@ export function get_route_name<A extends schema.AtomName, R extends schema.Route
 	http_method:types.RouteMethod
 ):R | undefined{
 	// const atom_dock = _get_atom_dock(atom_name);
-	const atom_def = book.get_definition(atom_name);
-	const dock_def = atom_def.dock;
+	const dock_def = book.get_dock_definition(atom_name);
 	if(!dock_def || !dock_def.routes){
 		return undefined;
 	}
@@ -166,7 +163,7 @@ export function get_route_name<A extends schema.AtomName, R extends schema.Route
 export function is_auth_request(atom_name: schema.AtomName, atom_path: string)
 		:boolean{
 	// const dock_def = book.dock.get_definition(atom_name);
-	const dock_def = book.get_definition(atom_name).dock;
+	const dock_def = book.get_dock_definition(atom_name);
 	if(dock_def && dock_def.auth_url && dock_def.auth_url === atom_path){
 		return true;
 	}
@@ -179,7 +176,7 @@ export function get_params_from_route_path<A extends schema.AtomName, R extends 
 	route_path: string
 ):types.Api.Request.Params<A,R>{
 	// const atom_dock = _get_atom_dock(atom_name);
-	const dock_def = book.get_definition(atom_name).dock;
+	const dock_def = book.get_dock_definition(atom_name);
 	if(!dock_def || !dock_def.routes){
 		return {} as types.Api.Request.Params<A,R>;
 	}

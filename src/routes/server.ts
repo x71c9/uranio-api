@@ -14,27 +14,27 @@ import * as types from '../types';
 
 import {schema} from '../sch/index';
 
-import {Book as ClientBook} from '../typ/book_cln';
+// import {Book as ClientBook} from '../typ/book_cln';
 
 import {add_media_routes, default_routes as cln_default_routes} from './client';
 
-import {
-	route_def as common_route_def,
-	atom_dock_with_defaults as common_atom_dock_with_defaults
-} from './common';
+// import {
+//   route_def as common_route_def,
+//   atom_dock_with_defaults as common_atom_dock_with_defaults
+// } from './common';
 
-export function route_def<A extends schema.AtomName, R extends schema.RouteName<A>>(atom_name:A, route_name:R)
-		:types.Book.Definition.Dock.Routes.Route<A,R>{
-	const server_default_routes = return_default_routes(atom_name) as ClientBook.Definition.Dock.Routes;
-	return common_route_def(server_default_routes, atom_name, route_name);
-}
+// export function route_def<A extends schema.AtomName, R extends schema.RouteName<A>>(atom_name:A, route_name:R)
+//     :types.Book.Definition.Dock.Routes.Route<A,R>{
+//   const server_default_routes = return_default_routes(atom_name) as ClientBook.Definition.Dock.Routes;
+//   return common_route_def(server_default_routes, atom_name, route_name);
+// }
 
-export function atom_dock_with_defaults<A extends core.schema.AtomName>(
-	default_routes:ClientBook.Definition.Dock.Routes,
-	atom_name:A
-):types.Book.Definition.Dock<A>{
-	return common_atom_dock_with_defaults(default_routes, atom_name) as types.Book.Definition.Dock<A>;
-}
+// export function atom_dock_with_defaults<A extends core.schema.AtomName>(
+//   default_routes:ClientBook.Definition.Dock.Routes,
+//   atom_name:A
+// ):types.Book.Definition.Dock<A>{
+//   return common_atom_dock_with_defaults(default_routes, atom_name) as types.Book.Definition.Dock<A>;
+// }
 
 export function return_default_routes<A extends core.schema.AtomName>(atom_name:A)
 		:types.Book.Definition.Dock.Routes<A>{

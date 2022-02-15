@@ -19,7 +19,7 @@ import * as types from '../types';
 import {schema} from '../sch/index';
 
 export function register<A extends schema.AtomName>(atom_definition:types.Book.Definition<A>, atom_name?:string)
-		:types.Book.Definition<A>{
+		:string{
 	// let final_atom_name = `undefined_atom`;
 	// if(atom_name){
 	//   final_atom_name = atom_name;

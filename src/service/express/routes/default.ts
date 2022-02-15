@@ -6,9 +6,10 @@
 
 import express from 'express';
 
-import {urn_log, urn_exception} from 'urn-lib';
+// import {urn_log, urn_exception} from 'urn-lib';
+import {urn_log} from 'urn-lib';
 
-const urn_exc = urn_exception.init(`EXPRESS_ROUTES_DEFAULT`,`Express routes default module`);
+// const urn_exc = urn_exception.init(`EXPRESS_ROUTES_DEFAULT`,`Express routes default module`);
 
 import * as book from '../../../book/index';
 
@@ -16,7 +17,7 @@ import * as types from '../../../types';
 
 import {schema} from '../../../sch/index';
 
-import {return_default_routes} from '../../../routes/server';
+// import {return_default_routes} from '../../../routes/server';
 
 import {route_middleware} from '../../../mdlw/index';
 
@@ -31,27 +32,30 @@ export function create_express_route<A extends schema.AtomName>(atom_name:A)
 	
 	const router = express.Router();
 	
-	const dock_def = book.get_definition(atom_name).dock;
+	// const dock_def = book.get_dock_definition(atom_name);
 	
-	const default_routes = return_default_routes(atom_name);
+	// const default_routes = return_default_routes(atom_name);
 	
-	if(!dock_def){
-		throw urn_exc.create_invalid_book(
-			`INVALID_DOCK_DEF`,
-			`Cannot create express route. Invalid dock definition.`
-		);
-	}
-	if(!dock_def.routes){
-		dock_def.routes = default_routes;
-	}else{
-		// custom route go before.
-		dock_def.routes = {
-			...dock_def.routes,
-			...default_routes
-		};
-	}
+	// if(!dock_def){
+	//   throw urn_exc.create_invalid_book(
+	//     `INVALID_DOCK_DEF`,
+	//     `Cannot create express route. Invalid dock definition.`
+	//   );
+	// }
+	// if(!dock_def.routes){
+	//   dock_def.routes = default_routes;
+	// }else{
+	//   // custom route go before.
+	//   dock_def.routes = {
+	//     ...dock_def.routes,
+	//     ...default_routes
+	//   };
+	// }
 	
-	for(const [_route_name, route_def] of Object.entries(dock_def.routes)){
+	const routes_definition = book.get_routes_definition_with_defaults(atom_name);
+	// console.log(routes_definition);
+	
+	for(const [_route_name, route_def] of Object.entries(routes_definition)){
 		switch(route_def.method){
 			case types.RouteMethod.GET: {
 				router.get(route_def.url, _return_express_middleware());

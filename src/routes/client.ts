@@ -8,12 +8,12 @@ import core from 'uranio-core';
 
 import * as types from '../cln/types';
 
-import {schema} from '../sch/index';
+// import {schema} from '../sch/index';
 
-import {
-	route_def as common_route_def,
-	atom_dock_with_defaults as common_atom_dock_with_defaults
-} from './common';
+// import {
+//   route_def as common_route_def,
+//   atom_dock_with_defaults as common_atom_dock_with_defaults
+// } from './common';
 
 /**
  *
@@ -109,17 +109,17 @@ export function add_media_routes():typeof default_routes{
 	return cloned_default_routes as typeof default_routes;
 }
 
-export function route_def<A extends schema.AtomName>(atom_name:A, route_name:schema.RouteName<A>)
-		:types.Book.Definition.Dock.Routes.Route{
+// export function route_def<A extends schema.AtomName>(atom_name:A, route_name:schema.RouteName<A>)
+//     :types.Book.Definition.Dock.Routes.Route{
 	
-	const cloned_default_routes = add_media_routes();
+//   const cloned_default_routes = add_media_routes();
 	
-	return common_route_def(cloned_default_routes as any, atom_name, route_name);
-}
+//   return common_route_def(cloned_default_routes as any, atom_name, route_name);
+// }
 
-export function atom_dock_with_defaults(
-	default_routes:types.Book.Definition.Dock.Routes,
-	atom_name:schema.AtomName
-):types.Book.Definition.Dock{
-	return common_atom_dock_with_defaults(default_routes, atom_name);
-}
+// export function atom_dock_with_defaults(
+//   default_routes:types.Book.Definition.Dock.Routes,
+//   atom_name:schema.AtomName
+// ):types.Book.Definition.Dock{
+//   return common_atom_dock_with_defaults(default_routes, atom_name);
+// }
