@@ -49,6 +49,21 @@ export const default_routes = {
 		url: '/:id',
 		query: ['options'],
 	},
+	insert: {
+		method: types.RouteMethod.POST,
+		action: core.types.AuthAction.WRITE,
+		url: '/',
+	},
+	update: {
+		method: types.RouteMethod.POST,
+		action: core.types.AuthAction.WRITE,
+		url: '/:id',
+	},
+	delete: {
+		method: types.RouteMethod.DELETE,
+		action: core.types.AuthAction.WRITE,
+		url: '/:id',
+	},
 	insert_multiple: {
 		method: types.RouteMethod.POST,
 		action: core.types.AuthAction.WRITE,
@@ -74,21 +89,6 @@ export const default_routes = {
 		},
 		url: '/multiple/:ids',
 	},
-	insert: {
-		method: types.RouteMethod.POST,
-		action: core.types.AuthAction.WRITE,
-		url: '/',
-	},
-	update: {
-		method: types.RouteMethod.POST,
-		action: core.types.AuthAction.WRITE,
-		url: '/:id',
-	},
-	delete: {
-		method: types.RouteMethod.DELETE,
-		action: core.types.AuthAction.WRITE,
-		url: '/:id',
-	},
 } as const;
 
 export function add_media_routes():typeof default_routes{
@@ -109,7 +109,7 @@ export function add_media_routes():typeof default_routes{
 	return cloned_default_routes as typeof default_routes;
 }
 
-export function route_def<A extends schema.AtomName>(atom_name:A, route_name:types.RouteName<A>)
+export function route_def<A extends schema.AtomName>(atom_name:A, route_name:schema.RouteName<A>)
 		:types.Book.Definition.Dock.Routes.Route{
 	
 	const cloned_default_routes = add_media_routes();

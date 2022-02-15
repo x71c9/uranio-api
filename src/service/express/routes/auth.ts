@@ -41,7 +41,7 @@ export function create_express_auth_route<A extends schema.AuthName>(atom_name:A
 	
 }
 
-function _return_express_auth_middleware<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth>(handler: types.AuthHandler<A,R,D>){
+function _return_express_auth_middleware<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth>(handler: types.AuthHandler<A,R,D>){
 	return async (
 		req: express.Request,
 		res: express.Response,

@@ -20,7 +20,7 @@ import * as book_cln from './book_cln';
 
 import {Api as ApiRequest} from './request';
 
-import {RouteName} from './route';
+// import {RouteName} from './route';
 
 import {schema} from '../sch/index';
 
@@ -72,22 +72,22 @@ export namespace Book {
 		export namespace Dock {
 			
 			export type Routes<A extends schema.AtomName> = {
-				[k in RouteName<A>]?: Routes.Route<A,k>
+				[k in schema.RouteName<A>]?: Routes.Route<A,k>
 			}
 			
 			// export type Routes = {
-			//   [k in RouteName]?: Routes.Route<k>
+			//   [k in schema.RouteName]?: Routes.Route<k>
 			// }
 			
 			export namespace Routes {
 				
-				export type Route<A extends schema.AtomName, R extends RouteName<A>, D extends schema.Depth = 0> =
+				export type Route<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0> =
 					book_cln.Book.Definition.Dock.Routes.Route & {
 						call?: Route.Call<A, R, D>,
 					}
 				
 				export namespace Route {
-					export type Call<A extends schema.AtomName, R extends RouteName<A>, D extends schema.Depth = 0> =
+					export type Call<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0> =
 						(route_request: ApiRequest.Request<A,R,D>) => any
 				}
 				
@@ -149,7 +149,7 @@ export namespace Book {
 	
 }
 
-// type RouteOfRoute<A extends schema.AtomName, k extends RouteName<A>> =
+// type RouteOfRoute<A extends schema.AtomName, k extends schema.RouteName<A>> =
 //   book_cln.Book.Definition.Dock.Routes.Route & {
 //     call?: Book.Definition.Dock.Routes.Route.Call<A, k>
 //   }

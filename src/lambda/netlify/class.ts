@@ -77,7 +77,7 @@ class NetlifyLambda implements Lambda {
 		}
 	}
 	
-	public async lambda_route<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth>(
+	public async lambda_route<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth>(
 		api_request:types.Api.Request<A,R,D>
 	){
 		if(api_request.is_auth){
@@ -179,7 +179,7 @@ function _lambda_request_to_partial_api_request(event: LambdaEvent, context: Lam
 	const api_request:Partial<types.Api.Request<any,any,any>> = {
 		...api_request_paths,
 		method: event.httpMethod,
-		params: {},
+		params: {} as any,
 		query: map_lambda_query_params(event.queryStringParameters || {}),
 	};
 	

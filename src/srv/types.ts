@@ -26,6 +26,6 @@ export * from '../typ/conf';
 
 export * from '../typ/request';
 
-export * from '../typ/route';
+// export * from '../typ/route';
 
 

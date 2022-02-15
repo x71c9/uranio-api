@@ -16,7 +16,7 @@ import * as types from '../../../types';
 
 import {schema} from '../../../sch/index';
 
-import {return_default_routes} from '../../../routes/index';
+import {return_default_routes} from '../../../routes/server';
 
 import {route_middleware} from '../../../mdlw/index';
 

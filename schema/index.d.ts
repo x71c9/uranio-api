@@ -228,7 +228,9 @@ declare module 'uranio-schema/typ/atom' {
 		never
 
 
-	export type RouteCustomName<A extends AtomName> =
+	type RouteDefaultName = 'count' | 'find_one' | 'find' | 'find_id' | 'insert' | 'update' | 'delete' | 'insert_multiple' | 'update_multiple' | 'delete_multiple'
+
+	type RouteCustomName<A extends AtomName> =
 		A extends 'superuser' ? never :
 		A extends 'user' ? never :
 		A extends 'group' ? never :
@@ -237,7 +239,23 @@ declare module 'uranio-schema/typ/atom' {
 		A extends 'request' ? never :
 	never
 
-	export type CustomRouteURL<A extends AtomName, R extends RouteCustomName<A>> =
+	export type RouteName<A extends schema.AtomName> =
+		RouteCustomName<A> | RouteDefaultName;
+
+	type DefaultRouteURL<A extends schema.AtomName, R extends schema.RouteName<A>> =
+		R extends 'count' ? '/count' :
+		R extends 'find_one' ? '/first' :
+		R extends 'find' ? '/' :
+		R extends 'find_id' ? '/:id' :
+		R extends 'insert' ? '/' :
+		R extends 'update' ? '/:id' :
+		R extends 'delete' ? '/:id' :
+		R extends 'insert_multiple' ? '/multiple' :
+		R extends 'update_multiple' ? '/multiple/:ids' :
+		R extends 'delete_multiple' ? '/multiple/:ids' :
+		never
+
+	type CustomRouteURL<A extends AtomName, R extends RouteCustomName<A>> =
 		A extends 'superuser' ? never :
 		A extends 'user' ? never :
 		A extends 'group' ? never :
@@ -248,16 +266,39 @@ declare module 'uranio-schema/typ/atom' {
 		A extends 'request' ? never :
 	never
 
-	export type CustomRouteQueryParamArray<A extends AtomName, R extends RouteCustomName<A>> =
+	export type RouteURL<A extends schema.AtomName, R extends schema.RouteName<A>> =
+		R extends RouteCustomName<A> ? CustomRouteURL<A,R> :
+		R extends RouteName<A> ? DefaultRouteURL<A,R> :
+		never
+
+	type DefaultRouteQueryParam<R extends RouteDefaultName> =
+		R extends 'count' ? 'filter' :
+		R extends 'find_one' ? 'filter' | 'options' :
+		R extends 'find' ? 'filter' | 'options' :
+		R extends 'find_id' ? 'options' :
+		R extends 'insert' ? never :
+		R extends 'update' ? never :
+		R extends 'delete' ? never :
+		R extends 'insert_multiple' ? never :
+		R extends 'update_multiple' ? never :
+		R extends 'delete_multiple' ? never :
+		never
+
+	type CustomRouteQueryParam<A extends AtomName, R extends RouteCustomName<A>> =
 		A extends 'superuser' ? never :
 		A extends 'user' ? never :
 		A extends 'group' ? never :
 		A extends 'media' ? never :
 		A extends 'error' ?
-			R extends 'errroute' ? ['title','length'] :
+			R extends 'errroute' ? 'title' | 'length' :
 			never :
 		A extends 'request' ? never :
 	never
+
+	export type RouteQueryParam<A extends schema.AtomName, R extends schema.RouteName<A>> =
+		R extends RouteDefaultName ? DefaultRouteQueryParam<R> :
+		CustomRouteQueryParam<A,R> extends string ? CustomRouteQueryParam<A,R> :
+		never
 
 	export {};/** --uranio-generate-end */
 

@@ -17,7 +17,7 @@ import {schema} from '../sch/index';
 export function route_def<A extends schema.AtomName>(
 	default_routes:types.Book.Definition.Dock.Routes,
 	atom_name:A,
-	route_name:types.RouteName<A>
+	route_name:schema.RouteName<A>
 ):types.Book.Definition.Dock.Routes.Route{
 		
 	const atom_dock = atom_dock_with_defaults(default_routes, atom_name);
