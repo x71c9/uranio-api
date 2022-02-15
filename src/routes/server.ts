@@ -23,7 +23,7 @@ import {
 	atom_dock_with_defaults as common_atom_dock_with_defaults
 } from './common';
 
-export function route_def<A extends schema.AtomName, R extends types.RouteName<A>>(atom_name:A, route_name:R)
+export function route_def<A extends schema.AtomName, R extends schema.RouteName<A>>(atom_name:A, route_name:R)
 		:types.Book.Definition.Dock.Routes.Route<A,R>{
 	const server_default_routes = return_default_routes(atom_name) as ClientBook.Definition.Dock.Routes;
 	return common_route_def(server_default_routes, atom_name, route_name);

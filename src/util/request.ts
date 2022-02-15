@@ -112,7 +112,7 @@ export function get_atom_name_from_atom_path(atom_path:string)
 	return undefined;
 }
 
-export function get_route_name<A extends schema.AtomName, R extends types.RouteName<A>>(
+export function get_route_name<A extends schema.AtomName, R extends schema.RouteName<A>>(
 	atom_name:A,
 	route_path:string,
 	http_method:types.RouteMethod
@@ -173,7 +173,7 @@ export function is_auth_request(atom_name: schema.AtomName, atom_path: string)
 	return false;
 }
 
-export function get_params_from_route_path<A extends schema.AtomName, R extends types.RouteName<A>>(
+export function get_params_from_route_path<A extends schema.AtomName, R extends schema.RouteName<A>>(
 	atom_name: A,
 	route_name: R,
 	route_path: string
@@ -260,7 +260,7 @@ export function store_error(
 	});
 }
 
-export function api_handle_exception<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth>(
+export function api_handle_exception<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth>(
 	ex: urn_exception.ExceptionInstance,
 	partial_api_request: Partial<types.Api.Request<A,R,D>>
 ):urn_response.Fail<any>{
@@ -313,7 +313,7 @@ export function api_handle_exception<A extends schema.AtomName, R extends types.
 	return urn_res;
 }
 
-export function api_handle_and_store_exception<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth>(
+export function api_handle_and_store_exception<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth>(
 	ex: urn_exception.ExceptionInstance,
 	partial_api_request: Partial<types.Api.Request<A,R,D>>,
 ):urn_response.Fail<any>{
@@ -323,7 +323,7 @@ export function api_handle_and_store_exception<A extends schema.AtomName, R exte
 	return _clean_response(urn_res);
 }
 
-export function partial_api_request_to_atom_request<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth>(
+export function partial_api_request_to_atom_request<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth>(
 	partial_api_request:Partial<types.Api.Request<A,R,D>>
 ):schema.AtomShape<'request'>{
 	const request_shape:schema.AtomShape<'request'> = {
@@ -357,7 +357,7 @@ export function partial_api_request_to_atom_request<A extends schema.AtomName, R
 	return request_shape;
 }
 
-export function validate_request<A extends schema.AtomName, R extends types.RouteName<A>, D extends schema.Depth>(
+export function validate_request<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth>(
 	api_request:Partial<types.Api.Request<A,R,D>>
 ):types.Api.Request<A,R,D>{
 	if(typeof api_request.full_path !== 'string' || api_request.full_path === ''){

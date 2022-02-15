@@ -26,13 +26,13 @@ import {schema} from '../../../sch/index';
 
 export function express_request_to_partial_api_request<
 	A extends schema.AtomName,
-	R extends types.RouteName<A>,
+	R extends schema.RouteName<A>,
 	D extends schema.Depth
 	>(req:express.Request):Partial<types.Api.Request<A,R,D>>{
 	
 	let api_request:Partial<types.Api.Request<any,any,any>> = {
 		full_path: req.originalUrl,
-		params: req.params,
+		params: req.params as any,
 		query: req.query
 	};
 	

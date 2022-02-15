@@ -9,16 +9,16 @@
 // import {routes_book} from 'uranio-books/routes';
 // import {dock_book} from 'uranio-books/dock';
 
-import {schema} from '../sch/index';
+// import {schema} from '../sch/index';
 
-import {default_routes} from '../routes/client';
+// import {default_routes} from '../routes/client';
 
 // type AtomDockProp<A extends AtomName> = typeof routes_book[A]['dock'];
 
-export type RouteDefaultName =
-	keyof typeof default_routes extends string ?
-	keyof typeof default_routes :
-	never;
+// export type RouteDefaultName =
+//   keyof typeof default_routes extends string ?
+//   keyof typeof default_routes :
+//   never;
 
 // This format is preferable than abstracting the types becase it will show
 // all the possibilities when a string doesn't match one of the route name.
@@ -36,8 +36,8 @@ export type RouteDefaultName =
 //   never :
 //   never;
 
-export type RouteName<A extends schema.AtomName> =
-	schema.RouteCustomName<A> | RouteDefaultName;
+// export type RouteName<A extends schema.AtomName> =
+//   schema.RouteCustomName<A> | RouteDefaultName;
 
 // export type RouteName<A extends AtomName> =
 //   RouteCustomName<A> | RouteDefaultName;

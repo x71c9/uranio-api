@@ -12,6 +12,8 @@ import uranio_core_client from 'uranio-core/client';
 
 console.log(uranio_core_client);
 
+// import api from './index';
+
 // import {urn_log} from 'urn-lib';
 
 // urn_log.defaults.log_level = urn_log.LogLevel.FUNCTION_DEBUG;
