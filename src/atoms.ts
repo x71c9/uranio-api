@@ -4,10 +4,6 @@
  * @packageDocumentation
  */
 
-// import {core.types.BookSecurity, core.types.BookProperty, core.types.BookPermission} from './typ/book_srv';
-
-// import * as types from './types';
-
 import core from 'uranio-core';
 
 export const atom_book = {
