@@ -235,7 +235,7 @@ declare module 'uranio-schema/typ/atom' {
 		A extends 'user' ? never :
 		A extends 'group' ? never :
 		A extends 'media' ? never :
-		A extends 'error' ? 'errroute' :
+		A extends 'error' ? never :
 		A extends 'request' ? never :
 	never
 
@@ -260,9 +260,7 @@ declare module 'uranio-schema/typ/atom' {
 		A extends 'user' ? never :
 		A extends 'group' ? never :
 		A extends 'media' ? never :
-		A extends 'error' ?
-			R extends 'errroute' ? '/errrr' :
-			never :
+		A extends 'error' ? never :
 		A extends 'request' ? never :
 	never
 
@@ -289,9 +287,7 @@ declare module 'uranio-schema/typ/atom' {
 		A extends 'user' ? never :
 		A extends 'group' ? never :
 		A extends 'media' ? never :
-		A extends 'error' ?
-			R extends 'errroute' ? 'title' | 'length' :
-			never :
+		A extends 'error' ? never :
 		A extends 'request' ? never :
 	never
 
