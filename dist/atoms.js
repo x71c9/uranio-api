@@ -9,8 +9,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.atom_book = void 0;
-// import {core.types.BookSecurity, core.types.BookProperty, core.types.BookPermission} from './typ/book_srv';
-// import * as types from './types';
 const uranio_core_1 = __importDefault(require("uranio-core"));
 exports.atom_book = {
     error: {
