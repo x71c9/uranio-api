@@ -3,6 +3,7 @@
  *
  * @packageDocumentation
  */
+import core from 'uranio-core';
 import * as types from '../cln/types';
 /**
  *
@@ -16,51 +17,51 @@ import * as types from '../cln/types';
 export declare const default_routes: {
     readonly count: {
         readonly method: types.RouteMethod.GET;
-        readonly action: any;
+        readonly action: core.types.AuthAction.READ;
         readonly url: "/count";
         readonly query: readonly ["filter"];
     };
     readonly find_one: {
         readonly method: types.RouteMethod.GET;
-        readonly action: any;
+        readonly action: core.types.AuthAction.READ;
         readonly url: "/first";
         readonly query: readonly ["filter", "options"];
     };
     readonly find: {
         readonly method: types.RouteMethod.GET;
-        readonly action: any;
+        readonly action: core.types.AuthAction.READ;
         readonly url: "/";
         readonly query: readonly ["filter", "options"];
     };
     readonly find_id: {
         readonly method: types.RouteMethod.GET;
-        readonly action: any;
+        readonly action: core.types.AuthAction.READ;
         readonly url: "/:id";
         readonly query: readonly ["options"];
     };
     readonly insert: {
         readonly method: types.RouteMethod.POST;
-        readonly action: any;
+        readonly action: core.types.AuthAction.WRITE;
         readonly url: "/";
     };
     readonly update: {
         readonly method: types.RouteMethod.POST;
-        readonly action: any;
+        readonly action: core.types.AuthAction.WRITE;
         readonly url: "/:id";
     };
     readonly delete: {
         readonly method: types.RouteMethod.DELETE;
-        readonly action: any;
+        readonly action: core.types.AuthAction.WRITE;
         readonly url: "/:id";
     };
     readonly insert_multiple: {
         readonly method: types.RouteMethod.POST;
-        readonly action: any;
+        readonly action: core.types.AuthAction.WRITE;
         readonly url: "/multiple";
     };
     readonly update_multiple: {
         readonly method: types.RouteMethod.POST;
-        readonly action: any;
+        readonly action: core.types.AuthAction.WRITE;
         readonly params: {
             readonly ids: {
                 readonly array: true;
@@ -70,7 +71,7 @@ export declare const default_routes: {
     };
     readonly delete_multiple: {
         readonly method: types.RouteMethod.DELETE;
-        readonly action: any;
+        readonly action: core.types.AuthAction.WRITE;
         readonly params: {
             readonly ids: {
                 readonly array: true;
