@@ -34,7 +34,7 @@ const book = __importStar(require("../book/index"));
 const client_1 = require("../routes/client");
 exports.process_params = {
     urn_command: `schema`,
-    urn_base_schema: `./types/schema.d.ts`,
+    urn_base_schema: `./.uranio/generate/base/schema.d.ts`,
     urn_output_dir: `.`
 };
 function schema() {
@@ -83,10 +83,12 @@ function _generate_route_query_param(atom_book) {
     let text = '';
     text += _generate_route_default_query_param();
     text += _generate_route_custom_query_param(atom_book);
-    text += `\texport type RouteQueryParam<A extends schema.AtomName, `;
-    text += `R extends schema.RouteName<A>> =\n`;
+    text += `\texport type RouteQueryParam<A extends AtomName, `;
+    text += `R extends RouteName<A>> =\n`;
     text += `\t\tR extends RouteDefaultName ? DefaultRouteQueryParam<R> :\n`;
+    text += `\t\tR extends RouteCustomName<A> ?\n`;
     text += `\t\tCustomRouteQueryParam<A,R> extends string ? CustomRouteQueryParam<A,R> :\n`;
+    text += `\t\tnever :\n`;
     text += `\t\tnever\n`;
     text += `\n`;
     return text;
@@ -112,7 +114,7 @@ function _generate_route_url(atom_book) {
     let text = '';
     text += _generate_route_default_url();
     text += _generate_route_custom_url(atom_book);
-    text += `\texport type RouteURL<A extends schema.AtomName, R extends schema.RouteName<A>> =\n`;
+    text += `\texport type RouteURL<A extends AtomName, R extends RouteName<A>> =\n`;
     text += `\t\tR extends RouteCustomName<A> ? CustomRouteURL<A,R> :\n`;
     text += `\t\tR extends RouteName<A> ? DefaultRouteURL<A,R> :\n`;
     text += `\t\tnever\n`;
@@ -121,7 +123,7 @@ function _generate_route_url(atom_book) {
 }
 function _generate_route_default_url() {
     let text = '';
-    text += `\ttype DefaultRouteURL<A extends schema.AtomName, R extends schema.RouteName<A>> =\n`;
+    text += `\ttype DefaultRouteURL<A extends AtomName, R extends RouteName<A>> =\n`;
     for (const [key, val] of Object.entries(client_1.default_routes)) {
         text += `\t\tR extends '${key}' ? '${val.url}' :\n`;
     }
@@ -133,7 +135,7 @@ function _generate_route_name(atom_book) {
     let text = '';
     text += _generate_route_default_name();
     text += _generate_route_custom_name(atom_book);
-    text += `\texport type RouteName<A extends schema.AtomName> =\n`;
+    text += `\texport type RouteName<A extends AtomName> =\n`;
     text += `\t\tRouteCustomName<A> | RouteDefaultName;\n\n`;
     return text;
 }
