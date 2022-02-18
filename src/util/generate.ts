@@ -4,13 +4,11 @@
  * @packageDocumentation
  */
 
-import fs from 'fs';
-
 import core from 'uranio-core';
 
 import {urn_log} from 'urn-lib';
 
-import {schema} from '../sch/index';
+import {schema as schema_types} from '../sch/index';
 
 import * as book from '../book/index';
 
@@ -18,42 +16,48 @@ import * as types from '../types';
 
 import {default_routes} from '../routes/client';
 
-let urn_generate_base_schema = `./types/schema.d.ts`;
-let urn_generate_output_dir = `.`;
+export let process_params = {
+	urn_command: `schema`,
+	urn_base_schema: `./types/schema.d.ts`,
+	urn_output_dir: `.`
+};
 
-export function generate():void{
-	
-	urn_log.debug('Generating uranio api schema...');
-	
-	core.util.generate();
-	
-	const text = _generate_schema_text();
-	_save_schema_declaration_file(text);
-	
+export function schema():string{
+	urn_log.debug('Started generating uranio api schema...');
+	_init_generate();
+	const core_schema = core.util.generate.schema();
+	const text = _generate_uranio_schema_text(core_schema);
 	urn_log.debug(`API Schema generated.`);
+	return text;
 }
 
-function _save_schema_declaration_file(text:string){
-	for(const argv of process.argv){
-		const splitted = argv.split('=');
-		if(
-			splitted[0] === 'urn_generate_base_schema'
-			&& typeof splitted[1] === 'string'
-			&& splitted[1] !== ''
-		){
-			urn_generate_base_schema = splitted[1];
-		}else if(
-			splitted[0] === 'urn_generate_output_dir'
-			&& typeof splitted[1] === 'string'
-			&& splitted[1] !== ''
-		){
-			urn_generate_output_dir = splitted[1];
-		}
-	}
-	_replace_text(urn_generate_base_schema, urn_generate_output_dir, text);
+export function schema_and_save():void{
+	const text = schema();
+	save_schema(text);
+	urn_log.debug(`Schema generated and saved.`);
 }
 
-function _generate_schema_text(){
+export function save_schema(text:string):void{
+	return core.util.generate.save_schema(text);
+}
+
+function _init_generate(){
+	process_params = core.util.generate.process_params;
+}
+
+function _generate_uranio_schema_text(core_schema:string){
+	const txt = _generate_api_schema_text();
+	const split_text = '\texport {};/** --uranio-generate-end */';
+	const data_splitted = core_schema.split(split_text);
+	let new_data = '';
+	new_data += data_splitted[0];
+	new_data += txt; + '\n\n\t';
+	new_data += split_text;
+	new_data += data_splitted[1];
+	return new_data;
+}
+
+function _generate_api_schema_text(){
 	const atom_book = book.get_all_definitions();
 	let txt = '';
 	txt += _generate_route_name(atom_book);
@@ -66,9 +70,12 @@ function _generate_route_query_param(atom_book:types.Book){
 	let text = '';
 	text += _generate_route_default_query_param();
 	text += _generate_route_custom_query_param(atom_book);
-	text += `\texport type RouteQueryParam<A extends schema.AtomName, R extends schema.RouteName<A>> =\n`;
+	text += `\texport type RouteQueryParam<A extends AtomName, `;
+	text += `R extends RouteName<A>> =\n`;
 	text += `\t\tR extends RouteDefaultName ? DefaultRouteQueryParam<R> :\n`;
+	text += `\t\tR extends RouteCustomName<A> ?\n`;
 	text += `\t\tCustomRouteQueryParam<A,R> extends string ? CustomRouteQueryParam<A,R> :\n`;
+	text += `\t\tnever :\n`;
 	text += `\t\tnever\n`;
 	text += `\n`;
 	return text;
@@ -95,7 +102,7 @@ function _generate_route_url(atom_book:types.Book){
 	let text = '';
 	text += _generate_route_default_url();
 	text += _generate_route_custom_url(atom_book);
-	text += `\texport type RouteURL<A extends schema.AtomName, R extends schema.RouteName<A>> =\n`;
+	text += `\texport type RouteURL<A extends AtomName, R extends RouteName<A>> =\n`;
 	text += `\t\tR extends RouteCustomName<A> ? CustomRouteURL<A,R> :\n`;
 	text += `\t\tR extends RouteName<A> ? DefaultRouteURL<A,R> :\n`;
 	text += `\t\tnever\n`;
@@ -105,7 +112,7 @@ function _generate_route_url(atom_book:types.Book){
 
 function _generate_route_default_url(){
 	let text = '';
-	text += `\ttype DefaultRouteURL<A extends schema.AtomName, R extends schema.RouteName<A>> =\n`;
+	text += `\ttype DefaultRouteURL<A extends AtomName, R extends RouteName<A>> =\n`;
 	for(const [key, val] of Object.entries(default_routes)){
 		text += `\t\tR extends '${key}' ? '${val.url}' :\n`;
 	}
@@ -118,7 +125,7 @@ function _generate_route_name(atom_book:types.Book){
 	let text = '';
 	text += _generate_route_default_name();
 	text += _generate_route_custom_name(atom_book);
-	text += `\texport type RouteName<A extends schema.AtomName> =\n`;
+	text += `\texport type RouteName<A extends AtomName> =\n`;
 	text += `\t\tRouteCustomName<A> | RouteDefaultName;\n\n`;
 	return text;
 }
@@ -183,27 +190,11 @@ function _generate_route_custom_query_param(atom_book:types.Book){
 	return text;
 }
 
-function _route_custom_name<A extends schema.AtomName>(atom_def:types.Book.Definition<A>){
+function _route_custom_name<A extends schema_types.AtomName>(atom_def:types.Book.Definition<A>){
 	if(!atom_def.dock || !atom_def.dock.routes){
 		return 'never';
 	}
 	const route_names = Object.keys(atom_def.dock.routes).map((k) => `'${k}'`);
 	return route_names.join(' | ');
-}
-
-function _replace_text(base_schema_path:string, output_dir_path:string, txt:string){
-	
-	const data = fs.readFileSync(base_schema_path, {encoding: 'utf8'});
-	
-	const split_text = '\texport {};/** --uranio-generate-end */';
-	const data_splitted = data.split(split_text);
-	
-	let new_data = '';
-	new_data += data_splitted[0];
-	new_data += txt; + '\n\n\t';
-	new_data += split_text;
-	new_data += data_splitted[1];
-	
-	fs.writeFileSync(`${output_dir_path}/schema.d.ts`, new_data);
 }
 
