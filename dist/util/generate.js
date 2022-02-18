@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.save_schema = exports.schema_and_save = exports.schema = exports.process_params = void 0;
+exports.init = exports.save_schema = exports.schema_and_save = exports.schema = exports.process_params = void 0;
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const urn_lib_1 = require("urn-lib");
 const book = __importStar(require("../book/index"));
@@ -39,7 +39,7 @@ exports.process_params = {
 };
 function schema() {
     urn_lib_1.urn_log.debug('Started generating uranio api schema...');
-    _init_generate();
+    init();
     const core_schema = uranio_core_1.default.util.generate.schema();
     const text = _generate_uranio_schema_text(core_schema);
     urn_lib_1.urn_log.debug(`API Schema generated.`);
@@ -56,9 +56,11 @@ function save_schema(text) {
     return uranio_core_1.default.util.generate.save_schema(text);
 }
 exports.save_schema = save_schema;
-function _init_generate() {
+function init() {
+    uranio_core_1.default.util.generate.init();
     exports.process_params = uranio_core_1.default.util.generate.process_params;
 }
+exports.init = init;
 function _generate_uranio_schema_text(core_schema) {
     const txt = _generate_api_schema_text();
     const split_text = '\texport {};/** --uranio-generate-end */';
