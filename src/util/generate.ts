@@ -24,7 +24,7 @@ export let process_params = {
 
 export function schema():string{
 	urn_log.debug('Started generating uranio api schema...');
-	_init_generate();
+	init();
 	const core_schema = core.util.generate.schema();
 	const text = _generate_uranio_schema_text(core_schema);
 	urn_log.debug(`API Schema generated.`);
@@ -41,7 +41,8 @@ export function save_schema(text:string):void{
 	return core.util.generate.save_schema(text);
 }
 
-function _init_generate(){
+export function init():void{
+	core.util.generate.init();
 	process_params = core.util.generate.process_params;
 }
 
