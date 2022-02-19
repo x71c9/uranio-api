@@ -30,7 +30,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.types = exports.util = exports.conf = exports.book = exports.routes = exports.lambda = exports.service = exports.core = void 0;
+exports.types = exports.log = exports.util = exports.conf = exports.book = exports.routes = exports.lambda = exports.service = exports.core = void 0;
 const uranio_core_1 = __importDefault(require("uranio-core"));
 exports.core = uranio_core_1.default;
 __exportStar(require("../sch/index"), exports);
@@ -46,14 +46,10 @@ const conf = __importStar(require("../conf/index"));
 exports.conf = conf;
 const util = __importStar(require("../util/index"));
 exports.util = util;
+const log = __importStar(require("../log/index"));
+exports.log = log;
 const types = __importStar(require("./types"));
 exports.types = types;
-/*
- * First level methods.
- * If other methods are added, urn-cli must be updated.
- * Go to urn-cli/src/cmd/transpose.ts and
- * add the new method names.
- */
 __exportStar(require("../init/index"), exports);
 __exportStar(require("../reg/index"), exports);
 //# sourceMappingURL=main.js.map
