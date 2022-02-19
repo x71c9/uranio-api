@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import {urn_exception} from 'urn-lib';
+import {urn_log, urn_exception} from 'urn-lib';
 
 const urn_exc = urn_exception.init('INIT_API_MODULE', `Api init module`);
 
@@ -20,8 +20,12 @@ import * as conf from '../conf/index';
 
 import * as book from '../book/index';
 
+import * as log from '../log/index';
+
 export function init(config?:types.Configuration)
 		:void{
+	
+	log.init(urn_log.defaults);
 	
 	core.init(config);
 	
@@ -32,6 +36,10 @@ export function init(config?:types.Configuration)
 	}
 	_validate_api_variables();
 	_validate_api_book();
+	
+	if(config && typeof config.log_level === 'number'){
+		urn_log.defaults.log_level = config.log_level;
+	}
 	
 	conf.set_initialize(true);
 }

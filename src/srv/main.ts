@@ -20,14 +20,10 @@ import * as conf from '../conf/index';
 
 import * as util from '../util/index';
 
+import * as log from '../log/index';
+
 import * as types from './types';
 
-/*
- * First level methods.
- * If other methods are added, urn-cli must be updated.
- * Go to urn-cli/src/cmd/transpose.ts and
- * add the new method names.
- */
 export * from '../init/index';
 
 export * from '../reg/index';
@@ -40,5 +36,6 @@ export {
 	book,
 	conf,
 	util,
+	log,
 	types
 };

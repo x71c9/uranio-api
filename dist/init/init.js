@@ -35,7 +35,9 @@ const defaults_1 = require("../conf/defaults");
 const client_1 = require("../routes/client");
 const conf = __importStar(require("../conf/index"));
 const book = __importStar(require("../book/index"));
+const log = __importStar(require("../log/index"));
 function init(config) {
+    log.init(urn_lib_1.urn_log.defaults);
     uranio_core_1.default.init(config);
     if (typeof config === 'undefined') {
         uranio_core_1.default.conf.set_from_env(defaults_1.api_config);
@@ -45,6 +47,9 @@ function init(config) {
     }
     _validate_api_variables();
     _validate_api_book();
+    if (config && typeof config.log_level === 'number') {
+        urn_lib_1.urn_log.defaults.log_level = config.log_level;
+    }
     conf.set_initialize(true);
 }
 exports.init = init;

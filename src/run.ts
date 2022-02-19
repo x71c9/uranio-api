@@ -6,13 +6,20 @@
 
 export * from './register';
 
+import {urn_log} from 'urn-lib';
+urn_log.init({
+	log_level: urn_log.LogLevel.FUNCTION_DEBUG,
+	debug_info: false,
+	color: false
+});
+
 import uranio from './index';
 uranio.init();
 
 const service = uranio.service.create();
 
 service.listen(() => {
-	console.log(`Listening on port ${uranio.conf.get(`service_port`)}...`);
+	urn_log.debug(`Listening on port ${uranio.conf.get(`service_port`)}...`);
 });
 
 // import uranio_core from 'uranio-core';

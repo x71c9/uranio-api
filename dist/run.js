@@ -19,11 +19,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./register"), exports);
+const urn_lib_1 = require("urn-lib");
+urn_lib_1.urn_log.init({
+    log_level: urn_lib_1.urn_log.LogLevel.FUNCTION_DEBUG,
+    debug_info: false,
+    color: false
+});
 const index_1 = __importDefault(require("./index"));
 index_1.default.init();
 const service = index_1.default.service.create();
 service.listen(() => {
-    console.log(`Listening on port ${index_1.default.conf.get(`service_port`)}...`);
+    urn_lib_1.urn_log.debug(`Listening on port ${index_1.default.conf.get(`service_port`)}...`);
 });
 // import uranio_core from 'uranio-core';
 // console.log(uranio_core);

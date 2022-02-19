@@ -27,13 +27,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.routes = exports.book = exports.types = exports.core = void 0;
+exports.routes = exports.log = exports.book = exports.types = exports.core = void 0;
 const client_1 = __importDefault(require("uranio-core/client"));
 exports.core = client_1.default;
 const routes = __importStar(require("../routes/client"));
 exports.routes = routes;
 const book = __importStar(require("../book/client"));
 exports.book = book;
+const log = __importStar(require("../log/index"));
+exports.log = log;
 const types = __importStar(require("./types"));
 exports.types = types;
 //# sourceMappingURL=main.js.map
