@@ -14,13 +14,9 @@
 
 import core from 'uranio-core';
 
-// import {route_book} from 'uranio-book/routes';
-
 import * as book_cln from './book_cln';
 
 import {Api as ApiRequest} from './request';
-
-// import {RouteName} from './route';
 
 import {schema} from '../sch/index';
 
@@ -28,25 +24,7 @@ export type Book = {
 	[k in schema.AtomName]?: Book.Definition<k>;
 }
 
-// export type DockBook = {
-//   [k in schema.AtomName]: Book.Definition.Dock<k>
-// }
-
 export namespace Book {
-	
-	// export type BasicDefinition<A extends schema.AtomName> =
-	//   core.types.Book.BasicDefinition &
-	//   { dock?: Definition.Dock<A> }
-	
-	// export type Definition<A extends schema.AtomName> =
-	//   Book.BasicDefinition<A> &
-	//   { bll?: Definition.Bll<A> }
-	
-	// export type Definition =
-	//   core.types.Book.Definition & {
-	//     bll?: Definition.Bll,
-	//     dock?: Definition.Dock
-	//   }
 	
 	export type Definition<A extends schema.AtomName> =
 		core.types.Book.Definition<A> & {
@@ -64,20 +42,11 @@ export namespace Book {
 				routes?: Dock.Routes<A>
 			};
 		
-		// export type Dock =
-		//   Omit<book_cln.Book.Definition.Dock, 'routes'> & {
-		//     routes?: Dock.Routes
-		//   };
-		
 		export namespace Dock {
 			
 			export type Routes<A extends schema.AtomName> = {
 				[k in schema.RouteName<A>]?: Routes.Route<A,k>
 			}
-			
-			// export type Routes = {
-			//   [k in schema.RouteName]?: Routes.Route<k>
-			// }
 			
 			export namespace Routes {
 				

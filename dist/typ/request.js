@@ -6,7 +6,6 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RouteMethod = void 0;
-// import {RouteName} from './route';
 var RouteMethod;
 (function (RouteMethod) {
     RouteMethod["GET"] = "GET";
