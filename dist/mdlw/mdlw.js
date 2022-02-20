@@ -168,6 +168,10 @@ function _validate_route(api_request) {
 }
 function _limit(api_request) {
     var _a;
+    const route_def = book.get_route_def(api_request.atom_name, api_request.route_name);
+    if (!Array.isArray(route_def.query) || !route_def.query.includes('options')) {
+        return api_request;
+    }
     let options = (_a = api_request.query) === null || _a === void 0 ? void 0 : _a.options;
     if (!options) {
         options = {};
