@@ -27,6 +27,7 @@ urn_lib_1.urn_log.init({
 });
 const index_1 = __importDefault(require("./index"));
 index_1.default.init();
+// console.log(uranio.conf.defaults.prefix_api);
 const service = index_1.default.service.create();
 service.listen(() => {
     urn_lib_1.urn_log.debug(`Listening on port ${index_1.default.conf.get(`service_port`)}...`);

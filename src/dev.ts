@@ -16,6 +16,8 @@ urn_log.init({
 import uranio from './index';
 uranio.init();
 
+// console.log(uranio.conf.defaults.prefix_api);
+
 const service = uranio.service.create();
 
 service.listen(() => {
