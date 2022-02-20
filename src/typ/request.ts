@@ -4,18 +4,9 @@
  * @packageDocumentation
  */
 
-// import {routes_book} from 'uranio-books/routes';
-// import {dock_book} from 'uranio-books/dock';
-
 import core from 'uranio-core';
 
-// import * as types from '../cln/types';
-
-// import * as routes from '../routes/client';
-
 import {schema} from '../sch/index';
-
-// import {RouteName} from './route';
 
 export enum RouteMethod {
 	GET = 'GET',

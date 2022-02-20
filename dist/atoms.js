@@ -4,47 +4,64 @@
  *
  * @packageDocumentation
  */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.atom_book = void 0;
-const uranio_core_1 = __importDefault(require("uranio-core"));
+// import core from 'uranio-core';
+const types = __importStar(require("./types"));
 exports.atom_book = {
     error: {
         plural: 'errors',
         read_only: true,
         connection: 'log',
         security: {
-            type: uranio_core_1.default.types.BookSecurity.UNIFORM,
-            _r: uranio_core_1.default.types.BookPermission.NOBODY
+            type: types.SecurityType.UNIFORM,
+            _r: types.PermissionType.NOBODY
         },
         properties: {
             status: {
-                type: uranio_core_1.default.types.BookProperty.INTEGER,
+                type: types.PropertyType.INTEGER,
                 label: 'Status'
             },
             msg: {
-                type: uranio_core_1.default.types.BookProperty.TEXT,
+                type: types.PropertyType.TEXT,
                 label: 'Message'
             },
             error_code: {
-                type: uranio_core_1.default.types.BookProperty.TEXT,
+                type: types.PropertyType.TEXT,
                 label: 'Error Code'
             },
             error_msg: {
-                type: uranio_core_1.default.types.BookProperty.TEXT,
+                type: types.PropertyType.TEXT,
                 label: 'Error Message'
             },
             request: {
-                type: uranio_core_1.default.types.BookProperty.ATOM,
+                type: types.PropertyType.ATOM,
                 label: 'Request',
                 atom: 'request',
                 delete_cascade: true,
                 optional: true
             },
             stack: {
-                type: uranio_core_1.default.types.BookProperty.LONG_TEXT,
+                type: types.PropertyType.LONG_TEXT,
                 label: 'Stack',
                 optional: true
             }
@@ -68,37 +85,37 @@ exports.atom_book = {
         read_only: true,
         connection: 'log',
         security: {
-            type: uranio_core_1.default.types.BookSecurity.UNIFORM,
-            _r: uranio_core_1.default.types.BookPermission.NOBODY
+            type: types.SecurityType.UNIFORM,
+            _r: types.PermissionType.NOBODY
         },
         properties: {
             full_path: {
-                type: uranio_core_1.default.types.BookProperty.TEXT,
+                type: types.PropertyType.TEXT,
                 label: "Full path",
             },
             route_path: {
-                type: uranio_core_1.default.types.BookProperty.TEXT,
+                type: types.PropertyType.TEXT,
                 label: "Route path",
                 optional: true
             },
             atom_path: {
-                type: uranio_core_1.default.types.BookProperty.TEXT,
+                type: types.PropertyType.TEXT,
                 label: "Atom path",
                 optional: true
             },
             connection_path: {
-                type: uranio_core_1.default.types.BookProperty.TEXT,
+                type: types.PropertyType.TEXT,
                 label: "Connection path",
                 optional: true
             },
             method: {
-                type: uranio_core_1.default.types.BookProperty.ENUM_STRING,
+                type: types.PropertyType.ENUM_STRING,
                 label: "Method",
                 values: ['GET', 'POST', 'DELETE'],
                 optional: true,
             },
             atom_name: {
-                type: uranio_core_1.default.types.BookProperty.TEXT,
+                type: types.PropertyType.TEXT,
                 label: "Atom name",
                 optional: true,
                 on_error: () => {
@@ -106,47 +123,47 @@ exports.atom_book = {
                 },
             },
             route_name: {
-                type: uranio_core_1.default.types.BookProperty.TEXT,
+                type: types.PropertyType.TEXT,
                 label: "Route name",
                 optional: true,
             },
             params: {
-                type: uranio_core_1.default.types.BookProperty.TEXT,
+                type: types.PropertyType.TEXT,
                 label: "Params",
                 optional: true,
             },
             query: {
-                type: uranio_core_1.default.types.BookProperty.TEXT,
+                type: types.PropertyType.TEXT,
                 label: "Query",
                 optional: true,
             },
             headers: {
-                type: uranio_core_1.default.types.BookProperty.LONG_TEXT,
+                type: types.PropertyType.LONG_TEXT,
                 label: "Headers",
                 optional: true,
             },
             body: {
-                type: uranio_core_1.default.types.BookProperty.LONG_TEXT,
+                type: types.PropertyType.LONG_TEXT,
                 label: "Body",
                 optional: true,
             },
             file: {
-                type: uranio_core_1.default.types.BookProperty.TEXT,
+                type: types.PropertyType.TEXT,
                 label: "File",
                 optional: true,
             },
             ip: {
-                type: uranio_core_1.default.types.BookProperty.TEXT,
+                type: types.PropertyType.TEXT,
                 label: "IP",
                 optional: true
             },
             is_auth: {
-                type: uranio_core_1.default.types.BookProperty.BINARY,
+                type: types.PropertyType.BINARY,
                 label: "Is auth",
                 optional: true
             },
             auth_action: {
-                type: uranio_core_1.default.types.BookProperty.ENUM_STRING,
+                type: types.PropertyType.ENUM_STRING,
                 label: "Auth action",
                 values: ["READ", "WRITE", "AUTH"],
                 on_error: () => {
