@@ -206,6 +206,10 @@ function _validate_route<A extends schema.AtomName, R extends schema.RouteName<A
 function _limit<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0>(
 	api_request:types.Api.Request<A,R,D>
 ){
+	const route_def = book.get_route_def(api_request.atom_name, api_request.route_name);
+	if(!Array.isArray(route_def.query) || !route_def.query.includes('options')){
+		return api_request;
+	}
 	let options = (api_request.query as any)?.options;
 	if(!options){
 		options = {};

@@ -64,4 +64,8 @@ var RouteMethod;
 // const a = ['a','b'];
 // type B = ArrayElement<typeof a>;
 // export const n:B = 'c';
+// export const c:schema.RouteQueryParam<'media','find'> = 'options';
+// export const d:RouteQueryParamValue<'media','find','filter',0> = {filename: ''};
+// export const w:schema.Query<'media'> = {filename: ''};
+// export const e:Api.Request.Query<'media', 'find', 0> = {filter: {filename: ''}};
 //# sourceMappingURL=request.js.map
