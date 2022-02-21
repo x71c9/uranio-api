@@ -23,13 +23,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.routes = exports.log = exports.book = exports.types = exports.core = void 0;
+exports.routes = exports.log = exports.book = exports.types = exports.schema = exports.core = void 0;
 const client_1 = __importDefault(require("uranio-core/client"));
 exports.core = client_1.default;
+// export * from '../core/client';
+const index_1 = require("../sch/index");
+Object.defineProperty(exports, "schema", { enumerable: true, get: function () { return index_1.schema; } });
 const routes = __importStar(require("../routes/client"));
 exports.routes = routes;
 const book = __importStar(require("../book/client"));
@@ -38,4 +44,5 @@ const log = __importStar(require("../log/index"));
 exports.log = log;
 const types = __importStar(require("./types"));
 exports.types = types;
+__exportStar(require("../reg/client"), exports);
 //# sourceMappingURL=main.js.map

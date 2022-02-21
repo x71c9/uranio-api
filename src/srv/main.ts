@@ -6,7 +6,9 @@
 
 import core from 'uranio-core';
 
-export * from '../sch/index';
+// export * from '../core/index';
+
+import {schema} from '../sch/index';
 
 import * as service from '../service/index';
 
@@ -30,6 +32,7 @@ export * from '../reg/index';
 
 export {
 	core,
+	schema,
 	service,
 	lambda,
 	routes,

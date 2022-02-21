@@ -6,7 +6,7 @@
 
 // import core from 'uranio-core';
 
-import * as types from './types';
+import * as types from './cln/types';
 
 export const atom_book = {
 	error: {

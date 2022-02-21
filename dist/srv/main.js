@@ -16,9 +16,6 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -26,14 +23,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.types = exports.log = exports.util = exports.conf = exports.book = exports.routes = exports.lambda = exports.service = exports.core = void 0;
+exports.types = exports.log = exports.util = exports.conf = exports.book = exports.routes = exports.lambda = exports.service = exports.schema = exports.core = void 0;
 const uranio_core_1 = __importDefault(require("uranio-core"));
 exports.core = uranio_core_1.default;
-__exportStar(require("../sch/index"), exports);
+// export * from '../core/index';
+const index_1 = require("../sch/index");
+Object.defineProperty(exports, "schema", { enumerable: true, get: function () { return index_1.schema; } });
 const service = __importStar(require("../service/index"));
 exports.service = service;
 const lambda = __importStar(require("../lambda/index"));

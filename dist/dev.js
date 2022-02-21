@@ -28,10 +28,10 @@ urn_lib_1.urn_log.init({
 const index_1 = __importDefault(require("./index"));
 index_1.default.init();
 // console.log(uranio.conf.defaults.prefix_api);
-const service = index_1.default.service.create();
-service.listen(() => {
-    urn_lib_1.urn_log.debug(`Listening on port ${index_1.default.conf.get(`service_port`)}...`);
-});
+// const service = uranio.service.create();
+// service.listen(() => {
+//   urn_log.debug(`Listening on port ${uranio.conf.get(`service_port`)}...`);
+// });
 // import uranio_core from 'uranio-core';
 // console.log(uranio_core);
 // import uranio_core_client from 'uranio-core/client';

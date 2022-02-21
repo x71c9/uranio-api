@@ -15,11 +15,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// export * from '../core/cln/types';
-// Override Book from '../core/cln/types' by '../typ/book_cln'
-// import {Book} from '../typ/book_cln';
-// export {Book};
+__exportStar(require("../typ/core_srv"), exports);
 __exportStar(require("../typ/book_cln"), exports);
 __exportStar(require("../typ/request"), exports);
-// export * from '../typ/route';
 //# sourceMappingURL=types.js.map
