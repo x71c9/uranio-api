@@ -29,5 +29,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./register"), exports);
 const urn_api = __importStar(require("./srv/main"));
+__exportStar(require("./srv/main"), exports);
 exports.default = urn_api;
 //# sourceMappingURL=index.js.map

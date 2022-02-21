@@ -3,5 +3,6 @@
  *
  * @packageDocumentation
  */
+export * from '../typ/core_srv';
 export * from '../typ/book_cln';
 export * from '../typ/request';

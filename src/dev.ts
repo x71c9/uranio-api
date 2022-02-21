@@ -18,11 +18,11 @@ uranio.init();
 
 // console.log(uranio.conf.defaults.prefix_api);
 
-const service = uranio.service.create();
+// const service = uranio.service.create();
 
-service.listen(() => {
-	urn_log.debug(`Listening on port ${uranio.conf.get(`service_port`)}...`);
-});
+// service.listen(() => {
+//   urn_log.debug(`Listening on port ${uranio.conf.get(`service_port`)}...`);
+// });
 
 // import uranio_core from 'uranio-core';
 

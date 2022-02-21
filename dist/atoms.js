@@ -26,7 +26,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.atom_book = void 0;
 // import core from 'uranio-core';
-const types = __importStar(require("./types"));
+const types = __importStar(require("./cln/types"));
 exports.atom_book = {
     error: {
         plural: 'errors',

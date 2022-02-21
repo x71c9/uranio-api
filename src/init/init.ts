@@ -34,6 +34,7 @@ export function init(config?:types.Configuration)
 	}else{
 		core.conf.set(api_config, config);
 	}
+	
 	_validate_api_variables();
 	_validate_api_book();
 	
