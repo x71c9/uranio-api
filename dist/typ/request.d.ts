@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 /// <reference types="node" />
-import core from 'uranio-core';
+import core from 'uranio-core/client';
 import { schema } from '../sch/index';
 export declare enum RouteMethod {
     GET = "GET",
