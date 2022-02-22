@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import core from 'uranio-core';
+import core from 'uranio-core/client';
 
 import * as types from '../cln/types';
 

@@ -28,7 +28,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.add_media_routes = exports.default_routes = void 0;
-const uranio_core_1 = __importDefault(require("uranio-core"));
+const client_1 = __importDefault(require("uranio-core/client"));
 const types = __importStar(require("../cln/types"));
 // import {schema} from '../sch/index';
 // import {
@@ -47,51 +47,51 @@ const types = __importStar(require("../cln/types"));
 exports.default_routes = {
     count: {
         method: types.RouteMethod.GET,
-        action: uranio_core_1.default.types.AuthAction.READ,
+        action: client_1.default.types.AuthAction.READ,
         url: '/count',
         query: ['filter'],
     },
     find_one: {
         method: types.RouteMethod.GET,
-        action: uranio_core_1.default.types.AuthAction.READ,
+        action: client_1.default.types.AuthAction.READ,
         url: '/first',
         query: ['filter', 'options'],
     },
     find: {
         method: types.RouteMethod.GET,
-        action: uranio_core_1.default.types.AuthAction.READ,
+        action: client_1.default.types.AuthAction.READ,
         url: '/',
         query: ['filter', 'options'],
     },
     find_id: {
         method: types.RouteMethod.GET,
-        action: uranio_core_1.default.types.AuthAction.READ,
+        action: client_1.default.types.AuthAction.READ,
         url: '/:id',
         query: ['options'],
     },
     insert: {
         method: types.RouteMethod.POST,
-        action: uranio_core_1.default.types.AuthAction.WRITE,
+        action: client_1.default.types.AuthAction.WRITE,
         url: '/',
     },
     update: {
         method: types.RouteMethod.POST,
-        action: uranio_core_1.default.types.AuthAction.WRITE,
+        action: client_1.default.types.AuthAction.WRITE,
         url: '/:id',
     },
     delete: {
         method: types.RouteMethod.DELETE,
-        action: uranio_core_1.default.types.AuthAction.WRITE,
+        action: client_1.default.types.AuthAction.WRITE,
         url: '/:id',
     },
     insert_multiple: {
         method: types.RouteMethod.POST,
-        action: uranio_core_1.default.types.AuthAction.WRITE,
+        action: client_1.default.types.AuthAction.WRITE,
         url: '/multiple',
     },
     update_multiple: {
         method: types.RouteMethod.POST,
-        action: uranio_core_1.default.types.AuthAction.WRITE,
+        action: client_1.default.types.AuthAction.WRITE,
         params: {
             ids: {
                 array: true
@@ -101,7 +101,7 @@ exports.default_routes = {
     },
     delete_multiple: {
         method: types.RouteMethod.DELETE,
-        action: uranio_core_1.default.types.AuthAction.WRITE,
+        action: client_1.default.types.AuthAction.WRITE,
         params: {
             ids: {
                 array: true
@@ -114,12 +114,12 @@ function add_media_routes() {
     const cloned_default_routes = {
         upload: {
             method: types.RouteMethod.POST,
-            action: uranio_core_1.default.types.AuthAction.WRITE,
+            action: client_1.default.types.AuthAction.WRITE,
             url: '/upload',
         },
         presigned: {
             method: types.RouteMethod.GET,
-            action: uranio_core_1.default.types.AuthAction.WRITE,
+            action: client_1.default.types.AuthAction.WRITE,
             query: ['filename', 'size', 'type'],
             url: '/presigned',
         },
