@@ -9,5 +9,7 @@ import * as routes from '../routes/client';
 import * as book from '../book/client';
 import * as log from '../log/client';
 import * as types from './types';
+import * as conf from '../conf/client';
 export * from '../reg/client';
-export { core, schema, types, book, log, routes };
+export * from '../init/client';
+export { core, schema, types, book, log, conf, routes };

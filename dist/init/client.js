@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Main module for client
+ * Init module
  *
  * @packageDocumentation
  */
@@ -23,29 +23,37 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.routes = exports.conf = exports.log = exports.book = exports.types = exports.schema = exports.core = void 0;
+exports.init = void 0;
+const urn_lib_1 = require("urn-lib");
 const client_1 = __importDefault(require("uranio-core/client"));
-exports.core = client_1.default;
-// export * from '../core/client';
-const index_1 = require("../sch/index");
-Object.defineProperty(exports, "schema", { enumerable: true, get: function () { return index_1.schema; } });
-const routes = __importStar(require("../routes/client"));
-exports.routes = routes;
-const book = __importStar(require("../book/client"));
-exports.book = book;
-const log = __importStar(require("../log/client"));
-exports.log = log;
-const types = __importStar(require("./types"));
-exports.types = types;
+const defaults_1 = require("../cln/defaults");
+const client_2 = require("../reg/client");
+const atoms_1 = require("../atoms");
 const conf = __importStar(require("../conf/client"));
-exports.conf = conf;
-__exportStar(require("../reg/client"), exports);
-__exportStar(require("../init/client"), exports);
-//# sourceMappingURL=main.js.map
+const log = __importStar(require("../log/client"));
+function init(config) {
+    log.init(urn_lib_1.urn_log.defaults);
+    client_1.default.init(config);
+    _register_required_atoms();
+    if (!config) {
+        conf.set_from_env(defaults_1.api_client_config);
+    }
+    else {
+        conf.set(defaults_1.api_client_config, config);
+    }
+    if (config && typeof config.log_level === 'number') {
+        urn_lib_1.urn_log.defaults.log_level = config.log_level;
+    }
+    conf.set_initialize(true);
+}
+exports.init = init;
+function _register_required_atoms() {
+    for (const [atom_name, atom_def] of Object.entries(atoms_1.atom_book)) {
+        (0, client_2.register)(atom_def, atom_name);
+    }
+}
+//# sourceMappingURL=client.js.map
