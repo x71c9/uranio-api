@@ -33,7 +33,7 @@ const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('BOOK_SERVER', 'Book server methods module');
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const book_client = __importStar(require("./client"));
-const server_1 = require("../routes/server");
+const calls_1 = require("../routes/calls");
 function get_route_def(atom_name, route_name) {
     const routes_def = get_routes_definition_with_defaults(atom_name);
     if (!routes_def || !routes_def[route_name]) {
@@ -51,7 +51,7 @@ function get_routes_definition_with_defaults(atom_name) {
     if (!dock_def.routes) {
         dock_def.routes = {};
     }
-    const server_default_routes = (0, server_1.return_default_routes)(atom_name);
+    const server_default_routes = (0, calls_1.return_default_routes)(atom_name);
     for (const [route_name, route_def] of Object.entries(server_default_routes)) {
         dock_def.routes[route_name] = route_def;
     }

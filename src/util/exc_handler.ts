@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import * as insta from '../nst/index';
+import * as insta from '../nst/server';
 
 /*
  * Function for handling exception.

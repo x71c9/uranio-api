@@ -6,29 +6,27 @@
 
 import core from 'uranio-core';
 
-// export * from '../core/index';
+import {schema} from '../sch/server';
 
-import {schema} from '../sch/index';
+import * as service from '../service/server';
 
-import * as service from '../service/index';
+import * as lambda from '../lambda/server';
 
-import * as lambda from '../lambda/index';
+import * as routes from '../routes/server';
 
-import * as routes from '../routes/index';
+import * as book from '../book/server';
 
-import * as book from '../book/index';
+import * as conf from '../conf/server';
 
-import * as conf from '../conf/index';
+import * as util from '../util/server';
 
-import * as util from '../util/index';
-
-import * as log from '../log/index';
+import * as log from '../log/server';
 
 import * as types from './types';
 
-export * from '../init/index';
+export * from '../init/server';
 
-export * from '../reg/index';
+export * from '../reg/server';
 
 export {
 	core,

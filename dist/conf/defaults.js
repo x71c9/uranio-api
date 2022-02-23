@@ -9,7 +9,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.api_config = void 0;
-// import {core_config} from 'uranio-core/conf/defaults';
 const uranio_core_1 = __importDefault(require("uranio-core"));
 exports.api_config = {
     ...uranio_core_1.default.conf.defaults,

@@ -8,19 +8,11 @@ import {urn_exception} from 'urn-lib';
 
 const urn_exc = urn_exception.init('BOOK_CLIENT', 'Book client methods module');
 
-// import * as atom from './atom/client';
-
-// export {atom};
-
-// import * as dock from './dock/client';
-
-// export {dock};
-
 import core_client from 'uranio-core/client';
 
 import {Book} from '../typ/book_cln';
 
-import {schema} from '../sch/index';
+import {schema} from '../sch/client';
 
 import {default_routes} from '../routes/client';
 

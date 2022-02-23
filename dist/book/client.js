@@ -11,10 +11,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.get_names = exports.has_property = exports.get_full_properties_definition = exports.get_custom_property_definitions = exports.get_property_definition = exports.get_definition = exports.get_all_definitions = exports.validate_auth_name = exports.validate_name = exports.get_plural = exports.get_dock_definition = exports.get_routes_definition_with_defaults = exports.get_routes_definition = exports.get_route_def = void 0;
 const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('BOOK_CLIENT', 'Book client methods module');
-// import * as atom from './atom/client';
-// export {atom};
-// import * as dock from './dock/client';
-// export {dock};
 const client_1 = __importDefault(require("uranio-core/client"));
 const client_2 = require("../routes/client");
 function get_route_def(atom_name, route_name) {

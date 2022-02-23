@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-export * from './register';
+export * from './srv/register';
 
 import {urn_log} from 'urn-lib';
 urn_log.init({
@@ -13,7 +13,7 @@ urn_log.init({
 	color: true
 });
 
-import uranio from './index';
+import uranio from './server';
 uranio.init();
 
 // console.log(uranio.conf.defaults.prefix_api);

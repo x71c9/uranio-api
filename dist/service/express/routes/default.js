@@ -29,37 +29,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create_express_route = void 0;
 const express_1 = __importDefault(require("express"));
-// import {urn_log, urn_exception} from 'urn-lib';
 const urn_lib_1 = require("urn-lib");
-// const urn_exc = urn_exception.init(`EXPRESS_ROUTES_DEFAULT`,`Express routes default module`);
-const book = __importStar(require("../../../book/index"));
-const types = __importStar(require("../../../types"));
+const book = __importStar(require("../../../book/server"));
+const types = __importStar(require("../../../srv/types"));
 // import {return_default_routes} from '../../../routes/server';
-const index_1 = require("../../../mdlw/index");
+const server_1 = require("../../../mdlw/server");
 const request_1 = require("../../../util/request");
 const common_1 = require("./common");
 function create_express_route(atom_name) {
     urn_lib_1.urn_log.fn_debug(`Create Express Default Atom Router [${atom_name}]`);
     const router = express_1.default.Router();
-    // const dock_def = book.get_dock_definition(atom_name);
-    // const default_routes = return_default_routes(atom_name);
-    // if(!dock_def){
-    //   throw urn_exc.create_invalid_book(
-    //     `INVALID_DOCK_DEF`,
-    //     `Cannot create express route. Invalid dock definition.`
-    //   );
-    // }
-    // if(!dock_def.routes){
-    //   dock_def.routes = default_routes;
-    // }else{
-    //   // custom route go before.
-    //   dock_def.routes = {
-    //     ...dock_def.routes,
-    //     ...default_routes
-    //   };
-    // }
     const routes_definition = book.get_routes_definition_with_defaults(atom_name);
-    // console.log(routes_definition);
     for (const [_route_name, route_def] of Object.entries(routes_definition)) {
         switch (route_def.method) {
             case types.RouteMethod.GET: {
@@ -84,7 +64,7 @@ function _return_express_middleware() {
         const partial_api_request = (0, common_1.express_request_to_partial_api_request)(req);
         try {
             const api_request = (0, request_1.validate_request)(partial_api_request);
-            const urn_res = await (0, index_1.route_middleware)(api_request);
+            const urn_res = await (0, server_1.route_middleware)(api_request);
             return (0, common_1.return_uranio_response_to_express)(urn_res, res);
         }
         catch (e) {

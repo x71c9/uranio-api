@@ -3,7 +3,7 @@
  *
  * @packageDocumentation
  */
-import { schema } from '../sch/index';
+import { schema } from '../sch/server';
 export declare function process_request_query<A extends schema.AtomName>(query: schema.Query<A> | undefined): schema.Query<A>;
 export declare function only_valid_query_keys(query: unknown, valid_query_keys: string[]): void;
 export declare function only_valid_param_keys(params: unknown, valid_params_keys: string[]): void;

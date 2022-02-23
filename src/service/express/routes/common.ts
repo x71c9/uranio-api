@@ -20,9 +20,9 @@ import {
 	get_auth_action,
 } from '../../../util/request';
 
-import * as types from '../../../types';
+import * as types from '../../../srv/types';
 
-import {schema} from '../../../sch/index';
+import {schema} from '../../../sch/server';
 
 export function express_request_to_partial_api_request<
 	A extends schema.AtomName,

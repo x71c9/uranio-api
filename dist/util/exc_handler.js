@@ -25,7 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.register_exception_handler = void 0;
-const insta = __importStar(require("../nst/index"));
+const insta = __importStar(require("../nst/server"));
 /*
  * Function for handling exception.
  * It should log the exception and stop the application.
