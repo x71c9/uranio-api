@@ -16,13 +16,13 @@ const urn_exc = urn_exception.init(`EXPRESSCLASS`, `Express class module`);
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 
-import * as book from '../../book/index';
+import * as book from '../../book/server';
 
 import {register_exception_handler} from '../../util/exc_handler';
 
-import * as conf from '../../conf/index';
+import * as conf from '../../conf/server';
 
-import {schema} from '../../sch/index';
+import {schema} from '../../sch/server';
 
 // import {AuthName} from '../../types';
 

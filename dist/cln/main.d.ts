@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 import core from 'uranio-core/client';
-import { schema } from '../sch/index';
+import { schema } from '../sch/client';
 import * as routes from '../routes/client';
 import * as book from '../book/client';
 import * as log from '../log/client';

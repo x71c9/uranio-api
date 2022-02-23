@@ -14,11 +14,11 @@ import core from 'uranio-core';
 
 import {Book} from '../typ/book_srv';
 
-import {schema} from '../sch/index';
+import {schema} from '../sch/server';
 
 import * as book_client from './client';
 
-import {return_default_routes} from '../routes/server';
+import {return_default_routes} from '../routes/calls';
 
 export function get_route_def<A extends schema.AtomName, R extends schema.RouteName<A>>(
 	atom_name: A,

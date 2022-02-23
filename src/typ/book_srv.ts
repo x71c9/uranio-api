@@ -18,7 +18,7 @@ import * as book_cln from './book_cln';
 
 import {Api as ApiRequest} from './request';
 
-import {schema} from '../sch/index';
+import {schema} from '../sch/server';
 
 export type Book = {
 	[k in schema.AtomName]?: Book.Definition<k>;

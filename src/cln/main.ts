@@ -6,9 +6,7 @@
 
 import core from 'uranio-core/client';
 
-// export * from '../core/client';
-
-import {schema} from '../sch/index';
+import {schema} from '../sch/client';
 
 import * as routes from '../routes/client';
 

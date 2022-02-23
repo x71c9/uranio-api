@@ -10,7 +10,7 @@ const urn_exc = urn_exception.init(`VALIDATE_REQUEST`, `Validate request module`
 
 // import {schema.AtomName, schema.Query} from '../types';
 
-import {schema} from '../sch/index';
+import {schema} from '../sch/server';
 
 export function process_request_query<A extends schema.AtomName>(query:schema.Query<A>|undefined)
 		:schema.Query<A>{

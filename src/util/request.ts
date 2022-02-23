@@ -12,17 +12,17 @@ const urn_exc = urn_exception.init(`REQUEST`, `Util request module`);
 
 import core from 'uranio-core';
 
-import * as conf from '../conf/index';
+import * as conf from '../conf/server';
 
 // import {return_default_routes} from '../routes/index';
 
-import * as insta from '../nst/index';
+import * as insta from '../nst/server';
 
-import * as book from '../book/client';
+import * as book from '../book/server';
 
-import {schema} from '../sch/index';
+import {schema} from '../sch/server';
 
-import * as types from '../types';
+import * as types from '../srv/types';
 
 export function process_request_path(full_path:string)
 		:types.Api.Request.Paths{
@@ -82,10 +82,11 @@ export function get_auth_action<A extends schema.AtomName>(
 	route_name:keyof types.Book.Definition.Dock.Routes<A>
 ):core.types.AuthAction{
 	const routes_def = book.get_routes_definition_with_defaults(atom_name);
-	// if(!dock_def || !dock_def.routes || !dock_def.routes[route_name as any]){
-	//   throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name \`${String(route_name)}\` from atom \`${atom_name}\`.`);
-	// }
-	const auth_action = routes_def[route_name as any].action;
+	const route_def = routes_def[route_name];
+	if(!route_def || !route_def.action){
+		throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name \`${String(route_name)}\` from atom \`${atom_name}\`.`);
+	}
+	const auth_action = route_def.action;
 	if(!(auth_action in core.types.AuthAction)){
 		throw urn_exc.create(`INVALID_AUTH_ACTION`, `Invalid auth action \`${auth_action}\` for \`${auth_action}\`\`${String(route_name)}\`.`);
 	}
@@ -168,15 +169,15 @@ export function get_params_from_route_path<A extends schema.AtomName, R extends 
 	route_name: R,
 	route_path: string
 ):types.Api.Request.Params<A,R>{
-	// const atom_dock = _get_atom_dock(atom_name);
 	const dock_def = book.get_dock_definition(atom_name);
 	if(!dock_def || !dock_def.routes){
 		return {} as types.Api.Request.Params<A,R>;
 	}
-	for(const route_key in dock_def.routes){
+	const routes = dock_def.routes;
+	for(const route_key in routes){
 		if(route_key === route_name){
 			const params = {} as types.Api.Request.Params<A,R>;
-			let atom_route_url = dock_def.routes[route_key].url;
+			let atom_route_url = (routes as any)[route_key].url;
 			if(atom_route_url[atom_route_url.length - 1] !== '/'){
 				atom_route_url += '/';
 			}

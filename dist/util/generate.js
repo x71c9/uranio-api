@@ -30,7 +30,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = exports.save_schema = exports.schema_and_save = exports.schema = exports.process_params = void 0;
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const urn_lib_1 = require("urn-lib");
-const book = __importStar(require("../book/index"));
+const book = __importStar(require("../book/server"));
 const client_1 = require("../routes/client");
 exports.process_params = {
     urn_command: `schema`,

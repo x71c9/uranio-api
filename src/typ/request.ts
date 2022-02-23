@@ -4,9 +4,9 @@
  * @packageDocumentation
  */
 
-import core from 'uranio-core/client';
+import core from 'uranio-core';
 
-import {schema} from '../sch/index';
+import {schema} from '../sch/server';
 
 export enum RouteMethod {
 	GET = 'GET',

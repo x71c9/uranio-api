@@ -4,8 +4,8 @@
  * @packageDocumentation
  */
 import core from 'uranio-core';
-import { ServiceName } from '../service/index';
-import { LambdaName } from '../lambda/index';
+import { ServiceName } from '../service/server';
+import { LambdaName } from '../lambda/server';
 declare type RequiredConfigParams = {};
 declare type OptionalConfigParam = {
     service: ServiceName;

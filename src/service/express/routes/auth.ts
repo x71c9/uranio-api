@@ -10,11 +10,11 @@ import {urn_log} from 'urn-lib';
 
 import core from 'uranio-core';
 
-import * as types from '../../../types';
+import * as types from '../../../srv/types';
 
-import {schema} from '../../../sch/index';
+import {schema} from '../../../sch/server';
 
-import {auth_route_middleware} from '../../../mdlw/index';
+import {auth_route_middleware} from '../../../mdlw/server';
 
 import {validate_request, api_handle_and_store_exception} from '../../../util/request';
 

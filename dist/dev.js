@@ -18,15 +18,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./register"), exports);
+__exportStar(require("./srv/register"), exports);
 const urn_lib_1 = require("urn-lib");
 urn_lib_1.urn_log.init({
     log_level: urn_lib_1.urn_log.LogLevel.FUNCTION_DEBUG,
     debug_info: false,
     color: true
 });
-const index_1 = __importDefault(require("./index"));
-index_1.default.init();
+const server_1 = __importDefault(require("./server"));
+server_1.default.init();
 // console.log(uranio.conf.defaults.prefix_api);
 // const service = uranio.service.create();
 // service.listen(() => {

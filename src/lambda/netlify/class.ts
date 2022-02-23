@@ -23,11 +23,11 @@ import {
 	validate_request
 } from '../../util/request';
 
-import {route_middleware, auth_route_middleware} from '../../mdlw/index';
+import {route_middleware, auth_route_middleware} from '../../mdlw/server';
 
-import * as types from '../../types';
+import * as types from '../../srv/types';
 
-import {schema} from '../../sch/index';
+import {schema} from '../../sch/server';
 
 import {
 	Lambda,

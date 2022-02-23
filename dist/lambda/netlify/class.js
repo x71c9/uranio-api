@@ -20,7 +20,7 @@ const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('NETLIFYCLASS', 'Netlify class module');
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const request_1 = require("../../util/request");
-const index_1 = require("../../mdlw/index");
+const server_1 = require("../../mdlw/server");
 // import {map_lambda_query_params, parse_multipart} from '../util';
 const util_1 = require("../util");
 let NetlifyLambda = class NetlifyLambda {
@@ -64,10 +64,10 @@ let NetlifyLambda = class NetlifyLambda {
                 const token = await auth_bll.authenticate((_a = api_request.body) === null || _a === void 0 ? void 0 : _a.email, (_b = api_request.body) === null || _b === void 0 ? void 0 : _b.password);
                 return token;
             };
-            return (0, index_1.auth_route_middleware)(api_request, auth_handler);
+            return (0, server_1.auth_route_middleware)(api_request, auth_handler);
         }
         else {
-            return (0, index_1.route_middleware)(api_request);
+            return (0, server_1.route_middleware)(api_request);
         }
     }
 };

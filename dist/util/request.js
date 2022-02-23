@@ -32,10 +32,10 @@ const urn_lib_1 = require("urn-lib");
 const urn_ret = urn_lib_1.urn_return.create(urn_lib_1.urn_log.util.return_injector);
 const urn_exc = urn_lib_1.urn_exception.init(`REQUEST`, `Util request module`);
 const uranio_core_1 = __importDefault(require("uranio-core"));
-const conf = __importStar(require("../conf/index"));
+const conf = __importStar(require("../conf/server"));
 // import {return_default_routes} from '../routes/index';
-const insta = __importStar(require("../nst/index"));
-const book = __importStar(require("../book/client"));
+const insta = __importStar(require("../nst/server"));
+const book = __importStar(require("../book/server"));
 function process_request_path(full_path) {
     let api_request_paths = {
         full_path,
@@ -91,10 +91,11 @@ function process_request_path(full_path) {
 exports.process_request_path = process_request_path;
 function get_auth_action(atom_name, route_name) {
     const routes_def = book.get_routes_definition_with_defaults(atom_name);
-    // if(!dock_def || !dock_def.routes || !dock_def.routes[route_name as any]){
-    //   throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name \`${String(route_name)}\` from atom \`${atom_name}\`.`);
-    // }
-    const auth_action = routes_def[route_name].action;
+    const route_def = routes_def[route_name];
+    if (!route_def || !route_def.action) {
+        throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name \`${String(route_name)}\` from atom \`${atom_name}\`.`);
+    }
+    const auth_action = route_def.action;
     if (!(auth_action in uranio_core_1.default.types.AuthAction)) {
         throw urn_exc.create(`INVALID_AUTH_ACTION`, `Invalid auth action \`${auth_action}\` for \`${auth_action}\`\`${String(route_name)}\`.`);
     }
@@ -167,15 +168,15 @@ function is_auth_request(atom_name, atom_path) {
 }
 exports.is_auth_request = is_auth_request;
 function get_params_from_route_path(atom_name, route_name, route_path) {
-    // const atom_dock = _get_atom_dock(atom_name);
     const dock_def = book.get_dock_definition(atom_name);
     if (!dock_def || !dock_def.routes) {
         return {};
     }
-    for (const route_key in dock_def.routes) {
+    const routes = dock_def.routes;
+    for (const route_key in routes) {
         if (route_key === route_name) {
             const params = {};
-            let atom_route_url = dock_def.routes[route_key].url;
+            let atom_route_url = routes[route_key].url;
             if (atom_route_url[atom_route_url.length - 1] !== '/') {
                 atom_route_url += '/';
             }

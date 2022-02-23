@@ -8,11 +8,11 @@ import core from 'uranio-core';
 
 import {urn_log} from 'urn-lib';
 
-import {schema as schema_types} from '../sch/index';
+import {schema as schema_types} from '../sch/server';
 
-import * as book from '../book/index';
+import * as book from '../book/server';
 
-import * as types from '../types';
+import * as types from '../srv/types';
 
 import {default_routes} from '../routes/client';
 

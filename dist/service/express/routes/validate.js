@@ -8,16 +8,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.empty = exports.only_valid_param_keys = exports.only_valid_query_keys = exports.process_request_query = void 0;
 const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init(`VALIDATE_REQUEST`, `Validate request module`);
-// export function process_request_token(locals:unknown)
-//     :TokenObject{
-//   if(!locals || !(locals as any).urn){
-//     throw urn_exc.create('INVALID_REQUEST_LOCALS', 'Invalid request locals not set.');
-//   }
-//   const urn_locals = (locals as any).urn;
-//   core.bll.auth.is_valid_token_object(urn_locals.token_object);
-//   const token_object:TokenObject = urn_locals.token_object;
-//   return token_object;
-// }
 function process_request_query(query) {
     if (typeof query === 'undefined') {
         return {};
@@ -28,26 +18,6 @@ function process_request_query(query) {
     throw urn_exc.create_invalid_request(`INVALID_QUERY_PARAM`, `Invalid query`);
 }
 exports.process_request_query = process_request_query;
-// export function process_request_filter<A extends schema.AtomName>(filter:ExpressQueryParam)
-//     :schema.Query<A>{
-//   if(typeof filter === 'undefined'){
-//     return {};
-//   }
-//   if(!Array.isArray(filter) && typeof filter === 'object'){
-//     return filter;
-//   }
-//   throw urn_exc.create_invalid_request(`INVALID_FILTER`, `Invalid filter`);
-// }
-// export function process_request_options<A extends schema.AtomName>(options:ExpressQueryParam)
-//     :schema.Query.Options<A>{
-//   if(typeof options === 'undefined'){
-//     return {};
-//   }
-//   if(!Array.isArray(options) && typeof options === 'object'){
-//     return options;
-//   }
-//   throw urn_exc.create_invalid_request(`INVALID_OPTIONS`, `Invalid options`);
-// }
 function only_valid_query_keys(query, valid_query_keys) {
     if (query && typeof query === 'object') {
         for (const [k] of Object.entries(query)) {

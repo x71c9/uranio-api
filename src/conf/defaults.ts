@@ -4,10 +4,7 @@
  * @packageDocumentation
  */
 
-// import {FullConfiguration} from '../types';
-import {Configuration} from '../types';
-
-// import {core_config} from 'uranio-core/conf/defaults';
+import {Configuration} from '../srv/types';
 
 import core from 'uranio-core';
 
