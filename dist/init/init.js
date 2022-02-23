@@ -33,10 +33,13 @@ const urn_exc = urn_lib_1.urn_exception.init('INIT_API_MODULE', `Api init module
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const defaults_1 = require("../conf/defaults");
 const client_1 = require("../routes/client");
+const index_1 = require("../reg/index");
+const atoms_1 = require("../atoms");
 const conf = __importStar(require("../conf/index"));
 const book = __importStar(require("../book/index"));
 const log = __importStar(require("../log/index"));
 function init(config) {
+    _register_required_atoms();
     log.init(urn_lib_1.urn_log.defaults);
     uranio_core_1.default.init(config);
     if (typeof config === 'undefined') {
@@ -53,6 +56,11 @@ function init(config) {
     conf.set_initialize(true);
 }
 exports.init = init;
+function _register_required_atoms() {
+    for (const [atom_name, atom_def] of Object.entries(atoms_1.atom_book)) {
+        (0, index_1.register)(atom_def, atom_name);
+    }
+}
 /**
  * NOTE:
  * Maybe this should be before compilation and not at runtime?

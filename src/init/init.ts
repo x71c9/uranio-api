@@ -14,6 +14,10 @@ import {api_config} from '../conf/defaults';
 
 import {default_routes} from '../routes/client';
 
+import {register} from '../reg/index';
+
+import {atom_book} from '../atoms';
+
 import * as types from '../types';
 
 import * as conf from '../conf/index';
@@ -24,6 +28,8 @@ import * as log from '../log/index';
 
 export function init(config?:types.Configuration)
 		:void{
+	
+	_register_required_atoms();
 	
 	log.init(urn_log.defaults);
 	
@@ -43,6 +49,12 @@ export function init(config?:types.Configuration)
 	}
 	
 	conf.set_initialize(true);
+}
+
+function _register_required_atoms(){
+	for(const [atom_name, atom_def] of Object.entries(atom_book)){
+		register(atom_def as any, atom_name);
+	}
 }
 
 /**
@@ -116,7 +128,7 @@ function _validate_route_name(){
 
 function _get_default_route_name(){
 	const route_names:string[] = [];
-	for(const route_name in default_routes){
+		for(const route_name in default_routes){
 		route_names.push(route_name);
 	}
 	route_names.push('upload');

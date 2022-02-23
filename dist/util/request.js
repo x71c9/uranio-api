@@ -90,12 +90,11 @@ function process_request_path(full_path) {
 }
 exports.process_request_path = process_request_path;
 function get_auth_action(atom_name, route_name) {
-    // const atom_dock = _get_atom_dock(atom_name);
-    const dock_def = book.get_dock_definition(atom_name);
-    if (!dock_def || !dock_def.routes || !dock_def.routes[route_name]) {
-        throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name \`${String(route_name)}\` from atom \`${atom_name}\`.`);
-    }
-    const auth_action = dock_def.routes[route_name].action;
+    const routes_def = book.get_routes_definition_with_defaults(atom_name);
+    // if(!dock_def || !dock_def.routes || !dock_def.routes[route_name as any]){
+    //   throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name \`${String(route_name)}\` from atom \`${atom_name}\`.`);
+    // }
+    const auth_action = routes_def[route_name].action;
     if (!(auth_action in uranio_core_1.default.types.AuthAction)) {
         throw urn_exc.create(`INVALID_AUTH_ACTION`, `Invalid auth action \`${auth_action}\` for \`${auth_action}\`\`${String(route_name)}\`.`);
     }
@@ -119,27 +118,21 @@ function get_atom_name_from_atom_path(atom_path) {
 }
 exports.get_atom_name_from_atom_path = get_atom_name_from_atom_path;
 function get_route_name(atom_name, route_path, http_method) {
-    // const atom_dock = _get_atom_dock(atom_name);
-    const dock_def = book.get_dock_definition(atom_name);
-    if (!dock_def || !dock_def.routes) {
-        return undefined;
-    }
+    const routes_def = book.get_routes_definition_with_defaults(atom_name);
     /**
      * Never rely on Object properties order.
      * This caused issue while checking route_name.
      * So in order to be sure is the correct route_name, first check for
      * all exact matches, then for route with parameters.
      */
-    for (const route_name in dock_def.routes) {
-        const route_def = dock_def.routes[route_name];
+    for (const [route_name, route_def] of Object.entries(routes_def)) {
         if (route_def.method === http_method) {
             if (route_def.url === route_path || route_def.url + '/' === route_path) {
                 return route_name;
             }
         }
     }
-    for (const route_name in dock_def.routes) {
-        const route_def = dock_def.routes[route_name];
+    for (const [route_name, route_def] of Object.entries(routes_def)) {
         if (route_def.method === http_method) {
             if (route_def.url.includes(':')) {
                 if (route_def.url[route_def.url.length - 1] !== '/') {
