@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-// import {AtomName} from '../cln/types';
+// import {AtomName} from '../client/types';
 
 // import {routes_book} from 'uranio-books/routes';
 // import {dock_book} from 'uranio-books/dock';

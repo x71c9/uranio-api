@@ -22,7 +22,7 @@ import * as book from '../book/server';
 
 import {schema} from '../sch/server';
 
-import * as types from '../srv/types';
+import * as types from '../server/types';
 
 export function process_request_path(full_path:string)
 		:types.Api.Request.Paths{

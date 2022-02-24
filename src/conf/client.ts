@@ -10,11 +10,11 @@ const urn_exc = urn_exception.init('CONF_TRX_CLIENT_MODULE', `TRX client configu
 
 import core_client from 'uranio-core/client';
 
-import {api_client_config} from '../cln/defaults';
+import {api_client_config} from '../client/defaults';
 
 export {api_client_config as defaults};
 
-import * as types from '../cln/types';
+import * as types from '../client/types';
 
 let _is_api_client_initialized = false;
 

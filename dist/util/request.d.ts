@@ -6,7 +6,7 @@
 import { urn_response, urn_exception } from 'urn-lib';
 import core from 'uranio-core';
 import { schema } from '../sch/server';
-import * as types from '../srv/types';
+import * as types from '../server/types';
 export declare function process_request_path(full_path: string): types.Api.Request.Paths;
 export declare function get_auth_action<A extends schema.AtomName>(atom_name: A, route_name: keyof types.Book.Definition.Dock.Routes<A>): core.types.AuthAction;
 export declare function get_atom_name_from_atom_path(atom_path: string): schema.AtomName | undefined;

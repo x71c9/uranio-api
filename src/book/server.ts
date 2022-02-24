@@ -12,7 +12,7 @@ const urn_exc = urn_exception.init('BOOK_SERVER', 'Book server methods module');
 
 import core from 'uranio-core';
 
-import {Book} from '../typ/book_srv';
+import {Book} from '../typ/book';
 
 import {schema} from '../sch/server';
 

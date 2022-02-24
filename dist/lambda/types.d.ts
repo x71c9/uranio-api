@@ -3,7 +3,7 @@
  *
  * @packageDocumentation
  */
-import * as types from '../srv/types';
+import * as types from '../server/types';
 export declare type LambdaName = 'netlify';
 export interface Lambda {
     handle: (event: LambdaEvent, context: LambdaContext) => Promise<HandlerResponse>;

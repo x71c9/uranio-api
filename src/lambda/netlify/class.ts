@@ -25,7 +25,7 @@ import {
 
 import {route_middleware, auth_route_middleware} from '../../mdlw/server';
 
-import * as types from '../../srv/types';
+import * as types from '../../server/types';
 
 import {schema} from '../../sch/server';
 

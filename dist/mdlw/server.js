@@ -36,7 +36,7 @@ const uranio_core_1 = __importDefault(require("uranio-core"));
 const conf = __importStar(require("../conf/server"));
 const insta = __importStar(require("../nst/server"));
 const book = __importStar(require("../book/server"));
-const types = __importStar(require("../srv/types"));
+const types = __importStar(require("../server/types"));
 // import {return_default_routes} from '../routes/server';
 const request_1 = require("../util/request");
 const req_validator = __importStar(require("./validate"));
