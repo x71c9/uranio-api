@@ -31,7 +31,7 @@ exports.create_express_route = void 0;
 const express_1 = __importDefault(require("express"));
 const urn_lib_1 = require("urn-lib");
 const book = __importStar(require("../../../book/server"));
-const types = __importStar(require("../../../srv/types"));
+const types = __importStar(require("../../../server/types"));
 // import {return_default_routes} from '../../../routes/server';
 const server_1 = require("../../../mdlw/server");
 const request_1 = require("../../../util/request");

@@ -20,7 +20,7 @@ import * as insta from '../nst/server';
 
 import * as book from '../book/server';
 
-import * as types from '../srv/types';
+import * as types from '../server/types';
 
 import {schema} from '../sch/server';
 

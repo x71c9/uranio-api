@@ -3,7 +3,7 @@
  *
  * @packageDocumentation
  */
-import * as types from './cln/types';
+import * as types from './client/types';
 export declare const atom_book: {
     readonly error: {
         readonly plural: "errors";

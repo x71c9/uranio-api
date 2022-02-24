@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-export * from './srv/register';
+export * from './server/register';
 
 import {urn_log} from 'urn-lib';
 urn_log.init({

@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 import { urn_response } from 'urn-lib';
-import * as types from '../../srv/types';
+import * as types from '../../server/types';
 import { schema } from '../../sch/server';
 import { Lambda, LambdaEvent, LambdaContext, HandlerResponse } from '../types';
 declare class NetlifyLambda implements Lambda {

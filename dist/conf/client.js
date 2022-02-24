@@ -12,7 +12,7 @@ exports.set = exports.set_from_env = exports.set_initialize = exports.is_initial
 const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('CONF_TRX_CLIENT_MODULE', `TRX client configuration module`);
 const client_1 = __importDefault(require("uranio-core/client"));
-const defaults_1 = require("../cln/defaults");
+const defaults_1 = require("../client/defaults");
 Object.defineProperty(exports, "defaults", { enumerable: true, get: function () { return defaults_1.api_client_config; } });
 let _is_api_client_initialized = false;
 function get(param_name) {

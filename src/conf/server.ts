@@ -14,7 +14,7 @@ import {api_config} from './defaults';
 
 export {api_config as defaults};
 
-import * as types from '../srv/types';
+import * as types from '../server/types';
 
 let _is_api_initialized = false;
 

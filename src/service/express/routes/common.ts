@@ -20,7 +20,7 @@ import {
 	get_auth_action,
 } from '../../../util/request';
 
-import * as types from '../../../srv/types';
+import * as types from '../../../server/types';
 
 import {schema} from '../../../sch/server';
 
