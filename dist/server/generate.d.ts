@@ -1,5 +1,5 @@
 /**
- * Api generate module
+ * API generate module
  *
  * @packageDocumentation
  */

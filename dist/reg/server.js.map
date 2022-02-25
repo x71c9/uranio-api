@@ -1,1 +1,1 @@
-{"version":3,"file":"server.js","sourceRoot":"","sources":["../../src/reg/server.ts"],"names":[],"mappings":";AAAA;;;;GAIG;;;;;;AAEH,8DAA+B;AAM/B,SAAgB,QAAQ,CACvB,eAAwC,EACxC,SAAY;IAEZ,OAAO,qBAAI,CAAC,QAAQ,CAAC,eAAe,EAAE,SAAS,CAAC,CAAC;AAClD,CAAC;AALD,4BAKC"}
+{"version":3,"file":"server.js","sourceRoot":"","sources":["../../src/reg/server.ts"],"names":[],"mappings":";AAAA;;;;GAIG;;;;;;;;;;;;AAEH,yCAAuB"}

@@ -13,6 +13,6 @@ import * as conf from '../conf/server';
 import * as util from '../util/server';
 import * as log from '../log/server';
 import * as types from './types';
+import * as register from '../reg/server';
 export * from '../init/server';
-export * from '../reg/server';
-export { core, schema, service, lambda, routes, book, conf, util, log, types };
+export { core, schema, service, lambda, routes, book, conf, util, log, register, types };

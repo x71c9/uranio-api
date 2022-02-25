@@ -1,1 +1,1 @@
-{"version":3,"file":"client.js","sourceRoot":"","sources":["../../src/reg/client.ts"],"names":[],"mappings":";AAAA;;;;GAIG;;;;;;AAEH,gEAA6C;AAM7C,SAAgB,QAAQ,CACvB,eAAqC,EACrC,SAAY;IAEZ,OAAO,gBAAW,CAAC,QAAQ,CAAC,eAAe,EAAE,SAAS,CAAC,CAAC;AACzD,CAAC;AALD,4BAKC"}
+{"version":3,"file":"client.js","sourceRoot":"","sources":["../../src/reg/client.ts"],"names":[],"mappings":";AAAA;;;;GAIG;;;;;;;;;;;;AAEH,6CAA2B"}

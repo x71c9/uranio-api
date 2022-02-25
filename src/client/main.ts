@@ -18,7 +18,7 @@ import * as types from './types';
 
 import * as conf from '../conf/client';
 
-export * from '../reg/client';
+import * as register from '../reg/client';
 
 export * from '../init/client';
 
@@ -29,5 +29,6 @@ export {
 	book,
 	log,
 	conf,
+	register,
 	routes
 };

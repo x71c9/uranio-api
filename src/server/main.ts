@@ -24,9 +24,9 @@ import * as log from '../log/server';
 
 import * as types from './types';
 
-export * from '../init/server';
+import * as register from '../reg/server';
 
-export * from '../reg/server';
+export * from '../init/server';
 
 export {
 	core,
@@ -38,5 +38,6 @@ export {
 	conf,
 	util,
 	log,
+	register,
 	types
 };

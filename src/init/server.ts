@@ -14,7 +14,7 @@ import {api_config} from '../conf/defaults';
 
 import {default_routes} from '../routes/client';
 
-import {register} from '../reg/server';
+import * as register from '../reg/server';
 
 import {atom_book} from '../atoms';
 
@@ -55,7 +55,7 @@ export function init(config?:types.Configuration)
 
 function _register_required_atoms(){
 	for(const [atom_name, atom_def] of Object.entries(atom_book)){
-		register(atom_def as any, atom_name as schema.AtomName);
+		register.atom(atom_def as any, atom_name as schema.AtomName);
 	}
 }
 
