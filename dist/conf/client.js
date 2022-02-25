@@ -40,7 +40,7 @@ function set(repo_config, config) {
 }
 exports.set = set;
 function _get_env_vars(repo_config) {
-    if (typeof process.env.URN_CLIENT_FETCH === 'string' && process.env.URN_CLIENT_FETCH !== '') {
+    if (typeof process.env.URN_PREFIX_LOG === 'string' && process.env.URN_PREFIX_LOG !== '') {
         repo_config.prefix_log = process.env.URN_PREFIX_LOG;
     }
     return repo_config;
