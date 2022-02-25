@@ -1,5 +1,5 @@
 /**
- * API register required atoms module
+ * Register module for URANIO Api
  *
  * @packageDocumentation
  */

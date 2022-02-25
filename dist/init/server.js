@@ -33,7 +33,7 @@ const urn_exc = urn_lib_1.urn_exception.init('INIT_API_MODULE', `Api init module
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const defaults_1 = require("../conf/defaults");
 const client_1 = require("../routes/client");
-const server_1 = require("../reg/server");
+const register = __importStar(require("../reg/server"));
 const atoms_1 = require("../atoms");
 const conf = __importStar(require("../conf/server"));
 const book = __importStar(require("../book/server"));
@@ -58,7 +58,7 @@ function init(config) {
 exports.init = init;
 function _register_required_atoms() {
     for (const [atom_name, atom_def] of Object.entries(atoms_1.atom_book)) {
-        (0, server_1.register)(atom_def, atom_name);
+        register.atom(atom_def, atom_name);
     }
 }
 /**

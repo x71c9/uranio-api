@@ -30,7 +30,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.routes = exports.conf = exports.log = exports.book = exports.types = exports.schema = exports.core = void 0;
+exports.routes = exports.register = exports.conf = exports.log = exports.book = exports.types = exports.schema = exports.core = void 0;
 const client_1 = __importDefault(require("uranio-core/client"));
 exports.core = client_1.default;
 const client_2 = require("../sch/client");
@@ -45,6 +45,7 @@ const types = __importStar(require("./types"));
 exports.types = types;
 const conf = __importStar(require("../conf/client"));
 exports.conf = conf;
-__exportStar(require("../reg/client"), exports);
+const register = __importStar(require("../reg/client"));
+exports.register = register;
 __exportStar(require("../init/client"), exports);
 //# sourceMappingURL=main.js.map

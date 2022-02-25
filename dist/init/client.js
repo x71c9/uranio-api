@@ -31,7 +31,7 @@ exports.init = void 0;
 const urn_lib_1 = require("urn-lib");
 const client_1 = __importDefault(require("uranio-core/client"));
 const defaults_1 = require("../client/defaults");
-const client_2 = require("../reg/client");
+const register = __importStar(require("../reg/client"));
 const atoms_1 = require("../atoms");
 const conf = __importStar(require("../conf/client"));
 const log = __importStar(require("../log/client"));
@@ -53,7 +53,7 @@ function init(config) {
 exports.init = init;
 function _register_required_atoms() {
     for (const [atom_name, atom_def] of Object.entries(atoms_1.atom_book)) {
-        (0, client_2.register)(atom_def, atom_name);
+        register.atom(atom_def, atom_name);
     }
 }
 //# sourceMappingURL=client.js.map

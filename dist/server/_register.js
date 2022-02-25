@@ -1,6 +1,6 @@
 "use strict";
 /**
- * API generate module
+ * Register module for URANIO Api
  *
  * @packageDocumentation
  */
@@ -16,9 +16,6 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -27,12 +24,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./register"), exports);
-const urn_lib_1 = require("urn-lib");
-urn_lib_1.urn_log.init({
-    log_level: urn_lib_1.urn_log.LogLevel.FUNCTION_DEBUG,
-    debug_info: false
-});
-const util = __importStar(require("../util/server"));
-util.generate.schema_and_save();
-//# sourceMappingURL=generate.js.map
+const register = __importStar(require("../reg/server"));
+const atoms_1 = require("../atoms");
+for (const [atom_name, atom_def] of Object.entries(atoms_1.atom_book)) {
+    register.atom(atom_def, atom_name);
+}
+//# sourceMappingURL=_register.js.map
