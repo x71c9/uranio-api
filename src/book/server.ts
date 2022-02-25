@@ -12,6 +12,8 @@ const urn_exc = urn_exception.init('BOOK_SERVER', 'Book server methods module');
 
 import core from 'uranio-core';
 
+import {Book as ClientBook} from '../typ/book_cln';
+
 import {Book} from '../typ/book';
 
 import {schema} from '../sch/server';
@@ -57,8 +59,18 @@ export function get_dock_definition<A extends schema.AtomName>(atom_name:A)
 	return book_client.get_dock_definition(atom_name) as Book.Definition.Dock<A>;
 }
 
-export function add_definition<A extends schema.AtomName>(atom_name:A, atom_definition:Book.Definition<A>)
-		:Book{
+export function add_route_definition<A extends schema.AtomName>(
+	atom_name:A,
+	route_name: schema.RouteName<A>,
+	route_definition:ClientBook.Definition.Dock.Routes.Route
+):Book{
+	return book_client.add_route_definition(atom_name, route_name, route_definition);
+}
+
+export function add_definition<A extends schema.AtomName>(
+	atom_name:A,
+	atom_definition:ClientBook.Definition
+):Book{
 	return core.book.add_definition(atom_name, atom_definition);
 }
 

@@ -63,6 +63,38 @@ export function get_dock_definition<A extends schema.AtomName>(atom_name:A)
 	return dock_def;
 }
 
+export function add_route_definition<A extends schema.AtomName>(
+	atom_name:A,
+	route_name: schema.RouteName<A>,
+	route_definition:Book.Definition.Dock.Routes.Route
+):Book{
+	const atom_book = get_all_definitions();
+	const atom_def = atom_book[atom_name];
+	if(!atom_def){
+		throw urn_exc.create(
+			`INVALID_ATOM_NAME`,
+			`Cannot get atom definition in [add_route_definition]`
+		);
+	}
+	if(!atom_def.dock){
+		atom_def.dock = {
+			url: `/${get_plural(atom_name)}`
+		};
+	}
+	if(!atom_def.dock.routes){
+		atom_def.dock.routes = {};
+	}
+	atom_def.dock.routes[route_name] = route_definition;
+	// Object.assign(atom_def.dock.routes, {...atom_def.dock.routes, route_name: route_definition});
+	// Object.assign(atom_book, {...atom_book_def, ...atom_book});
+	return atom_book;
+}
+
+export function add_definition<A extends schema.AtomName>(atom_name:A, atom_definition:Book.Definition)
+		:Book{
+	return core_client.book.add_definition(atom_name, atom_definition);
+}
+
 export function get_plural(atom_name:schema.AtomName):string{
 	return core_client.book.get_plural(atom_name);
 }
