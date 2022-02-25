@@ -34,8 +34,8 @@ const book = __importStar(require("../book/server"));
 const client_1 = require("../routes/client");
 exports.process_params = {
     urn_command: `schema`,
-    urn_base_schema: `./.uranio/generate/base/schema.d.ts`,
-    urn_output_dir: `.`
+    // urn_base_schema: `./.uranio/generate/base/schema.d.ts`,
+    // urn_output_dir: `.`
 };
 function schema() {
     urn_lib_1.urn_log.debug('Started generating uranio api schema...');
@@ -63,7 +63,7 @@ function init() {
 exports.init = init;
 function _generate_uranio_schema_text(core_schema) {
     const txt = _generate_api_schema_text();
-    const split_text = '\texport {};/** --uranio-generate-end */';
+    const split_text = 'export {};/** --uranio-generate-end */';
     const data_splitted = core_schema.split(split_text);
     let new_data = '';
     new_data += data_splitted[0];
@@ -85,30 +85,30 @@ function _generate_route_query_param(atom_book) {
     let text = '';
     text += _generate_route_default_query_param();
     text += _generate_route_custom_query_param(atom_book);
-    text += `\texport type RouteQueryParam<A extends AtomName, `;
+    text += `export declare type RouteQueryParam<A extends AtomName, `;
     text += `R extends RouteName<A>> =\n`;
-    text += `\t\tR extends RouteDefaultName ? DefaultRouteQueryParam<R> :\n`;
-    text += `\t\tR extends RouteCustomName<A> ?\n`;
-    text += `\t\tCustomRouteQueryParam<A,R> extends string ? CustomRouteQueryParam<A,R> :\n`;
-    text += `\t\tnever :\n`;
-    text += `\t\tnever\n`;
+    text += `\tR extends RouteDefaultName ? DefaultRouteQueryParam<R> :\n`;
+    text += `\tR extends RouteCustomName<A> ?\n`;
+    text += `\tCustomRouteQueryParam<A,R> extends string ? CustomRouteQueryParam<A,R> :\n`;
+    text += `\tnever :\n`;
+    text += `\tnever\n`;
     text += `\n`;
     return text;
 }
 function _generate_route_default_query_param() {
     let text = '';
-    text += `\ttype DefaultRouteQueryParam<R extends RouteDefaultName> =\n`;
+    text += `declare type DefaultRouteQueryParam<R extends RouteDefaultName> =\n`;
     for (const [key, value] of Object.entries(client_1.default_routes)) {
         const route_def = value;
         if (!route_def.query) {
-            text += `\t\tR extends '${key}' ? never :\n`;
+            text += `\tR extends '${key}' ? never :\n`;
         }
         else {
             const params_union = route_def.query.map((v) => `'${v}'`).join(' | ');
-            text += `\t\tR extends '${key}' ? ${params_union} :\n`;
+            text += `\tR extends '${key}' ? ${params_union} :\n`;
         }
     }
-    text += `\t\tnever\n`;
+    text += `\tnever\n`;
     text += `\n`;
     return text;
 }
@@ -116,20 +116,20 @@ function _generate_route_url(atom_book) {
     let text = '';
     text += _generate_route_default_url();
     text += _generate_route_custom_url(atom_book);
-    text += `\texport type RouteURL<A extends AtomName, R extends RouteName<A>> =\n`;
-    text += `\t\tR extends RouteCustomName<A> ? CustomRouteURL<A,R> :\n`;
-    text += `\t\tR extends RouteName<A> ? DefaultRouteURL<A,R> :\n`;
-    text += `\t\tnever\n`;
+    text += `export declare type RouteURL<A extends AtomName, R extends RouteName<A>> =\n`;
+    text += `\tR extends RouteCustomName<A> ? CustomRouteURL<A,R> :\n`;
+    text += `\tR extends RouteName<A> ? DefaultRouteURL<A,R> :\n`;
+    text += `\tnever\n`;
     text += `\n`;
     return text;
 }
 function _generate_route_default_url() {
     let text = '';
-    text += `\ttype DefaultRouteURL<A extends AtomName, R extends RouteName<A>> =\n`;
+    text += `declare type DefaultRouteURL<A extends AtomName, R extends RouteName<A>> =\n`;
     for (const [key, val] of Object.entries(client_1.default_routes)) {
-        text += `\t\tR extends '${key}' ? '${val.url}' :\n`;
+        text += `\tR extends '${key}' ? '${val.url}' :\n`;
     }
-    text += `\t\tnever\n`;
+    text += `\tnever\n`;
     text += `\n`;
     return text;
 }
@@ -137,67 +137,67 @@ function _generate_route_name(atom_book) {
     let text = '';
     text += _generate_route_default_name();
     text += _generate_route_custom_name(atom_book);
-    text += `\texport type RouteName<A extends AtomName> =\n`;
-    text += `\t\tRouteCustomName<A> | RouteDefaultName;\n\n`;
+    text += `export declare type RouteName<A extends AtomName> =\n`;
+    text += `\tRouteCustomName<A> | RouteDefaultName;\n\n`;
     return text;
 }
 function _generate_route_default_name() {
     const default_route_keys = Object.keys(client_1.default_routes);
     let text = '';
-    text += `\ttype RouteDefaultName = `;
+    text += `declare type RouteDefaultName = `;
     text += default_route_keys.map((k) => `'${k}'`).join(' | ');
     text += `\n\n`;
     return text;
 }
 function _generate_route_custom_name(atom_book) {
     let text = '';
-    text += `\ttype RouteCustomName<A extends AtomName> =\n`;
+    text += `declare type RouteCustomName<A extends AtomName> =\n`;
     for (const [atom_name, atom_def] of Object.entries(atom_book)) {
-        text += `\t\tA extends '${atom_name}' ? ${_route_custom_name(atom_def)} :\n`;
+        text += `\tA extends '${atom_name}' ? ${_route_custom_name(atom_def)} :\n`;
     }
-    text += `\tnever\n\n`;
+    text += `never\n\n`;
     return text;
 }
 function _generate_route_custom_url(atom_book) {
     let text = '';
-    text += `\ttype CustomRouteURL<A extends AtomName, R extends RouteCustomName<A>> =\n`;
+    text += `declare type CustomRouteURL<A extends AtomName, R extends RouteCustomName<A>> =\n`;
     for (const [atom_name, atom_def] of Object.entries(atom_book)) {
         if (!atom_def.dock || !atom_def.dock.routes) {
-            text += `\t\tA extends '${atom_name}' ? never :\n`;
+            text += `\tA extends '${atom_name}' ? never :\n`;
         }
         else {
-            text += `\t\tA extends '${atom_name}' ?\n`;
+            text += `\tA extends '${atom_name}' ?\n`;
             for (const [route_name, route_def] of Object.entries(atom_def.dock.routes)) {
-                text += `\t\t\tR extends '${route_name}' ? '${route_def.url}' :\n`;
+                text += `\t\tR extends '${route_name}' ? '${route_def.url}' :\n`;
             }
-            text += `\t\t\tnever :\n`;
+            text += `\t\tnever :\n`;
         }
     }
-    text += `\tnever\n\n`;
+    text += `never\n\n`;
     return text;
 }
 function _generate_route_custom_query_param(atom_book) {
     let text = '';
-    text += `\ttype CustomRouteQueryParam<A extends AtomName, R extends RouteCustomName<A>> =\n`;
+    text += `declare type CustomRouteQueryParam<A extends AtomName, R extends RouteCustomName<A>> =\n`;
     for (const [atom_name, atom_def] of Object.entries(atom_book)) {
         if (!atom_def.dock || !atom_def.dock.routes) {
-            text += `\t\tA extends '${atom_name}' ? never :\n`;
+            text += `\tA extends '${atom_name}' ? never :\n`;
         }
         else {
-            text += `\t\tA extends '${atom_name}' ?\n`;
+            text += `\tA extends '${atom_name}' ?\n`;
             for (const [route_name, route_def] of Object.entries(atom_def.dock.routes)) {
                 if (!route_def.query || !Array.isArray(route_def.query)) {
-                    text += `\t\t\tR extends '${route_name}' ? never :\n`;
+                    text += `\t\tR extends '${route_name}' ? never :\n`;
                 }
                 else {
                     const joined_value = route_def.query.map((v) => `'${v}'`).join(' | ');
-                    text += `\t\t\tR extends '${route_name}' ? ${joined_value} :\n`;
+                    text += `\t\tR extends '${route_name}' ? ${joined_value} :\n`;
                 }
             }
-            text += `\t\t\tnever :\n`;
+            text += `\t\tnever :\n`;
         }
     }
-    text += `\tnever\n\n`;
+    text += `never\n\n`;
     return text;
 }
 function _route_custom_name(atom_def) {
