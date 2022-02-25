@@ -3,6 +3,9 @@
 	"version": "0.0.1",
 	"description": "Uranio API",
 	"main": "dist/index.js",
+	"bin": {
+		"uranio-api": "dist/bin.js"
+	},
 	"exports": {
 		".": "./dist/server.js",
 		"./types": "./dist/server/types.js",

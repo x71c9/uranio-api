@@ -13,7 +13,7 @@
 
 import core_client from 'uranio-core/client';
 
-import {RouteMethod} from './request';
+import {RouteMethod} from './request_cln';
 
 import {schema} from '../sch/client';
 
@@ -21,22 +21,11 @@ export type Book = {
 	[k in schema.AtomName]?: Book.Definition
 }
 
-// export type DockBook = {
-//   [k in core_client.types.AtomName]: Book.Definition.Dock
-// }
-
 export namespace Book {
-	
-	// export type BasicDefinition =
-	//   core_client.types.Book.BasicDefinition &
-	//   { dock?: Definition.Dock }
 	
 	export type Definition =
 		core_client.types.Book.Definition &
 		{ dock?: Definition.Dock }
-	
-	// export type Definition =
-	//   Book.BasicDefinition
 	
 	export namespace Definition {
 		

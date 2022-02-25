@@ -37,7 +37,9 @@ export function set_initialize(is_initialized:boolean)
 
 export function set_from_env(repo_config:Required<types.ClientConfiguration>)
 		:void{
-	return core_client.conf.set_from_env(repo_config);
+	core_client.conf.set_from_env(repo_config);
+	const conf = _get_env_vars(repo_config);
+	set(repo_config, conf);
 }
 
 export function set(
@@ -45,6 +47,13 @@ export function set(
 	config:types.ClientConfiguration
 ):void{
 	return core_client.conf.set(repo_config, config);
+}
+
+function _get_env_vars(repo_config:types.ClientConfiguration):types.ClientConfiguration{
+	if(typeof process.env.URN_CLIENT_FETCH === 'string' && process.env.URN_CLIENT_FETCH !== ''){
+		repo_config.prefix_log = process.env.URN_PREFIX_LOG;
+	}
+	return repo_config;
 }
 
 function _check_if_param_exists(param_name:string){

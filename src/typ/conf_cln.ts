@@ -10,6 +10,7 @@ type RequiredClientConfigParams = {
 }
 
 type OptionalClientConfigParam = {
+	prefix_log: string
 }
 
 export type ClientConfiguration =

@@ -6,4 +6,4 @@
 export * from '../typ/core_cln';
 export * from '../typ/book_cln';
 export * from '../typ/conf_cln';
-export * from '../typ/request';
+export * from '../typ/request_cln';
