@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.has_property = exports.get_full_properties_definition = exports.get_custom_property_definitions = exports.get_property_definition = exports.get_definition = exports.get_all_definitions = exports.get_plural = exports.validate_name = exports.get_names = exports.add_definition = exports.get_dock_definition = exports.get_routes_definition_with_defaults = exports.get_routes_definition = exports.get_route_def = void 0;
+exports.has_property = exports.get_full_properties_definition = exports.get_custom_property_definitions = exports.get_property_definition = exports.get_definition = exports.get_all_definitions = exports.get_plural = exports.validate_name = exports.get_names = exports.add_definition = exports.add_route_definition = exports.get_dock_definition = exports.get_routes_definition_with_defaults = exports.get_routes_definition = exports.get_route_def = void 0;
 // export * from 'uranio-core/book/atom/index';
 const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('BOOK_SERVER', 'Book server methods module');
@@ -62,6 +62,10 @@ function get_dock_definition(atom_name) {
     return book_client.get_dock_definition(atom_name);
 }
 exports.get_dock_definition = get_dock_definition;
+function add_route_definition(atom_name, route_name, route_definition) {
+    return book_client.add_route_definition(atom_name, route_name, route_definition);
+}
+exports.add_route_definition = add_route_definition;
 function add_definition(atom_name, atom_definition) {
     return uranio_core_1.default.book.add_definition(atom_name, atom_definition);
 }
