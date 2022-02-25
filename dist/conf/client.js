@@ -30,13 +30,21 @@ function set_initialize(is_initialized) {
 }
 exports.set_initialize = set_initialize;
 function set_from_env(repo_config) {
-    return client_1.default.conf.set_from_env(repo_config);
+    client_1.default.conf.set_from_env(repo_config);
+    const conf = _get_env_vars(repo_config);
+    set(repo_config, conf);
 }
 exports.set_from_env = set_from_env;
 function set(repo_config, config) {
     return client_1.default.conf.set(repo_config, config);
 }
 exports.set = set;
+function _get_env_vars(repo_config) {
+    if (typeof process.env.URN_CLIENT_FETCH === 'string' && process.env.URN_CLIENT_FETCH !== '') {
+        repo_config.prefix_log = process.env.URN_PREFIX_LOG;
+    }
+    return repo_config;
+}
 function _check_if_param_exists(param_name) {
     return urn_lib_1.urn_util.object.has_key(defaults_1.api_client_config, param_name);
 }

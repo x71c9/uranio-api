@@ -2,10 +2,11 @@
 
 Uranio API extends [Uranio CORE](https://github.com/nbl7/uranio-core).
 
-Uranio API provides a method that creates a full web serivce for an Aplication
+Uranio API provides a method that creates a web service for an Application
 Programming Interface with CRUD operations.
 
 ```typescript
+// Method for Web Service
 import uranio from 'uranio';
 uranio.init();
 
@@ -17,13 +18,14 @@ service.listen(() => {
 
 The web service runs on [Express.js](https://expressjs.com/).
 
-> More services type will be available in the future
+> More service types will be available in the future
 
 Urano API provides also a method that runs on Lambda Functions. Useful for
 deplying on [AWS Lambda](https://aws.amazon.com/it/lambda/) or
 [Netlify](https://www.netlify.com/).
 
 ```typescript
+// Method for Lambda
 import uranio from 'uranio';
 uranio.init();
 
@@ -37,7 +39,9 @@ export { handler };
 
 ### Routes
 
-Uranio API generates for each Releation the following routes:
+Uranio API generates for each Atom the following routes:
+
+> See what is an [Atom](https://github.com/nbl7/uranio-core/README.md#Atom)
 
 - `count`
 - `find_one`
@@ -50,7 +54,7 @@ Uranio API generates for each Releation the following routes:
 - `update_multiple`
 - `delete_multiple`
 
-For the relation `media` it generates also the route:
+For the atom `media` it generates also the routes:
 
 - `upload`
 - `presigned`
@@ -192,11 +196,13 @@ Uranio API provides an authentication route for each **AuthAtom**.
 
 > See what is an [AuthAtom](https://github.com/nbl7/uranio-core#authatoms)
 
-The route path must be defined in Book with the attribute `auth_url` inside `dock`:
+The route path must be defined in Book with the attribute `auth_url` inside
+the `dock` property:
 
 ```typescript
 // src/book.ts
-export default atom_book:uranio.types.Book = {
+import uranio from 'uranio';
+export default uranio.register({
 	customer: {
 		authenticate: true,
 		properties: {
@@ -208,7 +214,7 @@ export default atom_book:uranio.types.Book = {
 			...
 		}
 	}
-}
+});
 ```
 Then the route `https://myservice.com/[prefix-api]/auth-customer` will
 accept a POST request with a JSON body:
