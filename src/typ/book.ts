@@ -56,8 +56,10 @@ export namespace Book {
 					}
 				
 				export namespace Route {
+					
 					export type Call<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0> =
 						(route_request: ApiRequest.Request<A,R,D>) => any
+					
 				}
 				
 			}
