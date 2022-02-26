@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.has_property = exports.get_full_properties_definition = exports.get_custom_property_definitions = exports.get_property_definition = exports.get_definition = exports.get_all_definitions = exports.get_plural = exports.validate_name = exports.get_names = exports.add_definition = exports.add_route_definition = exports.get_dock_definition = exports.get_routes_definition_with_defaults = exports.get_routes_definition = exports.get_route_def = void 0;
+exports.has_property = exports.get_full_properties_definition = exports.get_custom_property_definitions = exports.get_property_definition = exports.get_definition = exports.get_all_definitions = exports.get_plural = exports.validate_name = exports.get_names = exports.add_definition = exports.add_route_call = exports.get_dock_definition = exports.get_routes_definition_with_defaults = exports.get_routes_definition = exports.get_route_def = void 0;
 // export * from 'uranio-core/book/atom/index';
 const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('BOOK_SERVER', 'Book server methods module');
@@ -62,10 +62,37 @@ function get_dock_definition(atom_name) {
     return book_client.get_dock_definition(atom_name);
 }
 exports.get_dock_definition = get_dock_definition;
-function add_route_definition(atom_name, route_name, route_definition) {
-    return book_client.add_route_definition(atom_name, route_name, route_definition);
+function add_route_call(atom_name, route_name, route_call) {
+    const atom_book = get_all_definitions();
+    const atom_def = atom_book[atom_name];
+    if (!atom_def) {
+        throw urn_exc.create(`INVALID_ATOM_NAME`, `Cannot get atom definition in [add_route_definition]`);
+    }
+    if (!atom_def.dock) {
+        atom_def.dock = {
+            url: `/${get_plural(atom_name)}`
+        };
+    }
+    if (!atom_def.dock.routes) {
+        throw urn_exc.create(`ROUTE_NOT_DEFINED`, `Dock route is empty.`);
+    }
+    const route_def = atom_def.dock.routes[route_name];
+    if (!route_def) {
+        throw urn_exc.create(`INVALID_ROUTE_NAME`, `Cannot find route [${route_name}] for atom [${atom_name}].`);
+    }
+    route_def.call = route_call;
+    // Object.assign(atom_def.dock.routes, {...atom_def.dock.routes, route_name: route_definition});
+    // Object.assign(atom_book, {...atom_book_def, ...atom_book});
+    return atom_book;
 }
-exports.add_route_definition = add_route_definition;
+exports.add_route_call = add_route_call;
+// export function add_route_definition<A extends schema.AtomName>(
+//   atom_name:A,
+//   route_name: schema.RouteName<A>,
+//   route_definition:ClientBook.Definition.Dock.Routes.Route
+// ):Book{
+//   return book_client.add_route_definition(atom_name, route_name, route_definition);
+// }
 function add_definition(atom_name, atom_definition) {
     return uranio_core_1.default.book.add_definition(atom_name, atom_definition);
 }
