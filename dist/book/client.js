@@ -8,7 +8,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_names = exports.has_property = exports.get_full_properties_definition = exports.get_custom_property_definitions = exports.get_property_definition = exports.get_definition = exports.get_all_definitions = exports.validate_auth_name = exports.validate_name = exports.get_plural = exports.add_definition = exports.add_route_definition = exports.get_dock_definition = exports.get_routes_definition_with_defaults = exports.get_routes_definition = exports.get_route_def = void 0;
+exports.get_names = exports.has_property = exports.get_full_properties_definition = exports.get_custom_property_definitions = exports.get_property_definition = exports.get_definition = exports.get_all_definitions = exports.validate_auth_name = exports.validate_name = exports.get_plural = exports.add_definition = exports.get_dock_definition = exports.get_routes_definition_with_defaults = exports.get_routes_definition = exports.get_route_def = void 0;
 const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('BOOK_CLIENT', 'Book client methods module');
 const client_1 = __importDefault(require("uranio-core/client"));
@@ -51,26 +51,32 @@ function get_dock_definition(atom_name) {
     return dock_def;
 }
 exports.get_dock_definition = get_dock_definition;
-function add_route_definition(atom_name, route_name, route_definition) {
-    const atom_book = get_all_definitions();
-    const atom_def = atom_book[atom_name];
-    if (!atom_def) {
-        throw urn_exc.create(`INVALID_ATOM_NAME`, `Cannot get atom definition in [add_route_definition]`);
-    }
-    if (!atom_def.dock) {
-        atom_def.dock = {
-            url: `/${get_plural(atom_name)}`
-        };
-    }
-    if (!atom_def.dock.routes) {
-        atom_def.dock.routes = {};
-    }
-    atom_def.dock.routes[route_name] = route_definition;
-    // Object.assign(atom_def.dock.routes, {...atom_def.dock.routes, route_name: route_definition});
-    // Object.assign(atom_book, {...atom_book_def, ...atom_book});
-    return atom_book;
-}
-exports.add_route_definition = add_route_definition;
+// export function add_route_definition<A extends schema.AtomName>(
+//   atom_name:A,
+//   route_name: schema.RouteName<A>,
+//   route_definition:Book.Definition.Dock.Routes.Route
+// ):Book{
+//   const atom_book = get_all_definitions();
+//   const atom_def = atom_book[atom_name];
+//   if(!atom_def){
+//     throw urn_exc.create(
+//       `INVALID_ATOM_NAME`,
+//       `Cannot get atom definition in [add_route_definition]`
+//     );
+//   }
+//   if(!atom_def.dock){
+//     atom_def.dock = {
+//       url: `/${get_plural(atom_name)}`
+//     };
+//   }
+//   if(!atom_def.dock.routes){
+//     atom_def.dock.routes = {};
+//   }
+//   atom_def.dock.routes[route_name] = route_definition;
+//   // Object.assign(atom_def.dock.routes, {...atom_def.dock.routes, route_name: route_definition});
+//   // Object.assign(atom_book, {...atom_book_def, ...atom_book});
+//   return atom_book;
+// }
 function add_definition(atom_name, atom_definition) {
     return client_1.default.book.add_definition(atom_name, atom_definition);
 }

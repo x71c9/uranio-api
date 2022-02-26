@@ -59,13 +59,50 @@ export function get_dock_definition<A extends schema.AtomName>(atom_name:A)
 	return book_client.get_dock_definition(atom_name) as Book.Definition.Dock<A>;
 }
 
-export function add_route_definition<A extends schema.AtomName>(
+export function add_route_call<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth>(
 	atom_name:A,
-	route_name: schema.RouteName<A>,
-	route_definition:ClientBook.Definition.Dock.Routes.Route
+	route_name:R,
+	route_call:Book.Definition.Dock.Routes.Route.Call<A,R,D>
 ):Book{
-	return book_client.add_route_definition(atom_name, route_name, route_definition);
+	const atom_book = get_all_definitions();
+	const atom_def = atom_book[atom_name];
+	if(!atom_def){
+		throw urn_exc.create(
+			`INVALID_ATOM_NAME`,
+			`Cannot get atom definition in [add_route_definition]`
+		);
+	}
+	if(!atom_def.dock){
+		atom_def.dock = {
+			url: `/${get_plural(atom_name)}`
+		};
+	}
+	if(!atom_def.dock.routes){
+		throw urn_exc.create(
+			`ROUTE_NOT_DEFINED`,
+			`Dock route is empty.`
+		);
+	}
+	const route_def = atom_def.dock.routes[route_name];
+	if(!route_def){
+		throw urn_exc.create(
+			`INVALID_ROUTE_NAME`,
+			`Cannot find route [${route_name}] for atom [${atom_name}].`
+		);
+	}
+	(route_def as Book.Definition.Dock.Routes.Route<A,R,D>).call = route_call;
+	// Object.assign(atom_def.dock.routes, {...atom_def.dock.routes, route_name: route_definition});
+	// Object.assign(atom_book, {...atom_book_def, ...atom_book});
+	return atom_book;
 }
+	
+// export function add_route_definition<A extends schema.AtomName>(
+//   atom_name:A,
+//   route_name: schema.RouteName<A>,
+//   route_definition:ClientBook.Definition.Dock.Routes.Route
+// ):Book{
+//   return book_client.add_route_definition(atom_name, route_name, route_definition);
+// }
 
 export function add_definition<A extends schema.AtomName>(
 	atom_name:A,
