@@ -15,10 +15,10 @@ import core_client from 'uranio-core/client';
 
 import {RouteMethod} from './request_cln';
 
-import {schema} from '../sch/client';
+// import {schema} from '../sch/client';
 
 export type Book = {
-	[k in schema.AtomName]?: Book.Definition
+	[k:string]: Book.Definition
 }
 
 export namespace Book {

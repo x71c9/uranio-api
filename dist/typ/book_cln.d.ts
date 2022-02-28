@@ -12,9 +12,8 @@
  */
 import core_client from 'uranio-core/client';
 import { RouteMethod } from './request_cln';
-import { schema } from '../sch/client';
 export declare type Book = {
-    [k in schema.AtomName]?: Book.Definition;
+    [k: string]: Book.Definition;
 };
 export declare namespace Book {
     type Definition = core_client.types.Book.Definition & {
