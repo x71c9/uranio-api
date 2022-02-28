@@ -20,6 +20,10 @@ import * as conf from '../conf/client';
 
 import * as log from '../log/client';
 
+import * as book from '../book/client';
+
+import {default_routes, media_routes} from '../routes/client';
+
 export function init(config?:types.ClientConfiguration)
 		:void{
 	
@@ -27,6 +31,7 @@ export function init(config?:types.ClientConfiguration)
 	
 	core_client.init(config);
 	
+	_add_default_routes();
 	_register_required_atoms();
 	
 	if(!config){
@@ -42,8 +47,32 @@ export function init(config?:types.ClientConfiguration)
 	conf.set_initialize(true);
 }
 
+function _add_default_routes(){
+	
+	const core_atom_book = book.get_all_definitions();
+	for(const [atom_name, atom_def] of Object.entries(core_atom_book)){
+		if(atom_name === 'media'){
+			(atom_def.dock as any).routes = {
+				...default_routes,
+				...media_routes
+			};
+		}else{
+			(atom_def.dock as any).routes = default_routes;
+		}
+		register.atom(atom_def as any, atom_name as any);
+	}
+}
+
 function _register_required_atoms(){
 	for(const [atom_name, atom_def] of Object.entries(atom_book)){
+		if(atom_name === 'media'){
+			(atom_def.dock as any).routes = {
+				...default_routes,
+				...media_routes
+			};
+		}else{
+			(atom_def.dock as any).routes = default_routes;
+		}
 		register.atom(atom_def as any, atom_name as any);
 	}
 }

@@ -91,19 +91,23 @@ export const default_routes = {
 	},
 } as const;
 
+export const media_routes = {
+	upload:{
+		method: types.RouteMethod.POST,
+		action: core.types.AuthAction.WRITE,
+		url: '/upload',
+	},
+	presigned:{
+		method: types.RouteMethod.GET,
+		action: core.types.AuthAction.WRITE,
+		query: ['filename', 'size', 'type'],
+		url: '/presigned',
+	}
+} as const;
+
 export function add_media_routes():typeof default_routes{
 	const cloned_default_routes = {
-		upload:{
-			method: types.RouteMethod.POST,
-			action: core.types.AuthAction.WRITE,
-			url: '/upload',
-		},
-		presigned:{
-			method: types.RouteMethod.GET,
-			action: core.types.AuthAction.WRITE,
-			query: ['filename', 'size', 'type'],
-			url: '/presigned',
-		},
+		...media_routes,
 		...default_routes
 	};
 	return cloned_default_routes as typeof default_routes;

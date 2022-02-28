@@ -41,6 +41,7 @@ export declare namespace Book {
                 }
             }
         }
+        type Security = book_cln.Book.Definition.Security;
         type Property = book_cln.Book.Definition.Property;
         type Properties = book_cln.Book.Definition.Properties;
         namespace Property {
@@ -77,6 +78,5 @@ export declare namespace Book {
                 type Atom = book_cln.Book.Definition.Property.Validation.Atom;
             }
         }
-        type Security = core.types.Book.Definition.Security;
     }
 }

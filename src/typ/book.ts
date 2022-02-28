@@ -65,6 +65,7 @@ export namespace Book {
 			}
 		}
 		
+		export type Security = book_cln.Book.Definition.Security;
 		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		// export import Properties = core.types.Book.Definition.Properties;
@@ -113,8 +114,6 @@ export namespace Book {
 				export type Atom = book_cln.Book.Definition.Property.Validation.Atom;
 			}
 		}
-		
-		export type Security = core.types.Book.Definition.Security;
 		
 	}
 	

@@ -39,7 +39,7 @@ const common_1 = require("./common");
 function create_express_route(atom_name) {
     urn_lib_1.urn_log.fn_debug(`Create Express Default Atom Router [${atom_name}]`);
     const router = express_1.default.Router();
-    const routes_definition = book.get_routes_definition_with_defaults(atom_name);
+    const routes_definition = book.get_routes_definition(atom_name);
     for (const [_route_name, route_def] of Object.entries(routes_definition)) {
         switch (route_def.method) {
             case types.RouteMethod.GET: {

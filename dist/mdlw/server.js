@@ -60,7 +60,7 @@ async function auth_route_middleware(api_request, auth_handler) {
 exports.auth_route_middleware = auth_route_middleware;
 async function _authorization(api_request) {
     // const route_def = _get_route_def(api_request);
-    const route_def = book.get_route_def(api_request.atom_name, api_request.route_name);
+    const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
     if (uranio_core_1.default.bll.auth.is_public_request(api_request.atom_name, route_def.action)) {
         return false;
     }
@@ -80,7 +80,7 @@ async function _authorization(api_request) {
 }
 async function _validate_and_call(api_request) {
     // const route_def = _get_route_def(api_request);
-    const route_def = book.get_route_def(api_request.atom_name, api_request.route_name);
+    const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
     urn_lib_1.urn_log.fn_debug(`Router ${route_def.method} [${api_request.atom_name}] ${api_request.full_path}`);
     _validate_route(api_request);
     if (!urn_lib_1.urn_util.object.has_key(route_def, 'call') || !route_def.call) {
@@ -131,7 +131,7 @@ function _auth_validate(api_request) {
 }
 function _validate_route(api_request) {
     // const route_def = _get_route_def(api_request);
-    const route_def = book.get_route_def(api_request.atom_name, api_request.route_name);
+    const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
     urn_lib_1.urn_log.fn_debug(`Validate Route ${route_def.url} [${api_request.atom_name}]`);
     if (route_def.method !== types.RouteMethod.POST) {
         req_validator.empty(api_request.body, 'body');
@@ -168,7 +168,7 @@ function _validate_route(api_request) {
 }
 function _limit(api_request) {
     var _a;
-    const route_def = book.get_route_def(api_request.atom_name, api_request.route_name);
+    const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
     if (!Array.isArray(route_def.query) || !route_def.query.includes('options')) {
         return api_request;
     }

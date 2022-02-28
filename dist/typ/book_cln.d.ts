@@ -46,6 +46,7 @@ export declare namespace Book {
                 };
             }
         }
+        type Security = core_client.types.Book.Definition.Security;
         /**
          * ** NOTE **
          * For some reason it is not possible to use the following syntax.
