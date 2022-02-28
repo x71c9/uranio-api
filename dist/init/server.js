@@ -32,16 +32,18 @@ const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('INIT_API_MODULE', `Api init module`);
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const defaults_1 = require("../conf/defaults");
-const client_1 = require("../routes/client");
+// import {default_routes} from '../routes/client';
 const register = __importStar(require("../reg/server"));
 const atoms_1 = require("../atoms");
 const conf = __importStar(require("../conf/server"));
 const book = __importStar(require("../book/server"));
 const log = __importStar(require("../log/server"));
+const calls_1 = require("../routes/calls");
 function init(config) {
-    _register_required_atoms();
     log.init(urn_lib_1.urn_log.defaults);
     uranio_core_1.default.init(config);
+    _add_default_routes();
+    _register_required_atoms();
     if (typeof config === 'undefined') {
         uranio_core_1.default.conf.set_from_env(defaults_1.api_config);
     }
@@ -56,8 +58,15 @@ function init(config) {
     conf.set_initialize(true);
 }
 exports.init = init;
+function _add_default_routes() {
+    const core_atom_book = book.get_all_definitions();
+    for (const [atom_name, atom_def] of Object.entries(core_atom_book)) {
+        atom_def.dock.routes = (0, calls_1.return_default_routes)(atom_name);
+    }
+}
 function _register_required_atoms() {
     for (const [atom_name, atom_def] of Object.entries(atoms_1.atom_book)) {
+        atom_def.dock.routes = (0, calls_1.return_default_routes)(atom_name);
         register.atom(atom_def, atom_name);
     }
 }
@@ -68,7 +77,7 @@ function _register_required_atoms() {
 function _validate_api_book() {
     _validate_dock_url_uniqueness();
     _validate_dock_route_url_uniqueness();
-    _validate_route_name();
+    // _validate_route_name();
 }
 function _validate_dock_url_uniqueness() {
     const atom_book = book.get_all_definitions();
@@ -89,43 +98,49 @@ function _validate_dock_route_url_uniqueness() {
     for (const [atom_name, atom_def] of Object.entries(atom_book)) {
         const dock_def = atom_def.dock;
         if (dock_def && dock_def.routes) {
-            const route_urls = [];
+            const route_urls = {};
             for (const [_route_name, route_def] of Object.entries(dock_def.routes)) {
                 if (typeof route_def.url === 'string') {
-                    if (route_urls.includes(route_def.url)) {
-                        throw urn_exc.create_not_initialized(`INVALID_BOOK_DOCK_URL`, `Ivalid dock route url value [${route_def.url}]. Url already in use.` +
+                    if (!route_urls[route_def.method]) {
+                        route_urls[route_def.method] = [];
+                    }
+                    if (route_urls[route_def.method].includes(route_def.url)) {
+                        throw urn_exc.create_not_initialized(`INVALID_BOOK_ROUTE_URL`, `Ivalid dock route url value [${route_def.url}]. Url already in use.` +
                             ` atom_name [${atom_name}]`);
                     }
-                    route_urls.push(route_def.url);
+                    route_urls[route_def.method].push(route_def.url);
                 }
             }
         }
     }
 }
-function _validate_route_name() {
-    const atom_book = book.get_all_definitions();
-    const invalid_route_names = _get_default_route_name();
-    for (const [_atom_name, atom_def] of Object.entries(atom_book)) {
-        const dock_def = atom_def.dock;
-        if (dock_def && typeof dock_def.routes === 'object') {
-            for (const [route_name, _route_def] of Object.entries(dock_def.routes)) {
-                if (invalid_route_names.includes(route_name)) {
-                    throw urn_exc.create_not_initialized(`INVALID_BOOK_ROUTE_NAME`, `Ivalid route name [${route_name}].` +
-                        ` Route name already in use by the system.`);
-                }
-            }
-        }
-    }
-}
-function _get_default_route_name() {
-    const route_names = [];
-    for (const route_name in client_1.default_routes) {
-        route_names.push(route_name);
-    }
-    route_names.push('upload');
-    route_names.push('presigned');
-    return route_names;
-}
+// function _validate_route_name(){
+//   const atom_book = book.get_all_definitions();
+//   const invalid_route_names:string[] = _get_default_route_name();
+//   for(const [_atom_name, atom_def] of Object.entries(atom_book)){
+//     const dock_def = atom_def.dock;
+//     if(dock_def && typeof dock_def.routes === 'object'){
+//       for(const [route_name, _route_def] of Object.entries(dock_def.routes)){
+//         if(invalid_route_names.includes(route_name)){
+//           throw urn_exc.create_not_initialized(
+//             `INVALID_BOOK_ROUTE_NAME`,
+//             `Ivalid route name [${route_name}].` +
+//             ` Route name already in use by the system.`
+//           );
+//         }
+//       }
+//     }
+//   }
+// }
+// function _get_default_route_name(){
+//   const route_names:string[] = [];
+//   for(const route_name in default_routes){
+//     route_names.push(route_name);
+//   }
+//   route_names.push('upload');
+//   route_names.push('presigned');
+//   return route_names;
+// }
 function _validate_api_variables() {
     _check_number_values();
 }

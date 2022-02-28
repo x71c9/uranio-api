@@ -90,8 +90,7 @@ function process_request_path(full_path) {
 }
 exports.process_request_path = process_request_path;
 function get_auth_action(atom_name, route_name) {
-    const routes_def = book.get_routes_definition_with_defaults(atom_name);
-    const route_def = routes_def[route_name];
+    const route_def = book.get_route_definition(atom_name, route_name);
     if (!route_def || !route_def.action) {
         throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name \`${String(route_name)}\` from atom \`${atom_name}\`.`);
     }
@@ -119,7 +118,7 @@ function get_atom_name_from_atom_path(atom_path) {
 }
 exports.get_atom_name_from_atom_path = get_atom_name_from_atom_path;
 function get_route_name(atom_name, route_path, http_method) {
-    const routes_def = book.get_routes_definition_with_defaults(atom_name);
+    const routes_def = book.get_routes_definition(atom_name);
     /**
      * Never rely on Object properties order.
      * This caused issue while checking route_name.

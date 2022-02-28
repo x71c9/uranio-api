@@ -80,4 +80,17 @@ export declare const default_routes: {
         readonly url: "/multiple/:ids";
     };
 };
+export declare const media_routes: {
+    readonly upload: {
+        readonly method: types.RouteMethod.POST;
+        readonly action: core.types.AuthAction.WRITE;
+        readonly url: "/upload";
+    };
+    readonly presigned: {
+        readonly method: types.RouteMethod.GET;
+        readonly action: core.types.AuthAction.WRITE;
+        readonly query: readonly ["filename", "size", "type"];
+        readonly url: "/presigned";
+    };
+};
 export declare function add_media_routes(): typeof default_routes;

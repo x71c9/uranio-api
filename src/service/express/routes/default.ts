@@ -29,7 +29,7 @@ export function create_express_route<A extends schema.AtomName>(atom_name:A)
 	
 	const router = express.Router();
 	
-	const routes_definition = book.get_routes_definition_with_defaults(atom_name);
+	const routes_definition = book.get_routes_definition(atom_name);
 	
 	for(const [_route_name, route_def] of Object.entries(routes_definition)){
 		switch(route_def.method){

@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.add_media_routes = exports.default_routes = void 0;
+exports.add_media_routes = exports.media_routes = exports.default_routes = void 0;
 const client_1 = __importDefault(require("uranio-core/client"));
 const types = __importStar(require("../client/types"));
 // import {schema} from '../sch/index';
@@ -110,19 +110,22 @@ exports.default_routes = {
         url: '/multiple/:ids',
     },
 };
+exports.media_routes = {
+    upload: {
+        method: types.RouteMethod.POST,
+        action: client_1.default.types.AuthAction.WRITE,
+        url: '/upload',
+    },
+    presigned: {
+        method: types.RouteMethod.GET,
+        action: client_1.default.types.AuthAction.WRITE,
+        query: ['filename', 'size', 'type'],
+        url: '/presigned',
+    }
+};
 function add_media_routes() {
     const cloned_default_routes = {
-        upload: {
-            method: types.RouteMethod.POST,
-            action: client_1.default.types.AuthAction.WRITE,
-            url: '/upload',
-        },
-        presigned: {
-            method: types.RouteMethod.GET,
-            action: client_1.default.types.AuthAction.WRITE,
-            query: ['filename', 'size', 'type'],
-            url: '/presigned',
-        },
+        ...exports.media_routes,
         ...exports.default_routes
     };
     return cloned_default_routes;

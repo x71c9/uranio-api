@@ -57,7 +57,7 @@ async function _authorization<A extends schema.AtomName, R extends schema.RouteN
 	api_request:types.Api.Request<A,R,D>
 ):Promise<false | types.Api.Request<A,R,D>> {
 	// const route_def = _get_route_def(api_request);
-	const route_def = book.get_route_def(api_request.atom_name, api_request.route_name);
+	const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
 	if(core.bll.auth.is_public_request(api_request.atom_name, route_def.action)){
 		return false;
 	}
@@ -80,7 +80,7 @@ async function _validate_and_call<A extends schema.AtomName, R extends schema.Ro
 ){
 	
 	// const route_def = _get_route_def(api_request);
-	const route_def = book.get_route_def(api_request.atom_name, api_request.route_name);
+	const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
 	
 	urn_log.fn_debug(`Router ${route_def.method} [${api_request.atom_name}] ${api_request.full_path}`);
 	
@@ -164,7 +164,7 @@ function _validate_route<A extends schema.AtomName, R extends schema.RouteName<A
 ):void{
 	
 	// const route_def = _get_route_def(api_request);
-	const route_def = book.get_route_def(api_request.atom_name, api_request.route_name);
+	const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
 		
 	urn_log.fn_debug(`Validate Route ${route_def.url} [${api_request.atom_name}]`);
 	
@@ -206,7 +206,7 @@ function _validate_route<A extends schema.AtomName, R extends schema.RouteName<A
 function _limit<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0>(
 	api_request:types.Api.Request<A,R,D>
 ){
-	const route_def = book.get_route_def(api_request.atom_name, api_request.route_name);
+	const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
 	if(!Array.isArray(route_def.query) || !route_def.query.includes('options')){
 		return api_request;
 	}

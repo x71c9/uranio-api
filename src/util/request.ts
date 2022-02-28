@@ -81,8 +81,7 @@ export function get_auth_action<A extends schema.AtomName>(
 	atom_name:A,
 	route_name:keyof types.Book.Definition.Dock.Routes<A>
 ):core.types.AuthAction{
-	const routes_def = book.get_routes_definition_with_defaults(atom_name);
-	const route_def = routes_def[route_name];
+	const route_def = book.get_route_definition(atom_name, route_name);
 	if(!route_def || !route_def.action){
 		throw urn_exc.create(`AUTHACTION_INVALID_ROUTE_NAME`, `Invalid route name \`${String(route_name)}\` from atom \`${atom_name}\`.`);
 	}
@@ -115,7 +114,7 @@ export function get_route_name<A extends schema.AtomName, R extends schema.Route
 	route_path:string,
 	http_method:types.RouteMethod
 ):R | undefined{
-	const routes_def = book.get_routes_definition_with_defaults(atom_name);
+	const routes_def = book.get_routes_definition(atom_name);
 	/**
 	 * Never rely on Object properties order.
 	 * This caused issue while checking route_name.

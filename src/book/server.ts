@@ -20,13 +20,11 @@ import {schema} from '../sch/server';
 
 import * as book_client from './client';
 
-import {return_default_routes} from '../routes/calls';
-
-export function get_route_def<A extends schema.AtomName, R extends schema.RouteName<A>>(
+export function get_route_definition<A extends schema.AtomName, R extends schema.RouteName<A>>(
 	atom_name: A,
 	route_name: R
 ):Book.Definition.Dock.Routes.Route<A,R>{
-	const routes_def = get_routes_definition_with_defaults(atom_name);
+	const routes_def = get_routes_definition(atom_name);
 	if(!routes_def || !routes_def[route_name]){
 		throw urn_exc.create_invalid_book(
 			`INVALID_ROUTE_NAME`,
@@ -41,19 +39,6 @@ export function get_routes_definition<A extends schema.AtomName>(atom_name:A)
 	return book_client.get_routes_definition(atom_name) as Book.Definition.Dock.Routes<A>;
 }
 
-export function get_routes_definition_with_defaults<A extends schema.AtomName>(atom_name:A)
-		:Book.Definition.Dock.Routes<A>{
-	const dock_def = get_dock_definition(atom_name);
-	if(!dock_def.routes){
-		dock_def.routes = {};
-	}
-	const server_default_routes = return_default_routes(atom_name);
-	for(const [route_name, route_def] of Object.entries(server_default_routes)){
-		(dock_def.routes as any)[route_name] = route_def as Book.Definition.Dock.Routes.Route<A,any>;
-	}
-	return dock_def.routes;
-}
-
 export function get_dock_definition<A extends schema.AtomName>(atom_name:A)
 		:Book.Definition.Dock<A>{
 	return book_client.get_dock_definition(atom_name) as Book.Definition.Dock<A>;
@@ -63,47 +48,20 @@ export function add_route_call<A extends schema.AtomName, R extends schema.Route
 	atom_name:A,
 	route_name:R,
 	route_call:Book.Definition.Dock.Routes.Route.Call<A,R,D>
-):Book{
-	const atom_book = get_all_definitions();
-	const atom_def = atom_book[atom_name];
-	if(!atom_def){
-		throw urn_exc.create(
-			`INVALID_ATOM_NAME`,
-			`Cannot get atom definition in [add_route_definition]`
-		);
-	}
-	if(!atom_def.dock){
-		atom_def.dock = {
-			url: `/${get_plural(atom_name)}`
-		};
-	}
-	if(!atom_def.dock.routes){
-		throw urn_exc.create(
-			`ROUTE_NOT_DEFINED`,
-			`Dock route is empty.`
-		);
-	}
-	const route_def = atom_def.dock.routes[route_name];
-	if(!route_def){
-		throw urn_exc.create(
-			`INVALID_ROUTE_NAME`,
-			`Cannot find route [${route_name}] for atom [${atom_name}].`
-		);
-	}
+):Book.Definition.Dock.Routes.Route<A,R,D>{
+	const route_def = get_route_definition(atom_name, route_name);
+	// if(!route_def){
+	//   throw urn_exc.create(
+	//     `INVALID_ROUTE_NAME`,
+	//     `Cannot find route [${route_name}] for atom [${atom_name}].`
+	//   );
+	// }
 	(route_def as Book.Definition.Dock.Routes.Route<A,R,D>).call = route_call;
 	// Object.assign(atom_def.dock.routes, {...atom_def.dock.routes, route_name: route_definition});
 	// Object.assign(atom_book, {...atom_book_def, ...atom_book});
-	return atom_book;
+	return route_def;
 }
 	
-// export function add_route_definition<A extends schema.AtomName>(
-//   atom_name:A,
-//   route_name: schema.RouteName<A>,
-//   route_definition:ClientBook.Definition.Dock.Routes.Route
-// ):Book{
-//   return book_client.add_route_definition(atom_name, route_name, route_definition);
-// }
-
 export function add_definition<A extends schema.AtomName>(
 	atom_name:A,
 	atom_definition:ClientBook.Definition
@@ -139,14 +97,14 @@ export function get_property_definition<A extends schema.AtomName>(
 	return core.book.get_property_definition(atom_name, property_name);
 }
 
-export function get_custom_property_definitions<A extends schema.AtomName>(atom_name:A)
+export function get_custom_properties_definition<A extends schema.AtomName>(atom_name:A)
 		:Book.Definition.Properties{
-	return core.book.get_custom_property_definitions(atom_name);
+	return core.book.get_custom_properties_definition(atom_name);
 }
 
-export function get_full_properties_definition<A extends schema.AtomName>(atom_name:A)
+export function get_properties_definition<A extends schema.AtomName>(atom_name:A)
 		:Book.Definition.Properties{
-	return core.book.get_full_properties_definition(atom_name);
+	return core.book.get_properties_definition(atom_name);
 }
 
 export function has_property<A extends schema.AtomName>(atom_name:A, key:string)

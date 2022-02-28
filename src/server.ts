@@ -4,6 +4,8 @@
  * @packageDocumentation
  */
 
+export * from './server/register';
+
 import * as urn_api from './server/main';
 
 export * from './server/main';
