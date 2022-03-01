@@ -4,6 +4,7 @@
 	"description": "Uranio API",
 	"main": "dist/index.js",
 	"bin": {
+		"uranio-generate-schema": "dist/server/generate.js",
 		"uranio-api": "dist/bin.js"
 	},
 	"exports": {
