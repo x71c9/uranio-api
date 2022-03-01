@@ -385,7 +385,7 @@ export function validate_request<A extends schema.AtomName, R extends schema.Rou
 			`Invalid atom name. Full path \`${api_request.full_path}\`.`
 		);
 	}
-	if(typeof api_request.route_name !== 'string' || api_request.route_name === ''){
+	if(typeof api_request.route_name !== 'string' || (api_request.route_name as unknown) === ''){
 		throw urn_exc.create_invalid_request(
 			`INVALID_ROUTE_NAME`,
 			`Invalid route name. Full path \`${api_request.full_path}\`.`

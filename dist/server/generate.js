@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 "use strict";
 /**
  * API generate module
@@ -26,13 +27,23 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./register"), exports);
+const dotenv_1 = __importDefault(require("dotenv"));
+const result = dotenv_1.default.config();
+if (result.error) {
+    throw result.error;
+}
 const urn_lib_1 = require("urn-lib");
 urn_lib_1.urn_log.init({
     log_level: urn_lib_1.urn_log.LogLevel.FUNCTION_DEBUG,
     debug_info: false
 });
+__exportStar(require("./register"), exports);
+const uranio = __importStar(require("./main"));
+uranio.init();
 const util = __importStar(require("../util/server"));
 util.generate.schema_and_save();
 //# sourceMappingURL=generate.js.map
