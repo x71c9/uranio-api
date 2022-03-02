@@ -107,7 +107,7 @@ async function _validate_and_call<A extends schema.AtomName, R extends schema.Ro
 		call_response = core.atom.util.hide_hidden_properties<A,D>(
 			api_request.atom_name,
 			call_response as schema.Molecule<A,D>
-		) as schema.Response<A,R,D>;
+		) as schema.CallResponse<A,R,D>;
 	}
 	
 	const urn_response = urn_ret.return_success('Success', call_response);
