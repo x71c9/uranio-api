@@ -15,8 +15,6 @@ import core_client from 'uranio-core/client';
 
 import {RouteMethod} from './request_cln';
 
-// import {schema} from '../sch/client';
-
 export type Book = {
 	[k:string]: Book.Definition
 }
