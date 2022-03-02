@@ -40,7 +40,8 @@ function create_express_route(atom_name) {
     urn_lib_1.urn_log.fn_debug(`Create Express Default Atom Router [${atom_name}]`);
     const router = express_1.default.Router();
     const routes_definition = book.get_routes_definition(atom_name);
-    for (const [_route_name, route_def] of Object.entries(routes_definition)) {
+    for (const [_route_name, route_definition] of Object.entries(routes_definition)) {
+        const route_def = route_definition;
         switch (route_def.method) {
             case types.RouteMethod.GET: {
                 router.get(route_def.url, _return_express_middleware());

@@ -31,7 +31,9 @@ export function create_express_route<A extends schema.AtomName>(atom_name:A)
 	
 	const routes_definition = book.get_routes_definition(atom_name);
 	
-	for(const [_route_name, route_def] of Object.entries(routes_definition)){
+	for(const [_route_name, route_definition] of Object.entries(routes_definition)){
+		const route_def = route_definition as
+			types.Book.Definition.Dock.Routes.Route<A, schema.RouteName<A>>;
 		switch(route_def.method){
 			case types.RouteMethod.GET: {
 				router.get(route_def.url, _return_express_middleware());
