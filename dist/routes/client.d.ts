@@ -19,45 +19,53 @@ export declare const default_routes: {
         readonly method: types.RouteMethod.GET;
         readonly action: core.types.AuthAction.READ;
         readonly url: "/count";
+        readonly return: "number";
         readonly query: readonly ["filter"];
     };
     readonly find_one: {
         readonly method: types.RouteMethod.GET;
         readonly action: core.types.AuthAction.READ;
         readonly url: "/first";
+        readonly return: "Molecule<A,D>";
         readonly query: readonly ["filter", "options"];
     };
     readonly find: {
         readonly method: types.RouteMethod.GET;
         readonly action: core.types.AuthAction.READ;
         readonly url: "/";
+        readonly return: "Molecule<A,D>[]";
         readonly query: readonly ["filter", "options"];
     };
     readonly find_id: {
         readonly method: types.RouteMethod.GET;
         readonly action: core.types.AuthAction.READ;
         readonly url: "/:id";
+        readonly return: "Molecule<A,D>";
         readonly query: readonly ["options"];
     };
     readonly insert: {
         readonly method: types.RouteMethod.POST;
         readonly action: core.types.AuthAction.WRITE;
         readonly url: "/";
+        readonly return: "Molecule<A,D>";
     };
     readonly update: {
         readonly method: types.RouteMethod.POST;
         readonly action: core.types.AuthAction.WRITE;
         readonly url: "/:id";
+        readonly return: "Molecule<A,D>";
     };
     readonly delete: {
         readonly method: types.RouteMethod.DELETE;
         readonly action: core.types.AuthAction.WRITE;
         readonly url: "/:id";
+        readonly return: "Molecule<A,D>";
     };
     readonly insert_multiple: {
         readonly method: types.RouteMethod.POST;
         readonly action: core.types.AuthAction.WRITE;
         readonly url: "/multiple";
+        readonly return: "Molecule<A,D>[]";
     };
     readonly update_multiple: {
         readonly method: types.RouteMethod.POST;
@@ -68,6 +76,7 @@ export declare const default_routes: {
             };
         };
         readonly url: "/multiple/:ids";
+        readonly return: "Molecule<A,D>[]";
     };
     readonly delete_multiple: {
         readonly method: types.RouteMethod.DELETE;
@@ -78,6 +87,7 @@ export declare const default_routes: {
             };
         };
         readonly url: "/multiple/:ids";
+        readonly return: "Molecule<A,D>[]";
     };
 };
 export declare const media_routes: {
@@ -85,12 +95,14 @@ export declare const media_routes: {
         readonly method: types.RouteMethod.POST;
         readonly action: core.types.AuthAction.WRITE;
         readonly url: "/upload";
+        readonly return: "Molecule<A,D>[]";
     };
     readonly presigned: {
         readonly method: types.RouteMethod.GET;
         readonly action: core.types.AuthAction.WRITE;
         readonly query: readonly ["filename", "size", "type"];
         readonly url: "/presigned";
+        readonly return: "string";
     };
 };
 export declare function add_media_routes(): typeof default_routes;

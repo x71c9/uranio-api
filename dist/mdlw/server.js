@@ -91,8 +91,10 @@ async function _validate_and_call(api_request) {
     //   'Access-Control-Allow-Origin': 'http://localhost:4444',
     //   // 'Access-Control-Allow-Credentials': true
     // };
-    call_response = uranio_core_1.default.atom.util
-        .hide_hidden_properties(api_request.atom_name, call_response);
+    if (uranio_core_1.default.atom.util.is_molecule(api_request.atom_name, call_response)
+        || uranio_core_1.default.atom.util.is_atom(api_request.atom_name, call_response)) {
+        call_response = uranio_core_1.default.atom.util.hide_hidden_properties(api_request.atom_name, call_response);
+    }
     const urn_response = urn_ret.return_success('Success', call_response);
     return urn_response;
 }
@@ -130,7 +132,6 @@ function _auth_validate(api_request) {
     req_validator.empty(api_request.query, 'query');
 }
 function _validate_route(api_request) {
-    // const route_def = _get_route_def(api_request);
     const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
     urn_lib_1.urn_log.fn_debug(`Validate Route ${route_def.url} [${api_request.atom_name}]`);
     if (route_def.method !== types.RouteMethod.POST) {

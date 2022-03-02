@@ -35,7 +35,7 @@ const book = __importStar(require("../book/server"));
 function route(route, atom_name, route_name) {
     const final_atom_name = _get_atom_name(atom_name);
     const final_route_name = _get_route_name(route_name);
-    book.add_route(final_atom_name, final_route_name, route);
+    book.add_route_definition(final_atom_name, final_route_name, route);
     urn_lib_1.urn_log.debug(`Server route [${final_route_name}] for atom [${final_atom_name}] registered.`);
     return final_atom_name;
 }

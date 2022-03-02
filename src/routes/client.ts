@@ -29,45 +29,53 @@ export const default_routes = {
 		method: types.RouteMethod.GET,
 		action: core.types.AuthAction.READ,
 		url: '/count',
+		return: 'number',
 		query: ['filter'],
 	},
 	find_one: {
 		method: types.RouteMethod.GET,
 		action: core.types.AuthAction.READ,
 		url: '/first',
+		return: 'Molecule<A,D>',
 		query: ['filter', 'options'],
 	},
 	find: {
 		method: types.RouteMethod.GET,
 		action: core.types.AuthAction.READ,
 		url: '/',
+		return: 'Molecule<A,D>[]',
 		query: ['filter', 'options'],
 	},
 	find_id: {
 		method: types.RouteMethod.GET,
 		action: core.types.AuthAction.READ,
 		url: '/:id',
+		return: 'Molecule<A,D>',
 		query: ['options'],
 	},
 	insert: {
 		method: types.RouteMethod.POST,
 		action: core.types.AuthAction.WRITE,
 		url: '/',
+		return: 'Molecule<A,D>',
 	},
 	update: {
 		method: types.RouteMethod.POST,
 		action: core.types.AuthAction.WRITE,
 		url: '/:id',
+		return: 'Molecule<A,D>',
 	},
 	delete: {
 		method: types.RouteMethod.DELETE,
 		action: core.types.AuthAction.WRITE,
 		url: '/:id',
+		return: 'Molecule<A,D>',
 	},
 	insert_multiple: {
 		method: types.RouteMethod.POST,
 		action: core.types.AuthAction.WRITE,
 		url: '/multiple',
+		return: 'Molecule<A,D>[]',
 	},
 	update_multiple: {
 		method: types.RouteMethod.POST,
@@ -78,6 +86,7 @@ export const default_routes = {
 			}
 		},
 		url: '/multiple/:ids',
+		return: 'Molecule<A,D>[]',
 	},
 	delete_multiple: {
 		method: types.RouteMethod.DELETE,
@@ -88,6 +97,7 @@ export const default_routes = {
 			}
 		},
 		url: '/multiple/:ids',
+		return: 'Molecule<A,D>[]',
 	},
 } as const;
 
@@ -96,12 +106,14 @@ export const media_routes = {
 		method: types.RouteMethod.POST,
 		action: core.types.AuthAction.WRITE,
 		url: '/upload',
+		return: 'Molecule<A,D>[]',
 	},
 	presigned:{
 		method: types.RouteMethod.GET,
 		action: core.types.AuthAction.WRITE,
 		query: ['filename', 'size', 'type'],
 		url: '/presigned',
+		return: 'string',
 	}
 } as const;
 
