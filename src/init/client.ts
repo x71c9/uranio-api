@@ -24,6 +24,8 @@ import * as book from '../book/client';
 
 import {default_routes, media_routes} from '../routes/client';
 
+import {default_atom_names} from '../atoms';
+
 export function init(config?:types.ClientConfiguration)
 		:void{
 	
@@ -56,7 +58,7 @@ function _add_default_routes(){
 				...default_routes,
 				...media_routes
 			};
-		}else{
+		}else if(default_atom_names.includes(atom_name)){
 			(atom_def.dock as any).routes = default_routes;
 		}
 		register.atom(atom_def as any, atom_name as any);

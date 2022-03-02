@@ -4,6 +4,7 @@
  * @packageDocumentation
  */
 import * as types from './client/types';
+export declare const default_atom_names: string[];
 export declare const atom_book: {
     readonly error: {
         readonly plural: "errors";
