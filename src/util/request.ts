@@ -121,14 +121,18 @@ export function get_route_name<A extends schema.AtomName, R extends schema.Route
 	 * So in order to be sure is the correct route_name, first check for
 	 * all exact matches, then for route with parameters.
 	 */
-	for(const [route_name, route_def] of Object.entries(routes_def)){
+	for(const [route_name, route_definition] of Object.entries(routes_def)){
+		const route_def = route_definition as
+			types.Book.Definition.Dock.Routes.Route<A,R>;
 		if(route_def.method === http_method){
 			if(route_def.url === route_path || route_def.url + '/' === route_path){
 				return route_name as R;
 			}
 		}
 	}
-	for(const [route_name, route_def] of Object.entries(routes_def)){
+	for(const [route_name, route_definition] of Object.entries(routes_def)){
+		const route_def = route_definition as
+			types.Book.Definition.Dock.Routes.Route<A,R>;
 		if(route_def.method === http_method){
 			if(route_def.url.includes(':')){
 				if(route_def.url[route_def.url.length - 1] !== '/'){

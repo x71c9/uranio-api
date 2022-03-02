@@ -46,7 +46,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 		default_routes = add_media_routes();
 		
 		((default_routes as any).upload as any).call =
-			async <D extends schema.Depth>(api_request:types.Api.Request<typeof atom_name, 'count', D>) => {
+			async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
 				urn_log.fn_debug(`Router Call POST [upload] / [${atom_name}]`);
 				if(!api_request.file){
 					throw urn_exc.create_invalid_request(
@@ -65,7 +65,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			};
 			
 		((default_routes as any).presigned as any).call =
-			async <D extends schema.Depth>(api_request:types.Api.Request<typeof atom_name, 'count', D>) => {
+			async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
 				urn_log.fn_debug(`Router Call GET [presigned] / [${atom_name}]`);
 				if(!api_request.query){
 					throw urn_exc.create_invalid_request(
@@ -83,47 +83,43 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			};
 	}
 	
-	// (default_routes.count as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name,'count', any>).call =
 	(default_routes.count as any).call =
-		async <D extends schema.Depth>(api_request:types.Api.Request<typeof atom_name, 'count', D>) => {
+		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
 			urn_log.fn_debug(`Router Call GET [count] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
-				core.bll.BLL<typeof atom_name>;
-			const filter = (api_request.query as types.Api.Request.Query<'superuser', 'count', D>).filter || {};
+				core.bll.BLL<A>;
+			const filter = (api_request.query as unknown as any).filter || {};
 			const bll_res = await urn_bll.count(filter as any);
 			return bll_res;
 		};
 	
-	// (default_routes.find_one as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find_one', any>).call =
 	(default_routes.find_one as any).call =
-		async <D extends schema.Depth>(api_request:types.Api.Request<typeof atom_name, 'find_one', D>) => {
+		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
 			urn_log.fn_debug(`Router Call GET [find_one] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
-				core.bll.BLL<typeof atom_name>;
+				core.bll.BLL<A>;
 			const filter = (api_request.query as types.Api.Request.Query<'superuser', 'find', D>).filter || {};
 			const options = (api_request.query as types.Api.Request.Query<'superuser', 'find', D>).options;
 			const bll_res = await urn_bll.find_one(filter as any, options as any);
 			return bll_res;
 		};
 	
-	// (default_routes.find as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find', any>).call =
 	(default_routes.find as any).call =
-		async <D extends schema.Depth>(api_request:types.Api.Request<typeof atom_name,'find', D>) => {
+		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
 			urn_log.fn_debug(`Router Call GET [find] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
-				core.bll.BLL<typeof atom_name>;
+				core.bll.BLL<A>;
 			const filter = (api_request.query as types.Api.Request.Query<'superuser', 'find', D>).filter || {};
 			const options = (api_request.query as types.Api.Request.Query<'superuser', 'find', D>).options;
 			const bll_res = await urn_bll.find(filter as any, options as any);
 			return bll_res;
 		};
 	
-	// (default_routes.find_id as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find_id', any>).call =
 	(default_routes.find_id as any).call =
-		async <D extends schema.Depth>(api_request:types.Api.Request<typeof atom_name, 'find_id', D>) => {
+		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
 			urn_log.fn_debug(`Router Call GET [find_id] /:id [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
-				core.bll.BLL<typeof atom_name>;
+				core.bll.BLL<A>;
 			const bll_res = await urn_bll.find_by_id(
 				(api_request.params as types.Api.Request.Params<'superuser', 'find_id'>).id!,
 				(api_request.query as types.Api.Request.Query<'superuser', 'find_id', D> as any).options
@@ -131,12 +127,11 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			return bll_res;
 		};
 	
-	// (default_routes.insert as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'insert', any>).call =
 	(default_routes.insert as any).call =
-		async <D extends schema.Depth>(api_request:types.Api.Request<typeof atom_name, 'insert', D>) => {
+		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
 			urn_log.fn_debug(`Router Call POST [insert] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
-				core.bll.BLL<typeof atom_name>;
+				core.bll.BLL<A>;
 			if(!api_request.body){
 				throw urn_exc.create_invalid_request(
 					`INVALID_REQUEST_BODY`,
@@ -146,23 +141,22 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			// if(Array.isArray(api_request.body)){
 			//   return await urn_bll.insert_multiple(api_request.body);
 			// }
-			const bll_res = await urn_bll.insert_new(api_request.body);
+			const bll_res = await urn_bll.insert_new(api_request.body as any);
 			return bll_res;
 		};
 	
-	// (default_routes.update as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'update', any>).call =
 	(default_routes.update as any).call =
-		async <D extends schema.Depth>(api_request:types.Api.Request<'superuser', 'update', D>) => {
+		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
 			urn_log.fn_debug(`Router Call POST [update] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
-				core.bll.BLL<typeof atom_name>;
+				core.bll.BLL<A>;
 			if(!api_request.body){
 				throw urn_exc.create_invalid_request(
 					`INVALID_REQUEST_UPDATE_BODY`,
 					`Invalid request body.`
 				);
 			}
-			if(!api_request.params?.id){
+			if(!api_request.params || !(api_request.params as any).id){
 				throw urn_exc.create_invalid_request(
 					`INVALID_REQUEST_PARAM_ID`,
 					`Invalid request parameter \`id\`.`
@@ -173,19 +167,18 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			//   return await urn_bll.update_multiple(ids, api_request.body);
 			// }
 			const bll_res = await urn_bll.update_by_id(
-				api_request.params?.id,
+				(api_request.params as any)?.id,
 				api_request.body as unknown as Partial<schema.AtomShape<A>>
 			);
 			return bll_res;
 		};
 	
-	// (default_routes.delete as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'delete', any>).call =
 	(default_routes.delete as any).call =
-		async <D extends schema.Depth>(api_request:types.Api.Request<'superuser', 'delete', D>) => {
+		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
 			urn_log.fn_debug(`Router Call DELETE [delete] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
-				core.bll.BLL<typeof atom_name>;
-			if(!api_request.params?.id){
+				core.bll.BLL<A>;
+			if(!(api_request.params as any)?.id){
 				throw urn_exc.create_invalid_request(
 					`INVALID_REQUEST_DELETE_PARAM_ID`,
 					`Invalid request parameter \`id\`.`
@@ -195,16 +188,15 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			// if(ids.length > 1){
 			//   return await urn_bll.remove_multiple(ids);
 			// }
-			const bll_res = await urn_bll.remove_by_id(api_request.params.id);
+			const bll_res = await urn_bll.remove_by_id((api_request.params as any).id);
 			return bll_res;
 		};
 	
-	// (default_routes.insert as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'insert', any>).call =
 	(default_routes.insert_multiple as any).call =
-		async <D extends schema.Depth>(api_request:types.Api.Request<typeof atom_name, 'insert_multiple', D>) => {
+		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
 			urn_log.fn_debug(`Router Call POST [insert_multiple] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
-				core.bll.BLL<typeof atom_name>;
+				core.bll.BLL<A>;
 			if(!api_request.body || !Array.isArray(api_request.body)){
 				throw urn_exc.create_invalid_request(
 					`INVALID_REQUEST_INSERT_MULTIPLE_BODY`,
@@ -214,41 +206,39 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			return await urn_bll.insert_multiple(api_request.body);
 		};
 	
-	// (default_routes.update as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'update', any>).call =
 	(default_routes.update_multiple as any).call =
-		async <D extends schema.Depth>(api_request:types.Api.Request<'superuser', 'update_multiple', D>) => {
+		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
 			urn_log.fn_debug(`Router Call POST [update_multiple] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
-				core.bll.BLL<typeof atom_name>;
+				core.bll.BLL<A>;
 			if(!api_request.body){
 				throw urn_exc.create_invalid_request(
 					`INVALID_REQUEST_UPDATE_MULTIPLE_BODY`,
 					`Invalid request body.`
 				);
 			}
-			if(!api_request.params?.ids){
+			if(!(api_request.params as any)?.ids){
 				throw urn_exc.create_invalid_request(
 					`INVALID_REQUEST_UPDATE_MULTIPLE_PARAM_IDS`,
 					`Invalid request parameter \`ids\`.`
 				);
 			}
-			const ids = api_request.params?.ids?.split(',') || [];
+			const ids = (api_request.params as any)?.ids?.split(',') || [];
 			return await urn_bll.update_multiple(ids, api_request.body as unknown as Partial<schema.AtomShape<A>>);
 		};
 	
-	// (default_routes.delete as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'delete', any>).call =
 	(default_routes.delete_multiple as any).call =
-		async <D extends schema.Depth>(api_request:types.Api.Request<'superuser', 'delete_multiple', D>) => {
+		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
 			urn_log.fn_debug(`Router Call DELETE [delete_multiple] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
-				core.bll.BLL<typeof atom_name>;
-			if(!api_request.params?.ids){
+				core.bll.BLL<A>;
+			if(!(api_request.params as any)?.ids){
 				throw urn_exc.create_invalid_request(
 					`INVALID_REQUEST_DELETE_MULTIPLE_PARAM_IDS`,
 					`Invalid request parameter \`ids\`.`
 				);
 			}
-			const ids = api_request.params.ids?.split(',') || [];
+			const ids = ((api_request.params as any).ids)?.split(',') || [];
 			return await urn_bll.remove_multiple(ids);
 		};
 	

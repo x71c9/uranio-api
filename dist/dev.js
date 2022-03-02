@@ -28,25 +28,27 @@ urn_lib_1.urn_log.init({
 const server_1 = __importDefault(require("./server"));
 server_1.default.init();
 // import * as book from './book/server';
-// uranio.register.atom({
-//   properties:{
-//     title:{
-//       type: uranio.types.PropertyType.TEXT,
-//       label: 'Title'
-//     }
-//   },
-//   dock:{
-//     url: '/products'
-//   }
-// },'product');
-// uranio.register.route({
-//   method: uranio.types.RouteMethod.GET,
-//   url: '/add',
-//   action: uranio.types.AuthAction.READ,
-//   call:(r:any) => {
-//     console.log(r);
-//   }
-// }, 'product' as any, 'add' as any);
+server_1.default.register.atom({
+    properties: {
+        title: {
+            type: server_1.default.types.PropertyType.TEXT,
+            label: 'Title'
+        }
+    },
+    dock: {
+        url: '/products'
+    }
+}, 'product');
+server_1.default.register.route({
+    method: server_1.default.types.RouteMethod.GET,
+    url: '/add',
+    query: ['stars'],
+    action: server_1.default.types.AuthAction.READ,
+    call: (r) => {
+        console.log(r.query.stars);
+    }
+}, 'product', 'add');
 // const atom_book = book.get_all_definitions() as any;
 // console.log(atom_book.product.dock.routes.add.call.toString());
+server_1.default.util.generate.schema_and_save();
 //# sourceMappingURL=dev.js.map

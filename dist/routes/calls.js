@@ -63,7 +63,6 @@ function return_default_routes(atom_name) {
                 return atom_media;
             };
     }
-    // (default_routes.count as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name,'count', any>).call =
     default_routes.count.call =
         async (api_request) => {
             urn_lib_1.urn_log.fn_debug(`Router Call GET [count] / [${atom_name}]`);
@@ -72,7 +71,6 @@ function return_default_routes(atom_name) {
             const bll_res = await urn_bll.count(filter);
             return bll_res;
         };
-    // (default_routes.find_one as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find_one', any>).call =
     default_routes.find_one.call =
         async (api_request) => {
             urn_lib_1.urn_log.fn_debug(`Router Call GET [find_one] / [${atom_name}]`);
@@ -82,7 +80,6 @@ function return_default_routes(atom_name) {
             const bll_res = await urn_bll.find_one(filter, options);
             return bll_res;
         };
-    // (default_routes.find as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find', any>).call =
     default_routes.find.call =
         async (api_request) => {
             urn_lib_1.urn_log.fn_debug(`Router Call GET [find] / [${atom_name}]`);
@@ -92,7 +89,6 @@ function return_default_routes(atom_name) {
             const bll_res = await urn_bll.find(filter, options);
             return bll_res;
         };
-    // (default_routes.find_id as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'find_id', any>).call =
     default_routes.find_id.call =
         async (api_request) => {
             urn_lib_1.urn_log.fn_debug(`Router Call GET [find_id] /:id [${atom_name}]`);
@@ -100,7 +96,6 @@ function return_default_routes(atom_name) {
             const bll_res = await urn_bll.find_by_id(api_request.params.id, api_request.query.options);
             return bll_res;
         };
-    // (default_routes.insert as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'insert', any>).call =
     default_routes.insert.call =
         async (api_request) => {
             urn_lib_1.urn_log.fn_debug(`Router Call POST [insert] / [${atom_name}]`);
@@ -114,26 +109,24 @@ function return_default_routes(atom_name) {
             const bll_res = await urn_bll.insert_new(api_request.body);
             return bll_res;
         };
-    // (default_routes.update as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'update', any>).call =
     default_routes.update.call =
         async (api_request) => {
-            var _a, _b;
+            var _a;
             urn_lib_1.urn_log.fn_debug(`Router Call POST [update] / [${atom_name}]`);
             const urn_bll = uranio_core_1.default.bll.create(atom_name, api_request.passport);
             if (!api_request.body) {
                 throw urn_exc.create_invalid_request(`INVALID_REQUEST_UPDATE_BODY`, `Invalid request body.`);
             }
-            if (!((_a = api_request.params) === null || _a === void 0 ? void 0 : _a.id)) {
+            if (!api_request.params || !api_request.params.id) {
                 throw urn_exc.create_invalid_request(`INVALID_REQUEST_PARAM_ID`, `Invalid request parameter \`id\`.`);
             }
             // const ids = api_request.params?.id?.split(',') || [];
             // if(ids.length > 1){
             //   return await urn_bll.update_multiple(ids, api_request.body);
             // }
-            const bll_res = await urn_bll.update_by_id((_b = api_request.params) === null || _b === void 0 ? void 0 : _b.id, api_request.body);
+            const bll_res = await urn_bll.update_by_id((_a = api_request.params) === null || _a === void 0 ? void 0 : _a.id, api_request.body);
             return bll_res;
         };
-    // (default_routes.delete as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'delete', any>).call =
     default_routes.delete.call =
         async (api_request) => {
             var _a;
@@ -149,7 +142,6 @@ function return_default_routes(atom_name) {
             const bll_res = await urn_bll.remove_by_id(api_request.params.id);
             return bll_res;
         };
-    // (default_routes.insert as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'insert', any>).call =
     default_routes.insert_multiple.call =
         async (api_request) => {
             urn_lib_1.urn_log.fn_debug(`Router Call POST [insert_multiple] / [${atom_name}]`);
@@ -159,7 +151,6 @@ function return_default_routes(atom_name) {
             }
             return await urn_bll.insert_multiple(api_request.body);
         };
-    // (default_routes.update as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'update', any>).call =
     default_routes.update_multiple.call =
         async (api_request) => {
             var _a, _b, _c;
@@ -174,7 +165,6 @@ function return_default_routes(atom_name) {
             const ids = ((_c = (_b = api_request.params) === null || _b === void 0 ? void 0 : _b.ids) === null || _c === void 0 ? void 0 : _c.split(',')) || [];
             return await urn_bll.update_multiple(ids, api_request.body);
         };
-    // (default_routes.delete as unknown as types.Book.Definition.Dock.Routes.Route<typeof atom_name, 'delete', any>).call =
     default_routes.delete_multiple.call =
         async (api_request) => {
             var _a, _b;
@@ -183,7 +173,7 @@ function return_default_routes(atom_name) {
             if (!((_a = api_request.params) === null || _a === void 0 ? void 0 : _a.ids)) {
                 throw urn_exc.create_invalid_request(`INVALID_REQUEST_DELETE_MULTIPLE_PARAM_IDS`, `Invalid request parameter \`ids\`.`);
             }
-            const ids = ((_b = api_request.params.ids) === null || _b === void 0 ? void 0 : _b.split(',')) || [];
+            const ids = ((_b = (api_request.params.ids)) === null || _b === void 0 ? void 0 : _b.split(',')) || [];
             return await urn_bll.remove_multiple(ids);
         };
     return default_routes;
