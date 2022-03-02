@@ -14,7 +14,7 @@ import * as book from '../book/server';
 
 import * as types from '../server/types';
 
-// import {default_routes} from '../routes/client';
+import {default_routes} from '../routes/client';
 
 export let process_params = {
 	urn_command: `schema`,
@@ -171,30 +171,32 @@ function _generate_route_url(atom_book:types.Book){
 
 function _generate_route_name(atom_book:types.Book){
 	let text = '';
-	// text += _generate_route_default_name();
+	text += _generate_route_default_name();
 	text += _generate_route_custom_name(atom_book);
-	// text += `export declare type RouteName<A extends AtomName> =\n`;
-	// text += `\tRouteCustomName<A> | RouteDefaultName;\n\n`;
+	text += `export declare type RouteName<A extends AtomName> =\n`;
+	text += `\tRouteCustomName<A> | RouteDefaultName;\n\n`;
 	return text;
 }
 
-// function _generate_route_default_name(){
-//   const default_route_keys = Object.keys(default_routes);
-//   let text = '';
-//   text += `declare type RouteDefaultName = `;
-//   text += default_route_keys.map((k) => `'${k}'`).join(' | ');
-//   text += `\n\n`;
-//   return text;
-// }
+function _generate_route_default_name(){
+	const default_route_keys = Object.keys(default_routes);
+	let text = '';
+	text += `declare type RouteDefaultName = `;
+	text += default_route_keys.map((k) => `'${k}'`).join(' | ');
+	text += `\n\n`;
+	return text;
+}
 
 function _generate_route_custom_name(atom_book:types.Book){
 	let text = '';
-	// text += `declare type RouteCustomName<A extends AtomName> =\n`;
-	text += `export declare type RouteName<A extends AtomName> =\n`;
+	text += `declare type RouteCustomName<A extends AtomName> =\n`;
+	// text += `export declare type RouteName<A extends AtomName> =\n`;
 	for(const [atom_name, atom_def] of Object.entries(atom_book)){
-		text += `\tA extends '${atom_name}' ? ${_route_custom_name<any>(atom_def)} :\n`;
+		const custom_routes = _route_custom_name<any>(atom_def);
+		const routes = (custom_routes !== '') ? custom_routes : 'never';
+		text += `\tA extends '${atom_name}' ? ${routes} :\n`;
 	}
-	text += `never\n\n`;
+	text += `\tnever\n\n`;
 	return text;
 }
 
@@ -245,7 +247,12 @@ function _route_custom_name<A extends schema_types.AtomName>(atom_def:types.Book
 	if(!atom_def.dock || !atom_def.dock.routes){
 		return 'never';
 	}
-	const route_names = Object.keys(atom_def.dock.routes).map((k) => `'${k}'`);
-	return route_names.join(' | ');
+	const route_array:string[] = [];
+	for(const [route_name, _route_def] of Object.entries(atom_def.dock.routes)){
+		if(typeof (default_routes as any)[route_name] === 'undefined'){
+			route_array.push(`'${route_name}'`);
+		}
+	}
+	return route_array.join(' | ');
 }
 
