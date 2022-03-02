@@ -18,11 +18,27 @@ uranio.init();
 
 // import * as book from './book/server';
 
-// import * as register from './reg/server';
+// uranio.register.atom({
+//   properties:{
+//     title:{
+//       type: uranio.types.PropertyType.TEXT,
+//       label: 'Title'
+//     }
+//   },
+//   dock:{
+//     url: '/products'
+//   }
+// },'product');
 
-// register.route<'user', 'find'>((route_request: uranio.types.Api.Request<'user','find',0>) => {
-//   console.log(route_request);
-// },'user', 'find');
+// uranio.register.route({
+//   method: uranio.types.RouteMethod.GET,
+//   url: '/add',
+//   action: uranio.types.AuthAction.READ,
+//   call:(r:any) => {
+//     console.log(r);
+//   }
+// }, 'product' as any, 'add' as any);
 
-// const atom_book = book.get_route_definition('user', 'find');
-// console.log(atom_book.call?.toString());
+// const atom_book = book.get_all_definitions() as any;
+// console.log(atom_book.product.dock.routes.add.call.toString());
+
