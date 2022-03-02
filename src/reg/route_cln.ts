@@ -11,21 +11,21 @@ import path from 'path';
 
 import caller from 'caller';
 
-import * as book from '../book/server';
+import * as book from '../book/client';
 
-import * as types from '../server/types';
+import * as types from '../client/types';
 
-import {schema} from '../sch/server';
+import {schema} from '../sch/client';
 
-export function route<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0>(
-	route: types.Book.Definition.Dock.Routes.Route<A,R,D>,
+export function route<A extends schema.AtomName, R extends schema.RouteName<A>>(
+	route: types.Book.Definition.Dock.Routes.Route,
 	atom_name?: A,
 	route_name?: R
 ):string{
 	const final_atom_name = _get_atom_name(atom_name);
 	const final_route_name = _get_route_name(route_name);
 	book.add_route(final_atom_name, final_route_name, route);
-	urn_log.debug(`Server route [${final_route_name}] for atom [${final_atom_name}] registered.`);
+	urn_log.debug(`Client route [${final_route_name}] for atom [${final_atom_name}] registered.`);
 	return final_atom_name;
 }
 

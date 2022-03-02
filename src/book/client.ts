@@ -55,6 +55,16 @@ export function get_dock_definition<A extends schema.AtomName>(atom_name:A)
 	return dock_def;
 }
 
+export function add_route<A extends schema.AtomName, R extends schema.RouteName<A>>(
+	atom_name: A,
+	route_name: R,
+	route_definition: Book.Definition.Dock.Routes.Route
+):Book.Definition.Dock.Routes{
+	const routes_definition = get_routes_definition(atom_name);
+	routes_definition[route_name] = route_definition;
+	return routes_definition;
+}
+
 export function add_definition<A extends schema.AtomName>(atom_name:A, atom_definition:Book.Definition)
 		:Book{
 	return core_client.book.add_definition(atom_name, atom_definition);

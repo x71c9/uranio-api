@@ -2,6 +2,10 @@
 /**
  * Register module
  *
+ * This method registers the atom_defintion in the Book.
+ * Before register with the core_client method, it appends the
+ * default routes if the paramter dock.url is definied.
+ *
  * @packageDocumentation
  */
 var __importDefault = (this && this.__importDefault) || function (mod) {
