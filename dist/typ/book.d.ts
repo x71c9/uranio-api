@@ -37,7 +37,7 @@ export declare namespace Book {
                     call?: Route.Call<A, R, D>;
                 };
                 namespace Route {
-                    type Call<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0> = (route_request: ApiRequest.Request<A, R, D>) => schema.Response<A, R, D>;
+                    type Call<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0> = (route_request: ApiRequest.Request<A, R, D>) => schema.CallResponse<A, R, D>;
                 }
             }
         }
