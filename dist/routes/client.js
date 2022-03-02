@@ -49,45 +49,53 @@ exports.default_routes = {
         method: types.RouteMethod.GET,
         action: client_1.default.types.AuthAction.READ,
         url: '/count',
+        return: 'number',
         query: ['filter'],
     },
     find_one: {
         method: types.RouteMethod.GET,
         action: client_1.default.types.AuthAction.READ,
         url: '/first',
+        return: 'Molecule<A,D>',
         query: ['filter', 'options'],
     },
     find: {
         method: types.RouteMethod.GET,
         action: client_1.default.types.AuthAction.READ,
         url: '/',
+        return: 'Molecule<A,D>[]',
         query: ['filter', 'options'],
     },
     find_id: {
         method: types.RouteMethod.GET,
         action: client_1.default.types.AuthAction.READ,
         url: '/:id',
+        return: 'Molecule<A,D>',
         query: ['options'],
     },
     insert: {
         method: types.RouteMethod.POST,
         action: client_1.default.types.AuthAction.WRITE,
         url: '/',
+        return: 'Molecule<A,D>',
     },
     update: {
         method: types.RouteMethod.POST,
         action: client_1.default.types.AuthAction.WRITE,
         url: '/:id',
+        return: 'Molecule<A,D>',
     },
     delete: {
         method: types.RouteMethod.DELETE,
         action: client_1.default.types.AuthAction.WRITE,
         url: '/:id',
+        return: 'Molecule<A,D>',
     },
     insert_multiple: {
         method: types.RouteMethod.POST,
         action: client_1.default.types.AuthAction.WRITE,
         url: '/multiple',
+        return: 'Molecule<A,D>[]',
     },
     update_multiple: {
         method: types.RouteMethod.POST,
@@ -98,6 +106,7 @@ exports.default_routes = {
             }
         },
         url: '/multiple/:ids',
+        return: 'Molecule<A,D>[]',
     },
     delete_multiple: {
         method: types.RouteMethod.DELETE,
@@ -108,6 +117,7 @@ exports.default_routes = {
             }
         },
         url: '/multiple/:ids',
+        return: 'Molecule<A,D>[]',
     },
 };
 exports.media_routes = {
@@ -115,12 +125,14 @@ exports.media_routes = {
         method: types.RouteMethod.POST,
         action: client_1.default.types.AuthAction.WRITE,
         url: '/upload',
+        return: 'Molecule<A,D>[]',
     },
     presigned: {
         method: types.RouteMethod.GET,
         action: client_1.default.types.AuthAction.WRITE,
         query: ['filename', 'size', 'type'],
         url: '/presigned',
+        return: 'string',
     }
 };
 function add_media_routes() {

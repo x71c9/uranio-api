@@ -18,10 +18,10 @@ import {schema} from '../sch/server';
 
 import * as book_client from './client';
 
-export function get_route_definition<A extends schema.AtomName, R extends schema.RouteName<A>>(
+export function get_route_definition<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth>(
 	atom_name: A,
 	route_name: R
-):Book.Definition.Dock.Routes.Route<A,R>{
+):Book.Definition.Dock.Routes.Route<A,R,D>{
 	const routes_def = get_routes_definition(atom_name);
 	if(!routes_def || !routes_def[route_name]){
 		throw urn_exc.create_invalid_book(
@@ -29,7 +29,7 @@ export function get_route_definition<A extends schema.AtomName, R extends schema
 			`Cannot find route name \`${route_name}\`.`
 		);
 	}
-	return routes_def[route_name] as Book.Definition.Dock.Routes.Route<A,R>;
+	return routes_def[route_name] as Book.Definition.Dock.Routes.Route<A,R,D>;
 }
 
 export function get_routes_definition<A extends schema.AtomName>(atom_name:A)
@@ -42,13 +42,13 @@ export function get_dock_definition<A extends schema.AtomName>(atom_name:A)
 	return book_client.get_dock_definition(atom_name) as Book.Definition.Dock<A>;
 }
 
-export function add_route<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0>(
+export function add_route_definition<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0>(
 	atom_name: A,
 	route_name: R,
 	route_definition: Book.Definition.Dock.Routes.Route<A,R,D>
 ):Book.Definition.Dock.Routes<A>{
 	const routes_definition = get_routes_definition(atom_name);
-	routes_definition[route_name] = route_definition;
+	routes_definition[route_name] = route_definition as Book.Definition.Dock.Routes.Route<A,R>;
 	return routes_definition;
 }
 

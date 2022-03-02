@@ -100,8 +100,15 @@ async function _validate_and_call<A extends schema.AtomName, R extends schema.Ro
 	//   'Access-Control-Allow-Origin': 'http://localhost:4444',
 	//   // 'Access-Control-Allow-Credentials': true
 	// };
-	call_response = core.atom.util
-		.hide_hidden_properties(api_request.atom_name, call_response);
+	if(
+		core.atom.util.is_molecule<A,D>(api_request.atom_name, call_response)
+		|| core.atom.util.is_atom<A>(api_request.atom_name, call_response)
+	){
+		call_response = core.atom.util.hide_hidden_properties<A,D>(
+			api_request.atom_name,
+			call_response as schema.Molecule<A,D>
+		) as schema.Response<A,R,D>;
+	}
 	
 	const urn_response = urn_ret.return_success('Success', call_response);
 	
@@ -163,7 +170,6 @@ function _validate_route<A extends schema.AtomName, R extends schema.RouteName<A
 	api_request:types.Api.Request<A,R,D>
 ):void{
 	
-	// const route_def = _get_route_def(api_request);
 	const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
 		
 	urn_log.fn_debug(`Validate Route ${route_def.url} [${api_request.atom_name}]`);
