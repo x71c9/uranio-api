@@ -9,7 +9,7 @@ import { schema } from '../sch/server';
 export declare function get_route_definition<A extends schema.AtomName, R extends schema.RouteName<A>>(atom_name: A, route_name: R): Book.Definition.Dock.Routes.Route<A, R>;
 export declare function get_routes_definition<A extends schema.AtomName>(atom_name: A): Book.Definition.Dock.Routes<A>;
 export declare function get_dock_definition<A extends schema.AtomName>(atom_name: A): Book.Definition.Dock<A>;
-export declare function add_route_call<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth>(atom_name: A, route_name: R, route_call: Book.Definition.Dock.Routes.Route.Call<A, R, D>): Book.Definition.Dock.Routes.Route<A, R, D>;
+export declare function add_route<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0>(atom_name: A, route_name: R, route_definition: Book.Definition.Dock.Routes.Route<A, R, D>): Book.Definition.Dock.Routes<A>;
 export declare function add_definition<A extends schema.AtomName>(atom_name: A, atom_definition: ClientBook.Definition): Book;
 export declare function get_names(): schema.AtomName[];
 export declare function validate_name(atom_name: string): boolean;

@@ -4,8 +4,6 @@
  * @packageDocumentation
  */
 
-// export * from 'uranio-core/book/atom/index';
-
 import {urn_exception} from 'urn-lib';
 
 const urn_exc = urn_exception.init('BOOK_SERVER', 'Book server methods module');
@@ -44,24 +42,16 @@ export function get_dock_definition<A extends schema.AtomName>(atom_name:A)
 	return book_client.get_dock_definition(atom_name) as Book.Definition.Dock<A>;
 }
 
-export function add_route_call<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth>(
-	atom_name:A,
-	route_name:R,
-	route_call:Book.Definition.Dock.Routes.Route.Call<A,R,D>
-):Book.Definition.Dock.Routes.Route<A,R,D>{
-	const route_def = get_route_definition(atom_name, route_name);
-	// if(!route_def){
-	//   throw urn_exc.create(
-	//     `INVALID_ROUTE_NAME`,
-	//     `Cannot find route [${route_name}] for atom [${atom_name}].`
-	//   );
-	// }
-	(route_def as Book.Definition.Dock.Routes.Route<A,R,D>).call = route_call;
-	// Object.assign(atom_def.dock.routes, {...atom_def.dock.routes, route_name: route_definition});
-	// Object.assign(atom_book, {...atom_book_def, ...atom_book});
-	return route_def;
+export function add_route<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0>(
+	atom_name: A,
+	route_name: R,
+	route_definition: Book.Definition.Dock.Routes.Route<A,R,D>
+):Book.Definition.Dock.Routes<A>{
+	const routes_definition = get_routes_definition(atom_name);
+	routes_definition[route_name] = route_definition;
+	return routes_definition;
 }
-	
+
 export function add_definition<A extends schema.AtomName>(
 	atom_name:A,
 	atom_definition:ClientBook.Definition

@@ -27,8 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.has_property = exports.get_properties_definition = exports.get_custom_properties_definition = exports.get_property_definition = exports.get_definition = exports.get_all_definitions = exports.get_plural = exports.validate_name = exports.get_names = exports.add_definition = exports.add_route_call = exports.get_dock_definition = exports.get_routes_definition = exports.get_route_definition = void 0;
-// export * from 'uranio-core/book/atom/index';
+exports.has_property = exports.get_properties_definition = exports.get_custom_properties_definition = exports.get_property_definition = exports.get_definition = exports.get_all_definitions = exports.get_plural = exports.validate_name = exports.get_names = exports.add_definition = exports.add_route = exports.get_dock_definition = exports.get_routes_definition = exports.get_route_definition = void 0;
 const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('BOOK_SERVER', 'Book server methods module');
 const uranio_core_1 = __importDefault(require("uranio-core"));
@@ -49,20 +48,12 @@ function get_dock_definition(atom_name) {
     return book_client.get_dock_definition(atom_name);
 }
 exports.get_dock_definition = get_dock_definition;
-function add_route_call(atom_name, route_name, route_call) {
-    const route_def = get_route_definition(atom_name, route_name);
-    // if(!route_def){
-    //   throw urn_exc.create(
-    //     `INVALID_ROUTE_NAME`,
-    //     `Cannot find route [${route_name}] for atom [${atom_name}].`
-    //   );
-    // }
-    route_def.call = route_call;
-    // Object.assign(atom_def.dock.routes, {...atom_def.dock.routes, route_name: route_definition});
-    // Object.assign(atom_book, {...atom_book_def, ...atom_book});
-    return route_def;
+function add_route(atom_name, route_name, route_definition) {
+    const routes_definition = get_routes_definition(atom_name);
+    routes_definition[route_name] = route_definition;
+    return routes_definition;
 }
-exports.add_route_call = add_route_call;
+exports.add_route = add_route;
 function add_definition(atom_name, atom_definition) {
     return uranio_core_1.default.book.add_definition(atom_name, atom_definition);
 }
