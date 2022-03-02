@@ -39,6 +39,7 @@ const conf = __importStar(require("../conf/server"));
 const book = __importStar(require("../book/server"));
 const log = __importStar(require("../log/server"));
 const calls_1 = require("../routes/calls");
+const atoms_2 = require("../atoms");
 function init(config) {
     log.init(urn_lib_1.urn_log.defaults);
     uranio_core_1.default.init(config);
@@ -61,7 +62,9 @@ exports.init = init;
 function _add_default_routes() {
     const core_atom_book = book.get_all_definitions();
     for (const [atom_name, atom_def] of Object.entries(core_atom_book)) {
-        atom_def.dock.routes = (0, calls_1.return_default_routes)(atom_name);
+        if (atoms_2.default_atom_names.includes(atom_name)) {
+            atom_def.dock.routes = (0, calls_1.return_default_routes)(atom_name);
+        }
     }
 }
 function _register_required_atoms() {

@@ -24,9 +24,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.atom_book = void 0;
-// import core from 'uranio-core';
+exports.atom_book = exports.default_atom_names = void 0;
 const types = __importStar(require("./client/types"));
+exports.default_atom_names = [
+    'superuser',
+    'user',
+    'group',
+    'media',
+    'request',
+    'error',
+    'setting'
+];
 exports.atom_book = {
     error: {
         plural: 'errors',

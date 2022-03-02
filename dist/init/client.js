@@ -37,6 +37,7 @@ const conf = __importStar(require("../conf/client"));
 const log = __importStar(require("../log/client"));
 const book = __importStar(require("../book/client"));
 const client_2 = require("../routes/client");
+const atoms_2 = require("../atoms");
 function init(config) {
     log.init(urn_lib_1.urn_log.defaults);
     client_1.default.init(config);
@@ -63,7 +64,7 @@ function _add_default_routes() {
                 ...client_2.media_routes
             };
         }
-        else {
+        else if (atoms_2.default_atom_names.includes(atom_name)) {
             atom_def.dock.routes = client_2.default_routes;
         }
         register.atom(atom_def, atom_name);

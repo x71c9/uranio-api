@@ -4,9 +4,17 @@
  * @packageDocumentation
  */
 
-// import core from 'uranio-core';
-
 import * as types from './client/types';
+
+export const default_atom_names = [
+	'superuser',
+	'user',
+	'group',
+	'media',
+	'request',
+	'error',
+	'setting'
+];
 
 export const atom_book = {
 	error: {

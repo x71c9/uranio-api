@@ -30,6 +30,8 @@ import * as log from '../log/server';
 
 import {return_default_routes} from '../routes/calls';
 
+import {default_atom_names} from '../atoms';
+
 export function init(config?:types.Configuration)
 		:void{
 	
@@ -59,7 +61,9 @@ export function init(config?:types.Configuration)
 function _add_default_routes(){
 	const core_atom_book = book.get_all_definitions();
 	for(const [atom_name, atom_def] of Object.entries(core_atom_book)){
-		(atom_def.dock as any).routes = return_default_routes(atom_name as schema.AtomName);
+		if(default_atom_names.includes(atom_name)){
+			(atom_def.dock as any).routes = return_default_routes(atom_name as schema.AtomName);
+		}
 	}
 }
 function _register_required_atoms(){
