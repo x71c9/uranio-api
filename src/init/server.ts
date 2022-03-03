@@ -12,8 +12,6 @@ import core from 'uranio-core';
 
 import {api_config} from '../conf/defaults';
 
-// import {default_routes} from '../routes/client';
-
 import * as register from '../reg/server';
 
 import {atom_book} from '../atoms';
@@ -62,14 +60,16 @@ function _add_default_routes(){
 	const core_atom_book = book.get_all_definitions();
 	for(const [atom_name, atom_def] of Object.entries(core_atom_book)){
 		if(default_atom_names.includes(atom_name)){
-			(atom_def.dock as any).routes = return_default_routes(atom_name as schema.AtomName);
+			if(atom_def.dock){
+				(atom_def.dock as any).routes = return_default_routes(atom_name as schema.AtomName);
+			}
 		}
 	}
 }
 function _register_required_atoms(){
 	for(const [atom_name, atom_def] of Object.entries(atom_book)){
 		(atom_def.dock as any).routes = return_default_routes(atom_name as schema.AtomName);
-		register.atom(atom_def as any, atom_name as schema.AtomName);
+		register.atom(atom_def as any, atom_name);
 	}
 }
 
