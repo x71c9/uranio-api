@@ -32,7 +32,6 @@ const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('INIT_API_MODULE', `Api init module`);
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const defaults_1 = require("../conf/defaults");
-// import {default_routes} from '../routes/client';
 const register = __importStar(require("../reg/server"));
 const atoms_1 = require("../atoms");
 const conf = __importStar(require("../conf/server"));
@@ -63,7 +62,9 @@ function _add_default_routes() {
     const core_atom_book = book.get_all_definitions();
     for (const [atom_name, atom_def] of Object.entries(core_atom_book)) {
         if (atoms_2.default_atom_names.includes(atom_name)) {
-            atom_def.dock.routes = (0, calls_1.return_default_routes)(atom_name);
+            if (atom_def.dock) {
+                atom_def.dock.routes = (0, calls_1.return_default_routes)(atom_name);
+            }
         }
     }
 }
