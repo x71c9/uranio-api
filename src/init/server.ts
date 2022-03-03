@@ -16,8 +16,6 @@ import * as register from '../reg/server';
 
 import * as required from '../req/server';
 
-import {schema} from '../sch/server';
-
 import * as types from '../server/types';
 
 import * as conf from '../conf/server';
@@ -25,10 +23,6 @@ import * as conf from '../conf/server';
 import * as book from '../book/server';
 
 import * as log from '../log/server';
-
-import {return_default_routes} from '../routes/calls';
-
-// import {default_atom_names} from '../req/atoms';
 
 export function init(config?:types.Configuration, register_required=true)
 		:void{
@@ -69,7 +63,6 @@ export function init(config?:types.Configuration, register_required=true)
 function _register_required_atoms(){
 	const required_atoms = required.get();
 	for(const [atom_name, atom_def] of Object.entries(required_atoms)){
-		(atom_def.dock as any).routes = return_default_routes(atom_name as schema.AtomName);
 		register.atom(atom_def as any, atom_name);
 	}
 }
