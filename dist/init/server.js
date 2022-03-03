@@ -55,16 +55,6 @@ function init(config, register_required = true) {
     urn_lib_1.urn_log.defaults.log_level = conf.get(`log_level`);
 }
 exports.init = init;
-// function _add_default_routes(){
-//   const core_atom_book = book.get_all_definitions();
-//   for(const [atom_name, atom_def] of Object.entries(core_atom_book)){
-//     if(default_atom_names.includes(atom_name)){
-//       if(atom_def.dock){
-//         (atom_def.dock as any).routes = return_default_routes(atom_name as schema.AtomName);
-//       }
-//     }
-//   }
-// }
 function _register_required_atoms() {
     const required_atoms = required.get();
     for (const [atom_name, atom_def] of Object.entries(required_atoms)) {

@@ -35,9 +35,6 @@ const register = __importStar(require("../reg/client"));
 const required = __importStar(require("../req/client"));
 const conf = __importStar(require("../conf/client"));
 const log = __importStar(require("../log/client"));
-// import * as book from '../book/client';
-// import {default_routes, media_routes} from '../routes/client';
-// import {default_atom_names} from '../req/atoms';
 function init(config, register_required = true) {
     log.init(urn_lib_1.urn_log.defaults);
     client_1.default.init(config, false);
@@ -54,31 +51,9 @@ function init(config, register_required = true) {
     urn_lib_1.urn_log.defaults.log_level = conf.get(`log_level`);
 }
 exports.init = init;
-// function _add_default_routes(){
-//   const core_atom_book = book.get_all_definitions();
-//   for(const [atom_name, atom_def] of Object.entries(core_atom_book)){
-//     if(atom_name === 'media'){
-//       (atom_def.dock as any).routes = {
-//         ...default_routes,
-//         ...media_routes
-//       };
-//     }else if(default_atom_names.includes(atom_name)){
-//       (atom_def.dock as any).routes = default_routes;
-//     }
-//     register.atom(atom_def as any, atom_name as any);
-//   }
-// }
 function _register_required_atoms() {
     const required_atoms = required.get();
     for (const [atom_name, atom_def] of Object.entries(required_atoms)) {
-        // if(atom_name === 'media'){
-        //   (atom_def.dock as any).routes = {
-        //     ...default_routes,
-        //     ...media_routes
-        //   };
-        // }else{
-        //   (atom_def.dock as any).routes = default_routes;
-        // }
         register.atom(atom_def, atom_name);
     }
 }
