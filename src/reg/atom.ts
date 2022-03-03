@@ -20,6 +20,10 @@ import * as types from '../client/types';
 
 import {return_default_routes} from '../routes/calls';
 
+// import {default_routes} from '../routes/client';
+
+import {schema} from '../sch/client';
+
 export function atom(
 	atom_definition: types.Book.Definition,
 	atom_name?: string
@@ -29,8 +33,7 @@ export function atom(
 			atom_definition.dock.routes = {};
 		}
 		
-		const default_routes = (atom_name === 'media') ?
-			return_default_routes('media') : return_default_routes('superuser');
+		const default_routes = return_default_routes(atom_name as schema.AtomName);
 		
 		atom_definition.dock.routes = {
 			...atom_definition.dock.routes,

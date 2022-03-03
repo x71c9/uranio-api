@@ -23,8 +23,7 @@ function atom(atom_definition, atom_name) {
         if (!atom_definition.dock.routes) {
             atom_definition.dock.routes = {};
         }
-        const default_routes = (atom_name === 'media') ?
-            (0, calls_1.return_default_routes)('media') : (0, calls_1.return_default_routes)('superuser');
+        const default_routes = (0, calls_1.return_default_routes)(atom_name);
         atom_definition.dock.routes = {
             ...atom_definition.dock.routes,
             ...default_routes
