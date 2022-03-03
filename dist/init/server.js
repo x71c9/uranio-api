@@ -33,43 +33,43 @@ const urn_exc = urn_lib_1.urn_exception.init('INIT_API_MODULE', `Api init module
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const defaults_1 = require("../conf/defaults");
 const register = __importStar(require("../reg/server"));
-const atoms_1 = require("../atoms");
+const required = __importStar(require("../req/server"));
 const conf = __importStar(require("../conf/server"));
 const book = __importStar(require("../book/server"));
 const log = __importStar(require("../log/server"));
 const calls_1 = require("../routes/calls");
-const atoms_2 = require("../atoms");
-function init(config) {
+// import {default_atom_names} from '../req/atoms';
+function init(config, register_required = true) {
     log.init(urn_lib_1.urn_log.defaults);
-    uranio_core_1.default.init(config);
-    _add_default_routes();
-    _register_required_atoms();
+    uranio_core_1.default.init(config, false);
     if (typeof config === 'undefined') {
         uranio_core_1.default.conf.set_from_env(defaults_1.api_config);
     }
     else {
         uranio_core_1.default.conf.set(defaults_1.api_config, config);
     }
+    if (register_required) {
+        _register_required_atoms();
+    }
     _validate_api_variables();
     _validate_api_book();
-    if (config && typeof config.log_level === 'number') {
-        urn_lib_1.urn_log.defaults.log_level = config.log_level;
-    }
     conf.set_initialize(true);
+    urn_lib_1.urn_log.defaults.log_level = conf.get(`log_level`);
 }
 exports.init = init;
-function _add_default_routes() {
-    const core_atom_book = book.get_all_definitions();
-    for (const [atom_name, atom_def] of Object.entries(core_atom_book)) {
-        if (atoms_2.default_atom_names.includes(atom_name)) {
-            if (atom_def.dock) {
-                atom_def.dock.routes = (0, calls_1.return_default_routes)(atom_name);
-            }
-        }
-    }
-}
+// function _add_default_routes(){
+//   const core_atom_book = book.get_all_definitions();
+//   for(const [atom_name, atom_def] of Object.entries(core_atom_book)){
+//     if(default_atom_names.includes(atom_name)){
+//       if(atom_def.dock){
+//         (atom_def.dock as any).routes = return_default_routes(atom_name as schema.AtomName);
+//       }
+//     }
+//   }
+// }
 function _register_required_atoms() {
-    for (const [atom_name, atom_def] of Object.entries(atoms_1.atom_book)) {
+    const required_atoms = required.get();
+    for (const [atom_name, atom_def] of Object.entries(required_atoms)) {
         atom_def.dock.routes = (0, calls_1.return_default_routes)(atom_name);
         register.atom(atom_def, atom_name);
     }
@@ -84,9 +84,9 @@ function _validate_api_book() {
     // _validate_route_name();
 }
 function _validate_dock_url_uniqueness() {
-    const atom_book = book.get_all_definitions();
+    const required_atoms = book.get_all_definitions();
     const urls = [];
-    for (const [atom_name, atom_def] of Object.entries(atom_book)) {
+    for (const [atom_name, atom_def] of Object.entries(required_atoms)) {
         const dock_def = atom_def.dock;
         if (dock_def && typeof dock_def.url === 'string') {
             if (urls.includes(dock_def.url)) {
@@ -98,8 +98,8 @@ function _validate_dock_url_uniqueness() {
     }
 }
 function _validate_dock_route_url_uniqueness() {
-    const atom_book = book.get_all_definitions();
-    for (const [atom_name, atom_def] of Object.entries(atom_book)) {
+    const required_atoms = book.get_all_definitions();
+    for (const [atom_name, atom_def] of Object.entries(required_atoms)) {
         const dock_def = atom_def.dock;
         if (dock_def && dock_def.routes) {
             const route_urls = {};
@@ -119,9 +119,9 @@ function _validate_dock_route_url_uniqueness() {
     }
 }
 // function _validate_route_name(){
-//   const atom_book = book.get_all_definitions();
+//   const required_atoms = book.get_all_definitions();
 //   const invalid_route_names:string[] = _get_default_route_name();
-//   for(const [_atom_name, atom_def] of Object.entries(atom_book)){
+//   for(const [_atom_name, atom_def] of Object.entries(required_atoms)){
 //     const dock_def = atom_def.dock;
 //     if(dock_def && typeof dock_def.routes === 'object'){
 //       for(const [route_name, _route_def] of Object.entries(dock_def.routes)){

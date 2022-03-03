@@ -3,8 +3,7 @@
  *
  * @packageDocumentation
  */
-import * as types from './client/types';
-export declare const default_atom_names: string[];
+import * as types from '../client/types';
 export declare const required_atoms: {
     readonly error: {
         readonly plural: "errors";

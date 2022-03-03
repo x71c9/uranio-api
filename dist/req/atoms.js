@@ -24,17 +24,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.required_atoms = exports.default_atom_names = void 0;
-const types = __importStar(require("./client/types"));
-exports.default_atom_names = [
-    'superuser',
-    'user',
-    'group',
-    'media',
-    'request',
-    'error',
-    'setting'
-];
+exports.required_atoms = void 0;
+const types = __importStar(require("../client/types"));
+// export const default_atom_names = [
+//   'superuser',
+//   'user',
+//   'group',
+//   'media',
+//   'request',
+//   'error',
+//   'setting'
+// ];
 exports.required_atoms = {
     error: {
         plural: 'errors',

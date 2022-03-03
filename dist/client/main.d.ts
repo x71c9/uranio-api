@@ -11,5 +11,6 @@ import * as log from '../log/client';
 import * as types from './types';
 import * as conf from '../conf/client';
 import * as register from '../reg/client';
+import * as required from '../req/client';
 export * from '../init/client';
-export { core, schema, types, book, log, conf, register, routes };
+export { core, schema, types, book, log, conf, register, required, routes };

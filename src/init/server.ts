@@ -14,7 +14,7 @@ import {api_config} from '../conf/defaults';
 
 import * as register from '../reg/server';
 
-import {atom_book} from '../atoms';
+import * as required from '../req/server';
 
 import {schema} from '../sch/server';
 
@@ -28,17 +28,14 @@ import * as log from '../log/server';
 
 import {return_default_routes} from '../routes/calls';
 
-import {default_atom_names} from '../atoms';
+// import {default_atom_names} from '../req/atoms';
 
-export function init(config?:types.Configuration)
+export function init(config?:types.Configuration, register_required=true)
 		:void{
 	
 	log.init(urn_log.defaults);
 	
-	core.init(config);
-	
-	_add_default_routes();
-	_register_required_atoms();
+	core.init(config, false);
 	
 	if(typeof config === 'undefined'){
 		core.conf.set_from_env(api_config);
@@ -46,28 +43,32 @@ export function init(config?:types.Configuration)
 		core.conf.set(api_config, config);
 	}
 	
+	if(register_required){
+		_register_required_atoms();
+	}
+	
 	_validate_api_variables();
 	_validate_api_book();
 	
-	if(config && typeof config.log_level === 'number'){
-		urn_log.defaults.log_level = config.log_level;
-	}
-	
 	conf.set_initialize(true);
+	
+	urn_log.defaults.log_level = conf.get(`log_level`);
+	
 }
 
-function _add_default_routes(){
-	const core_atom_book = book.get_all_definitions();
-	for(const [atom_name, atom_def] of Object.entries(core_atom_book)){
-		if(default_atom_names.includes(atom_name)){
-			if(atom_def.dock){
-				(atom_def.dock as any).routes = return_default_routes(atom_name as schema.AtomName);
-			}
-		}
-	}
-}
+// function _add_default_routes(){
+//   const core_atom_book = book.get_all_definitions();
+//   for(const [atom_name, atom_def] of Object.entries(core_atom_book)){
+//     if(default_atom_names.includes(atom_name)){
+//       if(atom_def.dock){
+//         (atom_def.dock as any).routes = return_default_routes(atom_name as schema.AtomName);
+//       }
+//     }
+//   }
+// }
 function _register_required_atoms(){
-	for(const [atom_name, atom_def] of Object.entries(atom_book)){
+	const required_atoms = required.get();
+	for(const [atom_name, atom_def] of Object.entries(required_atoms)){
 		(atom_def.dock as any).routes = return_default_routes(atom_name as schema.AtomName);
 		register.atom(atom_def as any, atom_name);
 	}
@@ -84,9 +85,9 @@ function _validate_api_book(){
 }
 
 function _validate_dock_url_uniqueness(){
-	const atom_book = book.get_all_definitions();
+	const required_atoms = book.get_all_definitions();
 	const urls:string[] = [];
-	for(const [atom_name, atom_def] of Object.entries(atom_book)){
+	for(const [atom_name, atom_def] of Object.entries(required_atoms)){
 		const dock_def = atom_def.dock;
 		if(dock_def && typeof dock_def.url === 'string'){
 			if(urls.includes(dock_def.url)){
@@ -102,8 +103,8 @@ function _validate_dock_url_uniqueness(){
 }
 
 function _validate_dock_route_url_uniqueness(){
-	const atom_book = book.get_all_definitions();
-	for(const [atom_name, atom_def] of Object.entries(atom_book)){
+	const required_atoms = book.get_all_definitions();
+	for(const [atom_name, atom_def] of Object.entries(required_atoms)){
 		const dock_def = atom_def.dock;
 		if(dock_def && dock_def.routes){
 			const route_urls:{[k:string]:string[]} = {};
@@ -127,9 +128,9 @@ function _validate_dock_route_url_uniqueness(){
 }
 
 // function _validate_route_name(){
-//   const atom_book = book.get_all_definitions();
+//   const required_atoms = book.get_all_definitions();
 //   const invalid_route_names:string[] = _get_default_route_name();
-//   for(const [_atom_name, atom_def] of Object.entries(atom_book)){
+//   for(const [_atom_name, atom_def] of Object.entries(required_atoms)){
 //     const dock_def = atom_def.dock;
 //     if(dock_def && typeof dock_def.routes === 'object'){
 //       for(const [route_name, _route_def] of Object.entries(dock_def.routes)){
