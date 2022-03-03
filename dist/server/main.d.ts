@@ -14,5 +14,6 @@ import * as util from '../util/server';
 import * as log from '../log/server';
 import * as types from './types';
 import * as register from '../reg/server';
+import * as required from '../req/server';
 export * from '../init/server';
-export { core, schema, service, lambda, routes, book, conf, util, log, register, types };
+export { core, schema, service, lambda, routes, book, conf, util, log, register, required, types };

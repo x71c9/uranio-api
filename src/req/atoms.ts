@@ -4,19 +4,19 @@
  * @packageDocumentation
  */
 
-import * as types from './client/types';
+import * as types from '../client/types';
 
-export const default_atom_names = [
-	'superuser',
-	'user',
-	'group',
-	'media',
-	'request',
-	'error',
-	'setting'
-];
+// export const default_atom_names = [
+//   'superuser',
+//   'user',
+//   'group',
+//   'media',
+//   'request',
+//   'error',
+//   'setting'
+// ];
 
-export const atom_book = {
+export const required_atoms = {
 	error: {
 		plural: 'errors',
 		read_only: true,

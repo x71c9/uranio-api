@@ -20,6 +20,8 @@ import * as conf from '../conf/client';
 
 import * as register from '../reg/client';
 
+import * as required from '../req/client';
+
 export * from '../init/client';
 
 export {
@@ -30,5 +32,6 @@ export {
 	log,
 	conf,
 	register,
+	required,
 	routes
 };

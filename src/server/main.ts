@@ -26,6 +26,8 @@ import * as types from './types';
 
 import * as register from '../reg/server';
 
+import * as required from '../req/server';
+
 export * from '../init/server';
 
 export {
@@ -39,5 +41,6 @@ export {
 	util,
 	log,
 	register,
+	required,
 	types
 };
