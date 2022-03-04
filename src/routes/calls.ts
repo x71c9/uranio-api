@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import {urn_log, urn_exception} from 'urn-lib';
+import {urn_log, urn_exception, urn_util} from 'urn-lib';
 
 const urn_exc = urn_exception.init(`API_ROUTE_SERVER`, `Api route server module`);
 
@@ -39,7 +39,7 @@ import {add_media_routes, default_routes as cln_default_routes} from './client';
 export function return_default_routes<A extends core.schema.AtomName>(atom_name:A)
 		:types.Book.Definition.Dock.Routes<A>{
 	
-	let default_routes = cln_default_routes;
+	let default_routes = urn_util.json.clean_parse(urn_util.json.safe_stringify(cln_default_routes));
 	
 	if(atom_name === 'media'){
 		
