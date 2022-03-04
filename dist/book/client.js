@@ -32,9 +32,9 @@ exports.get_routes_definition = get_routes_definition;
 function get_dock_definition(atom_name) {
     const atom_def = get_definition(atom_name);
     const dock_def = atom_def.dock;
-    const fresh_default_routes = (atom_name === 'media') ?
-        { ...client_2.default_routes, ...client_2.media_routes } : client_2.default_routes;
     if (!dock_def || !dock_def.url) {
+        const fresh_default_routes = (atom_name === 'media') ?
+            { ...client_2.default_routes, ...client_2.media_routes } : client_2.default_routes;
         return {
             url: `/${get_plural(atom_name)}`,
             routes: fresh_default_routes
