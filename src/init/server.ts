@@ -31,9 +31,8 @@ export function init(config?:types.Configuration, register_required=true)
 	
 	core.init(config, false);
 	
-	if(typeof config === 'undefined'){
-		core.conf.set_from_env(api_config);
-	}else{
+	core.conf.set_from_env(api_config);
+	if(config){
 		core.conf.set(api_config, config);
 	}
 	

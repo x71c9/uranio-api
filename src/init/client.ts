@@ -27,9 +27,8 @@ export function init(config?:types.ClientConfiguration, register_required=true)
 	
 	core_client.init(config, false);
 	
-	if(!config){
-		conf.set_from_env(api_client_config);
-	}else{
+	conf.set_from_env(api_client_config);
+	if(config){
 		conf.set(api_client_config, config);
 	}
 	
