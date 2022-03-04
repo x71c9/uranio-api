@@ -266,7 +266,7 @@ function _log_auth_route_request<A extends schema.AtomName, R extends schema.Rou
 	auth_request: types.Api.Request<A,R,D>
 ):void{
 	const request_shape = partial_api_request_to_atom_request(auth_request);
-	const auth_request_clone = {...request_shape};
+	const auth_request_clone = urn_util.object.deep_clone(request_shape);
 	if(auth_request_clone.body){
 		const body = JSON.parse(auth_request_clone.body);
 		body.password = '[DELETED]';

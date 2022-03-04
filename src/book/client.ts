@@ -43,9 +43,9 @@ export function get_dock_definition<A extends schema.AtomName>(atom_name:A)
 		:Book.Definition.Dock{
 	const atom_def = get_definition(atom_name);
 	const dock_def = atom_def.dock;
-	const fresh_default_routes = (atom_name === 'media') ?
-		{...default_routes, ...media_routes} : default_routes;
 	if(!dock_def || !dock_def.url){
+		const fresh_default_routes = (atom_name === 'media') ?
+			{...default_routes, ...media_routes} : default_routes;
 		return {
 			url: `/${get_plural(atom_name)}`,
 			routes: fresh_default_routes as any
