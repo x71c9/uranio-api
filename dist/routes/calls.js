@@ -30,7 +30,7 @@ const client_1 = require("./client");
 //   return common_atom_dock_with_defaults(default_routes, atom_name) as types.Book.Definition.Dock<A>;
 // }
 function return_default_routes(atom_name) {
-    let default_routes = client_1.default_routes;
+    let default_routes = urn_lib_1.urn_util.json.clean_parse(urn_lib_1.urn_util.json.safe_stringify(client_1.default_routes));
     if (atom_name === 'media') {
         default_routes = (0, client_1.add_media_routes)();
         default_routes.upload.call =
