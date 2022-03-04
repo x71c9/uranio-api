@@ -6,7 +6,11 @@
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -216,7 +220,7 @@ function _log_route_request(api_request) {
 }
 function _log_auth_route_request(auth_request) {
     const request_shape = (0, request_1.partial_api_request_to_atom_request)(auth_request);
-    const auth_request_clone = { ...request_shape };
+    const auth_request_clone = urn_lib_1.urn_util.object.deep_clone(request_shape);
     if (auth_request_clone.body) {
         const body = JSON.parse(auth_request_clone.body);
         body.password = '[DELETED]';
