@@ -43,8 +43,8 @@ export function set_from_env(repo_config:Required<types.ClientConfiguration>)
 }
 
 export function set(
-	repo_config:Required<types.ClientConfiguration>,
-	config:types.ClientConfiguration
+	repo_config: Required<types.ClientConfiguration>,
+	config: Partial<types.ClientConfiguration>
 ):void{
 	return core_client.conf.set(repo_config, config);
 }
