@@ -44,9 +44,9 @@ const log = __importStar(require("../log/server"));
 function init(config, register_required = true) {
     log.init(urn_lib_1.urn_log.defaults);
     uranio_core_1.default.init(config, false);
-    uranio_core_1.default.conf.set_from_env(defaults_1.api_config);
+    conf.set_from_env(defaults_1.api_config);
     if (config) {
-        uranio_core_1.default.conf.set(defaults_1.api_config, config);
+        conf.set(defaults_1.api_config, config);
     }
     if (register_required) {
         _register_required_atoms();

@@ -33,9 +33,9 @@ export function init(
 	
 	core.init(config, false);
 	
-	core.conf.set_from_env(api_config);
+	conf.set_from_env(api_config);
 	if(config){
-		core.conf.set(api_config, config);
+		conf.set(api_config, config);
 	}
 	
 	if(register_required){
