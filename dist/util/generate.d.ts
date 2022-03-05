@@ -3,9 +3,7 @@
  *
  * @packageDocumentation
  */
-export declare let process_params: {
-    urn_command: string;
-};
+export declare let process_params: {};
 export declare function schema(): string;
 export declare function schema_and_save(): void;
 export declare function save_schema(text: string): void;

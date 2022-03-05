@@ -34,8 +34,8 @@
 	"scripts": {
 		"build": "npx tsc -b",
 		"dev": "npx tsc-watch --onSuccess \"node -r source-map-support/register -r dotenv/config ./dist/dev.js\"",
-		"generate:compile": "npx esbuild ./src/server/generate.ts --outfile=./generate/_generate_bundled.js --bundle --platform=node",
-		"generate:schema": "yarn generate:compile && node ./generate/_generate_bundled.js urn_command=schema"
+		"plain:generate": "node -r source-map-support/register -r dotenv/config ./dist/server/generate.js",
+		"generate": "yarn plain:generate urn_schema_repo_path=./node_modules/uranio-schema"
 	},
 	"devDependencies": {
 		"@types/caller": "^1.0.0",

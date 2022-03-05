@@ -37,9 +37,7 @@ const urn_lib_1 = require("urn-lib");
 const book = __importStar(require("../book/server"));
 const client_1 = require("../routes/client");
 exports.process_params = {
-    urn_command: `schema`,
-    // urn_base_schema: `./.uranio/generate/base/schema.d.ts`,
-    // urn_output_dir: `.`
+// urn_command: `schema`
 };
 function schema() {
     urn_lib_1.urn_log.debug('Started generating uranio api schema...');

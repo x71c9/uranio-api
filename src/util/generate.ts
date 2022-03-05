@@ -17,9 +17,7 @@ import * as types from '../server/types';
 import {default_routes} from '../routes/client';
 
 export let process_params = {
-	urn_command: `schema`,
-	// urn_base_schema: `./.uranio/generate/base/schema.d.ts`,
-	// urn_output_dir: `.`
+	// urn_command: `schema`
 };
 
 export function schema():string{
