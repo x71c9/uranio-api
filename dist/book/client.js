@@ -9,10 +9,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.get_names = exports.has_property = exports.get_properties_definition = exports.get_custom_properties_definition = exports.get_property_definition = exports.get_definition = exports.get_all_definitions = exports.validate_auth_name = exports.validate_name = exports.get_plural = exports.add_definition = exports.add_route_definition = exports.get_dock_definition = exports.get_routes_definition = exports.get_route_definition = void 0;
+// import {urn_util, urn_exception} from 'urn-lib';
 const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('BOOK_CLIENT', 'Book client methods module');
 const client_1 = __importDefault(require("uranio-core/client"));
-const client_2 = require("../routes/client");
+// import {default_routes, media_routes} from '../routes/client';
 function get_route_definition(atom_name, route_name) {
     const routes_def = get_routes_definition(atom_name);
     if (!routes_def || !routes_def[route_name]) {
@@ -33,18 +34,19 @@ function get_dock_definition(atom_name) {
     const atom_def = get_definition(atom_name);
     const dock_def = atom_def.dock;
     if (!dock_def || !dock_def.url) {
-        let cloned_default_routes = urn_lib_1.urn_util.object.deep_clone(client_2.default_routes);
-        if (atom_name === 'media') {
-            const cloned_media_routes = urn_lib_1.urn_util.object.deep_clone(client_2.media_routes);
-            cloned_default_routes = {
-                ...cloned_default_routes,
-                ...cloned_media_routes
-            };
-        }
-        return {
-            url: `/${get_plural(atom_name)}`,
-            routes: cloned_default_routes
-        };
+        throw urn_exc.create_invalid_book(`INVALID_DOCK_DEFINITION`, `Atom [${atom_name}] has no or invalid dock definition.`);
+        // let cloned_default_routes = urn_util.object.deep_clone(default_routes);
+        // if(atom_name === 'media'){
+        //   const cloned_media_routes = urn_util.object.deep_clone(media_routes);
+        //   cloned_default_routes = {
+        //     ...cloned_default_routes,
+        //     ...cloned_media_routes
+        //   };
+        // }
+        // return {
+        //   url: `/${get_plural(atom_name)}`,
+        //   routes: cloned_default_routes as any
+        // } as Book.Definition.Dock;
     }
     return dock_def;
 }

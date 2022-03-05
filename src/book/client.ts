@@ -4,7 +4,8 @@
  * @packageDocumentation
  */
 
-import {urn_util, urn_exception} from 'urn-lib';
+// import {urn_util, urn_exception} from 'urn-lib';
+import {urn_exception} from 'urn-lib';
 
 const urn_exc = urn_exception.init('BOOK_CLIENT', 'Book client methods module');
 
@@ -14,7 +15,7 @@ import {Book} from '../typ/book_cln';
 
 import {schema} from '../sch/client';
 
-import {default_routes, media_routes} from '../routes/client';
+// import {default_routes, media_routes} from '../routes/client';
 
 export function get_route_definition<A extends schema.AtomName, R extends schema.RouteName<A>>(
 	atom_name: A,
@@ -44,19 +45,23 @@ export function get_dock_definition<A extends schema.AtomName>(atom_name:A)
 	const atom_def = get_definition(atom_name);
 	const dock_def = atom_def.dock;
 	if(!dock_def || !dock_def.url){
-		let cloned_default_routes = urn_util.object.deep_clone(default_routes);
-		if(atom_name === 'media'){
-			const cloned_media_routes = urn_util.object.deep_clone(media_routes);
-			cloned_default_routes = {
-				...cloned_default_routes,
-				...cloned_media_routes
-			};
-		}
-		return {
-			url: `/${get_plural(atom_name)}`,
-			routes: cloned_default_routes as any
+		throw urn_exc.create_invalid_book(
+			`INVALID_DOCK_DEFINITION`,
+			`Atom [${atom_name}] has no or invalid dock definition.`
+		);
+		// let cloned_default_routes = urn_util.object.deep_clone(default_routes);
+		// if(atom_name === 'media'){
+		//   const cloned_media_routes = urn_util.object.deep_clone(media_routes);
+		//   cloned_default_routes = {
+		//     ...cloned_default_routes,
+		//     ...cloned_media_routes
+		//   };
+		// }
+		// return {
+		//   url: `/${get_plural(atom_name)}`,
+		//   routes: cloned_default_routes as any
 			
-		} as Book.Definition.Dock;
+		// } as Book.Definition.Dock;
 	}
 	return dock_def;
 }
