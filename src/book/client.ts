@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import {urn_exception} from 'urn-lib';
+import {urn_util, urn_exception} from 'urn-lib';
 
 const urn_exc = urn_exception.init('BOOK_CLIENT', 'Book client methods module');
 
@@ -44,11 +44,17 @@ export function get_dock_definition<A extends schema.AtomName>(atom_name:A)
 	const atom_def = get_definition(atom_name);
 	const dock_def = atom_def.dock;
 	if(!dock_def || !dock_def.url){
-		const fresh_default_routes = (atom_name === 'media') ?
-			{...default_routes, ...media_routes} : default_routes;
+		let cloned_default_routes = urn_util.object.deep_clone(default_routes);
+		if(atom_name === 'media'){
+			const cloned_media_routes = urn_util.object.deep_clone(media_routes);
+			cloned_default_routes = {
+				...cloned_default_routes,
+				...cloned_media_routes
+			};
+		}
 		return {
 			url: `/${get_plural(atom_name)}`,
-			routes: fresh_default_routes as any
+			routes: cloned_default_routes as any
 			
 		} as Book.Definition.Dock;
 	}
