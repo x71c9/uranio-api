@@ -34,8 +34,8 @@ urn_lib_1.urn_log.init({
     debug_info: false,
     color: true
 });
-__exportStar(require("./server/register"), exports);
-const server_1 = __importDefault(require("./server"));
+__exportStar(require("../server/register"), exports);
+const server_1 = __importDefault(require("../server"));
 server_1.default.init();
 const service = server_1.default.service.create();
 service.listen(() => {

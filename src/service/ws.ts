@@ -20,9 +20,9 @@ urn_log.init({
 	color: true
 });
 
-export * from './server/register';
+export * from '../server/register';
 
-import uranio from './server';
+import uranio from '../server';
 uranio.init();
 
 const service = uranio.service.create();
