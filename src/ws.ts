@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Api binary entrypoint
+ * Api Web Service Binary
  *
  * @packageDocumentation
  */

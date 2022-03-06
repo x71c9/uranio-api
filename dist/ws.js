@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 "use strict";
 /**
- * Api binary entrypoint
+ * Api Web Service Binary
  *
  * @packageDocumentation
  */
@@ -41,4 +41,4 @@ const service = server_1.default.service.create();
 service.listen(() => {
     urn_lib_1.urn_log.debug(`Uranio service listening on port ${server_1.default.conf.get(`service_port`)}...`);
 });
-//# sourceMappingURL=bin.js.map
+//# sourceMappingURL=ws.js.map
