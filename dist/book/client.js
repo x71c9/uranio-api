@@ -52,9 +52,22 @@ function get_dock_definition(atom_name) {
 }
 exports.get_dock_definition = get_dock_definition;
 function add_route_definition(atom_name, route_name, route_definition) {
-    const routes_definition = get_routes_definition(atom_name);
-    routes_definition[route_name] = route_definition;
-    return routes_definition;
+    try {
+        const routes_definition = get_routes_definition(atom_name);
+        routes_definition[route_name] = route_definition;
+        return routes_definition;
+    }
+    catch (ex) {
+        const err = ex;
+        if (err.type === urn_lib_1.urn_exception.ExceptionType.INVALID_BOOK) {
+            throw urn_exc.create_invalid_book(`INVALID_DOCK_DEFINITION`, `Cannot add route definition for Atom [${atom_name}].` +
+                ` Please make sure Atom definition has property \`dock\` defined and` +
+                ` with property \`url\` also defined: {dock: {url: '/[atom_name_plural]'}}`);
+        }
+        else {
+            throw ex;
+        }
+    }
 }
 exports.add_route_definition = add_route_definition;
 function add_definition(atom_name, atom_definition) {
