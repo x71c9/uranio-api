@@ -5,7 +5,7 @@
 	"main": "dist/index.js",
 	"bin": {
 		"uranio-generate-api": "dist/server/generate.js",
-		"uranio-webservice-api": "dist/ws.js"
+		"uranio-webservice-api": "dist/service/ws.js"
 	},
 	"exports": {
 		".": "./dist/server.js",
