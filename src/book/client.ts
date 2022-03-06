@@ -49,19 +49,6 @@ export function get_dock_definition<A extends schema.AtomName>(atom_name:A)
 			`INVALID_DOCK_DEFINITION`,
 			`Atom [${atom_name}] has no or invalid dock definition.`
 		);
-		// let cloned_default_routes = urn_util.object.deep_clone(default_routes);
-		// if(atom_name === 'media'){
-		//   const cloned_media_routes = urn_util.object.deep_clone(media_routes);
-		//   cloned_default_routes = {
-		//     ...cloned_default_routes,
-		//     ...cloned_media_routes
-		//   };
-		// }
-		// return {
-		//   url: `/${get_plural(atom_name)}`,
-		//   routes: cloned_default_routes as any
-			
-		// } as Book.Definition.Dock;
 	}
 	return dock_def;
 }

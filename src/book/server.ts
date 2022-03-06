@@ -47,9 +47,8 @@ export function add_route_definition<A extends schema.AtomName, R extends schema
 	route_name: R,
 	route_definition: Book.Definition.Dock.Routes.Route<A,R,D>
 ):Book.Definition.Dock.Routes<A>{
-	const routes_definition = get_routes_definition(atom_name);
-	routes_definition[route_name] = route_definition as Book.Definition.Dock.Routes.Route<A,R>;
-	return routes_definition;
+	return book_client.add_route_definition(atom_name, route_name, route_definition) as
+		Book.Definition.Dock.Routes<A>;
 }
 
 export function add_definition<A extends schema.AtomName>(

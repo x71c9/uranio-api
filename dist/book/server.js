@@ -53,9 +53,7 @@ function get_dock_definition(atom_name) {
 }
 exports.get_dock_definition = get_dock_definition;
 function add_route_definition(atom_name, route_name, route_definition) {
-    const routes_definition = get_routes_definition(atom_name);
-    routes_definition[route_name] = route_definition;
-    return routes_definition;
+    return book_client.add_route_definition(atom_name, route_name, route_definition);
 }
 exports.add_route_definition = add_route_definition;
 function add_definition(atom_name, atom_definition) {
