@@ -18,6 +18,8 @@ import * as types from './types';
 
 import * as conf from '../conf/client';
 
+import * as env from '../env/client';
+
 import * as register from '../reg/client';
 
 import * as required from '../req/client';
@@ -31,6 +33,7 @@ export {
 	book,
 	log,
 	conf,
+	env,
 	register,
 	required,
 	routes

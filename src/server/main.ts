@@ -18,6 +18,8 @@ import * as book from '../book/server';
 
 import * as conf from '../conf/server';
 
+import * as env from '../env/server';
+
 import * as util from '../util/server';
 
 import * as log from '../log/server';
@@ -38,6 +40,7 @@ export {
 	routes,
 	book,
 	conf,
+	env,
 	util,
 	log,
 	register,
