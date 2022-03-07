@@ -8,8 +8,6 @@ import {urn_log} from 'urn-lib';
 
 import core_client from 'uranio-core/client';
 
-import uranio_config from '../config';
-
 import {api_client_config} from '../client/default_conf';
 
 import {api_client_env} from '../client/default_env';
@@ -37,7 +35,7 @@ export function init(
 	
 	env.set_from_env(api_client_env);
 	
-	conf.set(api_client_config, uranio_config as types.ClientConfiguration);
+	core_client.conf.set_from_file();
 	
 	if(config){
 		conf.set(api_client_config, config);

@@ -27,7 +27,7 @@ export function get<k extends keyof Required<types.ClientEnvironment>>(param_nam
 
 export function is_initialized()
 		:boolean{
-	return core_client.conf.is_initialized() && _is_api_client_initialized;
+	return core_client.env.is_initialized() && _is_api_client_initialized;
 }
 
 export function set_initialize(is_initialized:boolean)

@@ -35,7 +35,6 @@ exports.init = void 0;
 const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('INIT_API_MODULE', `Api init module`);
 const uranio_core_1 = __importDefault(require("uranio-core"));
-const config_1 = __importDefault(require("../config"));
 const defaults_1 = require("../conf/defaults");
 const defaults_2 = require("../env/defaults");
 const register = __importStar(require("../reg/server"));
@@ -48,7 +47,7 @@ function init(config, register_required = true) {
     log.init(urn_lib_1.urn_log.defaults);
     uranio_core_1.default.init(config, false);
     env.set_from_env(defaults_2.api_env);
-    conf.set(defaults_1.api_config, config_1.default);
+    uranio_core_1.default.conf.set_from_file();
     if (config) {
         conf.set(defaults_1.api_config, config);
     }

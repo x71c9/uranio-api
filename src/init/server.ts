@@ -10,8 +10,6 @@ const urn_exc = urn_exception.init('INIT_API_MODULE', `Api init module`);
 
 import core from 'uranio-core';
 
-import uranio_config from '../config';
-
 import {api_config} from '../conf/defaults';
 
 import {api_env} from '../env/defaults';
@@ -41,7 +39,7 @@ export function init(
 	
 	env.set_from_env(api_env);
 	
-	conf.set(api_config, uranio_config as types.Configuration);
+	core.conf.set_from_file();
 	
 	if(config){
 		conf.set(api_config, config);

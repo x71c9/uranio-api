@@ -22,7 +22,7 @@ function get(param_name) {
 }
 exports.get = get;
 function is_initialized() {
-    return client_1.default.conf.is_initialized() && _is_api_client_initialized;
+    return client_1.default.env.is_initialized() && _is_api_client_initialized;
 }
 exports.is_initialized = is_initialized;
 function set_initialize(is_initialized) {
