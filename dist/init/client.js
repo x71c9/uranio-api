@@ -34,23 +34,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = void 0;
 const urn_lib_1 = require("urn-lib");
 const client_1 = __importDefault(require("uranio-core/client"));
-const defaults_1 = require("../client/defaults");
+const config_1 = __importDefault(require("../config"));
+const default_conf_1 = require("../client/default_conf");
+const default_env_1 = require("../client/default_env");
 const register = __importStar(require("../reg/client"));
 const required = __importStar(require("../req/client"));
 const conf = __importStar(require("../conf/client"));
+const env = __importStar(require("../env/client"));
 const log = __importStar(require("../log/client"));
 function init(config, register_required = true) {
     log.init(urn_lib_1.urn_log.defaults);
     client_1.default.init(config, false);
-    conf.set_from_env(defaults_1.api_client_config);
+    env.set_from_env(default_env_1.api_client_env);
+    conf.set(default_conf_1.api_client_config, config_1.default);
     if (config) {
-        conf.set(defaults_1.api_client_config, config);
+        conf.set(default_conf_1.api_client_config, config);
     }
     if (register_required) {
         _register_required_atoms();
     }
     conf.set_initialize(true);
-    urn_lib_1.urn_log.defaults.log_level = conf.get(`log_level`);
+    env.set_initialize(true);
+    urn_lib_1.urn_log.defaults.log_level = env.get(`log_level`);
 }
 exports.init = init;
 function _register_required_atoms() {

@@ -10,7 +10,7 @@ const urn_exc = urn_exception.init('CONF_TRX_CLIENT_MODULE', `TRX client configu
 
 import core_client from 'uranio-core/client';
 
-import {api_client_config} from '../client/defaults';
+import {api_client_config} from '../client/default_conf';
 
 export {api_client_config as defaults};
 
@@ -35,12 +35,12 @@ export function set_initialize(is_initialized:boolean)
 	_is_api_client_initialized = is_initialized;
 }
 
-export function set_from_env(repo_config:Required<types.ClientConfiguration>)
-		:void{
-	core_client.conf.set_from_env(repo_config);
-	const conf = _get_env_vars(repo_config);
-	set(repo_config, conf);
-}
+// export function set_from_env(repo_config:Required<types.ClientConfiguration>)
+//     :void{
+//   core_client.conf.set_from_env(repo_config);
+//   const conf = _get_env_vars(repo_config);
+//   set(repo_config, conf);
+// }
 
 export function set(
 	repo_config: Required<types.ClientConfiguration>,
@@ -49,12 +49,12 @@ export function set(
 	return core_client.conf.set(repo_config, config);
 }
 
-function _get_env_vars(repo_config:types.ClientConfiguration):types.ClientConfiguration{
-	if(typeof process.env.URN_PREFIX_LOG === 'string' && process.env.URN_PREFIX_LOG !== ''){
-		repo_config.prefix_log = process.env.URN_PREFIX_LOG;
-	}
-	return repo_config;
-}
+// function _get_env_vars(repo_config:types.ClientConfiguration):types.ClientConfiguration{
+//   if(typeof process.env.URN_PREFIX_LOG === 'string' && process.env.URN_PREFIX_LOG !== ''){
+//     repo_config.prefix_log = process.env.URN_PREFIX_LOG;
+//   }
+//   return repo_config;
+// }
 
 function _check_if_param_exists(param_name:string){
 	return urn_util.object.has_key(api_client_config, param_name);

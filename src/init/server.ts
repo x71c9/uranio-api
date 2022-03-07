@@ -10,7 +10,11 @@ const urn_exc = urn_exception.init('INIT_API_MODULE', `Api init module`);
 
 import core from 'uranio-core';
 
+import uranio_config from '../config';
+
 import {api_config} from '../conf/defaults';
+
+import {api_env} from '../env/defaults';
 
 import * as register from '../reg/server';
 
@@ -19,6 +23,8 @@ import * as required from '../req/server';
 import * as types from '../server/types';
 
 import * as conf from '../conf/server';
+
+import * as env from '../env/server';
 
 import * as book from '../book/server';
 
@@ -33,7 +39,10 @@ export function init(
 	
 	core.init(config, false);
 	
-	conf.set_from_env(api_config);
+	env.set_from_env(api_env);
+	
+	conf.set(api_config, uranio_config as types.Configuration);
+	
 	if(config){
 		conf.set(api_config, config);
 	}
@@ -46,8 +55,9 @@ export function init(
 	_validate_api_book();
 	
 	conf.set_initialize(true);
+	env.set_initialize(true);
 	
-	urn_log.defaults.log_level = conf.get(`log_level`);
+	urn_log.defaults.log_level = env.get(`log_level`);
 	
 }
 

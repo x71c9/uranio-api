@@ -16,6 +16,8 @@ import core from 'uranio-core';
 
 import * as conf from '../conf/server';
 
+import * as env from '../env/server';
+
 import * as insta from '../nst/server';
 
 import * as book from '../book/server';
@@ -66,7 +68,7 @@ async function _authorization<A extends schema.AtomName, R extends schema.RouteN
 		return false;
 	}
 	try{
-		const decoded = jwt.verify(auth_token, conf.get(`jwt_private_key`)) as core.types.Passport;
+		const decoded = jwt.verify(auth_token, env.get(`jwt_private_key`)) as core.types.Passport;
 		api_request.passport = decoded;
 		return api_request;
 	}catch(e){

@@ -35,16 +35,20 @@ exports.init = void 0;
 const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('INIT_API_MODULE', `Api init module`);
 const uranio_core_1 = __importDefault(require("uranio-core"));
+const config_1 = __importDefault(require("../config"));
 const defaults_1 = require("../conf/defaults");
+const defaults_2 = require("../env/defaults");
 const register = __importStar(require("../reg/server"));
 const required = __importStar(require("../req/server"));
 const conf = __importStar(require("../conf/server"));
+const env = __importStar(require("../env/server"));
 const book = __importStar(require("../book/server"));
 const log = __importStar(require("../log/server"));
 function init(config, register_required = true) {
     log.init(urn_lib_1.urn_log.defaults);
     uranio_core_1.default.init(config, false);
-    conf.set_from_env(defaults_1.api_config);
+    env.set_from_env(defaults_2.api_env);
+    conf.set(defaults_1.api_config, config_1.default);
     if (config) {
         conf.set(defaults_1.api_config, config);
     }
@@ -54,7 +58,8 @@ function init(config, register_required = true) {
     _validate_api_variables();
     _validate_api_book();
     conf.set_initialize(true);
-    urn_lib_1.urn_log.defaults.log_level = conf.get(`log_level`);
+    env.set_initialize(true);
+    urn_lib_1.urn_log.defaults.log_level = env.get(`log_level`);
 }
 exports.init = init;
 function _register_required_atoms() {

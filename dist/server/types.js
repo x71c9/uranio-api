@@ -22,5 +22,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("../typ/core"), exports);
 __exportStar(require("../typ/book"), exports);
 __exportStar(require("../typ/conf"), exports);
+__exportStar(require("../typ/env"), exports);
 __exportStar(require("../typ/request"), exports);
 //# sourceMappingURL=types.js.map

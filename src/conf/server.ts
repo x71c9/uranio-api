@@ -33,10 +33,10 @@ export function set_initialize(is_initialized:boolean):void{
 	_is_api_initialized = is_initialized;
 }
 
-export function set_from_env(repo_config:Required<types.Configuration>)
-		:void{
-	return core.conf.set_from_env(repo_config);
-}
+// export function set_from_env(repo_config:Required<types.Configuration>)
+//     :void{
+//   return core.conf.set_from_env(repo_config);
+// }
 
 export function set(
 	repo_config: Required<types.Configuration>,

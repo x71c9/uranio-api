@@ -8,7 +8,11 @@ import {urn_log} from 'urn-lib';
 
 import core_client from 'uranio-core/client';
 
-import {api_client_config} from '../client/defaults';
+import uranio_config from '../config';
+
+import {api_client_config} from '../client/default_conf';
+
+import {api_client_env} from '../client/default_env';
 
 import * as register from '../reg/client';
 
@@ -17,6 +21,8 @@ import * as required from '../req/client';
 import * as types from '../client/types';
 
 import * as conf from '../conf/client';
+
+import * as env from '../env/client';
 
 import * as log from '../log/client';
 
@@ -29,7 +35,10 @@ export function init(
 	
 	core_client.init(config, false);
 	
-	conf.set_from_env(api_client_config);
+	env.set_from_env(api_client_env);
+	
+	conf.set(api_client_config, uranio_config as types.ClientConfiguration);
+	
 	if(config){
 		conf.set(api_client_config, config);
 	}
@@ -39,8 +48,9 @@ export function init(
 	}
 	
 	conf.set_initialize(true);
+	env.set_initialize(true);
 	
-	urn_log.defaults.log_level = conf.get(`log_level`);
+	urn_log.defaults.log_level = env.get(`log_level`);
 }
 
 function _register_required_atoms(){

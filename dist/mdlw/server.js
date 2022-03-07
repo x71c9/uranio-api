@@ -38,6 +38,7 @@ const urn_ret = urn_lib_1.urn_return.create(urn_lib_1.urn_log.util.return_inject
 const urn_exc = urn_lib_1.urn_exception.init('EXPRESS_MDLW', 'Express middlewares');
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const conf = __importStar(require("../conf/server"));
+const env = __importStar(require("../env/server"));
 const insta = __importStar(require("../nst/server"));
 const book = __importStar(require("../book/server"));
 const types = __importStar(require("../server/types"));
@@ -73,7 +74,7 @@ async function _authorization(api_request) {
         return false;
     }
     try {
-        const decoded = jsonwebtoken_1.default.verify(auth_token, conf.get(`jwt_private_key`));
+        const decoded = jsonwebtoken_1.default.verify(auth_token, env.get(`jwt_private_key`));
         api_request.passport = decoded;
         return api_request;
     }
