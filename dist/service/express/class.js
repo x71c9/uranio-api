@@ -90,9 +90,22 @@ let ExpressWebService = class ExpressWebService {
         }
     }
     listen(portcall, callback) {
+        let service_port = 7777;
+        // const pro_service_port = conf.get(`service_port`);
+        // const dev_service_port = conf.get(`service_dev_port`);
+        // if(typeof pro_service_port === 'number' && env.is_production()){
+        //   service_port = pro_service_port;
+        // }else if(typeof dev_service_port === 'number'){
+        //   service_port = dev_service_port;
+        // }
+        const current_port = conf.get_current(`service_port`);
+        if (typeof current_port === 'number') {
+            service_port = current_port;
+        }
         switch (typeof portcall) {
+            case 'undefined':
             case 'function': {
-                this.express_app.listen(conf.get(`service_port`), portcall);
+                this.express_app.listen(service_port, portcall);
                 break;
             }
             case 'number': {

@@ -39,6 +39,6 @@ const server_1 = __importDefault(require("../server"));
 server_1.default.init();
 const service = server_1.default.service.create();
 service.listen(() => {
-    urn_lib_1.urn_log.debug(`Uranio service listening on port ${server_1.default.conf.get(`service_port`)}...`);
+    urn_lib_1.urn_log.debug(`Uranio service listening on port ${server_1.default.conf.get_current(`service_port`)}...`);
 });
 //# sourceMappingURL=ws.js.map

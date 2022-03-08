@@ -143,10 +143,13 @@ function _validate_api_variables() {
 }
 function _check_number_values() {
     if (defaults_1.api_config.request_auto_limit < 0) {
-        throw urn_exc.create_not_initialized(`INVALID_REQUEST_AUTO_LIMIT`, `Config request_auto_limit value cannot be smaller than 0.`);
+        throw urn_exc.create_not_initialized(`INVALID_REQUEST_AUTO_LIMIT`, `Config request_auto_limit value cannot be grater than 0.`);
     }
     if (defaults_1.api_config.service_port < 0) {
-        throw urn_exc.create_not_initialized(`INVALID_SERVIE_PORT`, `Config service_port value cannot be smaller than 0.`);
+        throw urn_exc.create_not_initialized(`INVALID_SERVIE_PORT`, `Config service_port value cannot be grater than 0.`);
+    }
+    if (defaults_1.api_config.service_dev_port && defaults_1.api_config.service_dev_port < 0) {
+        throw urn_exc.create_not_initialized(`INVALID_SERVIE_DEV_PORT`, `Config service_dev_port value cannot be grater than 0.`);
     }
 }
 //# sourceMappingURL=server.js.map

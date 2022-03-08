@@ -22,9 +22,9 @@ import {register_exception_handler} from '../../util/exc_handler';
 
 import * as conf from '../../conf/server';
 
-import {schema} from '../../sch/server';
+import * as env from '../../env/server';
 
-// import {AuthName} from '../../types';
+import {schema} from '../../sch/server';
 
 import {Service} from '../types';
 
@@ -93,9 +93,22 @@ class ExpressWebService implements Service {
 	listen(portcall:Callback): void;
 	listen(portcall: number, callback:Callback): void;
 	listen(portcall: number | Callback, callback?:() => void): void {
+		let service_port = 7777;
+		// const pro_service_port = conf.get(`service_port`);
+		// const dev_service_port = conf.get(`service_dev_port`);
+		// if(typeof pro_service_port === 'number' && env.is_production()){
+		//   service_port = pro_service_port;
+		// }else if(typeof dev_service_port === 'number'){
+		//   service_port = dev_service_port;
+		// }
+		const current_port = conf.get_current(`service_port`);
+		if(typeof current_port === 'number'){
+			service_port = current_port;
+		}
 		switch(typeof portcall){
+			case 'undefined':
 			case 'function':{
-				this.express_app.listen(conf.get(`service_port`), portcall);
+				this.express_app.listen(service_port, portcall);
 				break;
 			}
 			case 'number':{

@@ -27,5 +27,5 @@ uranio.init();
 
 const service = uranio.service.create();
 service.listen(() => {
-	urn_log.debug(`Uranio service listening on port ${uranio.conf.get(`service_port`)}...`);
+	urn_log.debug(`Uranio service listening on port ${uranio.conf.get_current(`service_port`)}...`);
 });
