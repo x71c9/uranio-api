@@ -33,8 +33,6 @@ export function init(
 	register_required=true
 ):void{
 	
-	log.init(urn_log.defaults);
-	
 	core.init(config, false);
 	
 	env.set_from_env(api_env);
@@ -55,7 +53,9 @@ export function init(
 	conf.set_initialize(true);
 	env.set_initialize(true);
 	
-	urn_log.defaults.log_level = env.get(`log_level`);
+	log.init(urn_log);
+	
+	urn_log.debug(`Uranio api initialization completed.`);
 	
 }
 

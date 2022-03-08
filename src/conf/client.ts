@@ -16,6 +16,8 @@ export {api_client_config as defaults};
 
 import * as types from '../client/types';
 
+import * as env from '../env/client';
+
 let _is_api_client_initialized = false;
 
 export function get<k extends keyof Required<types.ClientConfiguration>>(param_name:k)
@@ -23,6 +25,23 @@ export function get<k extends keyof Required<types.ClientConfiguration>>(param_n
 	_check_if_uranio_was_initialized();
 	_check_if_param_exists(param_name);
 	return api_client_config[param_name];
+}
+
+export function get_current<k extends keyof types.ClientConfiguration>(param_name:k)
+		:typeof api_client_config[k]{
+	const pro_value = core_client.conf.get_current(param_name as keyof core_client.types.ClientConfiguration) as
+		typeof api_client_config[k];
+	if(env.is_production()){
+		return pro_value;
+	}
+	if(param_name.indexOf('service_') !== -1){
+		const dev_param = param_name.replace('service_', 'service_dev_');
+		const dev_value = get(dev_param as keyof types.ClientConfiguration);
+		if(typeof dev_value !== 'undefined'){
+			return dev_value as typeof api_client_config[k];
+		}
+	}
+	return pro_value;
 }
 
 export function is_initialized()

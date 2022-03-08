@@ -8,7 +8,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.is_production = exports.set = exports.set_from_env = exports.set_initialize = exports.is_initialized = exports.get = exports.defaults = void 0;
+exports.is_production = exports.set = exports.set_from_env = exports.set_initialize = exports.is_initialized = exports.get_current = exports.get = exports.defaults = void 0;
 const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('API_ENV_MODULE', `Api environment module`);
 const uranio_core_1 = __importDefault(require("uranio-core"));
@@ -21,6 +21,22 @@ function get(param_name) {
     return defaults_1.api_env[param_name];
 }
 exports.get = get;
+function get_current(param_name) {
+    // const pro_value = get(param_name);
+    // if(is_production()){
+    //   return pro_value;
+    // }
+    // if(param_name.indexOf('service_') !== -1){
+    //   const dev_param = param_name.replace('service_', 'service_dev_');
+    //   const dev_value = get(dev_param as keyof types.Environment);
+    //   if(typeof dev_value !== 'undefined'){
+    //     return dev_value as typeof api_env[k];
+    //   }
+    // }
+    // return pro_value;
+    return uranio_core_1.default.env.get_current(param_name);
+}
+exports.get_current = get_current;
 function is_initialized() {
     return uranio_core_1.default.env.is_initialized() && _is_api_initialized;
 }

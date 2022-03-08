@@ -42,7 +42,6 @@ const conf = __importStar(require("../conf/client"));
 const env = __importStar(require("../env/client"));
 const log = __importStar(require("../log/client"));
 function init(config, register_required = true) {
-    log.init(urn_lib_1.urn_log.defaults);
     client_1.default.init(config, false);
     env.set_from_env(default_env_1.api_client_env);
     client_1.default.conf.set_from_file();
@@ -52,9 +51,12 @@ function init(config, register_required = true) {
     if (register_required) {
         _register_required_atoms();
     }
+    _validate_api_variables();
+    _validate_api_book();
     conf.set_initialize(true);
     env.set_initialize(true);
-    urn_lib_1.urn_log.defaults.log_level = env.get(`log_level`);
+    log.init(urn_lib_1.urn_log);
+    urn_lib_1.urn_log.debug(`Uranio api client initialization completed.`);
 }
 exports.init = init;
 function _register_required_atoms() {
@@ -62,5 +64,15 @@ function _register_required_atoms() {
     for (const [atom_name, atom_def] of Object.entries(required_atoms)) {
         register.atom(atom_def, atom_name);
     }
+}
+function _validate_api_variables() {
+    // TODO NOTHING TO CHECK YET
+}
+/**
+ * NOTE:
+ * Maybe this should be before compilation and not at runtime?
+ */
+function _validate_api_book() {
+    // TODO DONE IN SERVER?
 }
 //# sourceMappingURL=client.js.map

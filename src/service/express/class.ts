@@ -22,8 +22,6 @@ import {register_exception_handler} from '../../util/exc_handler';
 
 import * as conf from '../../conf/server';
 
-import * as env from '../../env/server';
-
 import {schema} from '../../sch/server';
 
 import {Service} from '../types';

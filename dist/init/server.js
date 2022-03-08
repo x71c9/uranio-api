@@ -44,7 +44,6 @@ const env = __importStar(require("../env/server"));
 const book = __importStar(require("../book/server"));
 const log = __importStar(require("../log/server"));
 function init(config, register_required = true) {
-    log.init(urn_lib_1.urn_log.defaults);
     uranio_core_1.default.init(config, false);
     env.set_from_env(defaults_2.api_env);
     uranio_core_1.default.conf.set_from_file();
@@ -58,7 +57,8 @@ function init(config, register_required = true) {
     _validate_api_book();
     conf.set_initialize(true);
     env.set_initialize(true);
-    urn_lib_1.urn_log.defaults.log_level = env.get(`log_level`);
+    log.init(urn_lib_1.urn_log);
+    urn_lib_1.urn_log.debug(`Uranio api initialization completed.`);
 }
 exports.init = init;
 function _register_required_atoms() {

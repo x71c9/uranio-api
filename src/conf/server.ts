@@ -27,17 +27,10 @@ export function get<k extends keyof types.Configuration>(param_name:k)
 	return api_config[param_name];
 }
 
-export function is_initialized():boolean{
-	return core.conf.is_initialized() && _is_api_initialized;
-}
-
-export function set_initialize(is_initialized:boolean):void{
-	_is_api_initialized = is_initialized;
-}
-
 export function get_current<k extends keyof types.Configuration>(param_name:k)
 		:typeof api_config[k]{
-	const pro_value = get(param_name);
+	const pro_value = core.conf.get_current(param_name as keyof core.types.Configuration) as
+		typeof api_config[k];
 	if(env.is_production()){
 		return pro_value;
 	}
@@ -49,6 +42,14 @@ export function get_current<k extends keyof types.Configuration>(param_name:k)
 		}
 	}
 	return pro_value;
+}
+
+export function is_initialized():boolean{
+	return core.conf.is_initialized() && _is_api_initialized;
+}
+
+export function set_initialize(is_initialized:boolean):void{
+	_is_api_initialized = is_initialized;
 }
 
 // export function set_from_env(repo_config:Required<types.Configuration>)

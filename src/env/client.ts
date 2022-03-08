@@ -25,6 +25,11 @@ export function get<k extends keyof Required<types.ClientEnvironment>>(param_nam
 	return api_client_env[param_name];
 }
 
+export function get_current<k extends keyof types.ClientEnvironment>(param_name:k)
+		:typeof api_client_env[k]{
+	return core_client.env.get_current(param_name);
+}
+
 export function is_initialized()
 		:boolean{
 	return core_client.env.is_initialized() && _is_api_client_initialized;
@@ -47,6 +52,10 @@ export function set(
 	config: Partial<types.ClientEnvironment>
 ):void{
 	return core_client.env.set(repo_env, config);
+}
+
+export function is_production():boolean{
+	return core_client.env.is_production();
 }
 
 function _get_env_vars(repo_env:types.ClientEnvironment):types.ClientEnvironment{

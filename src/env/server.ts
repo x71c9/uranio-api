@@ -25,6 +25,23 @@ export function get<k extends keyof types.Environment>(param_name:k)
 	return api_env[param_name];
 }
 
+export function get_current<k extends keyof types.Environment>(param_name:k)
+		:typeof api_env[k]{
+	// const pro_value = get(param_name);
+	// if(is_production()){
+	//   return pro_value;
+	// }
+	// if(param_name.indexOf('service_') !== -1){
+	//   const dev_param = param_name.replace('service_', 'service_dev_');
+	//   const dev_value = get(dev_param as keyof types.Environment);
+	//   if(typeof dev_value !== 'undefined'){
+	//     return dev_value as typeof api_env[k];
+	//   }
+	// }
+	// return pro_value;
+	return core.env.get_current(param_name);
+}
+
 export function is_initialized():boolean{
 	return core.env.is_initialized() && _is_api_initialized;
 }

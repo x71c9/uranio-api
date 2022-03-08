@@ -29,8 +29,6 @@ export function init(
 	register_required=true
 ):void{
 	
-	log.init(urn_log.defaults);
-	
 	core_client.init(config, false);
 	
 	env.set_from_env(api_client_env);
@@ -45,10 +43,16 @@ export function init(
 		_register_required_atoms();
 	}
 	
+	_validate_api_variables();
+	_validate_api_book();
+	
 	conf.set_initialize(true);
 	env.set_initialize(true);
 	
-	urn_log.defaults.log_level = env.get(`log_level`);
+	log.init(urn_log);
+	
+	urn_log.debug(`Uranio api client initialization completed.`);
+	
 }
 
 function _register_required_atoms(){
@@ -58,3 +62,14 @@ function _register_required_atoms(){
 	}
 }
 
+function _validate_api_variables(){
+	// TODO NOTHING TO CHECK YET
+}
+
+/**
+ * NOTE:
+ * Maybe this should be before compilation and not at runtime?
+ */
+function _validate_api_book(){
+	// TODO DONE IN SERVER?
+}
