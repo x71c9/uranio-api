@@ -88,9 +88,9 @@ class ExpressWebService implements Service {
 		}
 	}
 	
-	listen(portcall:Callback): void;
-	listen(portcall: number, callback:Callback): void;
-	listen(portcall: number | Callback, callback?:() => void): void {
+	listen(portcall?:Callback): void;
+	listen(portcall?: number, callback?:Callback): void;
+	listen(portcall?: number | Callback, callback?:() => void): void {
 		let service_port = 7777;
 		// const pro_service_port = conf.get(`service_port`);
 		// const dev_service_port = conf.get(`service_dev_port`);
@@ -103,14 +103,22 @@ class ExpressWebService implements Service {
 		if(typeof current_port === 'number'){
 			service_port = current_port;
 		}
+		const uranio_callback = function (){
+			urn_log.debug(`Uranio service is listening on port ${service_port}...`);
+			if(typeof portcall === 'function'){
+				portcall();
+			}else if(typeof callback === 'function'){
+				callback();
+			}
+		};
 		switch(typeof portcall){
 			case 'undefined':
 			case 'function':{
-				this.express_app.listen(service_port, portcall);
+				this.express_app.listen(service_port, uranio_callback);
 				break;
 			}
 			case 'number':{
-				this.express_app.listen(portcall, callback);
+				this.express_app.listen(portcall, uranio_callback);
 				break;
 			}
 			default:{

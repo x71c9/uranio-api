@@ -102,14 +102,23 @@ let ExpressWebService = class ExpressWebService {
         if (typeof current_port === 'number') {
             service_port = current_port;
         }
+        const uranio_callback = function () {
+            urn_lib_1.urn_log.debug(`Uranio service is listening on port ${service_port}...`);
+            if (typeof portcall === 'function') {
+                portcall();
+            }
+            else if (typeof callback === 'function') {
+                callback();
+            }
+        };
         switch (typeof portcall) {
             case 'undefined':
             case 'function': {
-                this.express_app.listen(service_port, portcall);
+                this.express_app.listen(service_port, uranio_callback);
                 break;
             }
             case 'number': {
-                this.express_app.listen(portcall, callback);
+                this.express_app.listen(portcall, uranio_callback);
                 break;
             }
             default: {
