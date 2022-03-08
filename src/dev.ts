@@ -1,5 +1,5 @@
 /**
- * Api run module
+ * Api dev module
  *
  * @packageDocumentation
  */
