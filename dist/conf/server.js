@@ -31,7 +31,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.set = exports.set_initialize = exports.is_initialized = exports.get_current = exports.get = exports.defaults = void 0;
+exports.set = exports.set_initialize = exports.is_initialized = exports.object = exports.get_current = exports.get = exports.defaults = void 0;
 const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('CONF_API_MODULE', `Api configuration module`);
 const uranio_core_1 = __importDefault(require("uranio-core"));
@@ -60,6 +60,11 @@ function get_current(param_name) {
     return pro_value;
 }
 exports.get_current = get_current;
+function object() {
+    _check_if_uranio_was_initialized();
+    return defaults_1.api_config;
+}
+exports.object = object;
 function is_initialized() {
     return uranio_core_1.default.conf.is_initialized() && _is_api_initialized;
 }

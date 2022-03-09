@@ -31,13 +31,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.init = exports.save_schema = exports.schema_and_save = exports.schema = exports.process_params = void 0;
+exports.save_client_config = exports.client_config_and_save = exports.client_config = exports.init = exports.save_schema = exports.schema_and_save = exports.schema = exports.process_params = void 0;
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const urn_lib_1 = require("urn-lib");
 const book = __importStar(require("../book/server"));
 const client_1 = require("../routes/client");
 exports.process_params = {
-// urn_command: `schema`
+    urn_command: `schema`
 };
 function schema() {
     urn_lib_1.urn_log.debug('Started generating uranio api schema...');
@@ -63,6 +63,24 @@ function init() {
     exports.process_params = uranio_core_1.default.util.generate.process_params;
 }
 exports.init = init;
+function client_config(server_config) {
+    urn_lib_1.urn_log.debug('Started generating uranio core client config...');
+    init();
+    const text = uranio_core_1.default.util.generate.client_config(server_config);
+    urn_lib_1.urn_log.debug(`Api client config generated.`);
+    return text;
+}
+exports.client_config = client_config;
+function client_config_and_save(server_config) {
+    const text = client_config(server_config);
+    save_client_config(text);
+    urn_lib_1.urn_log.debug(`Api Client config generated and saved.`);
+}
+exports.client_config_and_save = client_config_and_save;
+function save_client_config(text) {
+    uranio_core_1.default.util.generate.save_client_config(text);
+}
+exports.save_client_config = save_client_config;
 function _generate_uranio_schema_text(core_schema) {
     const txt = _generate_api_schema_text();
     const split_text = 'export {};/** --uranio-generate-end */';

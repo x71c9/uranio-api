@@ -17,7 +17,7 @@ import * as types from '../server/types';
 import {default_routes} from '../routes/client';
 
 export let process_params = {
-	// urn_command: `schema`
+	urn_command: `schema`
 };
 
 export function schema():string{
@@ -42,6 +42,24 @@ export function save_schema(text:string):void{
 export function init():void{
 	core.util.generate.init();
 	process_params = core.util.generate.process_params;
+}
+
+export function client_config(server_config:types.Configuration):string{
+	urn_log.debug('Started generating uranio core client config...');
+	init();
+	const text = core.util.generate.client_config(server_config);
+	urn_log.debug(`Api client config generated.`);
+	return text;
+}
+
+export function client_config_and_save(server_config:types.Configuration):void{
+	const text = client_config(server_config);
+	save_client_config(text);
+	urn_log.debug(`Api Client config generated and saved.`);
+}
+
+export function save_client_config(text:string):void{
+	core.util.generate.save_client_config(text);
 }
 
 function _generate_uranio_schema_text(core_schema:string){

@@ -41,10 +41,12 @@ const required = __importStar(require("../req/client"));
 const conf = __importStar(require("../conf/client"));
 const env = __importStar(require("../env/client"));
 const log = __importStar(require("../log/client"));
+const toml_1 = require("../client/toml");
 function init(config, register_required = true) {
     client_1.default.init(config, false);
     env.set_from_env(default_env_1.api_client_env);
     // core_client.conf.set_from_file(api_client_config);
+    conf.set(default_conf_1.api_client_config, toml_1.client_toml);
     if (config) {
         conf.set(default_conf_1.api_client_config, config);
     }
