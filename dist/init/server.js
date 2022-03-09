@@ -46,7 +46,7 @@ const log = __importStar(require("../log/server"));
 function init(config, register_required = true) {
     uranio_core_1.default.init(config, false);
     env.set_from_env(defaults_2.api_env);
-    uranio_core_1.default.conf.set_from_file();
+    uranio_core_1.default.conf.set_from_file(defaults_1.api_config);
     if (config) {
         conf.set(defaults_1.api_config, config);
     }

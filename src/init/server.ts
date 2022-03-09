@@ -37,7 +37,7 @@ export function init(
 	
 	env.set_from_env(api_env);
 	
-	core.conf.set_from_file();
+	core.conf.set_from_file(api_config);
 	
 	if(config){
 		conf.set(api_config, config);

@@ -16,7 +16,7 @@ fetch = 'axios'
 [service.dev]
 	protocol = 'http'
 	domain = 'localhost'
-	port = 7777
+	port = 7771
 [log]
 	debug_info = true
 	color = true

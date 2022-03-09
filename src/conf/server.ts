@@ -37,7 +37,7 @@ export function get_current<k extends keyof types.Configuration>(param_name:k)
 	if(param_name.indexOf('service_') !== -1){
 		const dev_param = param_name.replace('service_', 'service_dev_');
 		const dev_value = get(dev_param as keyof types.Configuration);
-		if(typeof dev_value !== 'undefined'){
+		if(typeof dev_value === typeof api_config[dev_param as keyof types.Configuration]){
 			return dev_value as typeof api_config[k];
 		}
 	}

@@ -33,7 +33,7 @@ export function init(
 	
 	env.set_from_env(api_client_env);
 	
-	core_client.conf.set_from_file();
+	core_client.conf.set_from_file(api_client_config);
 	
 	if(config){
 		conf.set(api_client_config, config);

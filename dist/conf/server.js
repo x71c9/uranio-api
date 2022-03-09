@@ -53,7 +53,7 @@ function get_current(param_name) {
     if (param_name.indexOf('service_') !== -1) {
         const dev_param = param_name.replace('service_', 'service_dev_');
         const dev_value = get(dev_param);
-        if (typeof dev_value !== 'undefined') {
+        if (typeof dev_value === typeof defaults_1.api_config[dev_param]) {
             return dev_value;
         }
     }
