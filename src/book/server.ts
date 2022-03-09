@@ -66,6 +66,10 @@ export function validate_name(atom_name:string):boolean{
 	return core.book.validate_name(atom_name);
 }
 
+export function validate_auth_name(atom_name:string):boolean{
+	return core.book.validate_auth_name(atom_name);
+}
+
 export function get_plural(atom_name:schema.AtomName):string{
 	return core.book.get_plural(atom_name);
 }
