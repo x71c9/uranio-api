@@ -6,13 +6,11 @@
 
 import {urn_log, urn_exception} from 'urn-lib';
 
-const urn_exc = urn_exception.init('INIT_API_MODULE', `Api init module`);
+const urn_exc = urn_exception.init('API_INIT_MODULE', `Api init module`);
 
 import core from 'uranio-core';
 
 import {api_config} from '../conf/defaults';
-
-import {api_env} from '../env/defaults';
 
 import * as register from '../reg/server';
 
@@ -21,8 +19,6 @@ import * as required from '../req/server';
 import * as types from '../server/types';
 
 import * as conf from '../conf/server';
-
-import * as env from '../env/server';
 
 import * as book from '../book/server';
 
@@ -35,12 +31,8 @@ export function init(
 	
 	core.init(config, false);
 	
-	env.set_from_env(api_env);
-	
-	core.conf.set_from_file(api_config);
-	
 	if(config){
-		conf.set(api_config, config);
+		conf.set(config);
 	}
 	
 	if(register_required){
@@ -49,9 +41,6 @@ export function init(
 	
 	_validate_api_variables();
 	_validate_api_book();
-	
-	conf.set_initialize(true);
-	env.set_initialize(true);
 	
 	log.init(urn_log);
 	
@@ -165,7 +154,7 @@ function _check_number_values(){
 			`Config service_port value cannot be grater than 0.`
 		);
 	}
-	if(api_config.service_dev_port && api_config.service_dev_port < 0){
+	if(api_config.dev_service_port && api_config.dev_service_port < 0){
 		throw urn_exc.create_not_initialized(
 			`INVALID_SERVIE_DEV_PORT`,
 			`Config service_dev_port value cannot be grater than 0.`

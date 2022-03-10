@@ -34,29 +34,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = void 0;
 const urn_lib_1 = require("urn-lib");
 const client_1 = __importDefault(require("uranio-core/client"));
-const default_conf_1 = require("../client/default_conf");
-const default_env_1 = require("../client/default_env");
 const register = __importStar(require("../reg/client"));
 const required = __importStar(require("../req/client"));
 const conf = __importStar(require("../conf/client"));
-const env = __importStar(require("../env/client"));
 const log = __importStar(require("../log/client"));
-const toml_1 = require("../client/toml");
 function init(config, register_required = true) {
     client_1.default.init(config, false);
-    env.set_from_env(default_env_1.api_client_env);
-    // core_client.conf.set_from_file(api_client_config);
-    conf.set(default_conf_1.api_client_config, toml_1.client_toml);
     if (config) {
-        conf.set(default_conf_1.api_client_config, config);
+        conf.set(config);
     }
     if (register_required) {
         _register_required_atoms();
     }
     _validate_api_variables();
     _validate_api_book();
-    conf.set_initialize(true);
-    env.set_initialize(true);
     log.init(urn_lib_1.urn_log);
     urn_lib_1.urn_log.debug(`Uranio api client initialization completed.`);
 }

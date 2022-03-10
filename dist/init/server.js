@@ -33,30 +33,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = void 0;
 const urn_lib_1 = require("urn-lib");
-const urn_exc = urn_lib_1.urn_exception.init('INIT_API_MODULE', `Api init module`);
+const urn_exc = urn_lib_1.urn_exception.init('API_INIT_MODULE', `Api init module`);
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const defaults_1 = require("../conf/defaults");
-const defaults_2 = require("../env/defaults");
 const register = __importStar(require("../reg/server"));
 const required = __importStar(require("../req/server"));
 const conf = __importStar(require("../conf/server"));
-const env = __importStar(require("../env/server"));
 const book = __importStar(require("../book/server"));
 const log = __importStar(require("../log/server"));
 function init(config, register_required = true) {
     uranio_core_1.default.init(config, false);
-    env.set_from_env(defaults_2.api_env);
-    uranio_core_1.default.conf.set_from_file(defaults_1.api_config);
     if (config) {
-        conf.set(defaults_1.api_config, config);
+        conf.set(config);
     }
     if (register_required) {
         _register_required_atoms();
     }
     _validate_api_variables();
     _validate_api_book();
-    conf.set_initialize(true);
-    env.set_initialize(true);
     log.init(urn_lib_1.urn_log);
     urn_lib_1.urn_log.debug(`Uranio api initialization completed.`);
 }
@@ -148,7 +142,7 @@ function _check_number_values() {
     if (defaults_1.api_config.service_port < 0) {
         throw urn_exc.create_not_initialized(`INVALID_SERVIE_PORT`, `Config service_port value cannot be grater than 0.`);
     }
-    if (defaults_1.api_config.service_dev_port && defaults_1.api_config.service_dev_port < 0) {
+    if (defaults_1.api_config.dev_service_port && defaults_1.api_config.dev_service_port < 0) {
         throw urn_exc.create_not_initialized(`INVALID_SERVIE_DEV_PORT`, `Config service_dev_port value cannot be grater than 0.`);
     }
 }

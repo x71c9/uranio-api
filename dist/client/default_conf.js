@@ -18,7 +18,7 @@ const client_1 = __importDefault(require("uranio-core/client"));
  * variable, like process.env[var_name] where `var_name` is a variable.
  */
 exports.api_client_config = {
-    ...client_1.default.conf.defaults,
+    ...client_1.default.conf.get_all(),
     prefix_log: '/logs'
 };
 //# sourceMappingURL=default_conf.js.map

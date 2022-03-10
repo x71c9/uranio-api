@@ -10,7 +10,7 @@ import core from 'uranio-core';
 
 export const api_config:Required<Configuration> = {
 	
-	...core.conf.defaults,
+	...core.conf.get_all(),
 	
 	request_auto_limit: 128,
 	
@@ -22,11 +22,11 @@ export const api_config:Required<Configuration> = {
 	
 	service_port: 3000,
 	
-	service_dev_protocol: 'http',
+	dev_service_protocol: 'http',
 	
-	service_dev_domain: 'localhost',
+	dev_service_domain: 'localhost',
 	
-	service_dev_port: 7777,
+	dev_service_port: 7777,
 	
 	lambda: 'netlify',
 	

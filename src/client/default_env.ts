@@ -17,6 +17,6 @@ import {ClientEnvironment} from './types';
  */
 export const api_client_env:Required<ClientEnvironment> = {
 	
-	...core_client.env.defaults,
+	...core_client.env.get_all(),
 	
 };

@@ -4,80 +4,32 @@
  * @packageDocumentation
  */
 
-import {urn_util, urn_exception} from 'urn-lib';
-
-const urn_exc = urn_exception.init('CONF_API_MODULE', `Api configuration module`);
+import {urn_context} from 'urn-lib';
 
 import core from 'uranio-core';
 
 import {api_config} from './defaults';
 
-export {api_config as defaults};
-
-import * as types from '../server/types';
+import {Configuration} from '../typ/conf';
 
 import * as env from '../env/server';
 
-let _is_api_initialized = false;
+const urn_ctx = urn_context.create<Required<Configuration>>(
+	api_config,
+	env.is_production()
+);
+urn_ctx.set(core.util.toml.read());
 
-export function get<k extends keyof types.Configuration>(param_name:k)
-		:typeof api_config[k]{
-	_check_if_uranio_was_initialized();
-	_check_if_param_exists(param_name);
-	return api_config[param_name];
+export function get<k extends keyof Configuration>(
+	param_name:k
+):Required<Configuration>[k]{
+	return urn_ctx.get(param_name);
 }
 
-export function get_current<k extends keyof types.Configuration>(param_name:k)
-		:typeof api_config[k]{
-	const pro_value = core.conf.get_current(param_name as keyof core.types.Configuration) as
-		typeof api_config[k];
-	if(env.is_production()){
-		return pro_value;
-	}
-	if(param_name.indexOf('service_') !== -1){
-		const dev_param = param_name.replace('service_', 'service_dev_');
-		const dev_value = get(dev_param as keyof types.Configuration);
-		if(typeof dev_value === typeof api_config[dev_param as keyof types.Configuration]){
-			return dev_value as typeof api_config[k];
-		}
-	}
-	return pro_value;
+export function set(config:Partial<Configuration>):void{
+	urn_ctx.set(config);
 }
 
-export function object():types.Configuration{
-	_check_if_uranio_was_initialized();
-	return api_config;
-}
-
-export function is_initialized():boolean{
-	return core.conf.is_initialized() && _is_api_initialized;
-}
-
-export function set_initialize(is_initialized:boolean):void{
-	_is_api_initialized = is_initialized;
-}
-
-// export function set_from_env(repo_config:Required<types.Configuration>)
-//     :void{
-//   return core.conf.set_from_env(repo_config);
-// }
-
-export function set(
-	repo_config: Required<types.Configuration>,
-	config: Partial<types.Configuration>
-):void{
-	return core.conf.set(repo_config, config);
-}
-
-function _check_if_param_exists(param_name:string){
-	return urn_util.object.has_key(api_config, param_name);
-}
-
-function _check_if_uranio_was_initialized(){
-	if(is_initialized() === false){
-		throw urn_exc.create_not_initialized(
-			`NOT_INITIALIZED`,
-			`Uranio was not initialized. Please run \`uranio.init()\` in your main file.`
-		);
-	}
+export function get_all():Required<Configuration>{
+	return urn_ctx.get_all();
 }

@@ -17,7 +17,7 @@ import {ClientConfiguration} from './types';
  */
 export const api_client_config:Required<ClientConfiguration> = {
 	
-	...core_client.conf.defaults,
+	...core_client.conf.get_all(),
 	
 	prefix_log: '/logs'
 	

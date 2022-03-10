@@ -11,6 +11,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.api_env = void 0;
 const uranio_core_1 = __importDefault(require("uranio-core"));
 exports.api_env = {
-    ...uranio_core_1.default.env.defaults,
+    ...uranio_core_1.default.env.get_all(),
 };
 //# sourceMappingURL=defaults.js.map

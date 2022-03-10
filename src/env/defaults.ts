@@ -10,6 +10,6 @@ import core from 'uranio-core';
 
 export const api_env:Required<Environment> = {
 	
-	...core.env.defaults,
+	...core.env.get_all(),
 	
 };

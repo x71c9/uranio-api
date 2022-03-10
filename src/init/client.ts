@@ -8,10 +8,6 @@ import {urn_log} from 'urn-lib';
 
 import core_client from 'uranio-core/client';
 
-import {api_client_config} from '../client/default_conf';
-
-import {api_client_env} from '../client/default_env';
-
 import * as register from '../reg/client';
 
 import * as required from '../req/client';
@@ -20,11 +16,7 @@ import * as types from '../client/types';
 
 import * as conf from '../conf/client';
 
-import * as env from '../env/client';
-
 import * as log from '../log/client';
-
-import {client_toml} from '../client/toml';
 
 export function init(
 	config?: Partial<types.ClientConfiguration>,
@@ -33,14 +25,8 @@ export function init(
 	
 	core_client.init(config, false);
 	
-	env.set_from_env(api_client_env);
-	
-	// core_client.conf.set_from_file(api_client_config);
-	
-	conf.set(api_client_config, client_toml);
-	
 	if(config){
-		conf.set(api_client_config, config);
+		conf.set(config);
 	}
 	
 	if(register_required){
@@ -49,9 +35,6 @@ export function init(
 	
 	_validate_api_variables();
 	_validate_api_book();
-	
-	conf.set_initialize(true);
-	env.set_initialize(true);
 	
 	log.init(urn_log);
 	

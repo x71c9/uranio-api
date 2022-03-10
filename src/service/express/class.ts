@@ -99,7 +99,7 @@ class ExpressWebService implements Service {
 		// }else if(typeof dev_service_port === 'number'){
 		//   service_port = dev_service_port;
 		// }
-		const current_port = conf.get_current(`service_port`);
+		const current_port = conf.get(`service_port`);
 		if(typeof current_port === 'number'){
 			service_port = current_port;
 		}

@@ -4,86 +4,32 @@
  * @packageDocumentation
  */
 
-import {urn_util, urn_exception} from 'urn-lib';
-
-const urn_exc = urn_exception.init('CONF_TRX_CLIENT_MODULE', `TRX client configuration module`);
-
-import core_client from 'uranio-core/client';
+import {urn_context} from 'urn-lib';
 
 import {api_client_config} from '../client/default_conf';
 
-export {api_client_config as defaults};
-
-import * as types from '../client/types';
+import {ClientConfiguration} from '../client/types';
 
 import * as env from '../env/client';
 
-let _is_api_client_initialized = false;
+import {client_toml} from '../client/toml';
 
-export function get<k extends keyof Required<types.ClientConfiguration>>(param_name:k)
-		:typeof api_client_config[k]{
-	_check_if_uranio_was_initialized();
-	_check_if_param_exists(param_name);
-	return api_client_config[param_name];
+const urn_ctx = urn_context.create<Required<ClientConfiguration>>(
+	api_client_config,
+	env.is_production()
+);
+urn_ctx.set(client_toml);
+
+export function get<k extends keyof ClientConfiguration>(
+	param_name:k
+):Required<ClientConfiguration>[k]{
+	return urn_ctx.get(param_name);
 }
 
-export function get_current<k extends keyof types.ClientConfiguration>(param_name:k)
-		:typeof api_client_config[k]{
-	const pro_value = core_client.conf.get_current(param_name as keyof core_client.types.ClientConfiguration) as
-		typeof api_client_config[k];
-	if(env.is_production()){
-		return pro_value;
-	}
-	if(param_name.indexOf('service_') !== -1){
-		const dev_param = param_name.replace('service_', 'service_dev_');
-		const dev_value = get(dev_param as keyof types.ClientConfiguration);
-		if(typeof dev_value === typeof api_client_config[dev_param as keyof types.ClientConfiguration]){
-			return dev_value as typeof api_client_config[k];
-		}
-	}
-	return pro_value;
+export function set(config:Partial<ClientConfiguration>):void{
+	urn_ctx.set(config);
 }
 
-export function is_initialized()
-		:boolean{
-	return core_client.conf.is_initialized() && _is_api_client_initialized;
-}
-
-export function set_initialize(is_initialized:boolean)
-		:void{
-	_is_api_client_initialized = is_initialized;
-}
-
-// export function set_from_env(repo_config:Required<types.ClientConfiguration>)
-//     :void{
-//   core_client.conf.set_from_env(repo_config);
-//   const conf = _get_env_vars(repo_config);
-//   set(repo_config, conf);
-// }
-
-export function set(
-	repo_config: Required<types.ClientConfiguration>,
-	config: Partial<types.ClientConfiguration>
-):void{
-	return core_client.conf.set(repo_config, config);
-}
-
-// function _get_env_vars(repo_config:types.ClientConfiguration):types.ClientConfiguration{
-//   if(typeof process.env.URN_PREFIX_LOG === 'string' && process.env.URN_PREFIX_LOG !== ''){
-//     repo_config.prefix_log = process.env.URN_PREFIX_LOG;
-//   }
-//   return repo_config;
-// }
-
-function _check_if_param_exists(param_name:string){
-	return urn_util.object.has_key(api_client_config, param_name);
-}
-
-function _check_if_uranio_was_initialized(){
-	if(is_initialized() === false){
-		throw urn_exc.create_not_initialized(
-			`NOT_INITIALIZED`,
-			`Uranio was not initialized. Please run \`uranio.init()\` in your main file.`
-		);
-	}
+export function get_all():Required<ClientConfiguration>{
+	return urn_ctx.get_all();
 }
