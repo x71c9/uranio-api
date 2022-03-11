@@ -20,6 +20,8 @@ import * as types from '../server/types';
 
 import * as conf from '../conf/server';
 
+import * as env from '../env/server';
+
 import * as book from '../book/server';
 
 import * as log from '../log/server';
@@ -31,6 +33,12 @@ export function init(
 	
 	core.init(config, false);
 	
+	conf.set(core.util.toml.read());
+	
+	env.set_env();
+	
+	log.init(urn_log);
+	
 	if(config){
 		conf.set(config);
 	}
@@ -41,8 +49,6 @@ export function init(
 	
 	_validate_api_variables();
 	_validate_api_book();
-	
-	log.init(urn_log);
 	
 	urn_log.debug(`Uranio api initialization completed.`);
 	

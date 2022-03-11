@@ -6,8 +6,6 @@
 
 import {urn_context} from 'urn-lib';
 
-import core from 'uranio-core';
-
 import {api_config} from './defaults';
 
 import {Configuration} from '../typ/conf';
@@ -16,9 +14,9 @@ import * as env from '../env/server';
 
 const urn_ctx = urn_context.create<Required<Configuration>>(
 	api_config,
-	env.is_production()
+	env.is_production(),
+	'API:CONF'
 );
-urn_ctx.set(core.util.toml.read());
 
 export function get<k extends keyof Configuration>(
 	param_name:k

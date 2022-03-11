@@ -27,17 +27,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.get_all = exports.set = exports.get = void 0;
 const urn_lib_1 = require("urn-lib");
-const uranio_core_1 = __importDefault(require("uranio-core"));
 const defaults_1 = require("./defaults");
 const env = __importStar(require("../env/server"));
-const urn_ctx = urn_lib_1.urn_context.create(defaults_1.api_config, env.is_production());
-urn_ctx.set(uranio_core_1.default.util.toml.read());
+const urn_ctx = urn_lib_1.urn_context.create(defaults_1.api_config, env.is_production(), 'API:CONF');
 function get(param_name) {
     return urn_ctx.get(param_name);
 }

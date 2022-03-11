@@ -39,10 +39,14 @@ const defaults_1 = require("../conf/defaults");
 const register = __importStar(require("../reg/server"));
 const required = __importStar(require("../req/server"));
 const conf = __importStar(require("../conf/server"));
+const env = __importStar(require("../env/server"));
 const book = __importStar(require("../book/server"));
 const log = __importStar(require("../log/server"));
 function init(config, register_required = true) {
     uranio_core_1.default.init(config, false);
+    conf.set(uranio_core_1.default.util.toml.read());
+    env.set_env();
+    log.init(urn_lib_1.urn_log);
     if (config) {
         conf.set(config);
     }
@@ -51,7 +55,6 @@ function init(config, register_required = true) {
     }
     _validate_api_variables();
     _validate_api_book();
-    log.init(urn_lib_1.urn_log);
     urn_lib_1.urn_log.debug(`Uranio api initialization completed.`);
 }
 exports.init = init;
