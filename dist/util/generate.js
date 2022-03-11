@@ -64,7 +64,7 @@ function init() {
 }
 exports.init = init;
 function client_config(server_config) {
-    urn_lib_1.urn_log.debug('Started generating uranio core client config...');
+    urn_lib_1.urn_log.debug('Started generating uranio api client config...');
     init();
     const text = uranio_core_1.default.util.generate.client_config(server_config);
     urn_lib_1.urn_log.debug(`Api client config generated.`);

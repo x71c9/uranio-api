@@ -45,7 +45,7 @@ export function init():void{
 }
 
 export function client_config(server_config:types.Configuration):string{
-	urn_log.debug('Started generating uranio core client config...');
+	urn_log.debug('Started generating uranio api client config...');
 	init();
 	const text = core.util.generate.client_config(server_config);
 	urn_log.debug(`Api client config generated.`);
