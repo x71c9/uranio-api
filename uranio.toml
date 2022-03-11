@@ -13,7 +13,7 @@ fetch = 'axios'
 	protocol = 'http'
 	domain = 'localhost'
 	port = 7777
-[service.dev]
+[dev.service]
 	protocol = 'http'
 	domain = 'localhost'
 	port = 7771
@@ -24,7 +24,7 @@ fetch = 'axios'
 	max_str_length = 174
 	prefix = ''
 	prefix_type = false
-[log.dev]
+[dev.log]
 	debug_info = true
 	color = true
 	time_format = "yyyy-mm-dd'T'HH:MM:ss:l"
@@ -38,7 +38,7 @@ fetch = 'axios'
 	max_str_length = 174
 	prefix = ''
 	prefix_type = false
-[client.log.dev]
+[client.dev.log]
 	debug_info = false
 	color = false
 	time_format = "yyyy-mm-dd'T'HH:MM:ss:l"
