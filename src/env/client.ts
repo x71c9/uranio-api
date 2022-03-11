@@ -6,7 +6,7 @@
 
 import {urn_context} from 'urn-lib';
 
-import core from 'uranio-core';
+import core_client from 'uranio-core/client';
 
 import {api_client_env} from '../client/default_env';
 
@@ -19,7 +19,7 @@ const urn_ctx = urn_context.create<Required<ClientEnvironment>>(
 );
 
 export function is_production():boolean{
-	return core.env.is_production();
+	return core_client.env.is_production();
 }
 
 export function get<k extends keyof ClientEnvironment>(
