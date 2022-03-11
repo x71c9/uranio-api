@@ -43,6 +43,7 @@ const toml_1 = require("../client/toml");
 function init(config, register_required = true) {
     client_1.default.init(config, false);
     conf.set(toml_1.client_toml);
+    client_1.default.conf.set(toml_1.client_toml);
     env.set_env();
     log.init(urn_lib_1.urn_log);
     if (config) {

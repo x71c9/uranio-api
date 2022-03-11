@@ -30,6 +30,7 @@ export function init(
 	core_client.init(config, false);
 	
 	conf.set(client_toml);
+	core_client.conf.set(client_toml);
 	
 	env.set_env();
 	
