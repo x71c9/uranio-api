@@ -23,6 +23,8 @@ uranio.init({
 	dev_log_debug_info: false
 });
 
+import {api_client_config} from '../client/default_conf';
+
 import * as util from '../util/server';
 
 let urn_command = 'all';
@@ -45,12 +47,12 @@ switch(urn_command){
 		break;
 	}
 	case 'client-config':{
-		util.generate.client_config_and_save(uranio.conf.get_all());
+		util.generate.client_config_and_save(api_client_config);
 		break;
 	}
 	default:{
 		util.generate.schema_and_save();
-		util.generate.client_config_and_save(uranio.conf.get_all());
+		util.generate.client_config_and_save(api_client_config);
 		break;
 	}
 }

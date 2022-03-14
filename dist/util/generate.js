@@ -63,16 +63,16 @@ function init() {
     exports.process_params = uranio_core_1.default.util.generate.process_params;
 }
 exports.init = init;
-function client_config(server_config) {
+function client_config(client_default) {
     urn_lib_1.urn_log.debug('Started generating uranio api client config...');
     init();
-    const text = uranio_core_1.default.util.generate.client_config(server_config);
+    const text = uranio_core_1.default.util.generate.client_config(client_default);
     urn_lib_1.urn_log.debug(`Api client config generated.`);
     return text;
 }
 exports.client_config = client_config;
-function client_config_and_save(server_config) {
-    const text = client_config(server_config);
+function client_config_and_save(client_default) {
+    const text = client_config(client_default);
     save_client_config(text);
     urn_lib_1.urn_log.debug(`Api Client config generated and saved.`);
 }

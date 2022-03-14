@@ -44,8 +44,11 @@ __exportStar(require("./register"), exports);
 const uranio = __importStar(require("./main"));
 uranio.init({
     connect_on_init: false,
-    superuser_create_on_init: false
+    superuser_create_on_init: false,
+    log_debug_info: false,
+    dev_log_debug_info: false
 });
+const default_conf_1 = require("../client/default_conf");
 const util = __importStar(require("../util/server"));
 let urn_command = 'all';
 for (const argv of process.argv) {
@@ -63,12 +66,12 @@ switch (urn_command) {
         break;
     }
     case 'client-config': {
-        util.generate.client_config_and_save(uranio.conf.get_all());
+        util.generate.client_config_and_save(default_conf_1.api_client_config);
         break;
     }
     default: {
         util.generate.schema_and_save();
-        util.generate.client_config_and_save(uranio.conf.get_all());
+        util.generate.client_config_and_save(default_conf_1.api_client_config);
         break;
     }
 }
