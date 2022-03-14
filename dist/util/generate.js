@@ -36,15 +36,15 @@ const uranio_core_1 = __importDefault(require("uranio-core"));
 const urn_lib_1 = require("urn-lib");
 const book = __importStar(require("../book/server"));
 const client_1 = require("../routes/client");
-const conf = __importStar(require("../conf/server"));
-const required_server_config_client = [
-    'service_protocol',
-    'service_domain',
-    'service_port',
-    'dev_service_protocol',
-    'dev_service_domain',
-    'dev_service_port',
-];
+// import * as conf from '../conf/server';
+// const required_server_config_client:Array<keyof types.Configuration> = [
+//   'service_protocol',
+//   'service_domain',
+//   'service_port',
+//   'dev_service_protocol',
+//   'dev_service_domain',
+//   'dev_service_port',
+// ];
 exports.process_params = {
     urn_command: `schema`
 };
@@ -75,10 +75,10 @@ exports.init = init;
 function client_config(client_default) {
     urn_lib_1.urn_log.debug('Started generating uranio api client config...');
     init();
-    const all_server_conf = conf.get_all();
-    for (const reqkey of required_server_config_client) {
-        client_default[`__server_${reqkey}`] = all_server_conf[reqkey];
-    }
+    // const all_server_conf = conf.get_all();
+    // for(const reqkey of required_server_config_client){
+    //   (client_default as any)[`__server_${reqkey}`] = all_server_conf[reqkey];
+    // }
     const text = uranio_core_1.default.util.generate.client_config(client_default);
     urn_lib_1.urn_log.debug(`Api client config generated.`);
     return text;
