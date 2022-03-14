@@ -42,11 +42,18 @@ exports.get_dock_definition = get_dock_definition;
 function add_route_definition(atom_name, route_name, route_definition) {
     try {
         let routes_definition = get_routes_definition(atom_name);
-        routes_definition = {
-            [route_name]: route_definition,
-            ...routes_definition
-        };
-        // routes_definition[route_name] = route_definition;
+        routes_definition[route_name] = route_definition;
+        // The following is the only way I could find to add the new route
+        // as first key in the routes_definition.
+        // This is needed because Express otherwise will override the new route
+        // with the more general /:id
+        // If the new route comes before the general route it will match first.
+        for (const [key, value] of Object.entries(routes_definition)) {
+            if (route_name === key)
+                continue;
+            delete routes_definition[key];
+            routes_definition[key] = value;
+        }
         return routes_definition;
     }
     catch (ex) {
