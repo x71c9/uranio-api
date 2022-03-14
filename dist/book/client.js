@@ -41,8 +41,12 @@ function get_dock_definition(atom_name) {
 exports.get_dock_definition = get_dock_definition;
 function add_route_definition(atom_name, route_name, route_definition) {
     try {
-        const routes_definition = get_routes_definition(atom_name);
-        routes_definition[route_name] = route_definition;
+        let routes_definition = get_routes_definition(atom_name);
+        routes_definition = {
+            [route_name]: route_definition,
+            ...routes_definition
+        };
+        // routes_definition[route_name] = route_definition;
         return routes_definition;
     }
     catch (ex) {

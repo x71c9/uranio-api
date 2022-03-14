@@ -59,8 +59,21 @@ export function add_route_definition<A extends schema.AtomName, R extends schema
 	route_definition: Book.Definition.Dock.Routes.Route
 ):Book.Definition.Dock.Routes{
 	try{
-		const routes_definition = get_routes_definition(atom_name);
+		let routes_definition = get_routes_definition(atom_name);
 		routes_definition[route_name] = route_definition;
+		
+		// The following is the only way I could find to add the new route
+		// as first key in the routes_definition.
+		// This is needed because Express otherwise will override the new route
+		// with the more general /:id
+		// If the new route comes before the general route it will match first.
+		for(const [key, value] of Object.entries(routes_definition)){
+				if(route_name === key)
+						continue;
+				delete routes_definition[key];
+				routes_definition[key] = value;
+		}
+		
 		return routes_definition;
 	}catch(ex){
 		const err = ex as urn_exception.InvalidBookExceptionInstance;

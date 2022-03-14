@@ -12,11 +12,25 @@ fetch = 'axios'
 	platform = 'express'
 	protocol = 'http'
 	domain = 'localhost'
-	port = 7777
+	port = 7775
+	url = 'http://localhost:7775/uranio/api'
 [dev.service]
 	protocol = 'http'
 	domain = 'localhost'
-	port = 7771
+	port = 7775
+	url = 'http://localhost:7775/uranio/api'
+[client.panel]
+	protocol = 'http'
+	domain = 'localhost'
+	port = 5454
+[client.dev.panel]
+	protocol = 'http'
+	domain = 'localhost'
+	port = 4477
+[client.fetch]
+	url = 'http://localhost:5454/uranio/api'
+[client.dev.fetch]
+	url = 'http://localhost:4477/uranio/api'
 [log]
 	debug_info = true
 	color = true
@@ -25,7 +39,7 @@ fetch = 'axios'
 	prefix = ''
 	prefix_type = false
 [dev.log]
-	debug_info = true
+	debug_info = false
 	color = true
 	time_format = "yyyy-mm-dd'T'HH:MM:ss:l"
 	max_str_length = 174
@@ -34,7 +48,7 @@ fetch = 'axios'
 [client.log]
 	debug_info = false
 	color = false
-	time_format = "yyyy-mm-dd'T'HH:MM:ss:l"
+	time_format = "HH:MM:ss:l"
 	max_str_length = 174
 	prefix = ''
 	prefix_type = false
