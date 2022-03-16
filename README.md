@@ -258,7 +258,7 @@ Uranio will create a new route for the `Atom` product. The route name would be `
 The module `add-review.ts` must export a route definition:
 
 ```typescript
-// src/atoms/product/routes/add-review.ts
+// src/atoms/product/routes/add_review.ts
 
 import uranio from 'uranio';
 export default uranio.register.route({
@@ -267,7 +267,7 @@ export default uranio.register.route({
 	action: uranio.types.AuthAction.WRITE,
 	query: ['stars', 'customer'],
 	return 'number',
-	call: async (request:uranio.types.Api.Request<'product','add-review'>):Promise<'number'>{
+	call: async (request:uranio.types.Api.Request<'product','add_review'>):Promise<'number'>{
 		// Some logic
 		const bll_customers = uranio.core.bll.create('customer', request.passport);
 		const customer = await bll_customers.find_id(request.customer);
