@@ -2,21 +2,10 @@
 
 Uranio API extends [Uranio CORE](https://github.com/nbl7/uranio-core).
 
-Uranio API provides a method that creates a web service for an Application
-Programming Interface with CRUD operations.
+Uranio API can run a web service for an Application Programming Interface with
+CRUD operations.
 
-```typescript
-// Method for Web Service
-import uranio from 'uranio';
-uranio.init();
-
-const service = uranio.service.create();
-service.listen(() => {
-	console.log(`Listening on port ${uranio.conf.get('service_port')}...`);
-})
-```
-
-The web service runs on [Express.js](https://expressjs.com/).
+The web service use [Express.js](https://expressjs.com/) internally.
 
 > More service types will be available in the future
 
@@ -200,19 +189,17 @@ The route path must be defined in Book with the attribute `auth_url` inside
 the `dock` property:
 
 ```typescript
-// src/book.ts
+// src/customer/index.ts
 import uranio from 'uranio';
-export default uranio.register({
-	customer: {
-		authenticate: true,
-		properties: {
-			...
-		},
-		dock:{
-			url: '/customers',
-			auth_url: '/auth-customer',
-			...
-		}
+export default uranio.register.atom({
+	authenticate: true,
+	properties: {
+		...
+	},
+	dock:{
+		url: '/customers',
+		auth_url: '/auth-customer',
+		...
 	}
 });
 ```
@@ -256,8 +243,46 @@ But it will do only if the server is the same.
 
 ### Adding routes
 
-As all Uranio repos, the only file that need to be develop is `src/book.ts`.
+With the following folder structure:
 
-Here is the documenation on how to develop it:
+```
+src
+`-- atoms
+    `-- product
+        |-- routes
+        |   `-- add-review.ts
+        `-- index.ts
+```
+Uranio will create a new route for the `Atom` product. The route name would be `add-review`.
 
-(book.ts documentation)[]
+The module `add-review.ts` must export a route definition:
+
+```typescript
+// src/atoms/product/routes/add-review.ts
+
+import uranio from 'uranio';
+export default uranio.register.route({
+	url: '/add-review-custom-url',
+	method: uranio.types.RouteMethod.POST,
+	action: uranio.types.AuthAction.WRITE,
+	query: ['stars', 'customer'],
+	return 'number',
+	call: async (request:uranio.types.Api.Request<'product','add-review'>):Promise<'number'>{
+		// Some logic
+		const bll_customers = uranio.core.bll.create('customer', request.passport);
+		const customer = await bll_customers.find_id(request.customer);
+		// Some logic
+		return request.query.stars || 0;
+	}
+});
+
+```
+The web serivce then will have the following route:
+
+```
+https://myservice.com/[prefix-api]/products/add-review-custom-url
+```
+
+that will call the method defined under the property `call` in the definition
+module.
+
