@@ -18,15 +18,23 @@ export function atom(
 	atom_definition: types.Book.Definition,
 	atom_name?: string
 ):string{
-	if(atom_definition.dock && atom_definition.dock.url){
-		if(!atom_definition.dock.routes){
-			atom_definition.dock.routes = {};
-		}
-		atom_definition.dock.routes = {
-			...atom_definition.dock.routes,
-			...default_routes as any
+	const plural = atom_definition.plural || `${atom_name}s`;
+	if(!atom_definition.dock){
+		atom_definition.dock = {
+			url: `/${plural}`,
+			routes: {}
 		};
 	}
+	if(!atom_definition.dock.url){
+		atom_definition.dock.url = `/${plural}`;
+	}
+	if(!atom_definition.dock.routes){
+		atom_definition.dock.routes = {};
+	}
+	atom_definition.dock.routes = {
+		...atom_definition.dock.routes,
+		...default_routes as any
+	};
 	return core_client.register.atom(atom_definition, atom_name);
 }
 

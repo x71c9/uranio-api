@@ -28,18 +28,26 @@ export function atom(
 	atom_definition: types.Book.Definition,
 	atom_name?: string
 ):string{
-	if(atom_definition.dock && atom_definition.dock.url){
-		if(!atom_definition.dock.routes){
-			atom_definition.dock.routes = {};
-		}
-		
-		const default_routes = return_default_routes(atom_name as schema.AtomName);
-		
-		atom_definition.dock.routes = {
-			...atom_definition.dock.routes,
-			...default_routes
+	const plural = atom_definition.plural || `${atom_name}s`;
+	if(!atom_definition.dock){
+		atom_definition.dock = {
+			url: `/${plural}`,
+			routes: {}
 		};
 	}
+	if(!atom_definition.dock.url){
+		atom_definition.dock.url = `/${plural}`;
+	}
+	if(!atom_definition.dock.routes){
+		atom_definition.dock.routes = {};
+	}
+	
+	const default_routes = return_default_routes(atom_name as schema.AtomName);
+	
+	atom_definition.dock.routes = {
+		...atom_definition.dock.routes,
+		...default_routes
+	};
 	return core.register.atom(atom_definition, atom_name);
 }
 

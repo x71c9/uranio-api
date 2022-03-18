@@ -12,25 +12,25 @@ fetch = 'axios'
 	platform = 'express'
 	protocol = 'http'
 	domain = 'localhost'
-	port = 7775
-	url = 'http://localhost:7775/uranio/api'
+	port = 7149
+	url = 'http://localhost:7149/uranio/api'
 [dev.service]
 	protocol = 'http'
 	domain = 'localhost'
-	port = 7775
-	url = 'http://localhost:7775/uranio/api'
+	port = 7149
+	url = 'http://localhost:7149/uranio/api'
 [client.panel]
 	protocol = 'http'
 	domain = 'localhost'
-	port = 5454
+	port = 5451
 [client.dev.panel]
 	protocol = 'http'
 	domain = 'localhost'
-	port = 4477
+	port = 5451
 [client.fetch]
-	url = 'http://localhost:5454/uranio/api'
+	url = 'http://localhost:5451/uranio/api'
 [client.dev.fetch]
-	url = 'http://localhost:4477/uranio/api'
+	url = 'http://localhost:5451/uranio/api'
 [log]
 	debug_info = true
 	color = true

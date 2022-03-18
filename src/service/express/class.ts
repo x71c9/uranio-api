@@ -70,9 +70,9 @@ class ExpressWebService implements Service {
 		for(const [atom_name, atom_def] of Object.entries(book.get_all_definitions())){
 			// const dock_def = book.get_dock_definition(atom_name);
 			// const atom_def = book.get_definition(atom_name);
-			if(!atom_def.dock || !atom_def.dock.url){
-				continue;
-			}
+			// if(!atom_def.dock || !atom_def.dock.url){
+			//   continue;
+			// }
 			const dock_def = atom_def.dock;
 			const router = create_express_route(atom_name as schema.AtomName);
 			if(dock_def && typeof dock_def.url === 'string' && dock_def.url !== ''){

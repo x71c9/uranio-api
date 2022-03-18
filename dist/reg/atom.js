@@ -19,16 +19,24 @@ exports.atom = void 0;
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const calls_1 = require("../routes/calls");
 function atom(atom_definition, atom_name) {
-    if (atom_definition.dock && atom_definition.dock.url) {
-        if (!atom_definition.dock.routes) {
-            atom_definition.dock.routes = {};
-        }
-        const default_routes = (0, calls_1.return_default_routes)(atom_name);
-        atom_definition.dock.routes = {
-            ...atom_definition.dock.routes,
-            ...default_routes
+    const plural = atom_definition.plural || `${atom_name}s`;
+    if (!atom_definition.dock) {
+        atom_definition.dock = {
+            url: `/${plural}`,
+            routes: {}
         };
     }
+    if (!atom_definition.dock.url) {
+        atom_definition.dock.url = `/${plural}`;
+    }
+    if (!atom_definition.dock.routes) {
+        atom_definition.dock.routes = {};
+    }
+    const default_routes = (0, calls_1.return_default_routes)(atom_name);
+    atom_definition.dock.routes = {
+        ...atom_definition.dock.routes,
+        ...default_routes
+    };
     return uranio_core_1.default.register.atom(atom_definition, atom_name);
 }
 exports.atom = atom;
