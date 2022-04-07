@@ -112,10 +112,60 @@ async function _validate_and_call<A extends schema.AtomName, R extends schema.Ro
 		) as schema.CallResponse<A,R,D>;
 	}
 	
-	const urn_response = urn_ret.return_success('Success', call_response);
+	let urn_response = urn_ret.return_success('Success', call_response);
+	
+	urn_response = await _assign_regenerated_token(api_request, urn_response);
 	
 	return urn_response;
 	
+}
+
+// "Set-Cookie": [`urn-auth-token=${auth_token}; SameSite=Strict; HttpOnly; Secure`]
+// "Set-Cookie": [`urn-auth-token=${auth_token}; SameSite=Strict; HttpOnly`]
+// "Set-Cookie": [`urn-auth-token=${auth_token}; Domain=localhost; HttpOnly`]
+// "Set-Cookie": [`urn-auth-token=${auth_token}; Domain=192.168.1.69; HttpOnly`]
+
+function _set_payload_multi_value_header_httponly_cookie<T extends {}>(
+	urn_response:urn_response.Success<T>,
+	token: string
+):urn_response.Success<T>{
+	if(!urn_response.payload){
+		urn_response.payload = {};
+	}
+	if(!urn_response.payload.multi_value_headers){
+		urn_response.payload.multi_value_headers = {};
+	}
+	urn_response.payload.multi_value_headers["Set-Cookie"] = [
+		`urn-auth-token=${token}; HttpOnly`
+	];
+	return urn_response;
+}
+
+function _set_payload_header_token<T extends any>(
+	urn_response:urn_response.Success<T>,
+	token: string
+):urn_response.Success<T>{
+	if(!urn_response.payload){
+		urn_response.payload = {};
+	}
+	if(!urn_response.payload.headers){
+		urn_response.payload.headers = {};
+	}
+	urn_response.payload.headers['urn-auth-token'] = token;
+	return urn_response;
+}
+
+async function _assign_regenerated_token<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0, T = any>(
+	api_request:types.Api.Request<A,R,D>, urn_response:urn_response.Success<T>
+):Promise<urn_response.Success<T>>{
+	if(!api_request.passport){
+		return urn_response;
+	}
+	const auth_bll = core.bll.auth.create(api_request.passport.auth_atom_name as schema.AuthName);
+	const regenerated_token = auth_bll.regenerate_token(api_request.passport);
+	urn_response = _set_payload_header_token(urn_response, regenerated_token);
+	urn_response = _set_payload_multi_value_header_httponly_cookie(urn_response, regenerated_token);
+	return urn_response;
 }
 
 async function _auth_validate_and_call<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0>(
@@ -145,11 +195,7 @@ async function _auth_validate_and_call<A extends schema.AtomName, R extends sche
 			// 'Access-Control-Allow-Credentials': true
 		},
 		multi_value_headers: {
-			// "Set-Cookie": [`urn-auth-token=${auth_token}; SameSite=Strict; HttpOnly; Secure`]
-			// "Set-Cookie": [`urn-auth-token=${auth_token}; SameSite=Strict; HttpOnly`]
-			// "Set-Cookie": [`urn-auth-token=${auth_token}; Domain=localhost; HttpOnly`]
-			"Set-Cookie": [`urn-auth-token=${auth_token}; HttpOnly`]
-			// "Set-Cookie": [`urn-auth-token=${auth_token}; Domain=192.168.1.69; HttpOnly`]
+			"Set-Cookie": [_httponly_token_cookie(auth_token)]
 		}
 	} as types.Api.AuthResponse);
 	
