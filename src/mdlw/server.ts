@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
 
 import {urn_util, urn_response, urn_return, urn_exception, urn_log} from 'urn-lib';
 
@@ -16,7 +16,7 @@ import core from 'uranio-core';
 
 import * as conf from '../conf/server';
 
-import * as env from '../env/server';
+// import * as env from '../env/server';
 
 import * as insta from '../nst/server';
 
@@ -68,12 +68,16 @@ async function _authorization<A extends schema.AtomName, R extends schema.RouteN
 		return false;
 	}
 	try{
-		const decoded = jwt.verify(auth_token, env.get(`jwt_private_key`)) as core.types.Passport;
+		// const decoded = jwt.verify(auth_token, env.get(`jwt_private_key`)) as core.types.Passport;
+		// if(!core.bll.auth.is_valid_token(auth_token)){
+		// 	throw urn_exc.create_unauthorized(`INVALID_TOKEN`, `Invalid token.`, ex);
+		// }
+		const decoded = await core.bll.auth.decode_token(auth_token);
 		api_request.passport = decoded;
 		return api_request;
 	}catch(e){
 		const ex = e as any;
-		throw urn_exc.create_unauthorized(`INVALID_TOKEN`, `Invalid token.`, ex);
+		throw urn_exc.create_unauthorized(`INVALID_DECODED_TOKEN`, `Invalid decoded token.`, ex);
 	}
 }
 
@@ -125,10 +129,10 @@ async function _validate_and_call<A extends schema.AtomName, R extends schema.Ro
 // "Set-Cookie": [`urn-auth-token=${auth_token}; Domain=localhost; HttpOnly`]
 // "Set-Cookie": [`urn-auth-token=${auth_token}; Domain=192.168.1.69; HttpOnly`]
 
-function _set_payload_multi_value_header_httponly_cookie<T extends {}>(
-	urn_response:urn_response.Success<T>,
+function _set_payload_multi_value_header_httponly_cookie(
+	urn_response:urn_response.Success<any>,
 	token: string
-):urn_response.Success<T>{
+):urn_response.Success<any>{
 	if(!urn_response.payload){
 		urn_response.payload = {};
 	}
@@ -141,10 +145,10 @@ function _set_payload_multi_value_header_httponly_cookie<T extends {}>(
 	return urn_response;
 }
 
-function _set_payload_header_token<T extends any>(
-	urn_response:urn_response.Success<T>,
+function _set_payload_header_token(
+	urn_response:urn_response.Success<any>,
 	token: string
-):urn_response.Success<T>{
+):urn_response.Success<any>{
 	if(!urn_response.payload){
 		urn_response.payload = {};
 	}
@@ -187,17 +191,10 @@ async function _auth_validate_and_call<A extends schema.AtomName, R extends sche
 	
 	const auth_token = await handler(auth_route_request);
 	
-	const urn_response = urn_ret.return_success('Success', {
-		token: auth_token,
-		headers: {
-			'urn-auth-token': auth_token,
-			// 'Access-Control-Allow-Origin': 'http://192.168.1.69',
-			// 'Access-Control-Allow-Credentials': true
-		},
-		multi_value_headers: {
-			"Set-Cookie": [_httponly_token_cookie(auth_token)]
-		}
-	} as types.Api.AuthResponse);
+	let urn_response = urn_ret.return_success('Success', {token: auth_token});
+	
+	urn_response = _set_payload_header_token(urn_response, auth_token);
+	urn_response = _set_payload_multi_value_header_httponly_cookie(urn_response, auth_token);
 	
 	return urn_response;
 	

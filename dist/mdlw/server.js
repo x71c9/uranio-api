@@ -32,13 +32,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.auth_route_middleware = exports.route_middleware = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+// import jwt from 'jsonwebtoken';
 const urn_lib_1 = require("urn-lib");
 const urn_ret = urn_lib_1.urn_return.create(urn_lib_1.urn_log.util.return_injector);
 const urn_exc = urn_lib_1.urn_exception.init('EXPRESS_MDLW', 'Express middlewares');
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const conf = __importStar(require("../conf/server"));
-const env = __importStar(require("../env/server"));
+// import * as env from '../env/server';
 const insta = __importStar(require("../nst/server"));
 const book = __importStar(require("../book/server"));
 const types = __importStar(require("../server/types"));
@@ -74,13 +74,17 @@ async function _authorization(api_request) {
         return false;
     }
     try {
-        const decoded = jsonwebtoken_1.default.verify(auth_token, env.get(`jwt_private_key`));
+        // const decoded = jwt.verify(auth_token, env.get(`jwt_private_key`)) as core.types.Passport;
+        // if(!core.bll.auth.is_valid_token(auth_token)){
+        // 	throw urn_exc.create_unauthorized(`INVALID_TOKEN`, `Invalid token.`, ex);
+        // }
+        const decoded = await uranio_core_1.default.bll.auth.decode_token(auth_token);
         api_request.passport = decoded;
         return api_request;
     }
     catch (e) {
         const ex = e;
-        throw urn_exc.create_unauthorized(`INVALID_TOKEN`, `Invalid token.`, ex);
+        throw urn_exc.create_unauthorized(`INVALID_DECODED_TOKEN`, `Invalid decoded token.`, ex);
     }
 }
 async function _validate_and_call(api_request) {
@@ -151,17 +155,9 @@ async function _auth_validate_and_call(auth_route_request, handler) {
     urn_lib_1.urn_log.fn_debug(`Router Auth ${dock_def.url} [${auth_route_request.atom_name}]`);
     _auth_validate(auth_route_request);
     const auth_token = await handler(auth_route_request);
-    const urn_response = urn_ret.return_success('Success', {
-        token: auth_token,
-        headers: {
-            'urn-auth-token': auth_token,
-            // 'Access-Control-Allow-Origin': 'http://192.168.1.69',
-            // 'Access-Control-Allow-Credentials': true
-        },
-        multi_value_headers: {
-            "Set-Cookie": [_httponly_token_cookie(auth_token)]
-        }
-    });
+    let urn_response = urn_ret.return_success('Success', { token: auth_token });
+    urn_response = _set_payload_header_token(urn_response, auth_token);
+    urn_response = _set_payload_multi_value_header_httponly_cookie(urn_response, auth_token);
     return urn_response;
 }
 function _auth_validate(api_request) {
