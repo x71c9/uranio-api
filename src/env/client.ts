@@ -36,7 +36,7 @@ export function set(env:Partial<ClientEnvironment>):void{
 	urn_ctx.set(env);
 }
 
-export function set_client_env():void{
+export function set_client_env():ClientEnvironment{
 	
 	// Cannot set env as normal because on the browser it is not possible to
 	// iterate on the object process.env. Also it is not possible to dynamically
@@ -47,4 +47,8 @@ export function set_client_env():void{
 	// Check core/env/client.ts for reference on how to implement this method.
 	// urn_ctx.set_env();
 	
+	const core_env = core_client.env.set_client_env();
+	set(core_env);
+	
+	return core_env;
 }

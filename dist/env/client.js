@@ -38,6 +38,9 @@ function set_client_env() {
     //
     // Check core/env/client.ts for reference on how to implement this method.
     // urn_ctx.set_env();
+    const core_env = client_1.default.env.set_client_env();
+    set(core_env);
+    return core_env;
 }
 exports.set_client_env = set_client_env;
 //# sourceMappingURL=client.js.map
