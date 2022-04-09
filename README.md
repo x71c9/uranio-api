@@ -224,7 +224,7 @@ Accept: application/json
 urn-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3...
 ```
 If the client and the server are on the same domain there is no need to send back
-the `token`.
+the `token`, since the server will also set an `HttpOnly` cookie with the token.
 
 #### Authenticate with `HttpOnly` cookie
 
@@ -240,6 +240,12 @@ But it will do only if the server is the same.
 >
 > See [SameSite](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite) flag
 
+### Regenerating the token
+
+The token expire after `a week`. The expiration time can be changed in the config `toml` file.
+
+For each authenticated call the server will respond with a header containing a new token.
+The server will also set a new `HttpOnly` cookie on each request.
 
 ### Adding routes
 
