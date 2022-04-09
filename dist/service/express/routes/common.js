@@ -113,19 +113,19 @@ function express_request_to_partial_api_request(req) {
 }
 exports.express_request_to_partial_api_request = express_request_to_partial_api_request;
 function _set_and_remove_headers(urn_res, res) {
-    if (urn_res.payload && urn_res.payload.headers) {
-        const headers = urn_res.payload.headers;
+    if (urn_res.meta && urn_res.meta.headers) {
+        const headers = urn_res.meta.headers;
         for (const [name, value] of Object.entries(headers)) {
             res.setHeader(name, value);
         }
-        delete urn_res.payload.headers;
+        delete urn_res.meta.headers;
     }
-    if (urn_res.payload && urn_res.payload.multi_value_headers) {
-        const multi_value_headers = urn_res.payload.multi_value_headers;
+    if (urn_res.meta && urn_res.meta.multi_value_headers) {
+        const multi_value_headers = urn_res.meta.multi_value_headers;
         for (const [name, value] of Object.entries(multi_value_headers)) {
             res.setHeader(name, value);
         }
-        delete urn_res.payload.multi_value_headers;
+        delete urn_res.meta.multi_value_headers;
     }
     return res;
 }

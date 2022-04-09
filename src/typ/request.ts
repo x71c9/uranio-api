@@ -18,12 +18,12 @@ export namespace Api {
 	
 	export type AuthResponse = {
 		token?: string,
-		headers?: {
-			[k:string]: string | boolean
-		},
-		multi_value_headers?: {
-			"Set-Cookie": string[]
-		}
+		// headers?: {
+		// 	[k:string]: string | boolean
+		// },
+		// multi_value_headers?: {
+		// 	"Set-Cookie": string[]
+		// }
 	}
 	
 	export type Request<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0> =

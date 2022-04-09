@@ -113,25 +113,25 @@ async function _validate_and_call(api_request) {
 // "Set-Cookie": [`urn-auth-token=${auth_token}; Domain=localhost; HttpOnly`]
 // "Set-Cookie": [`urn-auth-token=${auth_token}; Domain=192.168.1.69; HttpOnly`]
 function _set_payload_multi_value_header_httponly_cookie(urn_response, token) {
-    if (!urn_response.payload) {
-        urn_response.payload = {};
+    if (!urn_response.meta) {
+        urn_response.meta = {};
     }
-    if (!urn_response.payload.multi_value_headers) {
-        urn_response.payload.multi_value_headers = {};
+    if (!urn_response.meta.multi_value_headers) {
+        urn_response.meta.multi_value_headers = {};
     }
-    urn_response.payload.multi_value_headers["Set-Cookie"] = [
+    urn_response.meta.multi_value_headers["Set-Cookie"] = [
         `urn-auth-token=${token}; HttpOnly`
     ];
     return urn_response;
 }
 function _set_payload_header_token(urn_response, token) {
-    if (!urn_response.payload) {
-        urn_response.payload = {};
+    if (!urn_response.meta) {
+        urn_response.meta = {};
     }
-    if (!urn_response.payload.headers) {
-        urn_response.payload.headers = {};
+    if (!urn_response.meta.headers) {
+        urn_response.meta.headers = {};
     }
-    urn_response.payload.headers['urn-auth-token'] = token;
+    urn_response.meta.headers['urn-auth-token'] = token;
     return urn_response;
 }
 async function _assign_regenerated_token(api_request, urn_response) {

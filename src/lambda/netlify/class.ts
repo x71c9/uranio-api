@@ -232,16 +232,16 @@ function _lambda_response(
 	const handler_response:HandlerResponse = {
 		statusCode: urn_resp.status,
 	};
-	if(urn_resp.payload?.headers){
+	if(urn_resp.meta?.headers){
 		handler_response.headers = urn_resp.payload.headers;
-		delete urn_resp.payload.headers;
+		delete urn_resp.meta.headers;
 	}
 	if(headers){
 		handler_response.headers = headers;
 	}
-	if(urn_resp.payload?.multi_value_headers){
-		handler_response.multiValueHeaders = urn_resp.payload.multi_value_headers;
-		delete urn_resp.payload.multi_value_headers;
+	if(urn_resp.meta?.multi_value_headers){
+		handler_response.multiValueHeaders = urn_resp.meta.multi_value_headers;
+		delete urn_resp.meta.multi_value_headers;
 	}
 	if(multi_value_headers){
 		handler_response.multiValueHeaders = multi_value_headers;

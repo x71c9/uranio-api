@@ -177,16 +177,16 @@ function _lambda_response(urn_resp, headers, multi_value_headers, is_base64) {
     const handler_response = {
         statusCode: urn_resp.status,
     };
-    if ((_a = urn_resp.payload) === null || _a === void 0 ? void 0 : _a.headers) {
+    if ((_a = urn_resp.meta) === null || _a === void 0 ? void 0 : _a.headers) {
         handler_response.headers = urn_resp.payload.headers;
-        delete urn_resp.payload.headers;
+        delete urn_resp.meta.headers;
     }
     if (headers) {
         handler_response.headers = headers;
     }
-    if ((_b = urn_resp.payload) === null || _b === void 0 ? void 0 : _b.multi_value_headers) {
-        handler_response.multiValueHeaders = urn_resp.payload.multi_value_headers;
-        delete urn_resp.payload.multi_value_headers;
+    if ((_b = urn_resp.meta) === null || _b === void 0 ? void 0 : _b.multi_value_headers) {
+        handler_response.multiValueHeaders = urn_resp.meta.multi_value_headers;
+        delete urn_resp.meta.multi_value_headers;
     }
     if (multi_value_headers) {
         handler_response.multiValueHeaders = multi_value_headers;
