@@ -419,13 +419,21 @@ function _clean_response(urn_res:urn_response.Fail<any>)
 		for(let cookie of splitted_cookies){
 			const splitted_cookie = cookie.split('=');
 			if(splitted_cookie[0] === 'urn-auth-token'){
-				cookie = `urn-auth-token=${splitted_cookie[1].substring(0, 32)}...`;
+				cookie = `urn-auth-token=${_hide_string(splitted_cookie[1])}`;
 			}
 			new_cookies.push(cookie);
 		}
 		urn_res.payload.request.headers.cookie = new_cookies.join('; ');
 	}
+	const auth_token = urn_res.payload?.request?.headers?.['urn-auth-token'];
+	if(auth_token){
+		urn_res.payload.request.headers['urn-auth-token'] = _hide_string(auth_token);
+	}
 	return urn_res;
+}
+
+function _hide_string(str:string):string{
+	return str.substring(0, 32) + `[HIDDEN]...`;
 }
 
 

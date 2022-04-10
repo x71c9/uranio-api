@@ -366,7 +366,7 @@ function validate_request(api_request) {
 }
 exports.validate_request = validate_request;
 function _clean_response(urn_res) {
-    var _a, _b, _c;
+    var _a, _b, _c, _d, _e, _f;
     const cookies = (_c = (_b = (_a = urn_res.payload) === null || _a === void 0 ? void 0 : _a.request) === null || _b === void 0 ? void 0 : _b.headers) === null || _c === void 0 ? void 0 : _c.cookie;
     if (cookies) {
         const new_cookies = [];
@@ -374,12 +374,19 @@ function _clean_response(urn_res) {
         for (let cookie of splitted_cookies) {
             const splitted_cookie = cookie.split('=');
             if (splitted_cookie[0] === 'urn-auth-token') {
-                cookie = `urn-auth-token=${splitted_cookie[1].substring(0, 32)}...`;
+                cookie = `urn-auth-token=${_hide_string(splitted_cookie[1])}`;
             }
             new_cookies.push(cookie);
         }
         urn_res.payload.request.headers.cookie = new_cookies.join('; ');
     }
+    const auth_token = (_f = (_e = (_d = urn_res.payload) === null || _d === void 0 ? void 0 : _d.request) === null || _e === void 0 ? void 0 : _e.headers) === null || _f === void 0 ? void 0 : _f['urn-auth-token'];
+    if (auth_token) {
+        urn_res.payload.request.headers['urn-auth-token'] = _hide_string(auth_token);
+    }
     return urn_res;
+}
+function _hide_string(str) {
+    return str.substring(0, 32) + `[HIDDEN]...`;
 }
 //# sourceMappingURL=request.js.map

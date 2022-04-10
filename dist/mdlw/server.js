@@ -84,7 +84,7 @@ async function _authorization(api_request) {
     }
     catch (e) {
         const ex = e;
-        throw urn_exc.create_unauthorized(`INVALID_DECODED_TOKEN`, `Invalid decoded token.`, ex);
+        throw urn_exc.create_unauthorized(`INVALID_TOKEN`, `Invalid token.`, ex);
     }
 }
 async function _validate_and_call(api_request) {

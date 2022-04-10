@@ -77,7 +77,7 @@ async function _authorization<A extends schema.AtomName, R extends schema.RouteN
 		return api_request;
 	}catch(e){
 		const ex = e as any;
-		throw urn_exc.create_unauthorized(`INVALID_DECODED_TOKEN`, `Invalid decoded token.`, ex);
+		throw urn_exc.create_unauthorized(`INVALID_TOKEN`, `Invalid token.`, ex);
 	}
 }
 
