@@ -120,7 +120,7 @@ function _set_payload_multi_value_header_httponly_cookie(urn_response, token) {
         urn_response.meta.multi_value_headers = {};
     }
     urn_response.meta.multi_value_headers["Set-Cookie"] = [
-        `urn-auth-token=${token}; HttpOnly`
+        `urn-auth-token=${token}; HttpOnly; Max-Age=${conf.get('auth_cookie_expire_seconds')}`
     ];
     return urn_response;
 }
