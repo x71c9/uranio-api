@@ -253,6 +253,17 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			return bll_res;
 		};
 	
+	(default_routes.search_count as any).call =
+		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
+			urn_log.fn_debug(`Router Call GET [search_count] / [${atom_name}]`);
+			const urn_bll = core.bll.create(atom_name, api_request.passport) as
+				core.bll.BLL<A>;
+			const q = (api_request.params as types.Api.Request.Params<'superuser', 'search_count'>).q;
+			// const filter = (api_request.query as unknown as any).filter || {};
+			const bll_res = await urn_bll.search_count(q);
+			return bll_res;
+		};
+	
 	return default_routes as unknown as types.Book.Definition.Dock.Routes<A>;
 	
 }

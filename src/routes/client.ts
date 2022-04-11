@@ -99,13 +99,19 @@ export const default_routes = {
 		url: '/multiple/:ids',
 		return: 'Molecule<A,D>[]',
 	},
+	search_count: {
+		method: types.RouteMethod.GET,
+		action: core.types.AuthAction.READ,
+		url: '/search/count/:q',
+		return: 'number',
+	},
 	search: {
 		method: types.RouteMethod.GET,
 		action: core.types.AuthAction.READ,
 		url: '/search/:q',
 		return: 'Molecule<A,D>[]',
 		query: ['options'],
-	}
+	},
 } as const;
 
 export const media_routes = {

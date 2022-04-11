@@ -89,6 +89,12 @@ export declare const default_routes: {
         readonly url: "/multiple/:ids";
         readonly return: "Molecule<A,D>[]";
     };
+    readonly search_count: {
+        readonly method: types.RouteMethod.GET;
+        readonly action: core.types.AuthAction.READ;
+        readonly url: "/search/count/:q";
+        readonly return: "number";
+    };
     readonly search: {
         readonly method: types.RouteMethod.GET;
         readonly action: core.types.AuthAction.READ;

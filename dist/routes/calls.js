@@ -185,6 +185,15 @@ function return_default_routes(atom_name) {
             const bll_res = await urn_bll.search(q || '', options);
             return bll_res;
         };
+    default_routes.search_count.call =
+        async (api_request) => {
+            urn_lib_1.urn_log.fn_debug(`Router Call GET [search_count] / [${atom_name}]`);
+            const urn_bll = uranio_core_1.default.bll.create(atom_name, api_request.passport);
+            const q = api_request.params.q;
+            // const filter = (api_request.query as unknown as any).filter || {};
+            const bll_res = await urn_bll.search_count(q);
+            return bll_res;
+        };
     return default_routes;
 }
 exports.return_default_routes = return_default_routes;
