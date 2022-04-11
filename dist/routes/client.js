@@ -123,6 +123,13 @@ exports.default_routes = {
         url: '/multiple/:ids',
         return: 'Molecule<A,D>[]',
     },
+    search: {
+        method: types.RouteMethod.GET,
+        action: client_1.default.types.AuthAction.READ,
+        url: '/search/:q',
+        return: 'Molecule<A,D>[]',
+        query: ['options'],
+    }
 };
 exports.media_routes = {
     upload: {

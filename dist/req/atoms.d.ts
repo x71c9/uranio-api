@@ -20,14 +20,17 @@ export declare const required_atoms: {
             };
             readonly msg: {
                 readonly type: types.PropertyType.TEXT;
+                readonly search: true;
                 readonly label: "Message";
             };
             readonly error_code: {
                 readonly type: types.PropertyType.TEXT;
+                readonly search: true;
                 readonly label: "Error Code";
             };
             readonly error_msg: {
                 readonly type: types.PropertyType.TEXT;
+                readonly search: true;
                 readonly label: "Error Message";
             };
             readonly request: {
@@ -39,6 +42,7 @@ export declare const required_atoms: {
             };
             readonly stack: {
                 readonly type: types.PropertyType.LONG_TEXT;
+                readonly search: true;
                 readonly label: "Stack";
                 readonly optional: true;
             };
@@ -58,20 +62,24 @@ export declare const required_atoms: {
         readonly properties: {
             readonly full_path: {
                 readonly type: types.PropertyType.TEXT;
+                readonly search: true;
                 readonly label: "Full path";
             };
             readonly route_path: {
                 readonly type: types.PropertyType.TEXT;
+                readonly search: true;
                 readonly label: "Route path";
                 readonly optional: true;
             };
             readonly atom_path: {
                 readonly type: types.PropertyType.TEXT;
+                readonly search: true;
                 readonly label: "Atom path";
                 readonly optional: true;
             };
             readonly connection_path: {
                 readonly type: types.PropertyType.TEXT;
+                readonly search: true;
                 readonly label: "Connection path";
                 readonly optional: true;
             };
@@ -83,32 +91,38 @@ export declare const required_atoms: {
             };
             readonly atom_name: {
                 readonly type: types.PropertyType.TEXT;
+                readonly search: true;
                 readonly label: "Atom name";
                 readonly optional: true;
                 readonly on_error: () => string;
             };
             readonly route_name: {
                 readonly type: types.PropertyType.TEXT;
+                readonly search: true;
                 readonly label: "Route name";
                 readonly optional: true;
             };
             readonly params: {
                 readonly type: types.PropertyType.TEXT;
+                readonly search: true;
                 readonly label: "Params";
                 readonly optional: true;
             };
             readonly query: {
                 readonly type: types.PropertyType.TEXT;
+                readonly search: true;
                 readonly label: "Query";
                 readonly optional: true;
             };
             readonly headers: {
                 readonly type: types.PropertyType.LONG_TEXT;
+                readonly search: true;
                 readonly label: "Headers";
                 readonly optional: true;
             };
             readonly body: {
                 readonly type: types.PropertyType.LONG_TEXT;
+                readonly search: true;
                 readonly label: "Body";
                 readonly optional: true;
             };
@@ -119,6 +133,7 @@ export declare const required_atoms: {
             };
             readonly ip: {
                 readonly type: types.PropertyType.TEXT;
+                readonly search: true;
                 readonly label: "IP";
                 readonly optional: true;
             };

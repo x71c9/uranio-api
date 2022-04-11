@@ -32,14 +32,17 @@ export const required_atoms = {
 			},
 			msg: {
 				type: types.PropertyType.TEXT,
+				search: true,
 				label: 'Message'
 			},
 			error_code: {
 				type: types.PropertyType.TEXT,
+				search: true,
 				label: 'Error Code'
 			},
 			error_msg: {
 				type: types.PropertyType.TEXT,
+				search: true,
 				label: 'Error Message'
 			},
 			request: {
@@ -51,6 +54,7 @@ export const required_atoms = {
 			},
 			stack: {
 				type: types.PropertyType.LONG_TEXT,
+				search: true,
 				label: 'Stack',
 				optional: true
 			}
@@ -80,20 +84,24 @@ export const required_atoms = {
 		properties: {
 			full_path: {
 				type: types.PropertyType.TEXT,
+				search: true,
 				label: "Full path",
 			},
 			route_path: {
 				type: types.PropertyType.TEXT,
+				search: true,
 				label: "Route path",
 				optional: true
 			},
 			atom_path: {
 				type: types.PropertyType.TEXT,
+				search: true,
 				label: "Atom path",
 				optional: true
 			},
 			connection_path: {
 				type: types.PropertyType.TEXT,
+				search: true,
 				label: "Connection path",
 				optional: true
 			},
@@ -105,6 +113,7 @@ export const required_atoms = {
 			},
 			atom_name: {
 				type: types.PropertyType.TEXT,
+				search: true,
 				label: "Atom name",
 				optional: true,
 				on_error: () => {
@@ -113,26 +122,31 @@ export const required_atoms = {
 			},
 			route_name: {
 				type: types.PropertyType.TEXT,
+				search: true,
 				label: "Route name",
 				optional: true,
 			},
 			params: {
 				type: types.PropertyType.TEXT,
+				search: true,
 				label: "Params",
 				optional: true,
 			},
 			query: {
 				type: types.PropertyType.TEXT,
+				search: true,
 				label: "Query",
 				optional: true,
 			},
 			headers: {
 				type: types.PropertyType.LONG_TEXT,
+				search: true,
 				label: "Headers",
 				optional: true,
 			},
 			body: {
 				type: types.PropertyType.LONG_TEXT,
+				search: true,
 				label: "Body",
 				optional: true,
 			},
@@ -143,6 +157,7 @@ export const required_atoms = {
 			},
 			ip: {
 				type: types.PropertyType.TEXT,
+				search: true,
 				label: "IP",
 				optional: true
 			},
