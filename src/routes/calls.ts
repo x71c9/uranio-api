@@ -260,7 +260,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 				core.bll.BLL<A>;
 			const q = (api_request.params as types.Api.Request.Params<'superuser', 'search_count'>).q;
 			// const filter = (api_request.query as unknown as any).filter || {};
-			const bll_res = await urn_bll.search_count(q);
+			const bll_res = await urn_bll.search_count(q || '');
 			return bll_res;
 		};
 	
