@@ -17,6 +17,17 @@ import {schema} from '../sch/client';
 
 // import {default_routes, media_routes} from '../routes/client';
 
+export function get_dock_url<A extends schema.AtomName>(atom_name:A):string{
+	const dock_def = get_dock_definition(atom_name);
+	if(!dock_def.url){
+		dock_def.url = `/${get_plural(atom_name)}`;
+	}
+	if(dock_def.url[0] != '/'){
+		dock_def.url = `/${dock_def.url}`;
+	}
+	return dock_def.url;
+}
+
 export function get_route_definition<A extends schema.AtomName, R extends schema.RouteName<A>>(
 	atom_name: A,
 	route_name: R

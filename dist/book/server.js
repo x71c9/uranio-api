@@ -31,11 +31,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.has_property = exports.get_properties_definition = exports.get_custom_properties_definition = exports.get_property_definition = exports.get_definition = exports.get_all_definitions = exports.get_plural = exports.validate_auth_name = exports.validate_name = exports.get_names = exports.add_definition = exports.add_route_definition = exports.get_dock_definition = exports.get_routes_definition = exports.get_route_definition = void 0;
+exports.has_property = exports.get_properties_definition = exports.get_custom_properties_definition = exports.get_property_definition = exports.get_definition = exports.get_all_definitions = exports.get_plural = exports.validate_auth_name = exports.validate_name = exports.get_names = exports.add_definition = exports.add_route_definition = exports.get_dock_definition = exports.get_routes_definition = exports.get_route_definition = exports.get_dock_url = void 0;
 const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('BOOK_SERVER', 'Book server methods module');
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const book_client = __importStar(require("./client"));
+function get_dock_url(atom_name) {
+    return book_client.get_dock_url(atom_name);
+}
+exports.get_dock_url = get_dock_url;
 function get_route_definition(atom_name, route_name) {
     const routes_def = get_routes_definition(atom_name);
     if (!routes_def || !routes_def[route_name]) {

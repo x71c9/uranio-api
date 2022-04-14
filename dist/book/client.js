@@ -8,12 +8,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_names = exports.has_property = exports.get_properties_definition = exports.get_custom_properties_definition = exports.get_property_definition = exports.get_definition = exports.get_all_definitions = exports.validate_auth_name = exports.validate_name = exports.get_plural = exports.add_definition = exports.add_route_definition = exports.get_dock_definition = exports.get_routes_definition = exports.get_route_definition = void 0;
+exports.get_names = exports.has_property = exports.get_properties_definition = exports.get_custom_properties_definition = exports.get_property_definition = exports.get_definition = exports.get_all_definitions = exports.validate_auth_name = exports.validate_name = exports.get_plural = exports.add_definition = exports.add_route_definition = exports.get_dock_definition = exports.get_routes_definition = exports.get_route_definition = exports.get_dock_url = void 0;
 // import {urn_util, urn_exception} from 'urn-lib';
 const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init('BOOK_CLIENT', 'Book client methods module');
 const client_1 = __importDefault(require("uranio-core/client"));
 // import {default_routes, media_routes} from '../routes/client';
+function get_dock_url(atom_name) {
+    const dock_def = get_dock_definition(atom_name);
+    if (!dock_def.url) {
+        dock_def.url = `/${get_plural(atom_name)}`;
+    }
+    if (dock_def.url[0] != '/') {
+        dock_def.url = `/${dock_def.url}`;
+    }
+    return dock_def.url;
+}
+exports.get_dock_url = get_dock_url;
 function get_route_definition(atom_name, route_name) {
     const routes_def = get_routes_definition(atom_name);
     if (!routes_def || !routes_def[route_name]) {

@@ -66,42 +66,30 @@ let ExpressWebService = class ExpressWebService {
                 next();
             }
         });
-        const prefix_api = conf.get('prefix_api');
-        const prefix_log = conf.get('prefix_log');
+        const conf_prefix_api = conf.get('prefix_api');
+        const conf_prefix_log = conf.get('prefix_log');
         for (const [atom_name, atom_def] of Object.entries(book.get_all_definitions())) {
-            // const dock_def = book.get_dock_definition(atom_name);
-            // const atom_def = book.get_definition(atom_name);
-            // if(!atom_def.dock || !atom_def.dock.url){
-            //   continue;
-            // }
             const dock_def = atom_def.dock;
+            const dock_url = book.get_dock_url(atom_name);
             const router = (0, index_1.create_express_route)(atom_name);
-            if (dock_def && typeof dock_def.url === 'string' && dock_def.url !== '') {
-                if (atom_def.connection && atom_def.connection === 'log') {
-                    // console.log(`${prefix_api}${prefix_log}${dock_def.url}`);
-                    this.express_app.use(`${prefix_api}${prefix_log}${dock_def.url}`, router);
-                }
-                else {
-                    // console.log(`${prefix_api}${dock_def.url}`);
-                    this.express_app.use(`${prefix_api}${dock_def.url}`, router);
-                }
+            const prefix_api = (conf_prefix_api[0] !== '/') ? `/${conf_prefix_api}` : conf_prefix_api;
+            let prefix_log = '';
+            if (atom_def.connection && atom_def.connection === 'log') {
+                prefix_log = (conf_prefix_log[0] !== '/') ? `/${conf_prefix_log}` : conf_prefix_log;
             }
+            const full_url = `${prefix_api}${prefix_log}${dock_url}`;
+            urn_lib_1.urn_log.fn_debug(`Creating Express route [${full_url}]`);
+            this.express_app.use(full_url, router);
             if (dock_def && dock_def.auth_url && typeof dock_def.auth_url === 'string') {
                 const auth_route = (0, index_1.create_express_auth_route)(atom_name);
-                // console.log(`${prefix_api}${dock_def.auth_url}`);
-                this.express_app.use(`${prefix_api}${dock_def.auth_url}`, auth_route);
+                const full_auth_url = `${prefix_api}${dock_def.auth_url}`;
+                urn_lib_1.urn_log.fn_debug(`Creating Express auth route [${full_auth_url}]`);
+                this.express_app.use(full_auth_url, auth_route);
             }
         }
     }
     listen(portcall, callback) {
         let service_port = 7777;
-        // const pro_service_port = conf.get(`service_port`);
-        // const dev_service_port = conf.get(`service_dev_port`);
-        // if(typeof pro_service_port === 'number' && env.is_production()){
-        //   service_port = pro_service_port;
-        // }else if(typeof dev_service_port === 'number'){
-        //   service_port = dev_service_port;
-        // }
         const current_port = conf.get(`service_port`);
         if (typeof current_port === 'number') {
             service_port = current_port;

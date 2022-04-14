@@ -129,7 +129,8 @@ type ExtractParamFrom<URI extends string> =
 		Param1 | Param2 :
 	URI extends
 		`/:${infer Param}` |
-		`/${infer _Prefix}/:${infer Param}` ?
+		`/${infer _Prefix}/:${infer Param}` |
+		`/${infer __Prefix}/${infer _Prefix}/:${infer Param}` ?
 	Param :
 	never;
 
