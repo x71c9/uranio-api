@@ -87,6 +87,7 @@ exports.default_routes = {
         method: types.RouteMethod.POST,
         action: client_1.default.types.AuthAction.WRITE,
         url: '/:id',
+        query: ['options'],
         return: 'Molecule<A,D>',
     },
     delete: {

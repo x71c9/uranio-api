@@ -124,7 +124,8 @@ function return_default_routes(atom_name) {
             // if(ids.length > 1){
             //   return await urn_bll.update_multiple(ids, api_request.body);
             // }
-            const bll_res = await urn_bll.update_by_id((_a = api_request.params) === null || _a === void 0 ? void 0 : _a.id, api_request.body);
+            const options = api_request.query.options;
+            const bll_res = await urn_bll.update_by_id((_a = api_request.params) === null || _a === void 0 ? void 0 : _a.id, api_request.body, options);
             return bll_res;
         };
     default_routes.delete.call =

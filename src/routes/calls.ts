@@ -166,9 +166,11 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			// if(ids.length > 1){
 			//   return await urn_bll.update_multiple(ids, api_request.body);
 			// }
+			const options = (api_request.query as types.Api.Request.Query<'superuser', 'update', D>).options;
 			const bll_res = await urn_bll.update_by_id(
 				(api_request.params as any)?.id,
-				api_request.body as unknown as Partial<schema.AtomShape<A>>
+				api_request.body as unknown as Partial<schema.AtomShape<A>>,
+				options as any
 			);
 			return bll_res;
 		};

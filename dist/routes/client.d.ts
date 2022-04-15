@@ -53,6 +53,7 @@ export declare const default_routes: {
         readonly method: types.RouteMethod.POST;
         readonly action: core.types.AuthAction.WRITE;
         readonly url: "/:id";
+        readonly query: readonly ["options"];
         readonly return: "Molecule<A,D>";
     };
     readonly delete: {

@@ -63,6 +63,7 @@ export const default_routes = {
 		method: types.RouteMethod.POST,
 		action: core.types.AuthAction.WRITE,
 		url: '/:id',
+		query: ['options'],
 		return: 'Molecule<A,D>',
 	},
 	delete: {

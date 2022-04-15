@@ -418,7 +418,7 @@ function _clean_response(urn_res:urn_response.Fail<any>)
 		const splitted_cookies = cookies.split(';');
 		for(let cookie of splitted_cookies){
 			const splitted_cookie = cookie.split('=');
-			if(splitted_cookie[0] === 'urn-auth-token'){
+			if(splitted_cookie[0].trim() === 'urn-auth-token'){
 				cookie = `urn-auth-token=${_hide_string(splitted_cookie[1])}`;
 			}
 			new_cookies.push(cookie);
