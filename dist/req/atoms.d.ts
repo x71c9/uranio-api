@@ -16,21 +16,25 @@ export declare const required_atoms: {
         readonly properties: {
             readonly status: {
                 readonly type: types.PropertyType.INTEGER;
+                readonly primary: true;
                 readonly label: "Status";
             };
             readonly msg: {
                 readonly type: types.PropertyType.TEXT;
                 readonly search: true;
+                readonly primary: true;
                 readonly label: "Message";
             };
             readonly error_code: {
                 readonly type: types.PropertyType.TEXT;
                 readonly search: true;
+                readonly primary: true;
                 readonly label: "Error Code";
             };
             readonly error_msg: {
                 readonly type: types.PropertyType.TEXT;
                 readonly search: true;
+                readonly primary: true;
                 readonly label: "Error Message";
             };
             readonly request: {
@@ -63,6 +67,7 @@ export declare const required_atoms: {
             readonly full_path: {
                 readonly type: types.PropertyType.TEXT;
                 readonly search: true;
+                readonly primary: true;
                 readonly label: "Full path";
             };
             readonly route_path: {

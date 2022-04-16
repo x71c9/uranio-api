@@ -28,21 +28,25 @@ export const required_atoms = {
 		properties: {
 			status: {
 				type: types.PropertyType.INTEGER,
+				primary: true,
 				label: 'Status'
 			},
 			msg: {
 				type: types.PropertyType.TEXT,
 				search: true,
+				primary: true,
 				label: 'Message'
 			},
 			error_code: {
 				type: types.PropertyType.TEXT,
 				search: true,
+				primary: true,
 				label: 'Error Code'
 			},
 			error_msg: {
 				type: types.PropertyType.TEXT,
 				search: true,
+				primary: true,
 				label: 'Error Message'
 			},
 			request: {
@@ -85,6 +89,7 @@ export const required_atoms = {
 			full_path: {
 				type: types.PropertyType.TEXT,
 				search: true,
+				primary: true,
 				label: "Full path",
 			},
 			route_path: {

@@ -64,6 +64,7 @@ export namespace Api {
 		
 		export type Params<A extends schema.AtomName, R extends schema.RouteName<A>> = {
 			[k in RouteParam<A,R>]: string |  undefined
+			// [k in RouteParam<A,R>]: string |  string[] | undefined
 		}
 		
 		export type Query<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0> = {
