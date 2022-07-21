@@ -124,10 +124,10 @@ async function _validate_and_call<A extends schema.AtomName, R extends schema.Ro
 	
 }
 
-// "Set-Cookie": [`urn-auth-token=${auth_token}; SameSite=Strict; HttpOnly; Secure`]
-// "Set-Cookie": [`urn-auth-token=${auth_token}; SameSite=Strict; HttpOnly`]
-// "Set-Cookie": [`urn-auth-token=${auth_token}; Domain=localhost; HttpOnly`]
-// "Set-Cookie": [`urn-auth-token=${auth_token}; Domain=192.168.1.69; HttpOnly`]
+// "Set-Cookie": [`urn-auth-token=${auth_token}; Path=/; SameSite=Strict; HttpOnly; Secure`]
+// "Set-Cookie": [`urn-auth-token=${auth_token}; Path=/; SameSite=Strict; HttpOnly`]
+// "Set-Cookie": [`urn-auth-token=${auth_token}; Path=/; Domain=localhost; HttpOnly`]
+// "Set-Cookie": [`urn-auth-token=${auth_token}; Path=/; Domain=192.168.1.69; HttpOnly`]
 
 function _set_payload_multi_value_header_httponly_cookie(
 	urn_response:urn_response.Success<any>,
@@ -140,7 +140,7 @@ function _set_payload_multi_value_header_httponly_cookie(
 		urn_response.meta.multi_value_headers = {};
 	}
 	urn_response.meta.multi_value_headers["Set-Cookie"] = [
-		`urn-auth-token=${token}; HttpOnly; Max-Age=${conf.get('auth_cookie_expire_seconds')}`
+		`urn-auth-token=${token}; HttpOnly; Path=/; Max-Age=${conf.get('auth_cookie_expire_seconds')}`
 	];
 	return urn_response;
 }
