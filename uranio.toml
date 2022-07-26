@@ -9,6 +9,13 @@ connect_on_init = false
 prefix_api = '/uranio/api'
 prefix_log = '/logs'
 lambda = 'netlify'
+[default_atoms]
+	superuser = false
+	group = false
+	user = false
+	media = false
+	request = false
+	error = false
 [service]
 	platform = 'express'
 	protocol = 'http'

@@ -296,6 +296,9 @@ function _limit<A extends schema.AtomName, R extends schema.RouteName<A>, D exte
 function _log_route_request<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0>(
 	api_request: types.Api.Request<A,R,D>
 ):void{
+	if(conf.get('default_atoms_request') === false){
+		return;
+	}
 	const request_shape = partial_api_request_to_atom_request(api_request);
 	const bll_reqs = insta.get_bll_request();
 	bll_reqs.insert_new(request_shape).catch((ex) => {
@@ -310,6 +313,9 @@ function _log_route_request<A extends schema.AtomName, R extends schema.RouteNam
 function _log_auth_route_request<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth = 0>(
 	auth_request: types.Api.Request<A,R,D>
 ):void{
+	if(conf.get('default_atoms_request') === false){
+		return;
+	}
 	const request_shape = partial_api_request_to_atom_request(auth_request);
 	const auth_request_clone = urn_util.object.deep_clone(request_shape);
 	if(auth_request_clone.body){

@@ -29,6 +29,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.register_exception_handler = void 0;
+const conf = __importStar(require("../conf/server"));
 const insta = __importStar(require("../nst/server"));
 /*
  * Function for handling exception.
@@ -39,6 +40,9 @@ const insta = __importStar(require("../nst/server"));
 function handle_exception(service_name) {
     return async (ex) => {
         console.error(service_name, ex);
+        if (conf.get('default_atoms_error') === false) {
+            return;
+        }
         const bll_err = insta.get_bll_error();
         bll_err.insert_new({
             status: 500,
@@ -62,6 +66,9 @@ function handle_exception(service_name) {
 function handle_rejected_promise(service_name) {
     return (reason, promise) => {
         console.error(service_name, reason, promise);
+        if (conf.get('default_atoms_error') === false) {
+            return;
+        }
         const bll_err = insta.get_bll_error();
         bll_err.insert_new({
             status: 510,

@@ -12,6 +12,8 @@ exports.api_config = void 0;
 const uranio_core_1 = __importDefault(require("uranio-core"));
 exports.api_config = {
     ...uranio_core_1.default.conf.get_all(),
+    default_atoms_request: false,
+    default_atoms_error: false,
     request_auto_limit: 128,
     service: 'express',
     service_protocol: 'http',

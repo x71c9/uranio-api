@@ -19,6 +19,10 @@ export const api_client_config:Required<ClientConfiguration> = {
 	
 	...core_client.conf.get_all(),
 	
+	default_atoms_request: false,
+	
+	default_atoms_error: false,
+	
 	prefix_log: '/logs'
 	
 };

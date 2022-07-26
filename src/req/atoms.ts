@@ -6,16 +6,6 @@
 
 import * as types from '../client/types';
 
-// export const default_atom_names = [
-//   'superuser',
-//   'user',
-//   'group',
-//   'media',
-//   'request',
-//   'error',
-//   'setting'
-// ];
-
 export const required_atoms = {
 	error: {
 		plural: 'errors',

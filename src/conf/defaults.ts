@@ -12,6 +12,10 @@ export const api_config:Required<Configuration> = {
 	
 	...core.conf.get_all(),
 	
+	default_atoms_request: false,
+	
+	default_atoms_error: false,
+	
 	request_auto_limit: 128,
 	
 	service: 'express',

@@ -14,6 +14,8 @@ type RequiredConfigParams = {
 }
 
 type OptionalConfigParam = {
+	default_atoms_request: boolean
+	default_atoms_error: boolean
 	request_auto_limit: number
 	service: ServiceName
 	service_protocol: string

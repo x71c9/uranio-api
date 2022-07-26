@@ -238,6 +238,9 @@ function _limit(api_request) {
 //   return (cloned_atom_dock.routes as any)[api_request.route_name as string]! as types.Book.Definition.Dock.Routes.Route<A,R,D>;
 // }
 function _log_route_request(api_request) {
+    if (conf.get('default_atoms_request') === false) {
+        return;
+    }
     const request_shape = (0, request_1.partial_api_request_to_atom_request)(api_request);
     const bll_reqs = insta.get_bll_request();
     bll_reqs.insert_new(request_shape).catch((ex) => {
@@ -249,6 +252,9 @@ function _log_route_request(api_request) {
     });
 }
 function _log_auth_route_request(auth_request) {
+    if (conf.get('default_atoms_request') === false) {
+        return;
+    }
     const request_shape = (0, request_1.partial_api_request_to_atom_request)(auth_request);
     const auth_request_clone = urn_lib_1.urn_util.object.deep_clone(request_shape);
     if (auth_request_clone.body) {

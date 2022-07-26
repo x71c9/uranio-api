@@ -19,6 +19,8 @@ const client_1 = __importDefault(require("uranio-core/client"));
  */
 exports.api_client_config = {
     ...client_1.default.conf.get_all(),
+    default_atoms_request: false,
+    default_atoms_error: false,
     prefix_log: '/logs'
 };
 //# sourceMappingURL=default_conf.js.map

@@ -4,6 +4,8 @@
  * @packageDocumentation
  */
 
+import * as conf from '../conf/server';
+
 import * as insta from '../nst/server';
 
 /*
@@ -16,6 +18,9 @@ function handle_exception(service_name:string)
 		:(...args:any[]) => any {
 	return async (ex:Error):Promise<void> => {
 		console.error(service_name, ex);
+		if(conf.get('default_atoms_error') === false){
+			return;
+		}
 		const bll_err = insta.get_bll_error();
 		bll_err.insert_new({
 			status: 500,
@@ -41,6 +46,9 @@ function handle_rejected_promise(service_name:string)
 		:(...args:any[]) => any {
 	return (reason:any, promise:Promise<any>):void => {
 		console.error(service_name, reason, promise);
+		if(conf.get('default_atoms_error') === false){
+			return;
+		}
 		const bll_err = insta.get_bll_error();
 		bll_err.insert_new({
 			status: 510,
