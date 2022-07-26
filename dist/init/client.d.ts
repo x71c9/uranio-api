@@ -1,5 +1,5 @@
 /**
- * Init module
+ * API init module
  *
  * @packageDocumentation
  */

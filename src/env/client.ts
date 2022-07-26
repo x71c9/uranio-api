@@ -1,5 +1,5 @@
 /**
- * Env module
+ * API Env module
  *
  * @packageDocumentation
  */
