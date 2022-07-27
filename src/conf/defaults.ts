@@ -20,13 +20,13 @@ export const api_config:Required<Configuration> = {
 	
 	service: 'express',
 	
-	service_protocol: 'http',
+	service_protocol: 'https',
 	
 	service_domain: 'localhost',
 	
 	service_port: 3000,
 	
-	dev_service_protocol: 'http',
+	dev_service_protocol: 'https',
 	
 	dev_service_domain: 'localhost',
 	
