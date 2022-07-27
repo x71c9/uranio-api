@@ -18,15 +18,15 @@ lambda = 'netlify'
 	error = true
 [service]
 	platform = 'express'
-	protocol = 'http'
+	protocol = 'https'
 	domain = 'localhost'
 	port = 7772
-	url = 'http://localhost:7772/uranio/api'
+	url = 'https://localhost:7772/uranio/api'
 [dev.service]
-	protocol = 'http'
+	protocol = 'https'
 	domain = 'localhost'
 	port = 7772
-	url = 'http://localhost:7772/uranio/api'
+	url = 'https://localhost:7772/uranio/api'
 [log]
 	debug_info = true
 	color = true
