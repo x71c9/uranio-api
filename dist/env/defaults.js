@@ -12,5 +12,8 @@ exports.api_env = void 0;
 const uranio_core_1 = __importDefault(require("uranio-core"));
 exports.api_env = {
     ...uranio_core_1.default.env.get_all(),
+    https: true,
+    ssl_certificate: '',
+    ssl_key: ''
 };
 //# sourceMappingURL=defaults.js.map

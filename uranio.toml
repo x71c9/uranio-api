@@ -10,12 +10,12 @@ prefix_api = '/uranio/api'
 prefix_log = '/logs'
 lambda = 'netlify'
 [default_atoms]
-	superuser = false
-	group = false
+	superuser = true
+	group = true
 	user = false
 	media = false
-	request = false
-	error = false
+	request = true
+	error = true
 [service]
 	platform = 'express'
 	protocol = 'http'

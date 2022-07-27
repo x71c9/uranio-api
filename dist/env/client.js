@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Env module
+ * API Env module
  *
  * @packageDocumentation
  */

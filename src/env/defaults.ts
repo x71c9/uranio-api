@@ -12,4 +12,10 @@ export const api_env:Required<Environment> = {
 	
 	...core.env.get_all(),
 	
+	https: true,
+	
+	ssl_certificate: '',
+	
+	ssl_key: ''
+	
 };

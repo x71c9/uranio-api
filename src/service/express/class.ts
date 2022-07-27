@@ -4,6 +4,14 @@
  * @packageDocumentation
  */
 
+import fs from 'fs';
+
+// import path from 'path';
+
+import http from 'http';
+
+import https from 'https';
+
 import express from 'express';
 
 import fileupload from 'express-fileupload';
@@ -15,6 +23,8 @@ import {urn_log, urn_return, urn_exception} from 'urn-lib';
 const urn_exc = urn_exception.init(`EXPRESSCLASS`, `Express class module`);
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
+
+import * as env from '../../env/server';
 
 import * as book from '../../book/server';
 
@@ -107,14 +117,37 @@ class ExpressWebService implements Service {
 				callback();
 			}
 		};
+		
+		let server = http.createServer(this.express_app);
+		
+		if(env.get('https')){
+			const serverOptions = {
+				// Certificate(s) & Key(s)
+				// cert: fs.readFileSync(path.join(__dirname, '../../../cert/cert.pem')),
+				// key: fs.readFileSync(path.join(__dirname, '../../../cert/key.pem')),
+				cert: fs.readFileSync(env.get('ssl_certificate')),
+				key: fs.readFileSync(env.get('ssl_key')),
+				// TLS Versions
+				// maxVersion: 'TLSv1.3',
+				// minVersion: 'TLSv1.2'
+				// Hardened configuration
+				// ciphers: 'TLS_AES_256_GCM_SHA384:TLS_AES_128_GCM_SHA256',
+				// ecdhCurve: 'P-521:P-384',
+				// sigalgs: 'ecdsa_secp384r1_sha384',
+				// Attempt to use server cipher suite preference instead of clients
+				// honorCipherOrder: true
+			}
+			server = https.createServer(serverOptions, this.express_app);
+		}
+		
 		switch(typeof portcall){
 			case 'undefined':
 			case 'function':{
-				this.express_app.listen(service_port, uranio_callback);
+				server.listen(service_port, uranio_callback);
 				break;
 			}
 			case 'number':{
-				this.express_app.listen(portcall, uranio_callback);
+				server.listen(portcall, uranio_callback);
 				break;
 			}
 			default:{

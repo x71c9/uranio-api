@@ -137,6 +137,21 @@ function _validate_dock_route_url_uniqueness() {
 // }
 function _validate_api_variables() {
     _check_number_values();
+    _check_https_variables();
+}
+function _check_https_variables() {
+    if (env.get('https') === true) {
+        const ssl_cert = env.get('ssl_certificate');
+        if (!ssl_cert || ssl_cert === '') {
+            throw urn_exc.create_not_initialized(`INVALID_SSL_CERTIFICATE`, `Ivalid ssl certificate value. Set \`URN_SSL_CERTIFICATE\` in \`.env\`` +
+                `to the path of the certificate file.`);
+        }
+        const ssl_key = env.get('ssl_key');
+        if (!ssl_key || ssl_key === '') {
+            throw urn_exc.create_not_initialized(`INVALID_SSL_KEY`, `Ivalid ssl key value. Set \`URN_SSL_KEY\` in \`.env\`` +
+                `to the path of the certificate key file.`);
+        }
+    }
 }
 function _check_number_values() {
     if (defaults_1.api_config.request_auto_limit < 0) {

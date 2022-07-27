@@ -10,3 +10,6 @@ Run `yarn dev` in the root folder. -> This will start compilation in watch mode.
 
 The starting script for developing is `src/dev.ts`.
 
+### Install a certificate for SSL
+https://deviloper.in/ssl-certificate-in-nodejs#heading-lets-generate-ssl-certificates
+

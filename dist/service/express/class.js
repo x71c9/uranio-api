@@ -38,12 +38,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create = void 0;
+const fs_1 = __importDefault(require("fs"));
+// import path from 'path';
+const http_1 = __importDefault(require("http"));
+const https_1 = __importDefault(require("https"));
 const express_1 = __importDefault(require("express"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const cors_1 = __importDefault(require("cors"));
 const urn_lib_1 = require("urn-lib");
 const urn_exc = urn_lib_1.urn_exception.init(`EXPRESSCLASS`, `Express class module`);
 const urn_ret = urn_lib_1.urn_return.create(urn_lib_1.urn_log.util.return_injector);
+const env = __importStar(require("../../env/server"));
 const book = __importStar(require("../../book/server"));
 const exc_handler_1 = require("../../util/exc_handler");
 const conf = __importStar(require("../../conf/server"));
@@ -103,14 +108,34 @@ let ExpressWebService = class ExpressWebService {
                 callback();
             }
         };
+        let server = http_1.default.createServer(this.express_app);
+        if (env.get('https')) {
+            const serverOptions = {
+                // Certificate(s) & Key(s)
+                // cert: fs.readFileSync(path.join(__dirname, '../../../cert/cert.pem')),
+                // key: fs.readFileSync(path.join(__dirname, '../../../cert/key.pem')),
+                cert: fs_1.default.readFileSync(env.get('ssl_certificate')),
+                key: fs_1.default.readFileSync(env.get('ssl_key')),
+                // TLS Versions
+                // maxVersion: 'TLSv1.3',
+                // minVersion: 'TLSv1.2'
+                // Hardened configuration
+                // ciphers: 'TLS_AES_256_GCM_SHA384:TLS_AES_128_GCM_SHA256',
+                // ecdhCurve: 'P-521:P-384',
+                // sigalgs: 'ecdsa_secp384r1_sha384',
+                // Attempt to use server cipher suite preference instead of clients
+                // honorCipherOrder: true
+            };
+            server = https_1.default.createServer(serverOptions, this.express_app);
+        }
         switch (typeof portcall) {
             case 'undefined':
             case 'function': {
-                this.express_app.listen(service_port, uranio_callback);
+                server.listen(service_port, uranio_callback);
                 break;
             }
             case 'number': {
-                this.express_app.listen(portcall, uranio_callback);
+                server.listen(portcall, uranio_callback);
                 break;
             }
             default: {
