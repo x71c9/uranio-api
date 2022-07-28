@@ -8,4 +8,5 @@ package-lock.json
 yarn-error.log
 .urnlog
 *.bkp
-cert/
+cert/*
+!cert/.gitkeep
