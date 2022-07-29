@@ -33,7 +33,7 @@ export function init(
 	
 	core.init(config, false);
 	
-	conf.set(core.util.toml.read());
+	conf.set(core.util.toml.read(api_config));
 	
 	env.set_env();
 	

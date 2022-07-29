@@ -44,7 +44,7 @@ const book = __importStar(require("../book/server"));
 const log = __importStar(require("../log/server"));
 function init(config, register_required = true) {
     uranio_core_1.default.init(config, false);
-    conf.set(uranio_core_1.default.util.toml.read());
+    conf.set(uranio_core_1.default.util.toml.read(defaults_1.api_config));
     env.set_env();
     log.init(urn_lib_1.urn_log);
     if (config) {
