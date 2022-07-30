@@ -32,6 +32,7 @@
 	"repository": "git@github.com:x71c9/uranio-api.git",
 	"author": "Andrea Reni <108585118+x71c9@users.noreply.github.com>",
 	"scripts": {
+		"dev:sync": "npx tsc-watch --onSuccess \"node -r source-map-support/register -r dotenv/config ./dist/dev.js\"",
 		"build": "npx tsc -b",
 		"dev": "npx tsc-watch --onSuccess \"node -r source-map-support/register -r dotenv/config ./dist/dev.js\"",
 		"plain:generate": "node -r source-map-support/register -r dotenv/config ./dist/server/generate.js",
