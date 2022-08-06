@@ -47,7 +47,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 		
 		((default_routes as any).upload as any).call =
 			async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
-				urn_log.fn_debug(`Router Call POST [upload] / [${atom_name}]`);
+				urn_log.trace(`Router Call POST [upload] / [${atom_name}]`);
 				if(!api_request.file){
 					throw urn_exc.create_invalid_request(
 						`INVALID_REQUEST_MISSING_FILE_PARAM`,
@@ -66,7 +66,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			
 		((default_routes as any).presigned as any).call =
 			async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
-				urn_log.fn_debug(`Router Call GET [presigned] / [${atom_name}]`);
+				urn_log.trace(`Router Call GET [presigned] / [${atom_name}]`);
 				if(!api_request.query){
 					throw urn_exc.create_invalid_request(
 						`INVALID_REQUEST_MISSING_QUERY`,
@@ -85,7 +85,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 	
 	(default_routes.count as any).call =
 		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
-			urn_log.fn_debug(`Router Call GET [count] / [${atom_name}]`);
+			urn_log.trace(`Router Call GET [count] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
 			const filter = (api_request.query as unknown as any).filter || {};
@@ -95,7 +95,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 	
 	(default_routes.find_one as any).call =
 		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
-			urn_log.fn_debug(`Router Call GET [find_one] / [${atom_name}]`);
+			urn_log.trace(`Router Call GET [find_one] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
 			const filter = (api_request.query as types.Api.Request.Query<'superuser', 'find', D>).filter || {};
@@ -106,7 +106,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 	
 	(default_routes.find as any).call =
 		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
-			urn_log.fn_debug(`Router Call GET [find] / [${atom_name}]`);
+			urn_log.trace(`Router Call GET [find] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
 			const filter = (api_request.query as types.Api.Request.Query<'superuser', 'find', D>).filter || {};
@@ -117,7 +117,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 	
 	(default_routes.find_id as any).call =
 		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
-			urn_log.fn_debug(`Router Call GET [find_id] /:id [${atom_name}]`);
+			urn_log.trace(`Router Call GET [find_id] /:id [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
 			const bll_res = await urn_bll.find_by_id(
@@ -129,7 +129,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 	
 	(default_routes.insert as any).call =
 		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
-			urn_log.fn_debug(`Router Call POST [insert] / [${atom_name}]`);
+			urn_log.trace(`Router Call POST [insert] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
 			if(!api_request.body){
@@ -147,7 +147,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 	
 	(default_routes.update as any).call =
 		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
-			urn_log.fn_debug(`Router Call POST [update] / [${atom_name}]`);
+			urn_log.trace(`Router Call POST [update] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
 			if(!api_request.body){
@@ -177,7 +177,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 	
 	(default_routes.delete as any).call =
 		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
-			urn_log.fn_debug(`Router Call DELETE [delete] / [${atom_name}]`);
+			urn_log.trace(`Router Call DELETE [delete] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
 			if(!(api_request.params as any)?.id){
@@ -196,7 +196,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 	
 	(default_routes.insert_multiple as any).call =
 		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
-			urn_log.fn_debug(`Router Call POST [insert_multiple] / [${atom_name}]`);
+			urn_log.trace(`Router Call POST [insert_multiple] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
 			if(!api_request.body || !Array.isArray(api_request.body)){
@@ -210,7 +210,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 	
 	(default_routes.update_multiple as any).call =
 		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
-			urn_log.fn_debug(`Router Call POST [update_multiple] / [${atom_name}]`);
+			urn_log.trace(`Router Call POST [update_multiple] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
 			if(!api_request.body){
@@ -231,7 +231,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 	
 	(default_routes.delete_multiple as any).call =
 		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
-			urn_log.fn_debug(`Router Call DELETE [delete_multiple] / [${atom_name}]`);
+			urn_log.trace(`Router Call DELETE [delete_multiple] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
 			if(!(api_request.params as any)?.ids){
@@ -246,7 +246,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 	
 	(default_routes.search as any).call =
 		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
-			urn_log.fn_debug(`Router Call GET [search] / [${atom_name}]`);
+			urn_log.trace(`Router Call GET [search] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
 			const q = (api_request.params as types.Api.Request.Params<'superuser', 'search'>).q;
@@ -257,7 +257,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 	
 	(default_routes.search_count as any).call =
 		async <A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth=0>(api_request:types.Api.Request<A,R,D>) => {
-			urn_log.fn_debug(`Router Call GET [search_count] / [${atom_name}]`);
+			urn_log.trace(`Router Call GET [search_count] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
 			const q = (api_request.params as types.Api.Request.Params<'superuser', 'search_count'>).q;

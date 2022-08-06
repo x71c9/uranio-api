@@ -198,12 +198,12 @@ function _lambda_response(urn_resp, headers, multi_value_headers, is_base64) {
     return handler_response;
 }
 function create() {
-    urn_lib_1.urn_log.fn_debug(`Create NetlifyLambda`);
+    urn_lib_1.urn_log.trace(`Create NetlifyLambda`);
     return new NetlifyLambda();
 }
 exports.create = create;
 // export function connect_and_create():NetlifyLambda{
-//   urn_log.fn_debug(`Create NetlifyLambda`);
+//   urn_log.trace(`Create NetlifyLambda`);
 //   return new NetlifyLambda(true);
 // }
 //# sourceMappingURL=class.js.map

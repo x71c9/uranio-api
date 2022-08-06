@@ -25,7 +25,7 @@ import {express_request_to_partial_api_request, return_uranio_response_to_expres
 export function create_express_route<A extends schema.AtomName>(atom_name:A)
 		:express.Router{
 	
-	urn_log.fn_debug(`Create Express Default Atom Router [${atom_name}]`);
+	urn_log.trace(`Create Express Default Atom Router [${atom_name}]`);
 	
 	const router = express.Router();
 	

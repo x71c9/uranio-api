@@ -88,7 +88,7 @@ async function _validate_and_call<A extends schema.AtomName, R extends schema.Ro
 	// const route_def = _get_route_def(api_request);
 	const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
 	
-	urn_log.fn_debug(`Router ${route_def.method} [${api_request.atom_name}] ${api_request.full_path}`);
+	urn_log.trace(`Router ${route_def.method} [${api_request.atom_name}] ${api_request.full_path}`);
 	
 	_validate_route(api_request);
 	
@@ -185,7 +185,7 @@ async function _auth_validate_and_call<A extends schema.AtomName, R extends sche
 	//   );
 	// }
 	
-	urn_log.fn_debug(`Router Auth ${dock_def.url} [${auth_route_request.atom_name}]`);
+	urn_log.trace(`Router Auth ${dock_def.url} [${auth_route_request.atom_name}]`);
 	
 	_auth_validate(auth_route_request);
 	
@@ -204,7 +204,7 @@ function _auth_validate<A extends schema.AtomName, R extends schema.RouteName<A>
 	api_request:types.Api.Request<A,R,D>
 ):void{
 	
-	urn_log.fn_debug(`Validate Auth Route [${api_request.atom_name}]`);
+	urn_log.trace(`Validate Auth Route [${api_request.atom_name}]`);
 	
 	req_validator.empty(api_request.params, 'params');
 	req_validator.empty(api_request.query, 'query');
@@ -217,7 +217,7 @@ function _validate_route<A extends schema.AtomName, R extends schema.RouteName<A
 	
 	const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
 		
-	urn_log.fn_debug(`Validate Route ${route_def.url} [${api_request.atom_name}]`);
+	urn_log.trace(`Validate Route ${route_def.url} [${api_request.atom_name}]`);
 	
 	if(route_def.method !== types.RouteMethod.POST){
 		req_validator.empty(api_request.body, 'body');

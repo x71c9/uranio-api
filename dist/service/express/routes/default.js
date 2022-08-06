@@ -41,7 +41,7 @@ const server_1 = require("../../../mdlw/server");
 const request_1 = require("../../../util/request");
 const common_1 = require("./common");
 function create_express_route(atom_name) {
-    urn_lib_1.urn_log.fn_debug(`Create Express Default Atom Router [${atom_name}]`);
+    urn_lib_1.urn_log.trace(`Create Express Default Atom Router [${atom_name}]`);
     const router = express_1.default.Router();
     const routes_definition = book.get_routes_definition(atom_name);
     for (const [_route_name, route_definition] of Object.entries(routes_definition)) {

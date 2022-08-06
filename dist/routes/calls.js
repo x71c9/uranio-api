@@ -35,7 +35,7 @@ function return_default_routes(atom_name) {
         default_routes = (0, client_1.add_media_routes)();
         default_routes.upload.call =
             async (api_request) => {
-                urn_lib_1.urn_log.fn_debug(`Router Call POST [upload] / [${atom_name}]`);
+                urn_lib_1.urn_log.trace(`Router Call POST [upload] / [${atom_name}]`);
                 if (!api_request.file) {
                     throw urn_exc.create_invalid_request(`INVALID_REQUEST_MISSING_FILE_PARAM`, `Missing file param in api_request on upload media route.`);
                 }
@@ -50,7 +50,7 @@ function return_default_routes(atom_name) {
             };
         default_routes.presigned.call =
             async (api_request) => {
-                urn_lib_1.urn_log.fn_debug(`Router Call GET [presigned] / [${atom_name}]`);
+                urn_lib_1.urn_log.trace(`Router Call GET [presigned] / [${atom_name}]`);
                 if (!api_request.query) {
                     throw urn_exc.create_invalid_request(`INVALID_REQUEST_MISSING_QUERY`, `Missing query in api_request on presigned media route.`);
                 }
@@ -65,7 +65,7 @@ function return_default_routes(atom_name) {
     }
     default_routes.count.call =
         async (api_request) => {
-            urn_lib_1.urn_log.fn_debug(`Router Call GET [count] / [${atom_name}]`);
+            urn_lib_1.urn_log.trace(`Router Call GET [count] / [${atom_name}]`);
             const urn_bll = uranio_core_1.default.bll.create(atom_name, api_request.passport);
             const filter = api_request.query.filter || {};
             const bll_res = await urn_bll.count(filter);
@@ -73,7 +73,7 @@ function return_default_routes(atom_name) {
         };
     default_routes.find_one.call =
         async (api_request) => {
-            urn_lib_1.urn_log.fn_debug(`Router Call GET [find_one] / [${atom_name}]`);
+            urn_lib_1.urn_log.trace(`Router Call GET [find_one] / [${atom_name}]`);
             const urn_bll = uranio_core_1.default.bll.create(atom_name, api_request.passport);
             const filter = api_request.query.filter || {};
             const options = api_request.query.options;
@@ -82,7 +82,7 @@ function return_default_routes(atom_name) {
         };
     default_routes.find.call =
         async (api_request) => {
-            urn_lib_1.urn_log.fn_debug(`Router Call GET [find] / [${atom_name}]`);
+            urn_lib_1.urn_log.trace(`Router Call GET [find] / [${atom_name}]`);
             const urn_bll = uranio_core_1.default.bll.create(atom_name, api_request.passport);
             const filter = api_request.query.filter || {};
             const options = api_request.query.options;
@@ -91,14 +91,14 @@ function return_default_routes(atom_name) {
         };
     default_routes.find_id.call =
         async (api_request) => {
-            urn_lib_1.urn_log.fn_debug(`Router Call GET [find_id] /:id [${atom_name}]`);
+            urn_lib_1.urn_log.trace(`Router Call GET [find_id] /:id [${atom_name}]`);
             const urn_bll = uranio_core_1.default.bll.create(atom_name, api_request.passport);
             const bll_res = await urn_bll.find_by_id(api_request.params.id, api_request.query.options);
             return bll_res;
         };
     default_routes.insert.call =
         async (api_request) => {
-            urn_lib_1.urn_log.fn_debug(`Router Call POST [insert] / [${atom_name}]`);
+            urn_lib_1.urn_log.trace(`Router Call POST [insert] / [${atom_name}]`);
             const urn_bll = uranio_core_1.default.bll.create(atom_name, api_request.passport);
             if (!api_request.body) {
                 throw urn_exc.create_invalid_request(`INVALID_REQUEST_BODY`, `Invalid request body.`);
@@ -112,7 +112,7 @@ function return_default_routes(atom_name) {
     default_routes.update.call =
         async (api_request) => {
             var _a;
-            urn_lib_1.urn_log.fn_debug(`Router Call POST [update] / [${atom_name}]`);
+            urn_lib_1.urn_log.trace(`Router Call POST [update] / [${atom_name}]`);
             const urn_bll = uranio_core_1.default.bll.create(atom_name, api_request.passport);
             if (!api_request.body) {
                 throw urn_exc.create_invalid_request(`INVALID_REQUEST_UPDATE_BODY`, `Invalid request body.`);
@@ -131,7 +131,7 @@ function return_default_routes(atom_name) {
     default_routes.delete.call =
         async (api_request) => {
             var _a;
-            urn_lib_1.urn_log.fn_debug(`Router Call DELETE [delete] / [${atom_name}]`);
+            urn_lib_1.urn_log.trace(`Router Call DELETE [delete] / [${atom_name}]`);
             const urn_bll = uranio_core_1.default.bll.create(atom_name, api_request.passport);
             if (!((_a = api_request.params) === null || _a === void 0 ? void 0 : _a.id)) {
                 throw urn_exc.create_invalid_request(`INVALID_REQUEST_DELETE_PARAM_ID`, `Invalid request parameter \`id\`.`);
@@ -145,7 +145,7 @@ function return_default_routes(atom_name) {
         };
     default_routes.insert_multiple.call =
         async (api_request) => {
-            urn_lib_1.urn_log.fn_debug(`Router Call POST [insert_multiple] / [${atom_name}]`);
+            urn_lib_1.urn_log.trace(`Router Call POST [insert_multiple] / [${atom_name}]`);
             const urn_bll = uranio_core_1.default.bll.create(atom_name, api_request.passport);
             if (!api_request.body || !Array.isArray(api_request.body)) {
                 throw urn_exc.create_invalid_request(`INVALID_REQUEST_INSERT_MULTIPLE_BODY`, `Invalid request body.`);
@@ -155,7 +155,7 @@ function return_default_routes(atom_name) {
     default_routes.update_multiple.call =
         async (api_request) => {
             var _a, _b, _c;
-            urn_lib_1.urn_log.fn_debug(`Router Call POST [update_multiple] / [${atom_name}]`);
+            urn_lib_1.urn_log.trace(`Router Call POST [update_multiple] / [${atom_name}]`);
             const urn_bll = uranio_core_1.default.bll.create(atom_name, api_request.passport);
             if (!api_request.body) {
                 throw urn_exc.create_invalid_request(`INVALID_REQUEST_UPDATE_MULTIPLE_BODY`, `Invalid request body.`);
@@ -169,7 +169,7 @@ function return_default_routes(atom_name) {
     default_routes.delete_multiple.call =
         async (api_request) => {
             var _a, _b;
-            urn_lib_1.urn_log.fn_debug(`Router Call DELETE [delete_multiple] / [${atom_name}]`);
+            urn_lib_1.urn_log.trace(`Router Call DELETE [delete_multiple] / [${atom_name}]`);
             const urn_bll = uranio_core_1.default.bll.create(atom_name, api_request.passport);
             if (!((_a = api_request.params) === null || _a === void 0 ? void 0 : _a.ids)) {
                 throw urn_exc.create_invalid_request(`INVALID_REQUEST_DELETE_MULTIPLE_PARAM_IDS`, `Invalid request parameter \`ids\`.`);
@@ -179,7 +179,7 @@ function return_default_routes(atom_name) {
         };
     default_routes.search.call =
         async (api_request) => {
-            urn_lib_1.urn_log.fn_debug(`Router Call GET [search] / [${atom_name}]`);
+            urn_lib_1.urn_log.trace(`Router Call GET [search] / [${atom_name}]`);
             const urn_bll = uranio_core_1.default.bll.create(atom_name, api_request.passport);
             const q = api_request.params.q;
             const options = api_request.query.options;
@@ -188,7 +188,7 @@ function return_default_routes(atom_name) {
         };
     default_routes.search_count.call =
         async (api_request) => {
-            urn_lib_1.urn_log.fn_debug(`Router Call GET [search_count] / [${atom_name}]`);
+            urn_lib_1.urn_log.trace(`Router Call GET [search_count] / [${atom_name}]`);
             const urn_bll = uranio_core_1.default.bll.create(atom_name, api_request.passport);
             const q = api_request.params.q;
             // const filter = (api_request.query as unknown as any).filter || {};

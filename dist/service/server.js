@@ -37,7 +37,7 @@ const conf = __importStar(require("../conf/server"));
 const express = __importStar(require("./express/index"));
 __exportStar(require("./types"), exports);
 function create(service_name) {
-    urn_lib_1.urn_log.fn_debug(`Create Service`);
+    urn_lib_1.urn_log.trace(`Create Service`);
     const service = service_name || conf.get(`service`);
     switch (service) {
         case 'express': {

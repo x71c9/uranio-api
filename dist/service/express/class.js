@@ -83,12 +83,12 @@ let ExpressWebService = class ExpressWebService {
                 prefix_log = (conf_prefix_log[0] !== '/') ? `/${conf_prefix_log}` : conf_prefix_log;
             }
             const full_url = `${prefix_api}${prefix_log}${dock_url}`;
-            urn_lib_1.urn_log.fn_debug(`Creating Express route [${full_url}]`);
+            urn_lib_1.urn_log.trace(`Creating Express route [${full_url}]`);
             this.express_app.use(full_url, router);
             if (dock_def && dock_def.auth_url && typeof dock_def.auth_url === 'string') {
                 const auth_route = (0, index_1.create_express_auth_route)(atom_name);
                 const full_auth_url = `${prefix_api}${dock_def.auth_url}`;
-                urn_lib_1.urn_log.fn_debug(`Creating Express auth route [${full_auth_url}]`);
+                urn_lib_1.urn_log.trace(`Creating Express auth route [${full_auth_url}]`);
                 this.express_app.use(full_auth_url, auth_route);
             }
         }
@@ -149,7 +149,7 @@ ExpressWebService = __decorate([
     urn_lib_1.urn_log.util.decorators.debug_methods
 ], ExpressWebService);
 function create() {
-    urn_lib_1.urn_log.fn_debug(`Create ExpressWebService`);
+    urn_lib_1.urn_log.trace(`Create ExpressWebService`);
     return new ExpressWebService();
 }
 exports.create = create;

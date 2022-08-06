@@ -16,7 +16,7 @@ export * from './types';
 
 export function create(service_name?:ServiceName)
 		:Service{
-	urn_log.fn_debug(`Create Service`);
+	urn_log.trace(`Create Service`);
 	const service = service_name || conf.get(`service`);
 	switch(service){
 		case 'express':{

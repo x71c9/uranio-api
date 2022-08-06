@@ -90,7 +90,7 @@ async function _authorization(api_request) {
 async function _validate_and_call(api_request) {
     // const route_def = _get_route_def(api_request);
     const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
-    urn_lib_1.urn_log.fn_debug(`Router ${route_def.method} [${api_request.atom_name}] ${api_request.full_path}`);
+    urn_lib_1.urn_log.trace(`Router ${route_def.method} [${api_request.atom_name}] ${api_request.full_path}`);
     _validate_route(api_request);
     if (!urn_lib_1.urn_util.object.has_key(route_def, 'call') || !route_def.call) {
         return urn_ret.return_error(404, `Route call not implemented.`, `ROUTE_CALL_NOT_IMPLEMENTED`, `Route call not implemented.`);
@@ -152,7 +152,7 @@ async function _auth_validate_and_call(auth_route_request, handler) {
     //     `Cannot auth validate and call. Invalid dock def.`
     //   );
     // }
-    urn_lib_1.urn_log.fn_debug(`Router Auth ${dock_def.url} [${auth_route_request.atom_name}]`);
+    urn_lib_1.urn_log.trace(`Router Auth ${dock_def.url} [${auth_route_request.atom_name}]`);
     _auth_validate(auth_route_request);
     const auth_token = await handler(auth_route_request);
     let urn_response = urn_ret.return_success('Success', { token: auth_token });
@@ -161,13 +161,13 @@ async function _auth_validate_and_call(auth_route_request, handler) {
     return urn_response;
 }
 function _auth_validate(api_request) {
-    urn_lib_1.urn_log.fn_debug(`Validate Auth Route [${api_request.atom_name}]`);
+    urn_lib_1.urn_log.trace(`Validate Auth Route [${api_request.atom_name}]`);
     req_validator.empty(api_request.params, 'params');
     req_validator.empty(api_request.query, 'query');
 }
 function _validate_route(api_request) {
     const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
-    urn_lib_1.urn_log.fn_debug(`Validate Route ${route_def.url} [${api_request.atom_name}]`);
+    urn_lib_1.urn_log.trace(`Validate Route ${route_def.url} [${api_request.atom_name}]`);
     if (route_def.method !== types.RouteMethod.POST) {
         req_validator.empty(api_request.body, 'body');
         req_validator.empty(api_request.file, 'file');

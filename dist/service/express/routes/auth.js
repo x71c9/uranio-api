@@ -16,7 +16,7 @@ const server_1 = require("../../../mdlw/server");
 const request_1 = require("../../../util/request");
 const common_1 = require("./common");
 function create_express_auth_route(atom_name) {
-    urn_lib_1.urn_log.fn_debug(`Create Express Auth Atom Router [${atom_name}]`);
+    urn_lib_1.urn_log.trace(`Create Express Auth Atom Router [${atom_name}]`);
     const router = express_1.default.Router();
     const auth_bll = uranio_core_1.default.bll.auth.create(atom_name);
     const handler = async (route_request) => {

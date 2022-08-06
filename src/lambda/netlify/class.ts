@@ -254,11 +254,11 @@ function _lambda_response(
 }
 
 export function create():NetlifyLambda{
-	urn_log.fn_debug(`Create NetlifyLambda`);
+	urn_log.trace(`Create NetlifyLambda`);
 	return new NetlifyLambda();
 }
 
 // export function connect_and_create():NetlifyLambda{
-//   urn_log.fn_debug(`Create NetlifyLambda`);
+//   urn_log.trace(`Create NetlifyLambda`);
 //   return new NetlifyLambda(true);
 // }
