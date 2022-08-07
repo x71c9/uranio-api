@@ -50,7 +50,7 @@ export function init(
 	_validate_api_variables();
 	_validate_api_book();
 	
-	urn_log.debug(`Uranio api initialization completed.`);
+	urn_log.trace(`Uranio api initialization completed.`);
 	
 }
 

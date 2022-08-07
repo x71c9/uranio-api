@@ -49,18 +49,18 @@ exports.process_params = {
     urn_command: `schema`
 };
 function schema() {
-    urn_lib_1.urn_log.debug('Started generating uranio api schema...');
+    urn_lib_1.urn_log.trace('Started generating uranio api schema...');
     init();
     const core_schema = uranio_core_1.default.util.generate.schema();
     const text = _generate_uranio_schema_text(core_schema);
-    urn_lib_1.urn_log.debug(`API Schema generated.`);
+    urn_lib_1.urn_log.trace(`API Schema generated.`);
     return text;
 }
 exports.schema = schema;
 function schema_and_save() {
     const text = schema();
     save_schema(text);
-    urn_lib_1.urn_log.debug(`Schema generated and saved.`);
+    urn_lib_1.urn_log.trace(`Schema generated and saved.`);
 }
 exports.schema_and_save = schema_and_save;
 function save_schema(text) {
@@ -73,21 +73,21 @@ function init() {
 }
 exports.init = init;
 function client_config(client_default) {
-    urn_lib_1.urn_log.debug('Started generating uranio api client config...');
+    urn_lib_1.urn_log.trace('Started generating uranio api client config...');
     init();
     // const all_server_conf = conf.get_all();
     // for(const reqkey of required_server_config_client){
     //   (client_default as any)[`__server_${reqkey}`] = all_server_conf[reqkey];
     // }
     const text = uranio_core_1.default.util.generate.client_config(client_default);
-    urn_lib_1.urn_log.debug(`Api client config generated.`);
+    urn_lib_1.urn_log.trace(`Api client config generated.`);
     return text;
 }
 exports.client_config = client_config;
 function client_config_and_save(client_default) {
     const text = client_config(client_default);
     save_client_config(text);
-    urn_lib_1.urn_log.debug(`Api Client config generated and saved.`);
+    urn_lib_1.urn_log.trace(`Api Client config generated and saved.`);
 }
 exports.client_config_and_save = client_config_and_save;
 function save_client_config(text) {

@@ -54,7 +54,7 @@ function init(config, register_required = true) {
     }
     _validate_api_variables();
     _validate_api_book();
-    urn_lib_1.urn_log.debug(`Uranio api client initialization completed.`);
+    urn_lib_1.urn_log.trace(`Uranio api client initialization completed.`);
 }
 exports.init = init;
 function _register_required_atoms() {
