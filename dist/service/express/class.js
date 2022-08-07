@@ -100,7 +100,7 @@ let ExpressWebService = class ExpressWebService {
             service_port = current_port;
         }
         const uranio_callback = function () {
-            urn_lib_1.urn_log.debug(`Uranio service is listening on port ${service_port}...`);
+            urn_lib_1.urn_log.info(`Uranio service is listening on port ${service_port}...`);
             if (typeof portcall === 'function') {
                 portcall();
             }
