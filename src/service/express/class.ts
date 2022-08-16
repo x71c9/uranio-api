@@ -120,7 +120,7 @@ class ExpressWebService implements Service {
 		
 		let server = http.createServer(this.express_app);
 		
-		if(env.get('https')){
+		if(conf.get('service_protocol') === 'https'){
 			const serverOptions = {
 				// Certificate(s) & Key(s)
 				// cert: fs.readFileSync(path.join(__dirname, '../../../cert/cert.pem')),

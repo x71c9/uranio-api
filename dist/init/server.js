@@ -140,7 +140,7 @@ function _validate_api_variables() {
     _check_https_variables();
 }
 function _check_https_variables() {
-    if (env.get('https') === true) {
+    if (conf.get('service_protocol') === 'https') {
         const ssl_cert = env.get('ssl_certificate');
         if (!ssl_cert || ssl_cert === '') {
             throw urn_exc.create_not_initialized(`INVALID_SSL_CERTIFICATE`, `Ivalid ssl certificate value. Set \`URN_SSL_CERTIFICATE\` in \`.env\`` +

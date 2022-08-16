@@ -6,7 +6,6 @@
 import core from 'uranio-core';
 declare type RequiredEnvParams = {};
 declare type OptionalEnvParam = {
-    https: boolean;
     ssl_certificate: string;
     ssl_key: string;
 };
