@@ -19,14 +19,10 @@ lambda = 'netlify'
 [service]
 	platform = 'express'
 	protocol = 'https'
-	domain = 'localhost'
 	port = 7772
-	url = 'https://localhost:7772/uranio/api'
 [dev.service]
 	protocol = 'https'
-	domain = 'localhost'
 	port = 7772
-	url = 'https://localhost:7772/uranio/api'
 [log]
 	debug_info = true
 	color = true

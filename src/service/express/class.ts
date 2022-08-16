@@ -138,6 +138,7 @@ class ExpressWebService implements Service {
 				// honorCipherOrder: true
 			}
 			server = https.createServer(serverOptions, this.express_app);
+			urn_log.info(`Uranio service is on SSL.`);
 		}
 		
 		switch(typeof portcall){
