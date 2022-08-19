@@ -132,11 +132,13 @@ let ExpressWebService = class ExpressWebService {
         switch (typeof portcall) {
             case 'undefined':
             case 'function': {
-                server.listen(service_port, conf.get(`service_domain`), uranio_callback);
+                // server.listen(service_port, conf.get(`service_domain`), uranio_callback);
+                server.listen(service_port, uranio_callback);
                 break;
             }
             case 'number': {
-                server.listen(portcall, conf.get(`service_domain`), uranio_callback);
+                // server.listen(portcall, conf.get(`service_domain`), uranio_callback);
+                server.listen(portcall, uranio_callback);
                 break;
             }
             default: {
