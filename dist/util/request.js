@@ -228,6 +228,9 @@ exports.get_params_from_route_path = get_params_from_route_path;
 //   return cloned_atom_dock;
 // }
 function store_error(urn_res, atom_request, ex) {
+    if (conf.get('default_atoms_error') === false) {
+        return;
+    }
     const error_log = {
         status: urn_res.status,
         msg: '' + urn_res.message,

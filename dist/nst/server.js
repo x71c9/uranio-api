@@ -14,14 +14,14 @@ let api_bll_request;
 let api_bll_error;
 function get_bll_request() {
     if (!api_bll_request) {
-        api_bll_request = uranio_core_1.default.bll.basic.create('request');
+        api_bll_request = uranio_core_1.default.bll.basic.create('_request');
     }
     return api_bll_request;
 }
 exports.get_bll_request = get_bll_request;
 function get_bll_error() {
     if (!api_bll_error) {
-        api_bll_error = uranio_core_1.default.bll.basic.create('error');
+        api_bll_error = uranio_core_1.default.bll.basic.create('_error');
     }
     return api_bll_error;
 }

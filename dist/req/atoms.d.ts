@@ -5,8 +5,8 @@
  */
 import * as types from '../client/types';
 export declare const required_atoms: {
-    readonly error: {
-        readonly plural: "errors";
+    readonly _error: {
+        readonly plural: "_errors";
         readonly read_only: true;
         readonly connection: "log";
         readonly security: {
@@ -40,7 +40,7 @@ export declare const required_atoms: {
             readonly request: {
                 readonly type: types.PropertyType.ATOM;
                 readonly label: "Request";
-                readonly atom: "request";
+                readonly atom: "_request";
                 readonly delete_cascade: true;
                 readonly optional: true;
             };
@@ -52,11 +52,11 @@ export declare const required_atoms: {
             };
         };
         readonly dock: {
-            readonly url: "/errors";
+            readonly url: "/_errors";
         };
     };
-    readonly request: {
-        readonly plural: "requests";
+    readonly _request: {
+        readonly plural: "_requests";
         readonly read_only: true;
         readonly connection: "log";
         readonly security: {
@@ -156,7 +156,7 @@ export declare const required_atoms: {
             };
         };
         readonly dock: {
-            readonly url: "/requests";
+            readonly url: "/_requests";
         };
     };
 };

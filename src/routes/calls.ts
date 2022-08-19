@@ -41,7 +41,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 	
 	let default_routes = urn_util.json.clean_parse(urn_util.json.safe_stringify(cln_default_routes));
 	
-	if(atom_name === 'media'){
+	if(atom_name === '_media'){
 		
 		default_routes = add_media_routes();
 		
@@ -51,7 +51,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 				if(!api_request.file){
 					throw urn_exc.create_invalid_request(
 						`INVALID_REQUEST_MISSING_FILE_PARAM`,
-						`Missing file param in api_request on upload media route.`
+						`Missing file param in api_request on upload _media route.`
 					);
 				}
 				const urn_media_bll = core.bll.media.create(api_request.passport);
@@ -98,8 +98,8 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			urn_log.trace(`Router Call GET [find_one] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
-			const filter = (api_request.query as types.Api.Request.Query<'superuser', 'find', D>).filter || {};
-			const options = (api_request.query as types.Api.Request.Query<'superuser', 'find', D>).options;
+			const filter = (api_request.query as types.Api.Request.Query<'_superuser', 'find', D>).filter || {};
+			const options = (api_request.query as types.Api.Request.Query<'_superuser', 'find', D>).options;
 			const bll_res = await urn_bll.find_one(filter as any, options as any);
 			return bll_res;
 		};
@@ -109,8 +109,8 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			urn_log.trace(`Router Call GET [find] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
-			const filter = (api_request.query as types.Api.Request.Query<'superuser', 'find', D>).filter || {};
-			const options = (api_request.query as types.Api.Request.Query<'superuser', 'find', D>).options;
+			const filter = (api_request.query as types.Api.Request.Query<'_superuser', 'find', D>).filter || {};
+			const options = (api_request.query as types.Api.Request.Query<'_superuser', 'find', D>).options;
 			const bll_res = await urn_bll.find(filter as any, options as any);
 			return bll_res;
 		};
@@ -121,8 +121,8 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
 			const bll_res = await urn_bll.find_by_id(
-				(api_request.params as types.Api.Request.Params<'superuser', 'find_id'>).id!,
-				(api_request.query as types.Api.Request.Query<'superuser', 'find_id', D> as any).options
+				(api_request.params as types.Api.Request.Params<'_superuser', 'find_id'>).id!,
+				(api_request.query as types.Api.Request.Query<'_superuser', 'find_id', D> as any).options
 			);
 			return bll_res;
 		};
@@ -166,7 +166,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			// if(ids.length > 1){
 			//   return await urn_bll.update_multiple(ids, api_request.body);
 			// }
-			const options = (api_request.query as types.Api.Request.Query<'superuser', 'update', D>).options;
+			const options = (api_request.query as types.Api.Request.Query<'_superuser', 'update', D>).options;
 			const bll_res = await urn_bll.update_by_id(
 				(api_request.params as any)?.id,
 				api_request.body as unknown as Partial<schema.AtomShape<A>>,
@@ -249,8 +249,8 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			urn_log.trace(`Router Call GET [search] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
-			const q = (api_request.params as types.Api.Request.Params<'superuser', 'search'>).q;
-			const options = (api_request.query as types.Api.Request.Query<'superuser', 'find', D>).options;
+			const q = (api_request.params as types.Api.Request.Params<'_superuser', 'search'>).q;
+			const options = (api_request.query as types.Api.Request.Query<'_superuser', 'find', D>).options;
 			const bll_res = await urn_bll.search(q || '', options as any);
 			return bll_res;
 		};
@@ -260,7 +260,7 @@ export function return_default_routes<A extends core.schema.AtomName>(atom_name:
 			urn_log.trace(`Router Call GET [search_count] / [${atom_name}]`);
 			const urn_bll = core.bll.create(atom_name, api_request.passport) as
 				unknown as core.bll.BLL<A>;
-			const q = (api_request.params as types.Api.Request.Params<'superuser', 'search_count'>).q;
+			const q = (api_request.params as types.Api.Request.Params<'_superuser', 'search_count'>).q;
 			// const filter = (api_request.query as unknown as any).filter || {};
 			const bll_res = await urn_bll.search_count(q || '');
 			return bll_res;

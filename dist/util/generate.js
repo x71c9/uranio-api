@@ -175,7 +175,7 @@ function _generate_route_query_param(atom_book) {
 //   let text = '';
 //   text += `declare type DefaultRouteQueryParam<R extends RouteDefaultName> =\n`;
 //   for(const [key, value] of Object.entries(default_routes)){
-//     const route_def = value as types.Book.Definition.Dock.Routes.Route<'superuser', 'find'>;
+//     const route_def = value as types.Book.Definition.Dock.Routes.Route<'_superuser', 'find'>;
 //     if(!route_def.query){
 //       text += `\tR extends '${key}' ? never :\n`;
 //     }else{

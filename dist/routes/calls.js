@@ -31,13 +31,13 @@ const client_1 = require("./client");
 // }
 function return_default_routes(atom_name) {
     let default_routes = urn_lib_1.urn_util.json.clean_parse(urn_lib_1.urn_util.json.safe_stringify(client_1.default_routes));
-    if (atom_name === 'media') {
+    if (atom_name === '_media') {
         default_routes = (0, client_1.add_media_routes)();
         default_routes.upload.call =
             async (api_request) => {
                 urn_lib_1.urn_log.trace(`Router Call POST [upload] / [${atom_name}]`);
                 if (!api_request.file) {
-                    throw urn_exc.create_invalid_request(`INVALID_REQUEST_MISSING_FILE_PARAM`, `Missing file param in api_request on upload media route.`);
+                    throw urn_exc.create_invalid_request(`INVALID_REQUEST_MISSING_FILE_PARAM`, `Missing file param in api_request on upload _media route.`);
                 }
                 const urn_media_bll = uranio_core_1.default.bll.media.create(api_request.passport);
                 const params = {

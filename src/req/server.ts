@@ -14,10 +14,10 @@ import * as types from '../client/types';
 
 export function get():types.Book{
 	if(conf.get('default_atoms_request') === false){
-		delete (required_atoms as any).request;
+		delete (required_atoms as any)._request;
 	}
 	if(conf.get('default_atoms_error') === false){
-		delete (required_atoms as any).error;
+		delete (required_atoms as any)._error;
 	}
 	return {
 		...core.required.get(),

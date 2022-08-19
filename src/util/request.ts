@@ -229,10 +229,13 @@ export function get_params_from_route_path<A extends schema.AtomName, R extends 
 
 export function store_error(
 	urn_res: urn_response.Fail,
-	atom_request: Partial<schema.Atom<'request'>>,
+	atom_request: Partial<schema.Atom<'_request'>>,
 	ex?: urn_exception.ExceptionInstance,
 ):void{
-	const error_log:schema.AtomShape<'error'> = {
+	if(conf.get('default_atoms_error') === false){
+		return;
+	}
+	const error_log:schema.AtomShape<'_error'> = {
 		status: urn_res.status,
 		msg: '' + urn_res.message,
 		error_code: urn_res.err_code,
@@ -319,8 +322,8 @@ export function api_handle_and_store_exception<A extends schema.AtomName, R exte
 
 export function partial_api_request_to_atom_request<A extends schema.AtomName, R extends schema.RouteName<A>, D extends schema.Depth>(
 	partial_api_request:Partial<types.Api.Request<A,R,D>>
-):schema.AtomShape<'request'>{
-	const request_shape:schema.AtomShape<'request'> = {
+):schema.AtomShape<'_request'>{
+	const request_shape:schema.AtomShape<'_request'> = {
 		full_path: partial_api_request.full_path || 'NOFULLPATH',
 		route_path: partial_api_request.route_path,
 		atom_path: partial_api_request.atom_path,

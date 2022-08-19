@@ -12,8 +12,8 @@ lambda = 'netlify'
 [default_atoms]
 	superuser = true
 	group = true
-	user = false
-	media = false
+	user = true
+	media = true
 	request = true
 	error = true
 [service]

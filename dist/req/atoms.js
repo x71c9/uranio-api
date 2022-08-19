@@ -31,8 +31,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.required_atoms = void 0;
 const types = __importStar(require("../client/types"));
 exports.required_atoms = {
-    error: {
-        plural: 'errors',
+    _error: {
+        plural: '_errors',
         read_only: true,
         connection: 'log',
         security: {
@@ -66,7 +66,7 @@ exports.required_atoms = {
             request: {
                 type: types.PropertyType.ATOM,
                 label: 'Request',
-                atom: 'request',
+                atom: '_request',
                 delete_cascade: true,
                 optional: true
             },
@@ -78,7 +78,7 @@ exports.required_atoms = {
             }
         },
         dock: {
-            url: '/errors',
+            url: '/_errors',
             // routes: {
             //   errroute: {
             //     method: types.RouteMethod.GET,
@@ -91,8 +91,8 @@ exports.required_atoms = {
             // }
         }
     },
-    request: {
-        plural: 'requests',
+    _request: {
+        plural: '_requests',
         read_only: true,
         connection: 'log',
         security: {
@@ -196,7 +196,7 @@ exports.required_atoms = {
             },
         },
         dock: {
-            url: '/requests'
+            url: '/_requests'
         }
     },
 };

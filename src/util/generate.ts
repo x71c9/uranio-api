@@ -128,7 +128,7 @@ function _return_generic_response(atom_book:types.Book, type_name: string, respo
 		if(!atom_def.dock || !atom_def.dock.routes){
 			text += `\t\tnever :\n`;
 		}else{
-			const routes = atom_def.dock.routes as types.Book.Definition.Dock.Routes<'superuser'>;
+			const routes = atom_def.dock.routes as types.Book.Definition.Dock.Routes<'_superuser'>;
 			for(const [route_name, route_def] of Object.entries(routes)){
 				text += `\t\tR extends '${route_name}' ? ${_return_response_return(route_def.return, response_wrapper)} :\n`;
 			}
@@ -166,7 +166,7 @@ function _generate_route_query_param(atom_book:types.Book){
 //   let text = '';
 //   text += `declare type DefaultRouteQueryParam<R extends RouteDefaultName> =\n`;
 //   for(const [key, value] of Object.entries(default_routes)){
-//     const route_def = value as types.Book.Definition.Dock.Routes.Route<'superuser', 'find'>;
+//     const route_def = value as types.Book.Definition.Dock.Routes.Route<'_superuser', 'find'>;
 //     if(!route_def.query){
 //       text += `\tR extends '${key}' ? never :\n`;
 //     }else{

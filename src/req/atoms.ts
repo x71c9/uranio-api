@@ -7,8 +7,8 @@
 import * as types from '../client/types';
 
 export const required_atoms = {
-	error: {
-		plural: 'errors',
+	_error: {
+		plural: '_errors',
 		read_only: true,
 		connection: 'log',
 		security: {
@@ -42,7 +42,7 @@ export const required_atoms = {
 			request: {
 				type: types.PropertyType.ATOM,
 				label: 'Request',
-				atom: 'request',
+				atom: '_request',
 				delete_cascade: true,
 				optional: true
 			},
@@ -54,7 +54,7 @@ export const required_atoms = {
 			}
 		},
 		dock:{
-			url: '/errors',
+			url: '/_errors',
 			// routes: {
 			//   errroute: {
 			//     method: types.RouteMethod.GET,
@@ -67,8 +67,8 @@ export const required_atoms = {
 			// }
 		}
 	},
-	request: {
-		plural: 'requests',
+	_request: {
+		plural: '_requests',
 		read_only: true,
 		connection: 'log',
 		security: {
@@ -172,7 +172,7 @@ export const required_atoms = {
 			},
 		},
 		dock:{
-			url: '/requests'
+			url: '/_requests'
 		}
 	},
 } as const;

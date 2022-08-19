@@ -4,5 +4,5 @@
  * @packageDocumentation
  */
 import core from 'uranio-core';
-export declare function get_bll_request(): core.bll.BLL<'request'>;
-export declare function get_bll_error(): core.bll.BLL<'error'>;
+export declare function get_bll_request(): core.bll.BLL<'_request'>;
+export declare function get_bll_error(): core.bll.BLL<'_error'>;

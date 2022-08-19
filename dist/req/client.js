@@ -37,10 +37,10 @@ const conf = __importStar(require("../conf/client"));
 const atoms_1 = require("./atoms");
 function get() {
     if (conf.get('default_atoms_request') === false) {
-        delete atoms_1.required_atoms.request;
+        delete atoms_1.required_atoms._request;
     }
     if (conf.get('default_atoms_error') === false) {
-        delete atoms_1.required_atoms.error;
+        delete atoms_1.required_atoms._error;
     }
     return {
         ...client_1.default.required.get(),
