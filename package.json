@@ -5,14 +5,14 @@
 	"description": "Uranio API",
 	"main": "dist/index.js",
 	"bin": {
-		"uranio-generate-api": "dist/server/generate.js",
+		"uranio-generate-api": "dist/srv/generate.js",
 		"uranio-webservice-api": "dist/service/ws.js"
 	},
 	"exports": {
 		".": "./dist/server.js",
-		"./types": "./dist/server/types.js",
+		"./types": "./dist/srv/types.js",
 		"./client": "./dist/client.js",
-		"./client/types": "./dist/client/types.js"
+		"./client/types": "./dist/cln/types.js"
 	},
 	"typesVersions": {
 		"*": {
@@ -20,13 +20,13 @@
 				"dist/server.d.ts"
 			],
 			"types": [
-				"dist/server/types.d.ts"
+				"dist/srv/types.d.ts"
 			],
 			"client": [
 				"dist/client.d.ts"
 			],
 			"client/types": [
-				"dist/client/types.d.ts"
+				"dist/cln/types.d.ts"
 			]
 		}
 	},
