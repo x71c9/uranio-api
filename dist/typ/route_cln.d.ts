@@ -1,5 +1,0 @@
-/**
- * Route types module
- *
- * @packageDocumentation
- */
