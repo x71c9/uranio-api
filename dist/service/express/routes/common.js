@@ -34,7 +34,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.return_uranio_response_to_express = exports.express_request_to_partial_api_request = void 0;
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const request_1 = require("../../../util/request");
-const types = __importStar(require("../../../server/types"));
+const types = __importStar(require("../../../srv/types"));
 function express_request_to_partial_api_request(req) {
     let api_request = {
         full_path: req.originalUrl,

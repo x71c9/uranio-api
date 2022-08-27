@@ -13,7 +13,7 @@ import caller from 'caller';
 
 import * as book from '../book/client';
 
-import * as types from '../client/types';
+import * as types from '../cln/types';
 
 import {schema} from '../sch/client';
 

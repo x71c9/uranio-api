@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import * as types from '../server/types';
+import * as types from '../srv/types';
 
 export type LambdaName = 'netlify'; // | 'aws'
 

@@ -16,7 +16,7 @@ import core from 'uranio-core';
 /**
  * See core/reg/atom.ts why it is using client/types.
  */
-import * as types from '../client/types';
+import * as types from '../cln/types';
 
 import {return_default_routes} from '../routes/calls';
 

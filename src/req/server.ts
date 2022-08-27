@@ -10,7 +10,7 @@ import * as conf from '../conf/server';
 
 import {required_atoms} from './atoms';
 
-import * as types from '../client/types';
+import * as types from '../cln/types';
 
 export function get():types.Book{
 	if(conf.get('default_atoms_request') === false){

@@ -12,7 +12,7 @@ import {schema as schema_types} from '../sch/server';
 
 import * as book from '../book/server';
 
-import * as types from '../server/types';
+import * as types from '../srv/types';
 
 import {default_routes} from '../routes/client';
 

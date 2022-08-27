@@ -10,7 +10,7 @@ import {urn_log} from 'urn-lib';
 
 import core from 'uranio-core';
 
-import * as types from '../../../server/types';
+import * as types from '../../../srv/types';
 
 import {schema} from '../../../sch/server';
 

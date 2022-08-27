@@ -13,7 +13,7 @@ if(result.error){
 	throw result.error;
 }
 
-export * from '../server/register';
+export * from '../srv/register';
 
 import uranio from '../server';
 uranio.init();

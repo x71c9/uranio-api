@@ -6,9 +6,9 @@
 
 import {urn_context} from 'urn-lib';
 
-import {api_client_config} from '../client/default_conf';
+import {api_client_config} from '../cln/default_conf';
 
-import {ClientConfiguration} from '../client/types';
+import {ClientConfiguration} from '../cln/types';
 
 import * as env from '../env/client';
 

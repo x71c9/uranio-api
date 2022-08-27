@@ -8,7 +8,7 @@ import {urn_context} from 'urn-lib';
 
 import core_client from 'uranio-core/client';
 
-import {api_client_env} from '../client/default_env';
+import {api_client_env} from '../cln/default_env';
 
 import {ClientEnvironment} from '../typ/env_cln';
 

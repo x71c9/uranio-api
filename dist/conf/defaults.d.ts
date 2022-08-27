@@ -3,5 +3,5 @@
  *
  * @packageDocumentation
  */
-import { Configuration } from '../server/types';
+import { Configuration } from '../srv/types';
 export declare const api_config: Required<Configuration>;

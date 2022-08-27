@@ -10,7 +10,7 @@ const urn_exc = urn_exception.init(`API_ROUTE_SERVER`, `Api route server module`
 
 import core from 'uranio-core';
 
-import * as types from '../server/types';
+import * as types from '../srv/types';
 
 import {schema} from '../sch/server';
 

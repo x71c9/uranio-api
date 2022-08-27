@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import {Environment} from '../server/types';
+import {Environment} from '../srv/types';
 
 import core from 'uranio-core';
 

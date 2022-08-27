@@ -33,7 +33,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.add_media_routes = exports.media_routes = exports.default_routes = void 0;
 const client_1 = __importDefault(require("uranio-core/client"));
-const types = __importStar(require("../client/types"));
+const types = __importStar(require("../cln/types"));
 // import {schema} from '../sch/index';
 // import {
 //   route_def as common_route_def,

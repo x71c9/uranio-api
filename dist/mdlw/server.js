@@ -41,7 +41,7 @@ const conf = __importStar(require("../conf/server"));
 // import * as env from '../env/server';
 const insta = __importStar(require("../nst/server"));
 const book = __importStar(require("../book/server"));
-const types = __importStar(require("../server/types"));
+const types = __importStar(require("../srv/types"));
 // import {return_default_routes} from '../routes/server';
 const request_1 = require("../util/request");
 const req_validator = __importStar(require("./validate"));
