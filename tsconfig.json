@@ -39,7 +39,7 @@
 		"src/dev.ts",
 		"src/client.ts",
 		"src/server.ts",
-		"src/server/generate.ts",
+		"src/srv/generate.ts",
 		"src/service/ws.ts"
 	],
 	"exclude": [
