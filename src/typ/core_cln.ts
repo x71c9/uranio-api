@@ -11,4 +11,4 @@ export {
 	PermissionType,
 	SecurityType,
 	Passport,
-} from 'uranio-core/client/types';
+} from 'uranio-core/cln/types';

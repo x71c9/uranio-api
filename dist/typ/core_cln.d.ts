@@ -4,4 +4,4 @@
  *
  * @packageDocumentation
  */
-export { AuthAction, PropertyType, PermissionType, SecurityType, Passport, } from 'uranio-core/client/types';
+export { AuthAction, PropertyType, PermissionType, SecurityType, Passport, } from 'uranio-core/cln/types';
