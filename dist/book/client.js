@@ -9,9 +9,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.get_names = exports.has_property = exports.get_properties_definition = exports.get_custom_properties_definition = exports.get_property_definition = exports.get_definition = exports.get_all_definitions = exports.validate_auth_name = exports.validate_name = exports.get_plural = exports.add_definition = exports.add_route_definition = exports.get_dock_definition = exports.get_routes_definition = exports.get_route_definition = exports.get_dock_url = void 0;
-// import {urn_util, urn_exception} from 'urn-lib';
-const urn_lib_1 = require("urn-lib");
-const urn_exc = urn_lib_1.urn_exception.init('BOOK_CLIENT', 'Book client methods module');
+// import {urn_util, urn_exception} from 'uranio-utils';
+const uranio_utils_1 = require("uranio-utils");
+const urn_exc = uranio_utils_1.urn_exception.init('BOOK_CLIENT', 'Book client methods module');
 const client_1 = __importDefault(require("uranio-core/client"));
 // import {default_routes, media_routes} from '../routes/client';
 function get_dock_url(atom_name) {
@@ -69,7 +69,7 @@ function add_route_definition(atom_name, route_name, route_definition) {
     }
     catch (ex) {
         const err = ex;
-        if (err.type === urn_lib_1.urn_exception.ExceptionType.INVALID_BOOK) {
+        if (err.type === uranio_utils_1.urn_exception.ExceptionType.INVALID_BOOK) {
             throw urn_exc.create_invalid_book(`INVALID_DOCK_DEFINITION`, `Cannot add route definition for Atom [${atom_name}].` +
                 ` Please make sure Atom definition has property \`dock\` defined and` +
                 ` with property \`url\` also defined: {dock: {url: '/[atom_name_plural]'}}`);

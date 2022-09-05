@@ -8,7 +8,7 @@ import express from 'express';
 
 import {UploadedFile} from 'express-fileupload';
 
-import {urn_response} from 'urn-lib';
+import {urn_response} from 'uranio-utils';
 
 import core from 'uranio-core';
 

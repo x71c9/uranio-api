@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import {urn_log, urn_exception} from 'urn-lib';
+import {urn_log, urn_exception} from 'uranio-utils';
 
 const urn_exc = urn_exception.init('API_INIT_MODULE', `Api init module`);
 

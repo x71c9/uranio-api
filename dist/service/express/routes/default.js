@@ -33,7 +33,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create_express_route = void 0;
 const express_1 = __importDefault(require("express"));
-const urn_lib_1 = require("urn-lib");
+const uranio_utils_1 = require("uranio-utils");
 const book = __importStar(require("../../../book/server"));
 const types = __importStar(require("../../../srv/types"));
 // import {return_default_routes} from '../../../routes/server';
@@ -41,7 +41,7 @@ const server_1 = require("../../../mdlw/server");
 const request_1 = require("../../../util/request");
 const common_1 = require("./common");
 function create_express_route(atom_name) {
-    urn_lib_1.urn_log.trace(`Create Express Default Atom Router [${atom_name}]`);
+    uranio_utils_1.urn_log.trace(`Create Express Default Atom Router [${atom_name}]`);
     const router = express_1.default.Router();
     const routes_definition = book.get_routes_definition(atom_name);
     for (const [_route_name, route_definition] of Object.entries(routes_definition)) {

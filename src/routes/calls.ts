@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import {urn_log, urn_exception, urn_util} from 'urn-lib';
+import {urn_log, urn_exception, urn_util} from 'uranio-utils';
 
 const urn_exc = urn_exception.init(`API_ROUTE_SERVER`, `Api route server module`);
 

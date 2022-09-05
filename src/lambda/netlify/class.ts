@@ -6,7 +6,7 @@
 
 // import parse_multipart from 'parse-multipart';
 
-import {urn_log, urn_response, urn_exception, urn_util} from 'urn-lib';
+import {urn_log, urn_response, urn_exception, urn_util} from 'uranio-utils';
 
 const urn_exc = urn_exception.init('NETLIFYCLASS', 'Netlify class module');
 

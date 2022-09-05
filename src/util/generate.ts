@@ -6,7 +6,7 @@
 
 import core from 'uranio-core';
 
-import {urn_log} from 'urn-lib';
+import {urn_log} from 'uranio-utils';
 
 import {schema as schema_types} from '../sch/server';
 
@@ -99,7 +99,7 @@ function _generate_api_schema_text(){
 	txt += _generate_route_query_param(atom_book);
 	
 	txt += `\n`;
-	txt += `import {urn_response} from 'urn-lib';\n`;
+	txt += `import {urn_response} from 'uranio-utils';\n`;
 	txt += _generate_call_response(atom_book);
 	// txt += _generate_api_response(atom_book);
 	txt += _generate_api_response();

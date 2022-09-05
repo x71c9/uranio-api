@@ -32,7 +32,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.route = void 0;
-const urn_lib_1 = require("urn-lib");
+const uranio_utils_1 = require("uranio-utils");
 const path_1 = __importDefault(require("path"));
 const caller_1 = __importDefault(require("caller"));
 const book = __importStar(require("../book/server"));
@@ -40,7 +40,7 @@ function route(route, atom_name, route_name) {
     const final_atom_name = _get_atom_name(atom_name);
     const final_route_name = _get_route_name(route_name);
     book.add_route_definition(final_atom_name, final_route_name, route);
-    urn_lib_1.urn_log.debug(`Server route [${final_route_name}] for atom [${final_atom_name}] registered.`);
+    uranio_utils_1.urn_log.debug(`Server route [${final_route_name}] for atom [${final_atom_name}] registered.`);
     return final_atom_name;
 }
 exports.route = route;

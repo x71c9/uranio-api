@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import {urn_exception} from 'urn-lib';
+import {urn_exception} from 'uranio-utils';
 
 const urn_exc = urn_exception.init(`VALIDATE_REQUEST`, `Validate request module`);
 

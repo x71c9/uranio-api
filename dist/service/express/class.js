@@ -45,9 +45,9 @@ const https_1 = __importDefault(require("https"));
 const express_1 = __importDefault(require("express"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const cors_1 = __importDefault(require("cors"));
-const urn_lib_1 = require("urn-lib");
-const urn_exc = urn_lib_1.urn_exception.init(`EXPRESSCLASS`, `Express class module`);
-const urn_ret = urn_lib_1.urn_return.create(urn_lib_1.urn_log.util.return_injector);
+const uranio_utils_1 = require("uranio-utils");
+const urn_exc = uranio_utils_1.urn_exception.init(`EXPRESSCLASS`, `Express class module`);
+const urn_ret = uranio_utils_1.urn_return.create(uranio_utils_1.urn_log.util.return_injector);
 const env = __importStar(require("../../env/server"));
 const book = __importStar(require("../../book/server"));
 const exc_handler_1 = require("../../util/exc_handler");
@@ -83,12 +83,12 @@ let ExpressWebService = class ExpressWebService {
                 prefix_log = (conf_prefix_log[0] !== '/') ? `/${conf_prefix_log}` : conf_prefix_log;
             }
             const full_url = `${prefix_api}${prefix_log}${dock_url}`;
-            urn_lib_1.urn_log.trace(`Creating Express route [${full_url}]`);
+            uranio_utils_1.urn_log.trace(`Creating Express route [${full_url}]`);
             this.express_app.use(full_url, router);
             if (dock_def && dock_def.auth_url && typeof dock_def.auth_url === 'string') {
                 const auth_route = (0, index_1.create_express_auth_route)(atom_name);
                 const full_auth_url = `${prefix_api}${dock_def.auth_url}`;
-                urn_lib_1.urn_log.trace(`Creating Express auth route [${full_auth_url}]`);
+                uranio_utils_1.urn_log.trace(`Creating Express auth route [${full_auth_url}]`);
                 this.express_app.use(full_auth_url, auth_route);
             }
         }
@@ -100,7 +100,7 @@ let ExpressWebService = class ExpressWebService {
             service_port = current_port;
         }
         const uranio_callback = function () {
-            urn_lib_1.urn_log.info(`Uranio service is listening on port ${service_port}...`);
+            uranio_utils_1.urn_log.info(`Uranio service is listening on port ${service_port}...`);
             if (typeof portcall === 'function') {
                 portcall();
             }
@@ -127,7 +127,7 @@ let ExpressWebService = class ExpressWebService {
                 // honorCipherOrder: true
             };
             server = https_1.default.createServer(serverOptions, this.express_app);
-            urn_lib_1.urn_log.info(`Uranio service is on SSL.`);
+            uranio_utils_1.urn_log.info(`Uranio service is on SSL.`);
         }
         switch (typeof portcall) {
             case 'undefined':
@@ -148,11 +148,11 @@ let ExpressWebService = class ExpressWebService {
     }
 };
 ExpressWebService = __decorate([
-    urn_lib_1.urn_log.util.decorators.debug_constructor,
-    urn_lib_1.urn_log.util.decorators.debug_methods
+    uranio_utils_1.urn_log.util.decorators.debug_constructor,
+    uranio_utils_1.urn_log.util.decorators.debug_methods
 ], ExpressWebService);
 function create() {
-    urn_lib_1.urn_log.trace(`Create ExpressWebService`);
+    uranio_utils_1.urn_log.trace(`Create ExpressWebService`);
     return new ExpressWebService();
 }
 exports.create = create;

@@ -32,8 +32,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = void 0;
-const urn_lib_1 = require("urn-lib");
-const urn_exc = urn_lib_1.urn_exception.init('API_INIT_MODULE', `Api init module`);
+const uranio_utils_1 = require("uranio-utils");
+const urn_exc = uranio_utils_1.urn_exception.init('API_INIT_MODULE', `Api init module`);
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const defaults_1 = require("../conf/defaults");
 const register = __importStar(require("../reg/server"));
@@ -46,7 +46,7 @@ function init(config, register_required = true) {
     uranio_core_1.default.init(config, false);
     conf.set(uranio_core_1.default.util.toml.read(defaults_1.api_config));
     env.set_env();
-    log.init(urn_lib_1.urn_log);
+    log.init(uranio_utils_1.urn_log);
     if (config) {
         conf.set(config);
     }
@@ -55,7 +55,7 @@ function init(config, register_required = true) {
     }
     _validate_api_variables();
     _validate_api_book();
-    urn_lib_1.urn_log.trace(`Uranio api initialization completed.`);
+    uranio_utils_1.urn_log.trace(`Uranio api initialization completed.`);
 }
 exports.init = init;
 function _register_required_atoms() {

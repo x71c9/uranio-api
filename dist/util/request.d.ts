@@ -3,7 +3,7 @@
  *
  * @packageDocumentation
  */
-import { urn_response, urn_exception } from 'urn-lib';
+import { urn_response, urn_exception } from 'uranio-utils';
 import core from 'uranio-core';
 import { schema } from '../sch/server';
 import * as types from '../srv/types';

@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import {urn_util, urn_response, urn_return, urn_log, urn_exception} from 'urn-lib';
+import {urn_util, urn_response, urn_return, urn_log, urn_exception} from 'uranio-utils';
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 

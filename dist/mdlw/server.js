@@ -33,9 +33,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.auth_route_middleware = exports.route_middleware = void 0;
 // import jwt from 'jsonwebtoken';
-const urn_lib_1 = require("urn-lib");
-const urn_ret = urn_lib_1.urn_return.create(urn_lib_1.urn_log.util.return_injector);
-const urn_exc = urn_lib_1.urn_exception.init('EXPRESS_MDLW', 'Express middlewares');
+const uranio_utils_1 = require("uranio-utils");
+const urn_ret = uranio_utils_1.urn_return.create(uranio_utils_1.urn_log.util.return_injector);
+const urn_exc = uranio_utils_1.urn_exception.init('EXPRESS_MDLW', 'Express middlewares');
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const conf = __importStar(require("../conf/server"));
 // import * as env from '../env/server';
@@ -90,9 +90,9 @@ async function _authorization(api_request) {
 async function _validate_and_call(api_request) {
     // const route_def = _get_route_def(api_request);
     const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
-    urn_lib_1.urn_log.trace(`Router ${route_def.method} [${api_request.atom_name}] ${api_request.full_path}`);
+    uranio_utils_1.urn_log.trace(`Router ${route_def.method} [${api_request.atom_name}] ${api_request.full_path}`);
     _validate_route(api_request);
-    if (!urn_lib_1.urn_util.object.has_key(route_def, 'call') || !route_def.call) {
+    if (!uranio_utils_1.urn_util.object.has_key(route_def, 'call') || !route_def.call) {
         return urn_ret.return_error(404, `Route call not implemented.`, `ROUTE_CALL_NOT_IMPLEMENTED`, `Route call not implemented.`);
     }
     let call_response = await route_def.call(api_request);
@@ -152,7 +152,7 @@ async function _auth_validate_and_call(auth_route_request, handler) {
     //     `Cannot auth validate and call. Invalid dock def.`
     //   );
     // }
-    urn_lib_1.urn_log.trace(`Router Auth ${dock_def.url} [${auth_route_request.atom_name}]`);
+    uranio_utils_1.urn_log.trace(`Router Auth ${dock_def.url} [${auth_route_request.atom_name}]`);
     _auth_validate(auth_route_request);
     const auth_token = await handler(auth_route_request);
     let urn_response = urn_ret.return_success('Success', { token: auth_token });
@@ -161,13 +161,13 @@ async function _auth_validate_and_call(auth_route_request, handler) {
     return urn_response;
 }
 function _auth_validate(api_request) {
-    urn_lib_1.urn_log.trace(`Validate Auth Route [${api_request.atom_name}]`);
+    uranio_utils_1.urn_log.trace(`Validate Auth Route [${api_request.atom_name}]`);
     req_validator.empty(api_request.params, 'params');
     req_validator.empty(api_request.query, 'query');
 }
 function _validate_route(api_request) {
     const route_def = book.get_route_definition(api_request.atom_name, api_request.route_name);
-    urn_lib_1.urn_log.trace(`Validate Route ${route_def.url} [${api_request.atom_name}]`);
+    uranio_utils_1.urn_log.trace(`Validate Route ${route_def.url} [${api_request.atom_name}]`);
     if (route_def.method !== types.RouteMethod.POST) {
         req_validator.empty(api_request.body, 'body');
         req_validator.empty(api_request.file, 'file');
@@ -256,7 +256,7 @@ function _log_auth_route_request(auth_request) {
         return;
     }
     const request_shape = (0, request_1.partial_api_request_to_atom_request)(auth_request);
-    const auth_request_clone = urn_lib_1.urn_util.object.deep_clone(request_shape);
+    const auth_request_clone = uranio_utils_1.urn_util.object.deep_clone(request_shape);
     if (auth_request_clone.body) {
         const body = JSON.parse(auth_request_clone.body);
         body.password = '[DELETED]';

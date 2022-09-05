@@ -6,7 +6,7 @@
 
 // import jwt from 'jsonwebtoken';
 
-import {urn_util, urn_response, urn_return, urn_exception, urn_log} from 'urn-lib';
+import {urn_util, urn_response, urn_return, urn_exception, urn_log} from 'uranio-utils';
 
 const urn_ret = urn_return.create(urn_log.util.return_injector);
 

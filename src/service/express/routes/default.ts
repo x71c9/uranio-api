@@ -6,7 +6,7 @@
 
 import express from 'express';
 
-import {urn_log} from 'urn-lib';
+import {urn_log} from 'uranio-utils';
 
 import * as book from '../../../book/server';
 

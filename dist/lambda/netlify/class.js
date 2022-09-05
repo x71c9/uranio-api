@@ -16,8 +16,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create = void 0;
 // import parse_multipart from 'parse-multipart';
-const urn_lib_1 = require("urn-lib");
-const urn_exc = urn_lib_1.urn_exception.init('NETLIFYCLASS', 'Netlify class module');
+const uranio_utils_1 = require("uranio-utils");
+const urn_exc = uranio_utils_1.urn_exception.init('NETLIFYCLASS', 'Netlify class module');
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const request_1 = require("../../util/request");
 const server_1 = require("../../mdlw/server");
@@ -72,8 +72,8 @@ let NetlifyLambda = class NetlifyLambda {
     }
 };
 NetlifyLambda = __decorate([
-    urn_lib_1.urn_log.util.decorators.debug_constructor,
-    urn_lib_1.urn_log.util.decorators.debug_methods
+    uranio_utils_1.urn_log.util.decorators.debug_constructor,
+    uranio_utils_1.urn_log.util.decorators.debug_methods
 ], NetlifyLambda);
 async function _filter_lambda_body_request(event, api_request) {
     var _a;
@@ -194,11 +194,11 @@ function _lambda_response(urn_resp, headers, multi_value_headers, is_base64) {
     if (typeof is_base64 === 'boolean') {
         handler_response.isBase64Encoded = is_base64;
     }
-    handler_response.body = urn_lib_1.urn_util.json.safe_stringify(urn_resp);
+    handler_response.body = uranio_utils_1.urn_util.json.safe_stringify(urn_resp);
     return handler_response;
 }
 function create() {
-    urn_lib_1.urn_log.trace(`Create NetlifyLambda`);
+    uranio_utils_1.urn_log.trace(`Create NetlifyLambda`);
     return new NetlifyLambda();
 }
 exports.create = create;

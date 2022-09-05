@@ -6,8 +6,8 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.empty = exports.only_valid_param_keys = exports.only_valid_query_keys = exports.process_request_query = void 0;
-const urn_lib_1 = require("urn-lib");
-const urn_exc = urn_lib_1.urn_exception.init(`VALIDATE_REQUEST`, `Validate request module`);
+const uranio_utils_1 = require("uranio-utils");
+const urn_exc = uranio_utils_1.urn_exception.init(`VALIDATE_REQUEST`, `Validate request module`);
 function process_request_query(query) {
     if (typeof query === 'undefined') {
         return {};

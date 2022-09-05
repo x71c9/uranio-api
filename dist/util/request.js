@@ -32,9 +32,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validate_request = exports.partial_api_request_to_atom_request = exports.api_handle_and_store_exception = exports.api_handle_exception = exports.store_error = exports.get_params_from_route_path = exports.is_auth_request = exports.get_route_name = exports.get_atom_name_from_atom_path = exports.get_auth_action = exports.process_request_path = void 0;
-const urn_lib_1 = require("urn-lib");
-const urn_ret = urn_lib_1.urn_return.create(urn_lib_1.urn_log.util.return_injector);
-const urn_exc = urn_lib_1.urn_exception.init(`REQUEST`, `Util request module`);
+const uranio_utils_1 = require("uranio-utils");
+const urn_ret = uranio_utils_1.urn_return.create(uranio_utils_1.urn_log.util.return_injector);
+const urn_exc = uranio_utils_1.urn_exception.init(`REQUEST`, `Util request module`);
 const uranio_core_1 = __importDefault(require("uranio-core"));
 const conf = __importStar(require("../conf/server"));
 // import {return_default_routes} from '../routes/index';
@@ -263,26 +263,26 @@ function api_handle_exception(ex, partial_api_request) {
         error_msg = ex.msg;
     }
     switch (ex.type) {
-        case urn_lib_1.urn_exception.ExceptionType.UNAUTHORIZED: {
+        case uranio_utils_1.urn_exception.ExceptionType.UNAUTHORIZED: {
             status = 401;
             msg = 'Unauthorized';
             break;
         }
-        case urn_lib_1.urn_exception.ExceptionType.NOT_FOUND: {
+        case uranio_utils_1.urn_exception.ExceptionType.NOT_FOUND: {
             status = 404;
             msg = 'Not Found';
             error_code = 'RECORD_NOT_FOUND';
             error_msg = 'Record not found.';
             break;
         }
-        case urn_lib_1.urn_exception.ExceptionType.INVALID_ATOM:
-        case urn_lib_1.urn_exception.ExceptionType.INVALID_REQUEST: {
+        case uranio_utils_1.urn_exception.ExceptionType.INVALID_ATOM:
+        case uranio_utils_1.urn_exception.ExceptionType.INVALID_REQUEST: {
             status = 400;
             msg = 'Invalid Request';
             break;
         }
-        case urn_lib_1.urn_exception.ExceptionType.AUTH_NOT_FOUND:
-        case urn_lib_1.urn_exception.ExceptionType.AUTH_INVALID_PASSWORD: {
+        case uranio_utils_1.urn_exception.ExceptionType.AUTH_NOT_FOUND:
+        case uranio_utils_1.urn_exception.ExceptionType.AUTH_INVALID_PASSWORD: {
             status = 400;
             msg = 'Invalid auth request';
             error_code = 'INVALID_AUTH_REQUEST';
@@ -325,13 +325,13 @@ function partial_api_request_to_atom_request(partial_api_request) {
         request_shape.file = partial_api_request.file.name + ` [${partial_api_request.file.mime_type}] [${partial_api_request.file.size}]`;
     }
     if (partial_api_request.params && Object.keys(partial_api_request.params).length > 0) {
-        request_shape.params = urn_lib_1.urn_util.json.safe_stringify(partial_api_request.params);
+        request_shape.params = uranio_utils_1.urn_util.json.safe_stringify(partial_api_request.params);
     }
     if (partial_api_request.query && Object.keys(partial_api_request.query).length > 0) {
-        request_shape.query = urn_lib_1.urn_util.json.safe_stringify(partial_api_request.query);
+        request_shape.query = uranio_utils_1.urn_util.json.safe_stringify(partial_api_request.query);
     }
     if (partial_api_request.body && Object.keys(partial_api_request.body).length > 0) {
-        request_shape.body = urn_lib_1.urn_util.json.safe_stringify(partial_api_request.body);
+        request_shape.body = uranio_utils_1.urn_util.json.safe_stringify(partial_api_request.body);
     }
     return request_shape;
 }

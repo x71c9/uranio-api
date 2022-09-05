@@ -3,7 +3,7 @@
  *
  * @packageDocumentation
  */
-import { urn_response } from 'urn-lib';
+import { urn_response } from 'uranio-utils';
 import * as types from '../../srv/types';
 import { schema } from '../../sch/server';
 import { Lambda, LambdaEvent, LambdaContext, HandlerResponse } from '../types';

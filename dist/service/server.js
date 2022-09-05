@@ -32,12 +32,12 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create = void 0;
-const urn_lib_1 = require("urn-lib");
+const uranio_utils_1 = require("uranio-utils");
 const conf = __importStar(require("../conf/server"));
 const express = __importStar(require("./express/index"));
 __exportStar(require("./types"), exports);
 function create(service_name) {
-    urn_lib_1.urn_log.trace(`Create Service`);
+    uranio_utils_1.urn_log.trace(`Create Service`);
     const service = service_name || conf.get(`service`);
     switch (service) {
         case 'express': {
