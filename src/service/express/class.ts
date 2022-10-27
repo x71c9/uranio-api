@@ -28,7 +28,7 @@ import * as env from '../../env/server';
 
 import * as book from '../../book/server';
 
-import {register_exception_handler} from '../../util/exc_handler';
+// import {register_exception_handler} from '../../util/exc_handler';
 
 import * as conf from '../../conf/server';
 
@@ -48,7 +48,7 @@ class ExpressWebService implements Service {
 	
 	constructor(public service_name='main'){
 		
-		register_exception_handler(service_name);
+		// register_exception_handler(service_name);
 		
 		this.express_app = express();
 		this.express_app.use(cors());
@@ -75,6 +75,7 @@ class ExpressWebService implements Service {
 				}
 			}
 		);
+		
 		const conf_prefix_api = conf.get('prefix_api');
 		const conf_prefix_log = conf.get('prefix_log');
 		for(const [atom_name, atom_def] of Object.entries(book.get_all_definitions())){

@@ -50,13 +50,13 @@ const urn_exc = uranio_utils_1.urn_exception.init(`EXPRESSCLASS`, `Express class
 const urn_ret = uranio_utils_1.urn_return.create(uranio_utils_1.urn_log.util.return_injector);
 const env = __importStar(require("../../env/server"));
 const book = __importStar(require("../../book/server"));
-const exc_handler_1 = require("../../util/exc_handler");
+// import {register_exception_handler} from '../../util/exc_handler';
 const conf = __importStar(require("../../conf/server"));
 const index_1 = require("./routes/index");
 let ExpressWebService = class ExpressWebService {
     constructor(service_name = 'main') {
+        // register_exception_handler(service_name);
         this.service_name = service_name;
-        (0, exc_handler_1.register_exception_handler)(service_name);
         this.express_app = (0, express_1.default)();
         this.express_app.use((0, cors_1.default)());
         this.express_app.use(express_1.default.json());
