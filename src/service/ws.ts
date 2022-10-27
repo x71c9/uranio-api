@@ -20,3 +20,6 @@ uranio.init();
 
 const service = uranio.service.create();
 service.listen();
+
+export * from '../srv/delta/index';
+
