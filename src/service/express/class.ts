@@ -5,51 +5,35 @@
  */
 
 import fs from 'fs';
-
-// import path from 'path';
-
 import http from 'http';
-
 import https from 'https';
-
 import express from 'express';
-
 import fileupload from 'express-fileupload';
-
 import cors from 'cors';
-
 import {urn_log, urn_return, urn_exception} from 'uranio-utils';
-
 const urn_exc = urn_exception.init(`EXPRESSCLASS`, `Express class module`);
-
 const urn_ret = urn_return.create(urn_log.util.return_injector);
-
 import * as env from '../../env/server';
-
 import * as book from '../../book/server';
-
 // import {register_exception_handler} from '../../util/exc_handler';
-
 import * as conf from '../../conf/server';
-
 import {schema} from '../../sch/server';
-
 import {Service} from '../types';
-
 import {create_express_route, create_express_auth_route} from './routes/index';
 
 type Callback = () => void;
+
+const all_web_services:http.Server[] = [];
 
 @urn_log.util.decorators.debug_constructor
 @urn_log.util.decorators.debug_methods
 class ExpressWebService implements Service {
 	
 	public express_app:express.Application;
+	private server?:http.Server;
 	
 	constructor(public service_name='main'){
-		
 		// register_exception_handler(service_name);
-		
 		this.express_app = express();
 		this.express_app.use(cors());
 		this.express_app.use(express.json());
@@ -75,11 +59,9 @@ class ExpressWebService implements Service {
 				}
 			}
 		);
-		
 		const conf_prefix_api = conf.get('prefix_api');
 		const conf_prefix_log = conf.get('prefix_log');
 		for(const [atom_name, atom_def] of Object.entries(book.get_all_definitions())){
-			
 			const dock_def = atom_def.dock;
 			const dock_url = book.get_dock_url(atom_name as schema.AtomName);
 			const router = create_express_route(atom_name as schema.AtomName);
@@ -91,17 +73,14 @@ class ExpressWebService implements Service {
 			const full_url = `${prefix_api}${prefix_log}${dock_url}`;
 			urn_log.trace(`Creating Express route [${full_url}]`);
 			this.express_app.use(full_url, router);
-			
 			if(dock_def && dock_def.auth_url && typeof dock_def.auth_url === 'string'){
 				const auth_route = create_express_auth_route(atom_name as schema.AuthName);
 				const full_auth_url = `${prefix_api}${dock_def.auth_url}`;
 				urn_log.trace(`Creating Express auth route [${full_auth_url}]`);
 				this.express_app.use(full_auth_url, auth_route);
 			}
-			
 		}
 	}
-	
 	listen(portcall?:Callback): void;
 	listen(portcall?: number, callback?:Callback): void;
 	listen(portcall?: number | Callback, callback?:() => void): void {
@@ -118,9 +97,8 @@ class ExpressWebService implements Service {
 				callback();
 			}
 		};
-		
-		let server = http.createServer(this.express_app);
-		
+		this.server = http.createServer(this.express_app);
+		all_web_services.push(this.server);
 		if(conf.get('service_protocol') === 'https'){
 			const serverOptions = {
 				// Certificate(s) & Key(s)
@@ -138,26 +116,32 @@ class ExpressWebService implements Service {
 				// Attempt to use server cipher suite preference instead of clients
 				// honorCipherOrder: true
 			}
-			server = https.createServer(serverOptions, this.express_app);
+			this.server = https.createServer(serverOptions, this.express_app);
 			urn_log.info(`Uranio service is on SSL.`);
 		}
-		
 		switch(typeof portcall){
 			case 'undefined':
 			case 'function':{
 				// server.listen(service_port, conf.get(`service_domain`), uranio_callback);
-				server.listen(service_port, uranio_callback);
+				this.server.listen(service_port, uranio_callback);
 				break;
 			}
 			case 'number':{
 				// server.listen(portcall, conf.get(`service_domain`), uranio_callback);
-				server.listen(portcall, uranio_callback);
+				this.server.listen(portcall, uranio_callback);
 				break;
 			}
 			default:{
 				throw urn_exc.create(`INVALID_LISTEN_ARGS`, 'Invalid arguments.');
 			}
 		}
+	}
+	close(): void{
+		if(!this.server){
+			urn_log.warn(`Attempting to close server before initializing it.`);
+			return;
+		}
+		this.server.close();
 	}
 }
 
@@ -166,3 +150,8 @@ export function create():ExpressWebService{
 	return new ExpressWebService();
 }
 
+process.on('SIGINT', function() {
+	for(const ws of all_web_services){
+		ws.close();
+	}
+});

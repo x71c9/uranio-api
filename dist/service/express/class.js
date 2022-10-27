@@ -39,7 +39,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create = void 0;
 const fs_1 = __importDefault(require("fs"));
-// import path from 'path';
 const http_1 = __importDefault(require("http"));
 const https_1 = __importDefault(require("https"));
 const express_1 = __importDefault(require("express"));
@@ -53,10 +52,11 @@ const book = __importStar(require("../../book/server"));
 // import {register_exception_handler} from '../../util/exc_handler';
 const conf = __importStar(require("../../conf/server"));
 const index_1 = require("./routes/index");
+const all_web_services = [];
 let ExpressWebService = class ExpressWebService {
     constructor(service_name = 'main') {
-        // register_exception_handler(service_name);
         this.service_name = service_name;
+        // register_exception_handler(service_name);
         this.express_app = (0, express_1.default)();
         this.express_app.use((0, cors_1.default)());
         this.express_app.use(express_1.default.json());
@@ -108,7 +108,8 @@ let ExpressWebService = class ExpressWebService {
                 callback();
             }
         };
-        let server = http_1.default.createServer(this.express_app);
+        this.server = http_1.default.createServer(this.express_app);
+        all_web_services.push(this.server);
         if (conf.get('service_protocol') === 'https') {
             const serverOptions = {
                 // Certificate(s) & Key(s)
@@ -126,25 +127,32 @@ let ExpressWebService = class ExpressWebService {
                 // Attempt to use server cipher suite preference instead of clients
                 // honorCipherOrder: true
             };
-            server = https_1.default.createServer(serverOptions, this.express_app);
+            this.server = https_1.default.createServer(serverOptions, this.express_app);
             uranio_utils_1.urn_log.info(`Uranio service is on SSL.`);
         }
         switch (typeof portcall) {
             case 'undefined':
             case 'function': {
                 // server.listen(service_port, conf.get(`service_domain`), uranio_callback);
-                server.listen(service_port, uranio_callback);
+                this.server.listen(service_port, uranio_callback);
                 break;
             }
             case 'number': {
                 // server.listen(portcall, conf.get(`service_domain`), uranio_callback);
-                server.listen(portcall, uranio_callback);
+                this.server.listen(portcall, uranio_callback);
                 break;
             }
             default: {
                 throw urn_exc.create(`INVALID_LISTEN_ARGS`, 'Invalid arguments.');
             }
         }
+    }
+    close() {
+        if (!this.server) {
+            uranio_utils_1.urn_log.warn(`Attempting to close server before initializing it.`);
+            return;
+        }
+        this.server.close();
     }
 };
 ExpressWebService = __decorate([
@@ -156,4 +164,9 @@ function create() {
     return new ExpressWebService();
 }
 exports.create = create;
+process.on('SIGINT', function () {
+    for (const ws of all_web_services) {
+        ws.close();
+    }
+});
 //# sourceMappingURL=class.js.map
