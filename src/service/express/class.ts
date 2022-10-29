@@ -151,6 +151,7 @@ export function create():ExpressWebService{
 }
 
 process.on('SIGINT', function() {
+	urn_log.warn(`[uranio-api service express] Process received signal SIGNINT.`);
 	for(const ws of all_web_services){
 		ws.close();
 	}
